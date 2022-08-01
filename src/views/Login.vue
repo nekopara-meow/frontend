@@ -1,0 +1,201 @@
+<template>
+  <div>
+    <div id="content">
+      <h1 class="intro">登录</h1>
+      <el-form :model="form" :rules="rules" class="login-box">
+        <el-form-item label="邮箱" class="intro" prop="username">
+          <el-input
+            type="text"
+            placeholder="请输入邮箱"
+            v-model="form.username"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="密码" class="intro" prop="password">
+          <el-input
+            type="password"
+            placeholder="请输入密码"
+            v-model="form.password"
+          ></el-input>
+        </el-form-item>
+        <el-form-item id="submitcontain">
+          <el-button
+            class="button"
+            style="font-weight: bold; font-size: 20px"
+            @click="submitForm('form')"
+            >登录</el-button
+          >
+        </el-form-item>
+      </el-form>
+      <span>
+        <router-link
+          to="/register"
+          class="intro"
+          style="float: right; font-size: medium"
+          >注册账号</router-link
+        >
+      </span>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
+import Axios from "axios";
+</script>
+
+<script>
+// https://blog.csdn.net/m0_58039950/article/details/124721115
+export default {
+  name: "Login",
+  components: {},
+  data() {
+    return {
+      form: {
+        username: "",
+        password: "",
+      },
+      rules: {
+        username: [
+          {
+            required: true,
+            message: "请输入用户名",
+            trigger: "blur",
+          },
+        ],
+        password: [
+          {
+            required: true,
+            message: "请输入密码",
+            trigger: "blur",
+          },
+        ],
+      },
+    };
+  },
+  methods: {
+    submitForm() {
+      Axios.post(
+        "http://47.108.192.247:90/api/user/login",
+        {
+          email: this.form.username,
+          password: this.form.password,
+        },
+        {
+          headers: { "Content-Type": "application/x-www-form-urlencoded" }, //加上这个
+        }
+      )
+        .then((response) => {
+          console.log(response);
+          let ret = response.data.result;
+          if (ret == 0) {
+            ElMessage({
+              message: "登录成功，三秒后跳转到个人中心",
+              type: "success",
+            });
+            sessionStorage.setItem("uid", response.data.uid);
+            sessionStorage.setItem("token", response.data.token);
+            setTimeout(() => {
+              //需要延迟的代码 :3秒后延迟跳转到首页，可以加提示什么的
+              this.$router.push({
+                path: "/center",
+              });
+              //延迟时间：3秒
+            }, 3000);
+          } else ElMessage.error(response.data.message);
+        })
+        .catch((error) => {
+          // 请求失败处理
+          console.log(error);
+          ElMessage.error("网络有错误噢");
+        });
+    },
+  },
+};
+</script>
+
+<style scoped>
+.intro {
+  font-weight: 700;
+  font-size: 40px;
+  font-family: "思源黑体 CN";
+  background-image: linear-gradient(
+    90deg,
+    rgb(255, 167, 69),
+    rgb(254, 134, 159),
+    rgb(239, 122, 200),
+    rgb(160, 131, 237),
+    rgb(67, 174, 255),
+    rgb(160, 131, 237),
+    rgb(239, 122, 200),
+    rgb(254, 134, 159),
+    rgb(255, 167, 69)
+  );
+  background-size: 200%;
+  animation: streamer 5s linear infinite;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 20px;
+}
+@keyframes streamer {
+  0% {
+    background-position: 0;
+  }
+  100% {
+    background-position: 200%;
+  }
+}
+.button {
+  background-image: linear-gradient(
+    90deg,
+    rgb(255, 167, 69),
+    rgb(254, 134, 159),
+    rgb(239, 122, 200),
+    rgb(160, 131, 237),
+    rgb(67, 174, 255),
+    rgb(160, 131, 237),
+    rgb(239, 122, 200),
+    rgb(254, 134, 159),
+    rgb(255, 167, 69)
+  );
+  background-size: 200%;
+  animation: streamer 5s linear infinite;
+  background-clip: text;
+  color: transparent;
+  border-radius: 20px;
+}
+#content {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+
+  background: linear-gradient(
+    to right bottom,
+    rgba(255, 255, 255, 0.7),
+    rgba(255, 255, 255, 0.3)
+  );
+  backdrop-filter: blur(2rem);
+  padding: 50px;
+  border-radius: 10px;
+  box-shadow: 0px 15px 10px -15px lightgray;
+  height: 60%;
+  width: 400px;
+}
+#submitcontain {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 3em;
+}
+.el-form-item {
+  margin-top: 38px;
+}
+.el-input {
+  height: 100%;
+}
+.el-button {
+  height: 100%;
+  width: 100px;
+  border-radius: 10px;
+}
+</style>
