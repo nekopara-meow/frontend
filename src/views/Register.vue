@@ -7,7 +7,7 @@
           <el-input
             type="text"
             placeholder="请输入用户名"
-            v-model="form.name"
+            v-model="form.username"
           ></el-input>
         </el-form-item>
         <el-form-item label="密码" class="intro" prop="password1">
@@ -24,13 +24,6 @@
             v-model="form.password2"
           ></el-input>
         </el-form-item>
-        <el-form-item label="电话号码" class="intro" prop="tel">
-          <el-input
-            type="text"
-            placeholder="请输入电话号码"
-            v-model="form.tel"
-          ></el-input>
-        </el-form-item>
         <el-form-item label="邮箱地址" class="intro" prop="email">
           <el-input
             type="text"
@@ -38,21 +31,7 @@
             v-model="form.email"
           ></el-input>
         </el-form-item>
-        <el-form-item label="验证码" class="intro" prop="verify">
-          <el-input
-            class="bind_code_input"
-            v-model="form.verify"
-            type="text"
-            placeholder="验证码"
-          />
-          <el-button
-            @click.native.prevent="bindforgetSendCode"
-            class="codebtn"
-            style="border-radius: 0"
-            :disabled="disabled"
-            >{{ btnText }}</el-button
-          >
-        </el-form-item>
+
         <el-form-item id="submitcontain">
           <el-button
             class="button"
@@ -76,19 +55,23 @@
 
 <script>
 
-import {loginApi, registerApi} from "@/utils/api";
-import store from "@/store";
-
+import {login, register} from "@/utils/api";
+import {reactive, toRefs} from "vue";
+import {useRouter} from "vue-router/dist/vue-router";
+import {useStore} from "vuex";
+import {ElMessage} from "element-plus";
 export default {
   name: "Register",
   components: {},
-  data() {
-    return {
+  setup(){
+    const router = useRouter()
+    const store = useStore()
+  const data=reactive( {
       form: {
         username: "",
         password1: "",
         password2: "",
-        //email: "",
+        email: "",
        // verify: "",
         //tel: "",
       },
@@ -138,9 +121,7 @@ export default {
           },
         ],
       },
-    };
-  },
-  methods: {
+  })
     /*bindforgetSendCode() {
       this.$refs["form"].validateField("email", (errorMessage) => {
         if (errorMessage) {
@@ -194,33 +175,27 @@ export default {
         value
       );
     },*/
-    submitForm() {
-      /*this.$refs.form.validate((valid) => {
-        if (valid == false) {
-          ElMessage.error("请填写信息");
-          return;
-        }
-      });*/
-      /*if (this.form.password1 != this.form.password2) {
-        ElMessage.error("两次密码不一致");
-        return;
-      }*/
-      registerApi(data.form)
+    const submitForm=()=> {
+      register(data.form)
           .then((response) => {
-        console.log(response);
+        console.log(response.data);
         let ret = response.data.status_code;
         if (ret == 1) {
-          store.commit('setToken',response.data.token)
+         // store.commit('setToken',response.data.token)
           store.commit('setUsername',response.data.username)
           ElMessage({
             message: "注册成功",
             type: "success",
           });
-        } else ElMessage.error("注册失败" + response.data.message);
+        } else ElMessage.error("注册失败" );
       });
-    },
-  },
-};
+    }
+    return {
+      ...toRefs(data),
+      submitForm
+    }
+  }
+}
 </script>
 
 <style scoped>

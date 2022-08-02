@@ -1,16 +1,83 @@
-import axios from 'axios';
-import store from "@/store";
-import router from "@/router";
-
-const Service=axios.create({
-        baseURL,
-        timeout: 5000,
-        headers: {
-            'Content-Type':'application/json;charset=UTF'
-        },
-}).defaults.withCredentials = true
 // add username and token into headers
-Service.interceptors.request.use(
+import axios from 'axios'
+import store from '@/store'
+import qs from 'qs'
+import router from '@/router'
+const instance=axios.create({
+    baseURL:'http://127.0.0.1:8000/',
+    timeout: 5000,
+    headers: {
+        'Content-Type':'application/json;charset=UTF'
+    },
+})
+
+/**
+ * @author chuzhixin 1204505056@qq.com
+ * @description axios请求拦截器
+ */
+instance.interceptors.request.use(
+    (config) => {
+        const username = localStorage.getItem('username');
+        const authorization = localStorage.getItem('token');
+        // 若 localStorage 中含有这两个字段，则添加入请求头
+        //config.data = qs.stringify(config.data)
+        if (username && authorization) {
+            config.headers.authorization = authorization;
+            config.headers.username = username;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error)
+    }
+)
+instance.interceptors.response.use(
+    (response) => {
+        /*const { data, config } = response
+        const { code, msg } = data
+        // 操作正常Code数组
+        const codeVerificationArray = isArray(successCode)
+            ? [...successCode]
+            : [...[successCode]]
+        // 是否操作正常
+        if (codeVerificationArray.includes(code)) {
+            return data
+        } else {
+            handleCode(code, msg)
+            return Promise.reject(
+                'vue-admin-beautiful请求异常拦截:' +
+                JSON.stringify({ url: config.url, code, msg }) || 'Error'
+            )
+        }*/
+        return response
+    },
+    /*(error) => {
+        if (loadingInstance) loadingInstance.close()
+        const { response, message } = error
+        if (error.response && error.response.data) {
+            const { status, data } = response
+            handleCode(status, data.msg || message)
+            return Promise.reject(error)
+        } else {
+            let { message } = error
+            if (message === 'Network Error') {
+                message = '后端接口连接异常'
+            }
+            if (message.includes('timeout')) {
+                message = '后端接口请求超时'
+            }
+            if (message.includes('Request failed with status code')) {
+                const code = message.substr(message.length - 3)
+                message = '后端接口' + code + '异常'
+            }
+            message.error(message || `后端接口未知异常`)
+            return Promise.reject(error)
+        }
+    }*/
+)
+
+export default instance
+/*Service.interceptors.request.use(
     config => {
         var username = localStorage.getItem('username');
         var authorization = localStorage.getItem('token');
@@ -37,9 +104,9 @@ Service.interceptors.response.use(
                     store.commit('removeInfo')
 
                     // 只有在当前路由不是登录页面才跳转
-                    router.currentRoute.path !== 'login' &&
+                    router.currentRoute.path !== '/login' &&
                     router.replace({
-                        path: 'login',
+                        path: '/login',
                         query: { redirect: router.currentRoute.path },
                     })
             }
@@ -62,4 +129,4 @@ export const get=config=>{
         params:config.data
     })
 }
-export default Service
+*/

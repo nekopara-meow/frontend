@@ -3,10 +3,10 @@
     <div id="content">
       <h1 class="intro">登录</h1>
       <el-form :model="form" :rules="rules" class="login-box">
-        <el-form-item label="邮箱" class="intro" prop="username">
+        <el-form-item label="用户名" class="intro" prop="username">
           <el-input
             type="text"
-            placeholder="请输入邮箱"
+            placeholder="请输入用户名"
             v-model="form.username"
           ></el-input>
         </el-form-item>
@@ -21,7 +21,7 @@
           <el-button
             class="button"
             style="font-weight: bold; font-size: 20px"
-            @click="submitForm('form')"
+            @click="submitForm"
             >登录</el-button
           >
         </el-form-item>
@@ -40,56 +40,62 @@
 
 <script>
 // https://blog.csdn.net/m0_58039950/article/details/124721115
-import {loginApi} from "@/utils/api";
-import {reactive, toRef} from "vue";
+import {login} from "@/utils/api";
+import {reactive, toRef, toRefs} from "vue";
 import store from "@/store";
 import router from "@/router";
 import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
+import {useRouter} from "vue-router/dist/vue-router";
+import {useStore} from "vuex";
 export default {
   name: "Login",
   components: {},
-  setup(){
-    const data=reactive({
-        form: {
-          username: "",
-          password: "",
-        },
-        rules: {
-          username: [
-            {
-              required: true,
-              message: "请输入用户名",
-              trigger: "blur",
-            },
-          ],
-          password: [
-            {
-              required: true,
-              message: "请输入密码",
-              trigger: "blur",
-            },
-          ],
-        },
-      })
-      const submitForm=()=>{
-        loginApi(data.form)
+  setup() {
+    const router = useRouter()
+    const store = useStore()
+    const data = reactive({
+      form: {
+        username: "",
+        password: "",
+      },
+      rules: {
+        username: [
+          {
+            required: true,
+            message: "请输入用户名",
+            trigger: "blur",
+          },
+        ],
+        password: [
+          {
+
+            required: true,
+            message: "请输入密码",
+            trigger: "blur",
+          },
+        ],
+      },
+    })
+    const submitForm = () => {
+      login(data.form)
           .then((response) => {
-            console.log(response);
+            console.log("返回",response.data);
             let ret = response.data.status_code;
-            if (ret == 0) {
-              store.commit('setToken',response.data.token)
-              store.commit('setUsername',response.data.username)
+            if (ret == 1) {
+              store.commit('setToken', response.data.token)
+              store.commit('setUsername', response.data.username)
               ElMessage({
                 message: "登录成功，三秒后跳转到个人中心",
                 type: "success",
               });
-              setTimeout(() => {
+              console.log("token",localStorage.getItem('token'))
+              /*setTimeout(() => {
                 //需要延迟的代码 :3秒后延迟跳转到首页，可以加提示什么的
                 router.push({
                   path: "/",
                 });
                 //延迟时间：3秒
-              }, 3000);
+              }, 3000);*/
             } else ElMessage.error(response.data.message);
           })
           .catch((error) => {
@@ -97,13 +103,13 @@ export default {
             console.log(error);
             ElMessage.error("网络有错误噢");
           });
-      }
-      return{
-      ...toRef(data),
-        submitForm
-      }
-  }
+    }
+    return{
+      ...toRefs(data),
+      submitForm
+    }
 
+  }
 }
 </script>
 
@@ -126,7 +132,7 @@ export default {
   );
   background-size: 200%;
   animation: streamer 5s linear infinite;
-  background-clip:text;
+   background-clip:text;
   color: transparent;
   margin-bottom: 20px;
 }
