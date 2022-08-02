@@ -54,25 +54,24 @@
 </template>
 
 <script>
-
-import {login, register} from "@/utils/api";
-import {reactive, toRefs} from "vue";
-import {useRouter} from "vue-router/dist/vue-router";
-import {useStore} from "vuex";
-import {ElMessage} from "element-plus";
+import { login, register } from "@/utils/api";
+import { reactive, toRefs } from "vue";
+import { useRouter } from "vue-router/dist/vue-router";
+import { useStore } from "vuex";
+import { ElMessage } from "element-plus";
 export default {
   name: "Register",
   components: {},
-  setup(){
-    const router = useRouter()
-    const store = useStore()
-  const data=reactive( {
+  setup() {
+    const router = useRouter();
+    const store = useStore();
+    const data = reactive({
       form: {
         username: "",
         password1: "",
         password2: "",
         email: "",
-       // verify: "",
+        // verify: "",
         //tel: "",
       },
       btnText: "获取验证码",
@@ -121,7 +120,7 @@ export default {
           },
         ],
       },
-  })
+    });
     /*bindforgetSendCode() {
       this.$refs["form"].validateField("email", (errorMessage) => {
         if (errorMessage) {
@@ -175,27 +174,26 @@ export default {
         value
       );
     },*/
-    const submitForm=()=> {
-      register(data.form)
-          .then((response) => {
+    const submitForm = () => {
+      register(data.form).then((response) => {
         console.log(response.data);
         let ret = response.data.status_code;
         if (ret == 1) {
-         // store.commit('setToken',response.data.token)
-          store.commit('setUsername',response.data.username)
+          // store.commit('setToken',response.data.token)
+          store.commit("setUsername", response.data.username);
           ElMessage({
             message: "注册成功",
             type: "success",
           });
-        } else ElMessage.error("注册失败" );
+        } else ElMessage.error("注册失败");
       });
-    }
+    };
     return {
       ...toRefs(data),
-      submitForm
-    }
-  }
-}
+      submitForm,
+    };
+  },
+};
 </script>
 
 <style scoped>
@@ -219,7 +217,7 @@ export default {
   animation: streamer 5s linear infinite;
   background-clip: text;
   color: transparent;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 @keyframes streamer {
   0% {

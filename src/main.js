@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
+import '@/assets/scss/custom.scss';
 //import Axios from "axios";
 //Axios.defaults.withCredentials = true;
 //Axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
