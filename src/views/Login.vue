@@ -38,79 +38,73 @@
   </div>
 </template>
 
-<script setup>
-import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
-import Axios from "axios";
-</script>
-
 <script>
 // https://blog.csdn.net/m0_58039950/article/details/124721115
+import {loginApi} from "@/utils/api";
+import {reactive, toRef} from "vue";
+import store from "@/store";
+import router from "@/router";
+import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
 export default {
   name: "Login",
   components: {},
-  data() {
-    return {
-      form: {
-        username: "",
-        password: "",
-      },
-      rules: {
-        username: [
-          {
-            required: true,
-            message: "请输入用户名",
-            trigger: "blur",
-          },
-        ],
-        password: [
-          {
-            required: true,
-            message: "请输入密码",
-            trigger: "blur",
-          },
-        ],
-      },
-    };
-  },
-  methods: {
-    submitForm() {
-      Axios.post(
-        "http://47.108.192.247:90/api/user/login",
-        {
-          email: this.form.username,
-          password: this.form.password,
+  setup(){
+    const data=reactive({
+        form: {
+          username: "",
+          password: "",
         },
-        {
-          headers: { "Content-Type": "application/x-www-form-urlencoded" }, //加上这个
-        }
-      )
-        .then((response) => {
-          console.log(response);
-          let ret = response.data.result;
-          if (ret == 0) {
-            ElMessage({
-              message: "登录成功，三秒后跳转到个人中心",
-              type: "success",
-            });
-            sessionStorage.setItem("uid", response.data.uid);
-            sessionStorage.setItem("token", response.data.token);
-            setTimeout(() => {
-              //需要延迟的代码 :3秒后延迟跳转到首页，可以加提示什么的
-              this.$router.push({
-                path: "/center",
+        rules: {
+          username: [
+            {
+              required: true,
+              message: "请输入用户名",
+              trigger: "blur",
+            },
+          ],
+          password: [
+            {
+              required: true,
+              message: "请输入密码",
+              trigger: "blur",
+            },
+          ],
+        },
+      })
+      const submitForm=()=>{
+        loginApi(data.form)
+          .then((response) => {
+            console.log(response);
+            let ret = response.data.status_code;
+            if (ret == 0) {
+              store.commit('setToken',response.data.token)
+              store.commit('setUsername',response.data.username)
+              ElMessage({
+                message: "登录成功，三秒后跳转到个人中心",
+                type: "success",
               });
-              //延迟时间：3秒
-            }, 3000);
-          } else ElMessage.error(response.data.message);
-        })
-        .catch((error) => {
-          // 请求失败处理
-          console.log(error);
-          ElMessage.error("网络有错误噢");
-        });
-    },
-  },
-};
+              setTimeout(() => {
+                //需要延迟的代码 :3秒后延迟跳转到首页，可以加提示什么的
+                router.push({
+                  path: "/",
+                });
+                //延迟时间：3秒
+              }, 3000);
+            } else ElMessage.error(response.data.message);
+          })
+          .catch((error) => {
+            // 请求失败处理
+            console.log(error);
+            ElMessage.error("网络有错误噢");
+          });
+      }
+      return{
+      ...toRef(data),
+        submitForm
+      }
+  }
+
+}
 </script>
 
 <style scoped>
@@ -132,7 +126,7 @@ export default {
   );
   background-size: 200%;
   animation: streamer 5s linear infinite;
-  background-clip: text;
+  background-clip:text;
   color: transparent;
   margin-bottom: 20px;
 }

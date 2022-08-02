@@ -74,25 +74,23 @@
   </div>
 </template>
 
-<script setup>
-import { ElMessage } from "element-plus";
-import { ElForm, ElFormItem, ElInput, ElButton } from "element-plus";
-import Axios from "axios";
-</script>
-
 <script>
+
+import {loginApi, registerApi} from "@/utils/api";
+import store from "@/store";
+
 export default {
   name: "Register",
   components: {},
   data() {
     return {
       form: {
-        name: "",
+        username: "",
         password1: "",
         password2: "",
-        email: "",
-        verify: "",
-        tel: "",
+        //email: "",
+       // verify: "",
+        //tel: "",
       },
       btnText: "获取验证码",
       disabled: false,
@@ -143,7 +141,7 @@ export default {
     };
   },
   methods: {
-    bindforgetSendCode() {
+    /*bindforgetSendCode() {
       this.$refs["form"].validateField("email", (errorMessage) => {
         if (errorMessage) {
           if (!this.checkEmail(this.form.email)) {
@@ -175,9 +173,9 @@ export default {
           return false;
         }
       });
-    },
+    },*/
 
-    doLoop: function (seconds) {
+    /*doLoop: function (seconds) {
       seconds = seconds ? seconds : 60;
       this.btnText = seconds + "s后获取";
       let countdown = setInterval(() => {
@@ -195,34 +193,25 @@ export default {
       return /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/.test(
         value
       );
-    },
+    },*/
     submitForm() {
-      this.$refs.form.validate((valid) => {
+      /*this.$refs.form.validate((valid) => {
         if (valid == false) {
           ElMessage.error("请填写信息");
           return;
         }
-      });
-      if (this.form.password1 != this.form.password2) {
+      });*/
+      /*if (this.form.password1 != this.form.password2) {
         ElMessage.error("两次密码不一致");
         return;
-      }
-      Axios.post(
-        "http://47.108.192.247:90/api/user/register/submit",
-        {
-          verifyCode: this.form.verify,
-          username: this.form.name,
-          password: this.form.password1,
-          email: this.form.email,
-          tel: this.form.tel,
-        },
-        {
-          headers: { "Content-Type": "application/x-www-form-urlencoded" }, //加上这个
-        }
-      ).then((response) => {
+      }*/
+      registerApi(data.form)
+          .then((response) => {
         console.log(response);
-        let ret = response.data.result;
-        if (ret == 0) {
+        let ret = response.data.status_code;
+        if (ret == 1) {
+          store.commit('setToken',response.data.token)
+          store.commit('setUsername',response.data.username)
           ElMessage({
             message: "注册成功",
             type: "success",
