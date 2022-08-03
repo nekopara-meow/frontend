@@ -32,7 +32,7 @@
         </el-icon>
         <span class="Sp">课程</span>
       </div>
-      <router-link to="/course" v-show="!collapse">
+      <router-link to="/team" v-show="!collapse">
         <span>课程推荐</span>
       </router-link>
     </div>
