@@ -1,8 +1,10 @@
 <template>
   <div id="fr-aside" :class="{ indent: collapse }">
     <header class="fr-back-color" :class="$store.getters.themeClass">
-      <figure><img src="@/assets/img/logo-w.png" class="h-100" alt=""/></figure>
-      <span>NEKOPARA</span>
+      <figure>
+        <img src="@/assets/img/logo-w.png" class="h-100" alt="" />
+      </figure>
+      <span style="margin: 0; padding: 0">NEKOPARA</span>
     </header>
 
     <!-- <div class="Menu-head" v-show="!collapse">
@@ -44,16 +46,24 @@
         <span>团队管理</span>
       </router-link>
     </div>
+    <div class="openBtn-open" :class="{ 'Btn-fold': collapse }">
+      <!--<el-button type="" :icon="EditPen"></el-button>-->
+      <div class="ww" @click="gotoTeam">
+        <el-icon :size="30">
+          <Calendar />
+        </el-icon>
+        <span class="Sp">日历</span>
+      </div>
+      <router-link to="/calendar" v-show="!collapse">
+        <span>我的日历</span>
+      </router-link>
+    </div>
   </div>
 </template>
 
 <script setup>
 // import { ElButton } from "element-plus";
-import {
-  Menu,
-  Notebook,
-    UserFilled,
-} from "@element-plus/icons-vue";
+import { Menu, Notebook, UserFilled, Calendar } from "@element-plus/icons-vue";
 </script>
 
 <script>
@@ -152,7 +162,7 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  padding-left: 20px;
+  padding-left: 22px;
   a {
     text-decoration: none !important;
     // background-image: linear-gradient(
@@ -196,7 +206,6 @@ export default {
     .span {
       position: absolute;
       margin-left: 3em;
-
     }
   }
   .ww:hover {
@@ -236,10 +245,10 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding-left: 1em;
+  padding-left: 22px;
 
   &:not(& + &) {
-    padding-top: 10px;
+    padding-top: 0px;
   }
 }
 </style>

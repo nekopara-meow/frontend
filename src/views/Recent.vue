@@ -3,7 +3,7 @@
     <div id="content">
       <div id="left">
         <div id="leftup">
-          <h2 class="title gradient">我的工作台</h2>
+          <h2 class="title gradient">最近打开</h2>
           <div class="buttons">
             <el-dropdown style="margin-right: 30px">
               <el-button type="primary"

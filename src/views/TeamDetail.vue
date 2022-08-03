@@ -4,7 +4,7 @@
       <div id="left">
         <div id="leftup">
           <div style="display: flex">
-            <h2 class="title gradient">我的团队</h2>
+            <h2 class="title gradient">猫娘乐园</h2>
             <nav>
               <a
                 @click="
@@ -12,7 +12,7 @@
                     this.tab = 'tab-0';
                   }
                 "
-                >我创建的</a
+                >团队概览</a
               >
               <a
                 @click="
@@ -20,7 +20,7 @@
                     this.tab = 'tab-1';
                   }
                 "
-                >我管理的</a
+                >团队成员</a
               >
               <a
                 @click="
@@ -28,13 +28,37 @@
                     this.tab = 'tab-2';
                   }
                 "
-                >我参与的</a
+                >团队项目</a
               >
               <div class="animation" :class="tab"></div>
             </nav>
           </div>
-
-          <div class="buttons">
+          <div class="text-wrap">
+            <div class="example">
+              <div class="avatar-list avatar-list-stacked">
+                <span
+                  class="avatar cover-image brround"
+                  style="
+                    background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
+                  "
+                ></span
+                ><span
+                  class="avatar cover-image brround"
+                  style="
+                    background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
+                  "
+                ></span
+                ><span
+                  class="avatar cover-image brround"
+                  style="
+                    background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
+                  "
+                ></span
+                ><span class="avatar cover-image brround">+8</span>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="buttons">
             <el-dropdown style="margin-right: 30px">
               <el-button type="primary"
                 ><el-icon><Sort /></el-icon
@@ -51,7 +75,7 @@
             <el-button type="primary"
               ><el-icon><Plus /></el-icon
             ></el-button>
-          </div>
+          </div> -->
         </div>
 
         <hr style="margin: 5px; margin-bottom: 20px" />
@@ -487,6 +511,7 @@ nav a:nth-child(3):hover ~ .animation {
   border-radius: 3px 3px 0 0;
   font-size: 0.9375rem;
   border: none;
+  width: 150px;
 }
 .text-wrap {
   font-size: 14px;

@@ -4,7 +4,7 @@
       <div id="left">
         <div id="leftup">
           <div style="display: flex">
-            <h2 class="title gradient">我的团队</h2>
+            <h2 class="title gradient">NEKOPARA</h2>
             <nav>
               <a
                 @click="
@@ -12,7 +12,7 @@
                     this.tab = 'tab-0';
                   }
                 "
-                >我创建的</a
+                >概览</a
               >
               <a
                 @click="
@@ -20,7 +20,7 @@
                     this.tab = 'tab-1';
                   }
                 "
-                >我管理的</a
+                >文件</a
               >
               <a
                 @click="
@@ -28,12 +28,52 @@
                     this.tab = 'tab-2';
                   }
                 "
-                >我参与的</a
+                >需求</a
+              >
+              <a
+                @click="
+                  () => {
+                    this.tab = 'tab-3';
+                  }
+                "
+                >迭代</a
+              >
+              <a
+                @click="
+                  () => {
+                    this.tab = 'tab-4';
+                  }
+                "
+                >统计</a
               >
               <div class="animation" :class="tab"></div>
             </nav>
           </div>
-
+          <div class="text-wrap">
+            <div class="example">
+              <div class="avatar-list avatar-list-stacked">
+                <span
+                  class="avatar cover-image brround"
+                  style="
+                    background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
+                  "
+                ></span
+                ><span
+                  class="avatar cover-image brround"
+                  style="
+                    background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
+                  "
+                ></span
+                ><span
+                  class="avatar cover-image brround"
+                  style="
+                    background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
+                  "
+                ></span
+                ><span class="avatar cover-image brround">+8</span>
+              </div>
+            </div>
+          </div>
           <div class="buttons">
             <el-dropdown style="margin-right: 30px">
               <el-button type="primary"
@@ -55,146 +95,73 @@
         </div>
 
         <hr style="margin: 5px; margin-bottom: 20px" />
-        <div id="leftdown" v-if="tab == 'tab-0'">
-          <div class="oneteam" v-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9]">
-            <div
-              class="teamimage"
-              style="
-                background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-              "
-            ></div>
-            <div class="oneteamdown">
-              <div style="font-size: 18px">猫娘乐园</div>
-              <div>我是傻逼，我是傻逼，我真的是傻逼</div>
-              <div class="text-wrap">
-                <div class="example">
-                  <div class="avatar-list avatar-list-stacked">
-                    <span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span class="avatar cover-image brround">+8</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
         <div id="leftdown" v-if="tab == 'tab-1'">
-          <div class="oneteam" v-for="i in [1, 2, 3, 4, 5, 6]">
-            <div
-              class="teamimage"
-              style="
-                background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-              "
-            ></div>
-            <div class="oneteamdown">
-              <div style="font-size: 18px">小秋月</div>
-              <div>我是傻逼，我是傻逼，我真的是傻逼</div>
-              <div class="text-wrap">
-                <div class="example">
-                  <div class="avatar-list avatar-list-stacked">
-                    <span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span class="avatar cover-image brround">+8</span>
+          <el-collapse
+            v-model="activeNames"
+            @change="handleChange"
+            style="border: none"
+            class="onegroup"
+          >
+            <el-collapse-item
+              title="文本文件"
+              name="1"
+              style="font-size: 20px; font-weight: lighter"
+            >
+              <el-dropdown
+                trigger="contextmenu"
+                v-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9]"
+              >
+                <div class="oneitem">
+                  <img src="..\assets\img\fileicons\Word.png" />
+                  <div>少年阿宾.txt</div>
+                  <div style="font-size: smaller; margin-top: 2px">
+                    2022/8/3
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div id="leftdown" v-if="tab == 'tab-2'">
-          <div class="oneteam" v-for="i in [1, 2, 3, 4, 5, 6, 7]">
-            <div
-              class="teamimage"
-              style="
-                background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-              "
-            ></div>
-            <div class="oneteamdown">
-              <div style="font-size: 18px">小猫猫</div>
-              <div>我是傻逼，我是傻逼，我真的是傻逼</div>
-              <div class="text-wrap">
-                <div class="example">
-                  <div class="avatar-list avatar-list-stacked">
-                    <span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span class="avatar cover-image brround">+8</span>
+
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item>打开</el-dropdown-item>
+                    <el-dropdown-item>在新标签页中打开</el-dropdown-item>
+                    <el-dropdown-item>移出工作台</el-dropdown-item>
+                    <el-dropdown-item>历史版本</el-dropdown-item>
+                    <el-dropdown-item>属性</el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+            </el-collapse-item>
+
+            <hr style="margin: 5px" />
+            <el-collapse-item
+              title="UML文件"
+              name="2"
+              style="font-size: 20px; font-weight: lighter"
+            >
+              <el-dropdown
+                trigger="contextmenu"
+                v-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9]"
+              >
+                <div class="oneitem">
+                  <img src="..\assets\img\fileicons\txt.png" />
+                  <div>少年阿宾.txt</div>
+                  <div style="font-size: smaller; margin-top: 2px">
+                    2022/8/3
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
+
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item>打开</el-dropdown-item>
+                    <el-dropdown-item>在新标签页中打开</el-dropdown-item>
+                    <el-dropdown-item>移出工作台</el-dropdown-item>
+                    <el-dropdown-item>历史版本</el-dropdown-item>
+                    <el-dropdown-item>属性</el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+            </el-collapse-item>
+            <hr style="margin: 5px" />
+          </el-collapse>
         </div>
       </div>
     </div>
@@ -320,11 +287,23 @@ export default {
   align-items: center;
   justify-content: space-between;
 }
-#leftdown {
+::v-deep .el-collapse-item__header {
+  background-color: transparent;
+  border: none;
+  font-size: 20px;
+  font-weight: lighter;
+  color: #26476d;
+}
+::v-deep .el-collapse-item__wrap {
+  background-color: transparent;
+  border: none;
   display: flex;
+}
+::v-deep .el-collapse-item__content {
+  width: 100%;
+  flex-direction: column;
   align-items: center;
-  justify-content: start;
-  flex-wrap: wrap;
+  justify-content: center;
 }
 .buttons {
   margin-right: 50px;
@@ -400,7 +379,7 @@ nav a {
   float: left;
   font-size: 15px;
   line-height: 50px;
-  width: 100px;
+  width: 60px;
   height: 50px;
   color: #fff;
   text-transform: uppercase;
@@ -424,18 +403,28 @@ nav .animation {
 
 .tab-0,
 nav a:hover ~ .animation {
-  width: 100px;
+  width: 60px;
   left: 0px;
 }
 .tab-1,
 nav a:nth-child(2):hover ~ .animation {
-  width: 100px;
-  left: 100px;
+  width: 60px;
+  left: 60px;
 }
 .tab-2,
 nav a:nth-child(3):hover ~ .animation {
-  width: 100px;
-  left: 200px;
+  width: 60px;
+  left: 120px;
+}
+.tab-3,
+nav a:nth-child(4):hover ~ .animation {
+  width: 60px;
+  left: 180px;
+}
+.tab-4,
+nav a:nth-child(5):hover ~ .animation {
+  width: 60px;
+  left: 240px;
 }
 
 .avatar {
@@ -487,6 +476,7 @@ nav a:nth-child(3):hover ~ .animation {
   border-radius: 3px 3px 0 0;
   font-size: 0.9375rem;
   border: none;
+  width: 150px;
 }
 .text-wrap {
   font-size: 14px;

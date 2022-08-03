@@ -1,0 +1,468 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -ms-overflow-style: scrollbar;
+  -webkit-tap-highlight-color: transparent;
+}
+@-ms-viewport {
+  width: device-width;
+}
+article,
+aside,
+dialog,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section {
+  display: block;
+}
+.nav-sidebar li ul li:last-child {
+  border-bottom: 0px;
+}
+.nav-sidebar li ul {
+}
+.secondlevel ul {
+  background: none !important;
+  margin-left: 5px !important;
+  margin-right: 5px !important;
+}
+body {
+  margin: 0;
+  font-family: "Open Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #374254;
+  text-align: left;
+  background-color: #ebf2fb;
+}
+[tabindex="-1"]:focus {
+  outline: 0 !important;
+}
+hr {
+  box-sizing: content-box;
+  height: 0;
+  overflow: visible;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0;
+  margin-bottom: 0.66em;
+}
+p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+abbr[title],
+abbr[data-original-title] {
+  text-decoration: underline;
+  -webkit-text-decoration: underline dotted;
+  text-decoration: underline dotted;
+  cursor: help;
+  border-bottom: 0;
+}
+address {
+  margin-bottom: 1rem;
+  font-style: normal;
+  line-height: inherit;
+}
+ol,
+ul,
+dl {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+ol ol,
+ul ul,
+ol ul,
+ul ol {
+  margin-bottom: 0;
+}
+dt {
+  font-weight: 700;
+}
+dd {
+  margin-bottom: 0.5rem;
+  margin-left: 0;
+}
+blockquote {
+  margin: 0 0 1rem;
+}
+dfn {
+  font-style: italic;
+}
+b,
+strong {
+  font-weight: bolder;
+}
+small {
+  font-size: 80%;
+}
+sub,
+sup {
+  position: relative;
+  font-size: 75%;
+  line-height: 0;
+  vertical-align: baseline;
+}
+sub {
+  bottom: -0.25em;
+}
+sup {
+  top: -0.5em;
+}
+a {
+  color: #a7b4c9;
+  text-decoration: none;
+  background-color: transparent;
+  -webkit-text-decoration-skip: objects;
+}
+a:hover {
+  color: #313148;
+  text-decoration: underline;
+}
+a:not([href]):not([tabindex]) {
+  color: inherit;
+  text-decoration: none;
+}
+a:not([href]):not([tabindex]):hover,
+a:not([href]):not([tabindex]):focus {
+  color: inherit;
+  text-decoration: none;
+}
+a:not([href]):not([tabindex]):focus {
+  outline: 0;
+}
+pre,
+code,
+kbd,
+samp {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+pre {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  overflow: auto;
+  -ms-overflow-style: scrollbar;
+}
+figure {
+  margin: 0 0 1rem;
+}
+img {
+  vertical-align: middle;
+  border-style: none;
+}
+.avatar {
+  width: 2rem;
+  height: 2rem;
+  line-height: 2rem;
+  display: inline-block;
+  background: #2ddcd3 no-repeat center/cover;
+  position: relative;
+  text-align: center;
+  color: #fff;
+  font-weight: 600;
+  vertical-align: bottom;
+  font-size: 0.875rem;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.avatar i {
+  font-size: 125%;
+  vertical-align: sub;
+}
+.avatar-status {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 0.75rem;
+  height: 0.75rem;
+  border: 2px solid #fff;
+  background: #868e96;
+  border-radius: 50%;
+}
+.avatar-sm {
+  width: 1.5rem;
+  height: 1.5rem;
+  line-height: 1.5rem;
+  font-size: 0.75rem;
+}
+.avatar-md {
+  width: 2.5rem;
+  height: 2.5rem;
+  line-height: 2.5rem;
+  font-size: 1rem;
+}
+.avatar-lg {
+  width: 3rem;
+  height: 3rem;
+  line-height: 3rem;
+  font-size: 1.25rem;
+}
+.avatar-xl {
+  width: 4rem;
+  height: 4rem;
+  line-height: 4rem;
+  font-size: 1.75rem;
+}
+.avatar-xxl {
+  width: 5rem;
+  height: 5rem;
+  line-height: 5rem;
+  font-size: 2rem;
+}
+.avatar-placeholder {
+  background: #ced4da
+    url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" width="134" height="134" viewBox="0 0 134 134"><path fill="#868e96" d="M65.92 66.34h2.16c14.802.42 30.928 6.062 29.283 20.35l-1.618 13.32c-.844 6.815-5.208 7.828-13.972 7.866H52.23c-8.764-.038-13.13-1.05-13.973-7.865l-1.62-13.32C34.994 72.4 51.12 66.76 65.92 66.34zM49.432 43.934c0-9.82 7.99-17.81 17.807-17.81 9.82 0 17.81 7.99 17.81 17.81 0 9.82-7.99 17.807-17.81 17.807-9.82 0-17.808-7.987-17.808-17.806z"/></svg>')
+    no-repeat center/80%;
+}
+.avatar-list {
+  margin: 0 0 -0.5rem;
+  padding: 0;
+  font-size: 0;
+}
+.avatar-list .avatar {
+  margin-bottom: 0.5rem;
+}
+.avatar-list .avatar:not(:last-child) {
+  margin-right: 0.5rem;
+}
+.avatar-list-stacked .avatar {
+  margin-right: -0.8em !important;
+}
+.avatar-list-stacked .avatar {
+  box-shadow: 0 0 0 2px #fff;
+}
+.avatar-blue {
+  background-color: #c8d9f1;
+  color: #467fcf;
+}
+.avatar-indigo {
+  background-color: #d1d5f0;
+  color: #6574cd;
+}
+.avatar-purple {
+  background-color: #e4cff9;
+  color: #2ddcd3;
+}
+.avatar-pink {
+  background-color: #fcd3e1;
+  color: #ff2b88;
+}
+.avatar-red {
+  background-color: #f0bcbc;
+  color: #ff382b;
+}
+.avatar-orange {
+  background-color: #fee0c7;
+  color: #e67605;
+}
+.avatar-yellow {
+  background-color: #fbedb7;
+  color: #ffa22b;
+}
+.avatar-green {
+  background-color: #cfeab3;
+  color: #00e682;
+}
+.avatar-teal {
+  background-color: #bfefea;
+  color: #05e6e6;
+}
+.avatar-cyan {
+  background-color: #b9e3ea;
+  color: #17a2b8;
+}
+.avatar-white {
+  background-color: white;
+  color: #fff;
+}
+.avatar-gray {
+  background-color: #dbdde0;
+  color: #868e96;
+}
+.avatar-gray-dark {
+  background-color: #c2c4c6;
+  color: #343a40;
+}
+.avatar-azure {
+  background-color: #c7e6fb;
+  color: #00d6e6;
+}
+.avatar-lime {
+  background-color: #d7f2c2;
+  color: #63e600;
+}
+.brround {
+  border-radius: 50%;
+}
+.example {
+  padding: 1.5rem;
+  border: 1px solid rgba(167, 180, 201, 0.3);
+  border-radius: 3px 3px 0 0;
+  font-size: 0.9375rem;
+}
+.text-wrap {
+  font-size: 14px;
+  line-height: 1.66;
+}
+.text-wrap > :first-child {
+  margin-top: 0;
+}
+.text-wrap > :last-child {
+  margin-bottom: 0;
+}
+.bg-red {
+  background-color: #ff382b !important;
+  color: #fff !important;
+}
+a.bg-red:hover,
+a.bg-red:focus,
+button.bg-red:hover,
+button.bg-red:focus {
+  background-color: #fb5b50 !important;
+}
+.text-red {
+  color: #ff382b !important;
+}
+.bg-orange {
+  background-color: #e67605 !important;
+  color: #fff !important;
+}
+a.bg-orange:hover,
+a.bg-orange:focus,
+button.bg-orange:hover,
+button.bg-orange:focus {
+  background-color: #fc7a12 !important;
+}
+.text-orange {
+  color: #e67605 !important;
+}
+.bg-yellow {
+  background-color: #ffa22b !important;
+  color: #fff !important;
+}
+a.bg-yellow:hover,
+a.bg-yellow:focus,
+button.bg-yellow:hover,
+button.bg-yellow:focus {
+  background-color: #ffaa33 !important;
+}
+.text-yellow {
+  color: #ffa22b !important;
+}
+.bg-green {
+  background-color: #00e682 !important;
+  color: #000 !important;
+}
+a.bg-green:hover,
+a.bg-green:focus,
+button.bg-green:hover,
+button.bg-green:focus {
+  background-color: #3adfab !important;
+}
+.text-green {
+  color: #00e682 !important;
+}
+.bg-teal {
+  background-color: #05e6e6 !important;
+}
+a.bg-teal:hover,
+a.bg-teal:focus,
+button.bg-teal:hover,
+button.bg-teal:focus {
+  background-color: #05fafa !important;
+}
+.text-teal {
+  color: #05e6e6 !important;
+}
+.bg-cyan {
+  background-color: #17a2b8 !important;
+  color: #fff !important;
+}
+a.bg-cyan:hover,
+a.bg-cyan:focus,
+button.bg-cyan:hover,
+button.bg-cyan:focus {
+  background-color: #117a8b !important;
+}
+.text-cyan {
+  color: #17a2b8 !important;
+}
+.bg-white {
+  background-color: #fff !important;
+}
+a.bg-white:hover,
+a.bg-white:focus,
+button.bg-white:hover,
+button.bg-white:focus {
+  background-color: #e6e5e5 !important;
+}
+.text-white {
+  color: #fff !important;
+}
+.bg-gray {
+  background-color: #868e96 !important;
+}
+a.bg-gray:hover,
+a.bg-gray:focus,
+button.bg-gray:hover,
+button.bg-gray:focus {
+  background-color: #a3b1c9 !important;
+}
+.text-gray {
+  color: #858d97 !important;
+}
+.bg-gray-dark {
+  background-color: #858d97 !important;
+}
+.bg-lightpink-red {
+  color: #ff7088 !important;
+}
+a.bg-gray-dark:hover,
+a.bg-gray-dark:focus,
+button.bg-gray-dark:hover,
+button.bg-gray-dark:focus {
+  background-color: #1d2124 !important;
+}
+.text-gray-dark {
+  color: #343a40 !important;
+}
+.bg-azure {
+  background-color: #00d6e6 !important;
+}
+a.bg-azure:hover,
+a.bg-azure:focus,
+button.bg-azure:hover,
+button.bg-azure:focus {
+  background-color: #1594ef !important;
+}
+.text-azure {
+  color: #00d6e6 !important;
+}
+.bg-lime {
+  background-color: #63e600 !important;
+}
+a.bg-lime:hover,
+a.bg-lime:focus,
+button.bg-lime:hover,
+button.bg-lime:focus {
+  background-color: #63ad27 !important;
+}

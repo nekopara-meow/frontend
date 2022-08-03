@@ -16,6 +16,22 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
   {
+    path: '/teamdetail',
+    name: 'teamdetail',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/TeamDetail.vue')
+  },
+  {
+    path: '/projectdetail',
+    name: 'projectdetail',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/ProjectDetail.vue')
+  },
+  {
     path: '/workspace',
     name: 'workspace',
     // route level code-splitting
@@ -48,13 +64,21 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Recent.vue')
   },
   {
-    path: '/ceshi',
-    name: 'ceshi',
+    path: '/team',
+    name: 'team',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/ceshi.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/TeamView.vue')
   },
+  {
+    path: '/calendar',
+    name: 'calendar',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/Calendar.vue')
+  }
 ]
 
 const router = createRouter({

@@ -8,6 +8,7 @@
           <div id="createbutton">Get Started →</div>
         </div>
       </div>
+      <img src="../assets/img/neko.png" />
       <!-- <div id="lottie" style="position: absolute"></div> -->
     </div>
     <!-- <div class="circle1 circle"></div>
@@ -52,6 +53,13 @@ export default {
 };
 </script>
 <style scoped>
+img {
+  position: absolute;
+  bottom: -30px;
+  right: 20px;
+  width: 250px;
+  z-index: -1;
+}
 .circle {
   background: transparent;
   background-image: linear-gradient(60deg, #e9fcf69d 0%, #f9f3ce58 100%);
@@ -85,6 +93,7 @@ export default {
   left: 15%;
 }
 #container {
+  position: relative;
   width: 80%;
   height: 80%;
   max-width: 50vw;
@@ -114,6 +123,7 @@ export default {
   z-index: -1;
 }
 #intro {
+  position: relative;
   font-weight: 700;
   font-size: 70px;
   font-family: "思源黑体 CN";
