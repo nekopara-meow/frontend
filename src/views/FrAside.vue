@@ -12,7 +12,7 @@
     <div
       class="openBtn-open"
       :class="{ 'Btn-fold': collapse }"
-      style="margin-top: 5em"
+      style="margin-top: 5em; padding-top: 0"
     >
       <div class="ww" @click="gotoHome">
         <el-icon :size="30">
@@ -118,13 +118,11 @@ export default {
 <style lang="scss" scoped>
 #fr-aside {
   width: 200px;
-  background: linear-gradient(
-    to right bottom,
-    rgba(255, 255, 255, 0.7),
-    rgba(255, 255, 255, 0.5)
-  );
-  backdrop-filter: blur(2rem);
+
+  background-color: #26476d;
+  backdrop-filter: blur(1rem);
   border-bottom-right-radius: 3em;
+  box-shadow: 0px 15px 10px 3px rgba(221, 221, 221, 0.308);
 
   &.indent {
     width: 75px;
@@ -175,7 +173,8 @@ export default {
   }
 }
 .openBtn-open:hover {
-  background-image: linear-gradient(90deg, #abecd6, #fbed96, #fbed96, #abecd6);
+  background-image: linear-gradient(90deg, #4facfe, #7bd4fe, #6acaf7, #4facfe);
+
   background-size: 200%;
 
   a {
@@ -184,33 +183,35 @@ export default {
 }
 .openBtn-open {
   height: 3.5rem;
-  border-radius: 1.75em;
+
   width: 100%;
   color: white;
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding-left: 30px;
+  justify-content: center;
+  padding-left: 0px;
 
   a {
     text-decoration: none !important;
-    background-image: linear-gradient(
-      90deg,
-      #abecd6,
-      #fbed96,
-      #fbed96,
-      #abecd6
-    );
-    background-size: 200%;
-    background-clip: text;
-    color: transparent;
+    // background-image: linear-gradient(
+    //   90deg,
+    //   #4facfe,
+    //   #7bd4fe,
+    //   #6acaf7,
+    //   #4facfe
+    // );
+    // background-size: 200%;
+    // background-clip: text;
+    // color: transparent;
+    color: white;
     font-weight: lighter;
     :hover {
       // padding-left: 10px;
       // font-size: 20px !important;
     }
     span {
-      font-weight: 600;
+      font-weight: 500;
       font-size: medium;
     }
   }
@@ -223,15 +224,14 @@ export default {
 	}*/
   .ww {
     color: transparent !important;
-    //display: flex;
+
+    // display: flex;
     //flex-direction: column;
     .el-icon {
       position: absolute;
-      left: 25px;
     }
     .span {
       position: absolute;
-      left: 5px;
     }
   }
   .ww:hover {

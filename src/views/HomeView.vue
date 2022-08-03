@@ -8,12 +8,12 @@
           <div id="createbutton">Get Started →</div>
         </div>
       </div>
-      <div id="lottie" style="position: absolute"></div>
+      <!-- <div id="lottie" style="position: absolute"></div> -->
     </div>
-    <div class="circle1 circle"></div>
+    <!-- <div class="circle1 circle"></div>
     <div class="circle2 circle"></div>
     <div class="circle3 circle"></div>
-    <div class="circle4 circle"></div>
+    <div class="circle4 circle"></div> -->
   </div>
 </template>
 
@@ -96,7 +96,7 @@ export default {
     rgba(255, 255, 255, 0.7),
     rgba(255, 255, 255, 0.3)
   );
-  backdrop-filter: blur(2rem);
+  backdrop-filter: blur(1rem);
   position: relative;
   border-radius: 1em;
 }
@@ -117,7 +117,7 @@ export default {
   font-weight: 700;
   font-size: 70px;
   font-family: "思源黑体 CN";
-  background-image: linear-gradient(90deg, #abecd6, #fbed96, #fbed96, #abecd6);
+  background-image: linear-gradient(90deg, #4facfe, #7bd4fe, #6acaf7, #4facfe);
   background-size: 200%;
   animation: streamer 5s linear infinite;
   background-clip: text;
@@ -128,7 +128,7 @@ export default {
 }
 #button {
   display: inline-block;
-  background-image: linear-gradient(90deg, #abecd6, #fbed96, #fbed96, #abecd6);
+  background-image: linear-gradient(90deg, #4facfe, #7bd4fe, #6acaf7, #4facfe);
   background-size: 200%;
   animation: streamer 5s linear infinite;
   backdrop-filter: blur(2rem);
@@ -138,6 +138,14 @@ export default {
   padding-right: 20px;
   border-radius: 30px;
   box-shadow: 0px 15px 10px -15px lightgray;
+}
+@keyframes streamer {
+  0% {
+    background-position: 0;
+  }
+  100% {
+    background-position: 200%;
+  }
 }
 #createbutton {
   line-height: 60px;

@@ -201,18 +201,7 @@ export default {
   font-weight: 700;
   font-size: 40px;
   font-family: "思源黑体 CN";
-  background-image: linear-gradient(
-    90deg,
-    rgb(255, 167, 69),
-    rgb(254, 134, 159),
-    rgb(239, 122, 200),
-    rgb(160, 131, 237),
-    rgb(67, 174, 255),
-    rgb(160, 131, 237),
-    rgb(239, 122, 200),
-    rgb(254, 134, 159),
-    rgb(255, 167, 69)
-  );
+  background-image: linear-gradient(90deg, #4facfe, #7bd4fe, #6acaf7, #4facfe);
   background-size: 200%;
   animation: streamer 5s linear infinite;
   background-clip: text;
@@ -228,18 +217,7 @@ export default {
   }
 }
 .button {
-  background-image: linear-gradient(
-    90deg,
-    rgb(255, 167, 69),
-    rgb(254, 134, 159),
-    rgb(239, 122, 200),
-    rgb(160, 131, 237),
-    rgb(67, 174, 255),
-    rgb(160, 131, 237),
-    rgb(239, 122, 200),
-    rgb(254, 134, 159),
-    rgb(255, 167, 69)
-  );
+  background-image: linear-gradient(90deg, #4facfe, #7bd4fe, #6acaf7, #4facfe);
   background-size: 200%;
   animation: streamer 5s linear infinite;
   background-clip: text;

@@ -303,10 +303,11 @@ export default {
     flex: none;
 
     background: linear-gradient(
-      to right bottom,
+      to bottom,
       rgba(255, 255, 255, 0.737),
       rgba(255, 255, 255, 0.221)
     );
+    box-shadow: 0px 15px 10px -15px rgba(221, 221, 221, 0.479);
     backdrop-filter: blur(2rem);
     > * {
       height: 100%;
