@@ -1,12 +1,12 @@
 <template>
   <div id="fr-aside" :class="{ indent: collapse }">
     <header class="fr-back-color" :class="$store.getters.themeClass">
-      <figure><img src="@/assets/img/logo-w.png" class="h-100" /></figure>
+      <figure><img src="@/assets/img/logo-w.png" class="h-100" alt=""/></figure>
       <span>NEKOPARA</span>
     </header>
 
     <!-- <div class="Menu-head" v-show="!collapse">
-   
+
       <span>Menu</span>
     </div> -->
     <div
@@ -14,77 +14,49 @@
       :class="{ 'Btn-fold': collapse }"
       style="margin-top: 5em; padding-top: 0"
     >
-      <div class="ww" @click="gotoHome">
+      <div class="ww" @click="gotoWorkspace">
         <el-icon :size="30">
-          <HomeFilled />
+          <Menu />
         </el-icon>
-        <span class="Sp">首页</span>
+        <span class="Sp">工作</span>
       </div>
-      <router-link to="/" v-show="!collapse">
-        <span>综合首页</span>
+      <router-link to="/workspace" v-show="!collapse">
+        <span>工作台</span>
       </router-link>
     </div>
     <div class="openBtn-open" :class="{ 'Btn-fold': collapse }">
       <!--<el-button type="" :icon="Notebook"></el-button>-->
-      <div class="ww" @click="gotoCourse">
+      <div class="ww" @click="gotoRecent">
         <el-icon :size="30">
           <Notebook />
         </el-icon>
-        <span class="Sp">课程</span>
+        <span class="Sp">最近</span>
       </div>
-      <router-link to="/course" v-show="!collapse">
-        <span>课程推荐</span>
+      <router-link to="/recent" v-show="!collapse">
+        <span>最近打开</span>
       </router-link>
     </div>
     <div class="openBtn-open" :class="{ 'Btn-fold': collapse }">
       <!--<el-button type="" :icon="EditPen"></el-button>-->
-      <div class="ww" @click="gotoExercise">
+      <div class="ww" @click="gotoTeam">
         <el-icon :size="30">
-          <EditPen />
+          <UserFilled />
         </el-icon>
-        <span class="Sp">刷题</span>
+        <span class="Sp">团队</span>
       </div>
-      <router-link to="/exercise" v-show="!collapse">
-        <span>刷题之路</span>
-      </router-link>
-    </div>
-    <div class="openBtn-open" :class="{ 'Btn-fold': collapse }">
-      <!--<el-button type="" :icon="ColdDrink"></el-button>-->
-      <div class="ww" @click="gotoCampus">
-        <el-icon :size="30">
-          <ColdDrink />
-        </el-icon>
-        <span class="Sp">周边</span>
-      </div>
-      <router-link to="/campus" v-show="!collapse">
-        <span>云游校园</span>
-      </router-link>
-    </div>
-    <div class="openBtn-open" :class="{ 'Btn-fold': collapse }">
-      <!--<el-button type="" :icon="Menu"></el-button>-->
-      <div class="ww" @click="gotoResourse">
-        <el-icon :size="30">
-          <Menu />
-        </el-icon>
-        <span class="Sp">资源</span>
-      </div>
-      <router-link to="/resourse" v-show="!collapse">
-        <span>资源共享</span>
+      <router-link to="/team" v-show="!collapse">
+        <span>团队管理</span>
       </router-link>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ElButton } from "element-plus";
+// import { ElButton } from "element-plus";
 import {
-  Compass,
-  HomeFilled,
   Menu,
-  Star,
   Notebook,
-  EditPen,
-  ColdDrink,
+    UserFilled,
 } from "@element-plus/icons-vue";
 </script>
 
@@ -96,20 +68,14 @@ export default {
     return {};
   },
   methods: {
-    gotoHome() {
-      this.$router.push({ name: "Synthesis" });
+    gotoWorkspace() {
+      this.$router.push({ name: "workspace" });
     },
-    gotoCourse() {
-      this.$router.push({ name: "Course" });
+    gotoRecent() {
+      this.$router.push({ name: "recent" });
     },
-    gotoExercise() {
-      this.$router.push({ name: "Exercise" });
-    },
-    gotoCampus() {
-      this.$router.push({ name: "Campus" });
-    },
-    gotoResourse() {
-      this.$router.push({ name: "Resourse" });
+    gotoTeam() {
+      this.$router.push({ name: "team" });
     },
   },
 };
@@ -122,7 +88,7 @@ export default {
   background-color: #26476d;
   backdrop-filter: blur(1rem);
   border-bottom-right-radius: 3em;
-  box-shadow: 0px 15px 10px 3px rgba(221, 221, 221, 0.308);
+  box-shadow: 0 15px 10px 3px rgba(221, 221, 221, 0.308);
 
   &.indent {
     width: 75px;
@@ -190,7 +156,7 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  padding-left: 0px;
+  padding-left: 0;
 
   a {
     text-decoration: none !important;
