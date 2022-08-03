@@ -24,12 +24,12 @@
       <el-dropdown
         trigger="click"
         class="Notification"
-        v-if="this.$store.state.userinfo != undefined"
+        v-if="this.$store.state.userinfo !== undefined"
       >
         <div class="el-dropdown-link d-flex align-items-center">
           <el-badge
             :value="
-              numoffollowers + numofcomments + numoflikes + numofsys == 0
+              numoffollowers + numofcomments + numoflikes + numofsys === 0
                 ? ''
                 : numoffollowers + numofcomments + numoflikes + numofsys
             "
@@ -58,7 +58,7 @@
             <el-dropdown-item divided class="badgecontainer">
               <div class="badges">
                 <el-badge
-                  :value="numoffollowers == 0 ? '' : numoffollowers"
+                  :value="numoffollowers === 0 ? '' : numoffollowers"
                   class="item"
                 >
                   <el-button
@@ -70,7 +70,7 @@
                   <span>新的粉丝</span>
                 </el-badge>
                 <el-badge
-                  :value="numofcomments == 0 ? '' : numofcomments"
+                  :value="numofcomments === 0 ? '' : numofcomments"
                   class="item"
                 >
                   <el-button
@@ -82,7 +82,7 @@
                   <span>新的回复</span>
                 </el-badge>
                 <el-badge
-                  :value="numoflikes == 0 ? '' : numoflikes"
+                  :value="numoflikes === 0 ? '' : numoflikes"
                   class="item"
                 >
                   <el-button
@@ -93,7 +93,7 @@
                   />
                   <span>新的赞同</span>
                 </el-badge>
-                <el-badge :value="numofsys == 0 ? '' : numofsys" class="item">
+                <el-badge :value="numofsys === 0 ? '' : numofsys" class="item">
                   <el-button
                     :icon="Service"
                     circle
@@ -126,13 +126,13 @@
           <el-dropdown-menu style="width: 160px">
             <el-dropdown-item
               :icon="Setting"
-              v-if="this.$store.state.userinfo != undefined"
+              v-if="this.$store.state.userinfo !== undefined"
             >
               <router-link to="/appearance">设置</router-link>
             </el-dropdown-item>
             <el-dropdown-item
               :icon="User"
-              v-if="this.$store.state.userinfo != undefined"
+              v-if="this.$store.state.userinfo !== undefined"
               @click="gotocenter"
               >个人空间</el-dropdown-item
             >
@@ -140,14 +140,14 @@
               :icon="TurnOff"
               divided
               @click="logout"
-              v-if="this.$store.state.userinfo != undefined"
+              v-if="this.$store.state.userinfo !== undefined"
               >退出登录</el-dropdown-item
             >
             <el-dropdown-item
               :icon="TurnOff"
               divided
               @click="login"
-              v-if="this.$store.state.userinfo == undefined"
+              v-if="this.$store.state.userinfo === undefined"
               >登录</el-dropdown-item
             >
           </el-dropdown-menu>
@@ -235,7 +235,7 @@ export default {
     },
     updateinfo() {
       this.userinfo = this.$store.state.userinfo;
-      if (this.userinfo == undefined) {
+      if (this.userinfo === undefined) {
         this.head =
           "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/Transparent_Akkarin.jpg";
         this.name = "请登录";
@@ -259,7 +259,7 @@ export default {
         .then((response) => {
           console.log(response);
           let ret = response.data.status_code;
-          if (ret == 200) {
+          if (ret === 200) {
             sessionStorage.clear();
             localStorage.clear();
             ElMessage({
@@ -273,7 +273,7 @@ export default {
               });
               //延迟时间：3秒
             }, 3000);
-          } else if (ret == 401) {
+          } else if (ret === 401) {
             ElMessage.error("未登录");
           }
         })
@@ -365,7 +365,6 @@ export default {
   justify-content: space-around;
   // background-color: #fd9f9f;
   width: 100%;
-  height: 100%;
   height: 70px;
 }
 .item span {

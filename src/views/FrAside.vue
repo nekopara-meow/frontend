@@ -9,11 +9,7 @@
 
       <span>Menu</span>
     </div> -->
-    <div
-      class="openBtn-open"
-      :class="{ 'Btn-fold': collapse }"
-      style="margin-top: 5em; padding-top: 0"
-    >
+    <div class="openBtn-open" :class="{ 'Btn-fold': collapse }">
       <div class="ww" @click="gotoWorkspace">
         <el-icon :size="30">
           <Menu />
@@ -155,9 +151,8 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  padding-left: 0;
-
+  justify-content: flex-start;
+  padding-left: 20px;
   a {
     text-decoration: none !important;
     // background-image: linear-gradient(
@@ -177,6 +172,8 @@ export default {
       // font-size: 20px !important;
     }
     span {
+      position: relative;
+      left: 3em;
       font-weight: 500;
       font-size: medium;
     }
@@ -190,7 +187,7 @@ export default {
 	}*/
   .ww {
     color: transparent !important;
-
+    position: absolute;
     // display: flex;
     //flex-direction: column;
     .el-icon {
@@ -198,6 +195,8 @@ export default {
     }
     .span {
       position: absolute;
+      margin-left: 3em;
+
     }
   }
   .ww:hover {
@@ -234,8 +233,10 @@ export default {
 }
 
 .Btn-fold {
-  flex-direction: column;
-  padding: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-left: 1em;
 
   &:not(& + &) {
     padding-top: 10px;
