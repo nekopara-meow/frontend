@@ -83,6 +83,7 @@ export default {
           if (ret == 1) {
             store.commit("setToken", response.data.token);
             store.commit("setUsername", response.data.username);
+            //store.commit("setHead",response.data.head);
             ElMessage({
               message: "登录成功，两秒后跳转到主页",
               type: "success",
@@ -95,7 +96,8 @@ export default {
                 });
                 //延迟时间：3秒
               }, 2000);
-          } else ElMessage.error(response.data.message);
+          } else
+            ElMessage.error(response.data.message);
         })
         .catch((error) => {
           // 请求失败处理

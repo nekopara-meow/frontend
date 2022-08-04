@@ -2,7 +2,7 @@
   <div id="fr-nav" class="d-flex" style="border: none">
     <div class="indent" @click="indentSignal">
       <i
-        :class="{
+          :class="{
           'bi-text-indent-right': !collapse,
           'bi-text-indent-left': collapse,
         }"
@@ -13,28 +13,28 @@
     </div>
     <div class="text">
       <input
-        type="text"
-        v-model="query"
-        @keydown.enter="browse"
-        placeholder="搜索..."
-        style="background-color: rgba(255, 255, 255, 0.437)"
+          type="text"
+          v-model="query"
+          @keydown.enter="browse"
+          placeholder="搜索..."
+          style="background-color: rgba(255, 255, 255, 0.437)"
       />
     </div>
     <div class="end">
       <el-dropdown
-        trigger="click"
-        class="Notification"
-        v-if="this.$store.state.token"
+          trigger="click"
+          class="Notification"
+          v-if="$store.state.token"
       >
         <div class="el-dropdown-link d-flex align-items-center">
           <el-badge
-            :value="
+              :value="
               numoffollowers + numofcomments + numoflikes + numofsys === 0
                 ? ''
                 : numoffollowers + numofcomments + numoflikes + numofsys
             "
-            class="item"
-            type="danger"
+              class="item"
+              type="danger"
           >
             <i class="bi-bell"></i>
           </el-badge>
@@ -43,8 +43,8 @@
         <template #dropdown>
           <el-dropdown-menu style="width: 300px; margin: 0">
             <div
-              class="dropdown-head"
-              style="
+                class="dropdown-head"
+                style="
                 display: flex;
                 flex-direction: row;
                 justify-content: center;
@@ -58,47 +58,47 @@
             <el-dropdown-item divided class="badgecontainer">
               <div class="badges">
                 <el-badge
-                  :value="numoffollowers === 0 ? '' : numoffollowers"
-                  class="item"
+                    :value="numoffollowers === 0 ? '' : numoffollowers"
+                    class="item"
                 >
                   <el-button
-                    :icon="User"
-                    circle
-                    size="large"
-                    @click="gotoListFollow"
+                      :icon="User"
+                      circle
+                      size="large"
+                      @click="gotoListFollow"
                   />
                   <span>新的粉丝</span>
                 </el-badge>
                 <el-badge
-                  :value="numofcomments === 0 ? '' : numofcomments"
-                  class="item"
+                    :value="numofcomments === 0 ? '' : numofcomments"
+                    class="item"
                 >
                   <el-button
-                    :icon="ChatDotRound"
-                    circle
-                    size="large"
-                    @click="gotoListComment"
+                      :icon="ChatDotRound"
+                      circle
+                      size="large"
+                      @click="gotoListComment"
                   />
                   <span>新的回复</span>
                 </el-badge>
                 <el-badge
-                  :value="numoflikes === 0 ? '' : numoflikes"
-                  class="item"
+                    :value="numoflikes === 0 ? '' : numoflikes"
+                    class="item"
                 >
                   <el-button
-                    :icon="Star"
-                    circle
-                    size="large"
-                    @click="gotoListLike"
+                      :icon="Star"
+                      circle
+                      size="large"
+                      @click="gotoListLike"
                   />
                   <span>新的赞同</span>
                 </el-badge>
                 <el-badge :value="numofsys === 0 ? '' : numofsys" class="item">
                   <el-button
-                    :icon="Service"
-                    circle
-                    size="large"
-                    @click="gotoListSys"
+                      :icon="Service"
+                      circle
+                      size="large"
+                      @click="gotoListSys"
                   />
                   <span>系统消息</span>
                 </el-badge>
@@ -108,12 +108,12 @@
         </template>
       </el-dropdown>
       <el-dropdown
-        :hide-on-click="false"
-        trigger="click"
-        class="justify-content-end"
+          :hide-on-click="false"
+          trigger="click"
+          class="justify-content-end"
       >
         <div class="el-dropdown-link d-flex align-items-center">
-          {{ this.name }}
+          {{ name }}
           <!-- {{YL}} -->
           <i class="bi-caret-down-fill" />
           <el-avatar :size="40">
@@ -126,44 +126,33 @@
           <el-dropdown-menu style="width: 160px">
             <el-dropdown-item
                 :icon="User"
-                v-if="this.$store.state.token"
+                v-if="$store.state.token"
                 @click="checkInfo"
             >查看资料</el-dropdown-item
             >
             <el-dropdown-item
-              :icon="User"
-              v-if="this.$store.state.token"
-              @click="changePassword"
-              >修改密码</el-dropdown-item
+                :icon="User"
+                v-if="$store.state.token"
+                @click.native="changePassword"
+            >修改密码</el-dropdown-item
             >
             <el-dropdown-item
-              :icon="TurnOff"
-              divided
-              @click="logout"
-              v-if="this.$store.state.token"
-              >退出登录</el-dropdown-item
+                :icon="TurnOff"
+                divided
+                @click="logout"
+                v-if="$store.state.token"
+            >退出登录</el-dropdown-item
             >
             <el-dropdown-item
-              :icon="TurnOff"
-              divided
-              @click="login"
-              v-if="!this.$store.state.token"
-              >登录</el-dropdown-item
+                :icon="TurnOff"
+                divided
+                @click="login"
+                v-if="!$store.state.token"
+            >登录</el-dropdown-item
             >
           </el-dropdown-menu>
         </template>
       </el-dropdown>
-      <el-dialog title="修改密码" :visible.sync="addDialogVisible" width="50%" >
-        <hr>
-        <span>你觉得这个稿件有什么问题呢</span>
-        <p>为帮助审核人员尽快处理,请补充转载来源等详细信息</p>
-        <el-input type="textarea" autosize placeholder="请输入内容" v-model="textarea1">
-        </el-input>
-        <span slot="footer" class="dialog-footer">
-                <el-button @click="addDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="submit">确 定</el-button>
-            </span>
-      </el-dialog>
     </div>
   </div>
 </template>
@@ -190,6 +179,9 @@ import {
 </script>
 
 <script>
+import { changepassword, getuserinfo } from "@/utils/api";
+import { ElMessage } from "element-plus";
+import qs from "qs";
 export default {
   name: "FrNav",
   props: {
@@ -197,26 +189,33 @@ export default {
   },
   data() {
     return {
-      addDialogVisible: false,
+      numoffollowers: 0,
+      numofcomments: 0,
+      numoflikes: 0,
+      numofsys: 0,
       query: "",
-      token: undefined,
+      token: "",
       name: "",
       head: "",
-      textarea1:""
+      textarea1: "",
+      changedata: {
+        username: "luanbu",
+        password: "yaoyaoling110YAO",
+        password1: "yaoyaoling112YAO",
+        password2: "yaoyaoling11111",
+      },
     };
   },
   mounted() {
     this.updateinfo();
   },
-
   watch: {
     "$store.state.token"() {
       // console.log("changed!");
       this.updateinfo();
     },
   },
-  updated() {
-  },
+  updated() {},
   methods: {
     browse() {
       this.$router.push({
@@ -230,15 +229,24 @@ export default {
     },
     updateinfo() {
       this.token = this.$store.state.token;
-      if (this.token === undefined) {
+      if (!this.token) {
         this.head =
             "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/Transparent_Akkarin.jpg";
         this.name = "请登录";
       } else {
+        console.log(this.$store.state.username, this.$store.state.token);
+        getuserinfo({ username: this.$store.state.username }).then(
+            (response) => {
+              if (response.data.status_code == 1) {
+                console.log(response.data);
+                this.head = response.data.head;
+              } else ElMessage.error(response.data.message);
+            }
+        );
         //this.head = this.userinfo.head;
         this.name = this.$store.state.username;
       }
-      console.log(this.name)
+      console.log(this.name);
     },
     indentSignal() {
       this.$emit("indent");
@@ -259,86 +267,14 @@ export default {
       this.$router.push("/login");
     },
     logout() {
-      /*Axios.post(
-        "http://127.0.0.1:8000/api/users/logout",
-        {},
-        {
-          headers: { "Content-Type": "application/x-www-form-urlencoded" }, //加上这个
-        }
-      )
-        .then((response) => {
-          console.log(response);
-          let ret = response.data.status_code;
-          if (ret === 200) {
-            sessionStorage.clear();
-            localStorage.clear();
-            ElMessage({
-              message: "注销成功",
-              type: "success",
-            });
-            setTimeout(() => {
-              //需要延迟的代码 :3秒后延迟跳转到首页，可以加提示什么的
-              this.$router.push({
-                path: "/",
-              });
-              //延迟时间：3秒
-            }, 3000);
-          } else if (ret === 401) {
-            ElMessage.error("未登录");
-          }
-        })
-        .catch((error) => {
-          // 请求失败处理
-          console.log(error);
-          ElMessage.error("网络有错误噢");
-        });*/
       this.$store.commit("removeInfo");
       localStorage.clear();
     },
     checkInfo() {
+      this.$router.push("/personalspace");
     },
     changePassword() {
-      console.log("tanchuanchuxian")
-      this.addDialogVisible = true
-
-    },
-    submit() {/*
-      var t = this.newAll;
-      if(t.username.length === 0){
-        alert("用户名不能为空！！！");
-      }
-      if(t.password.length === 0){
-        alert("密码不能为空！！！");
-      }
-      if(this.standard.toLowerCase() !== this.viaCode.toLowerCase()){
-        alert("验证码不正确");
-      }
-      let that=this;
-      this.$axios({
-        method:'post',
-        url:'users/change_password/',
-        headers:{
-          'Authorization':localStorage.key
-        },
-        transformRequest: [function (data) {
-          // 对 data 进行任意转换处理
-          return Qs.stringify(data)
-        }],
-        data:{
-          newusername:this.newAll.username,
-          newpassword:this.newAll.password,
-        }
-      }).then(function (res){
-        if(res.data.errno==1){
-          alert("用户名已存在");
-        }
-        else{
-          alert('修改成功！！');
-        }
-      }).catch(err=>{
-        console.log(err);
-      })
-    },*/
+      this.$router.push("/changepassword");
     },
   },
 };
@@ -350,11 +286,10 @@ export default {
     width: 55px;
     height: 100%;
     flex: none;
-
     background: linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0.737),
-      rgba(255, 255, 255, 0.221)
+            to bottom,
+            rgba(255, 255, 255, 0.737),
+            rgba(255, 255, 255, 0.221)
     );
     box-shadow: 0px 15px 10px -15px rgba(221, 221, 221, 0.479);
     backdrop-filter: blur(2rem);

@@ -1,5 +1,31 @@
 <template>
   <div class="big">
+    <el-dialog v-model="dialogFormVisible1" title="邀请成员" width="30%" center>
+      <el-form :model="newfile">
+        <el-form-item label="文件名称">
+          <el-input v-model="newfile.name" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="文件类型">
+          <el-select v-model="newfile.type" placeholder="选择文件类型">
+            <el-option label="文本文档" value="0" />
+            <el-option label="原型设计" value="1" />
+            <el-option label="UML图" value="2" />
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button
+            @click="this.dialogFormVisible1 = false"
+            style="background-color: white"
+            >Cancel</el-button
+          >
+          <el-button type="primary" @click="this.dialogFormVisible1 = false"
+            >Confirm</el-button
+          >
+        </span>
+      </template>
+    </el-dialog>
     <div id="content">
       <div id="left">
         <div id="leftup">
@@ -95,6 +121,121 @@
         </div>
 
         <hr style="margin: 5px; margin-bottom: 20px" />
+        <div id="leftdown1" v-if="tab == 'tab-0'">
+          <div id="leftdown1left">
+            <div style="display: flex; justify-content: space-between">
+              <h2 class="bluelight">项目信息</h2>
+              <el-button type="primary" style="margin-right: 30px"
+                ><el-icon><Filter /></el-icon
+              ></el-button>
+            </div>
+
+            <hr style="margin: 5px; margin-bottom: 20px" />
+            <span class="bluelight">团队：猫娘乐园</span>
+            <span class="bluelight">创建人：{{ data.creator }}</span
+            ><span style="font-size: 13px" class="bluelight"
+              >创建于{{ data.createtime }}</span
+            >
+
+            <div
+              class="intro bluelight"
+              v-if="editing == 0"
+              style="margin-top: 10px"
+            >
+              {{ data.intro }}
+            </div>
+            <el-input
+              v-else
+              v-model="data.brief_intro"
+              placeholder="简介"
+              type="textarea"
+              :rows="4"
+              style="display: line; width: 200px; font-size: 10px"
+            />
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                margin-top: 20px;
+              "
+            >
+              <h2 class="bluelight">项目进度</h2>
+            </div>
+
+            <hr style="margin: 5px; margin-bottom: 20px" />
+            <div
+              class="progress"
+              style="
+                width: 100%;
+                height: 100px;
+                display: flex;
+                justify-content: space-around;
+                background-color: transparent;
+                flex-shrink: 0;
+              "
+            >
+              <div class="pg" style="height: 100%; flex: 0 1 35%">
+                <span class="bluelight" style="font-size: 13px">已完成</span>
+                <span class="bluelight" style="font-size: 30px">11</span>
+                <el-progress
+                  status="success"
+                  :percentage="50"
+                  :show-text="false"
+                >
+                </el-progress>
+              </div>
+              <div class="pg" style="height: 100%; flex: 0 1 35%">
+                <span class="bluelight" style="font-size: 13px">未完成</span>
+                <span class="bluelight" style="font-size: 30px">11</span>
+                <el-progress
+                  status="warning"
+                  :percentage="50"
+                  :show-text="false"
+                >
+                </el-progress>
+              </div>
+            </div>
+          </div>
+          <div id="leftdown1right">
+            <div style="display: flex; justify-content: space-between">
+              <h2 class="bluelight">项目动态</h2>
+            </div>
+
+            <hr style="margin: 5px; margin-bottom: 20px" />
+            <div class="dongtaicontainer">
+              <div class="dongtai" v-for="i in [1, 2]">
+                <img
+                  src="https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg"
+                />
+                <div class="dongtairight bluelight">
+                  <div>刘华阳</div>
+                  <div style="font-size: 15px">创建了项目：NEKOPARA</div>
+                  <div style="font-size: 13px">2022/8/5</div>
+                </div>
+              </div>
+              <div class="dongtai" v-for="i in [1, 2]">
+                <img
+                  src="https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg"
+                />
+                <div class="dongtairight bluelight">
+                  <div>小七</div>
+                  <div style="font-size: 15px">邀请了成员：吕双羽</div>
+                  <div style="font-size: 13px">2022/8/5</div>
+                </div>
+              </div>
+              <div class="dongtai" v-for="i in [1, 2]">
+                <img
+                  src="https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg"
+                />
+                <div class="dongtairight bluelight">
+                  <div>徐凡</div>
+                  <div style="font-size: 15px">成为了管理员</div>
+                  <div style="font-size: 13px">2022/8/5</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div id="leftdown" v-if="tab == 'tab-1'">
           <el-collapse
             v-model="activeNames"
@@ -112,8 +253,7 @@
                 v-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9]"
               >
                 <div class="oneitem">
-<!--                  <img src="..\assets\img\fileicons\Word.png" />-->
-                  <co-editor></co-editor>
+                  <img src="..\assets\img\fileicons\Word.png" />
                   <div>少年阿宾.txt</div>
                   <div style="font-size: smaller; margin-top: 2px">
                     2022/8/3
@@ -181,6 +321,20 @@ export default {
   data() {
     return {
       tab: "tab-0",
+      dialogFormVisible1: false,
+      editing: 0,
+      data: {
+        creator: "刘华阳",
+        createtime: "2022/8/5",
+        avatar:
+          "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg",
+        intro:
+          "你若去往「绝云间」，便替我采来一束[清心」吧。一束就好。此行的旅费.啊，差些忘了，「契约」生效期间，旅费由你代为垫付。那就有劳了你说，归离原的少年仙人.啊.直至今日，他仍在履行他的职责.哦，这副「连理镇心散」，请替我带给他。对了，可千万不能让小派蒙偷吃了去，这里的药力.绝非常人所能承受。",
+      },
+      newfile: {
+        name: "",
+        type: "",
+      },
     };
   },
 };
@@ -229,7 +383,10 @@ export default {
     background-size: cover;
   }
 }
-
+.el-progress--line {
+  margin-bottom: 15px;
+  width: 80px;
+}
 .big {
   display: flex;
   align-items: center;
@@ -263,6 +420,11 @@ export default {
   flex: 1 1 30%;
   min-width: 200px;
   padding: 10px;
+}
+.bluelight {
+  font-weight: lighter;
+  font-size: 20px;
+  color: #26476d;
 }
 .gradient {
   background-image: linear-gradient(90deg, #4facfe, #7bd4fe, #6acaf7, #4facfe);
@@ -493,5 +655,121 @@ nav a:nth-child(5):hover ~ .animation {
 }
 .text-wrap > :last-child {
   margin-bottom: 0;
+}
+#leftdown1 {
+  display: flex;
+
+  justify-content: start;
+  overflow-y: scroll;
+  height: 63vh;
+  padding: 0 5px;
+  flex-direction: row;
+}
+.bluelight {
+  font-weight: lighter;
+  font-size: 20px;
+  color: #26476d;
+}
+#leftdown1left {
+  flex: 0 1 30%;
+
+  min-width: 230px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid lightgray;
+}
+#leftdown1right {
+  flex: 0 1 70%;
+  height: 100%;
+
+  padding: 20px;
+}
+.dongtaicontainer {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.dongtai {
+  background: linear-gradient(
+    to right bottom,
+    rgba(255, 255, 255, 0.185),
+    rgba(255, 255, 255, 0.042)
+  );
+  backdrop-filter: blur(1rem);
+  width: 300px;
+  height: 100px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 15px 10px -15px rgba(211, 211, 211, 0.392);
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin-right: 60px;
+  img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0px 15px 10px -15px rgb(211, 211, 211);
+    margin-right: 10px;
+  }
+}
+#teamavatar {
+  width: 200px !important;
+  height: 200px !important;
+  object-fit: cover;
+  border: 10px solid white;
+  border-radius: 20px;
+  box-shadow: 0px 15px 10px -15px lightgray;
+  margin-bottom: 15px;
+  flex-shrink: 0;
+}
+.el-button {
+  background-color: #26476d;
+  border: none;
+}
+.intro {
+  font-size: 14px;
+  width: 200px;
+  text-indent: 2em;
+}
+.pg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(
+    to right bottom,
+    rgba(255, 255, 255, 0.185),
+    rgba(255, 255, 255, 0.042)
+  );
+  backdrop-filter: blur(1rem);
+  justify-content: space-around;
+  border-radius: 10px;
+  box-shadow: 0px 15px 10px -15px rgba(211, 211, 211, 0.696);
+}
+::v-deep .el-dialog {
+  background: linear-gradient(
+    to right bottom,
+    rgba(255, 255, 255, 0.905),
+    rgba(255, 255, 255, 0.622)
+  );
+  backdrop-filter: blur(1rem);
+  border-radius: 10px;
+  box-shadow: 0px 15px 10px -15px lightgray;
+  font-weight: lighter;
+  font-size: 23px;
+  color: #26476d;
+  overflow: hidden;
+  .el-button {
+    background-color: #26476d;
+    border: none;
+  }
+}
+::v-deep .el-dialog__header {
+  margin-right: 0;
+  color: white;
+  background: linear-gradient(to right bottom, #26476def, #26476dc5);
 }
 </style>

@@ -32,6 +32,30 @@ export function load_uml(data){
     })
 }
 
+export async function getuserinfo(data) {
+    return request({
+        url: 'api/users/get_info',
+        method: 'post',
+        data,
+    })
+}
+
+export async function edituserinfo(data) {
+    return request({
+        url: 'api/users/update/info',
+        method: 'post',
+        data,
+    })
+}
+export async function changepassword(data) {
+    return request({
+        url: 'api/users/change_password',
+        method: 'post',
+        data,
+    })
+}
+
+
 export function save_doc(data){
     return request({
         url: 'api/team/doc/save',

@@ -3,10 +3,6 @@
     <div id="content">
       <el-calendar>
         <template #dateCell="{ data }">
-          <!-- <p :class="data.isSelected ? 'is-selected' : ''">
-            {{ data.day.split("-").slice(1).join("-") }}
-            {{ data.isSelected ? "✔️" : "" }}
-          </p> -->
           <p
             style="
               font-size: 20px;
@@ -47,7 +43,6 @@ export default {
   components: {},
   data() {
     return {
-      ans: [],
       calendarData: [
         { month: 8, day: 5, thing: "第一次答辩" },
         { month: 8, day: 5, thing: "七夕第二天" },
@@ -58,7 +53,7 @@ export default {
   },
   methods: {
     check(a, b) {
-      this.ans = [];
+      let ans = [];
       let len = this.calendarData.length;
       let i = 0;
       for (i = 0; i < len; i++) {
@@ -66,11 +61,10 @@ export default {
           this.calendarData[i].month == parseInt(a) &&
           this.calendarData[i].day == parseInt(b)
         ) {
-          this.ans.push(this.calendarData[i].thing);
+          ans.push(this.calendarData[i].thing);
         }
-        console.log(i);
       }
-      return this.ans;
+      return ans;
       return ["neow", "!23"];
     },
   },

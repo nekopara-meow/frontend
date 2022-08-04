@@ -17,12 +17,27 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
   {
+    path: '/changepassword',
+    name: 'changepassword',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/ChangePassword.vue')
+  },
+  {
     path: '/teamdetail',
     name: 'teamdetail',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/TeamDetail.vue')
+  },{
+    path: '/personalspace',
+    name: 'personalspace',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/PersonalSpace.vue')
   },
   {
     path: '/projectdetail',
@@ -39,6 +54,14 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/Workspace.vue')
+  },
+  {
+    path: '/axure',
+    name: 'axure',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/Axure.vue')
   },
   {
     path: '/login',
@@ -81,15 +104,31 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Calendar.vue')
   },
   {
+    path: '/confirm',
+    name: 'confirm',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/Confirm.vue')
+  },
+  {
     path: '/test',
     name: 'test',
-    component: ()=>import('../components/Tiptap')
+    component: ()=>import('../components/UMLEditor')
   },
   {
     path: '/editor',
     name: 'editor',
     component: ()=>import('../components/Tiptap')
-  }
+  },
+  {
+    path: "/404",
+    component: () => import("@/views/404.vue"),
+  },
+  {
+    path: "/:pathMatch(.*)*", //匹配未定义的路由
+    redirect: "/404", //重定向
+  },
 ]
 
 const router = createRouter({
