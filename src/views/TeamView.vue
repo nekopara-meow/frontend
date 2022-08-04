@@ -62,19 +62,6 @@
           </div>
 
           <div class="buttons">
-            <!-- <el-dropdown style="margin-right: 30px">
-              <el-button type="primary"
-                ><el-icon><Sort /></el-icon
-              ></el-button>
-              <template #dropdown>
-                <el-dropdown-menu>
-                  <el-dropdown-item>按xx排序</el-dropdown-item>
-                  <el-dropdown-item>按xx排序</el-dropdown-item>
-                  <el-dropdown-item>按xx排序</el-dropdown-item>
-                </el-dropdown-menu>
-              </template>
-            </el-dropdown> -->
-
             <el-button type="primary" @click="this.dialogFormVisible = true"
               ><el-icon><Plus /></el-icon
             ></el-button>

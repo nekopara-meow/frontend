@@ -1,9 +1,63 @@
 <template>
   <div class="big">
+    <el-dialog v-model="dialogFormVisible1" title="邀请成员" width="30%" center>
+      <el-form :model="invite">
+        <el-form-item label="用户名称">
+          <el-input v-model="invite.name" autocomplete="off" />
+        </el-form-item>
+        <!-- <el-form-item label="团队介绍">
+          <el-input
+            type="textarea"
+            :rows="3"
+            v-model="createteamform.intro"
+            autocomplete="off"
+          />
+        </el-form-item> -->
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button
+            @click="this.dialogFormVisible1 = false"
+            style="background-color: white"
+            >Cancel</el-button
+          >
+          <el-button type="primary" @click="this.dialogFormVisible1 = false"
+            >Confirm</el-button
+          >
+        </span>
+      </template>
+    </el-dialog>
+    <el-dialog v-model="dialogFormVisible2" title="新建项目" width="30%" center>
+      <el-form :model="newproject">
+        <el-form-item label="项目名称">
+          <el-input v-model="newproject.name" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="项目简介">
+          <el-input
+            type="textarea"
+            :rows="3"
+            v-model="newproject.intro"
+            autocomplete="off"
+          />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button
+            @click="this.dialogFormVisible2 = false"
+            style="background-color: white"
+            >Cancel</el-button
+          >
+          <el-button type="primary" @click="this.dialogFormVisible2 = false"
+            >Confirm</el-button
+          >
+        </span>
+      </template>
+    </el-dialog>
     <div id="content">
       <div id="left">
         <div id="leftup">
-          <div style="display: flex">
+          <div style="display: flex; width: 100%">
             <h2 class="title gradient">猫娘乐园</h2>
             <nav>
               <a
@@ -33,18 +87,68 @@
               <div class="animation" :class="tab"></div>
             </nav>
           </div>
+          <el-button
+            type="primary"
+            style="margin-right: 30px"
+            v-if="tab == 'tab-0' && editing == 0"
+            @click="edit"
+            ><el-icon><Edit /></el-icon
+          ></el-button>
+          <el-button
+            type="primary"
+            style="margin-right: 30px"
+            @click="edit"
+            v-if="tab == 'tab-0' && editing == 1"
+            ><el-icon><Upload /></el-icon
+          ></el-button>
+          <el-button
+            type="primary"
+            style="margin-right: 30px"
+            @click="this.dialogFormVisible1 = true"
+            v-if="tab == 'tab-1'"
+            ><el-icon><Plus /></el-icon
+          ></el-button>
+          <el-button
+            type="primary"
+            style="margin-right: 30px"
+            @click="this.dialogFormVisible2 = true"
+            v-if="tab == 'tab-2'"
+            ><el-icon><Plus /></el-icon
+          ></el-button>
         </div>
 
         <hr style="margin: 5px; margin-bottom: 20px" />
         <div id="leftdown1" v-if="tab == 'tab-0'">
           <div id="leftdown1left">
-            <img
-              id="teamavatar"
-              src="https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg"
-            />
-            <span class="bluelight">刘华阳</span
+            <img id="teamavatar" :src="data.avatar" v-if="editing == 0" />
+            <el-upload
+              v-else
+              class="avatar-uploader"
+              action=""
+              :show-file-list="false"
+              :on-success="handleAvatarSuccess"
+              :before-upload="handleBeforeUpload"
+              :http-request="uploadURL"
+              v-model="data.avatar"
+              :style="
+                'background-image: url(' +
+                data.avatar +
+                ');background-size:cover;background-position:center'
+              "
+              style="
+                width: 200px !important;
+                height: 200px !important;
+                flex-shrink: 0;
+                box-shadow: 0px 15px 10px -15px lightgray;
+                margin-bottom: 15px;
+              "
+            >
+              <!-- <img v-if="flag == 1" class="upper" :src="url" /> -->
+              <el-icon class="avatar-uploader-icon"><Plus /></el-icon>
+            </el-upload>
+            <span class="bluelight">{{ data.creator }}</span
             ><span style="font-size: 13px" class="bluelight"
-              >创建于2022/8/5</span
+              >创建于{{ data.createtime }}</span
             >
             <div class="text-wrap" style="margin: 10px 0">
               <div class="example">
@@ -83,9 +187,17 @@
                 </div>
               </div>
             </div>
-            <div class="intro bluelight">
-              你若去往「绝云间」，便替我采来一束[清心」吧。一束就好。此行的旅费.啊，差些忘了，「契约」生效期间，旅费由你代为垫付。那就有劳了你说，归离原的少年仙人.啊.直至今日，他仍在履行他的职责.哦，这副「连理镇心散」，请替我带给他。对了，可千万不能让小派蒙偷吃了去，这里的药力.绝非常人所能承受。
+            <div class="intro bluelight" v-if="editing == 0">
+              {{ data.intro }}
             </div>
+            <el-input
+              v-else
+              v-model="data.brief_intro"
+              placeholder="简介"
+              type="textarea"
+              :rows="4"
+              style="display: line; width: 200px; font-size: 10px"
+            />
           </div>
           <div id="leftdown1right">
             <div style="display: flex; justify-content: space-between">
@@ -230,43 +342,6 @@
             </el-collapse-item>
             <hr style="margin: 5px" />
           </el-collapse>
-          <!-- <div class="oneteam" v-for="i in [1, 2, 3, 4, 5, 6]">
-            <div
-              class="teamimage"
-              style="
-                background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-              "
-            ></div>
-            <div class="oneteamdown">
-              <div style="font-size: 18px">小秋月</div>
-              <div>我是傻逼，我是傻逼，我真的是傻逼</div>
-              <div class="text-wrap">
-                <div class="example">
-                  <div class="avatar-list avatar-list-stacked">
-                    <span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span class="avatar cover-image brround">+8</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> -->
         </div>
         <div id="leftdown" v-if="tab == 'tab-2'">
           <div
@@ -289,19 +364,80 @@
 
 <script>
 import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
-import { Filter, Sort, Plus, CaretBottom } from "@element-plus/icons-vue";
+import {
+  Filter,
+  Sort,
+  Plus,
+  CaretBottom,
+  Edit,
+  Upload,
+} from "@element-plus/icons-vue";
 export default {
   name: "workspace",
-  components: { Filter, Sort, Plus, CaretBottom },
+  components: { Filter, Edit, Sort, Plus, CaretBottom, Upload },
   data() {
     return {
+      dialogFormVisible1: false,
+      dialogFormVisible2: false,
       tab: "tab-0",
+      editing: 0,
+      data: {
+        creator: "刘华阳",
+        createtime: "2022/8/5",
+        avatar:
+          "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg",
+        intro:
+          "你若去往「绝云间」，便替我采来一束[清心」吧。一束就好。此行的旅费.啊，差些忘了，「契约」生效期间，旅费由你代为垫付。那就有劳了你说，归离原的少年仙人.啊.直至今日，他仍在履行他的职责.哦，这副「连理镇心散」，请替我带给他。对了，可千万不能让小派蒙偷吃了去，这里的药力.绝非常人所能承受。",
+      },
+      invite: {
+        name: "",
+      },
+      newproject: {
+        name: "",
+        intro: "",
+      },
     };
+  },
+  methods: {
+    edit() {
+      if (this.editing == 0) {
+        this.editing = 1;
+      } else {
+        this.editing = 0;
+        ElMessage({
+          message: "修改成功",
+          type: "success",
+        });
+      }
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.avatar-uploader {
+  width: 200px;
+  height: 200px;
+  box-sizing: border-box;
+  border: 10px solid white;
+  border-radius: 20px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: white;
+  font-weight: 500;
+  width: 180px;
+  height: 180px;
+  line-height: 180px;
+  text-align: center;
+  background-color: #0000005b;
+}
 .oneteamdown {
   color: #26476d;
   width: 100%;
@@ -689,5 +825,28 @@ nav a:nth-child(3):hover ~ .animation {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+::v-deep .el-dialog {
+  background: linear-gradient(
+    to right bottom,
+    rgba(255, 255, 255, 0.905),
+    rgba(255, 255, 255, 0.622)
+  );
+  backdrop-filter: blur(1rem);
+  border-radius: 10px;
+  box-shadow: 0px 15px 10px -15px lightgray;
+  font-weight: lighter;
+  font-size: 23px;
+  color: #26476d;
+  overflow: hidden;
+  .el-button {
+    background-color: #26476d;
+    border: none;
+  }
+}
+::v-deep .el-dialog__header {
+  margin-right: 0;
+  color: white;
+  background: linear-gradient(to right bottom, #26476def, #26476dc5);
 }
 </style>

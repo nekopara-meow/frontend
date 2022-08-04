@@ -1,6 +1,6 @@
 <template>
   <div id="App" class="row">
-    <fr-aside @click="collapse=!collapse" :collapse="collapse" />
+    <fr-aside @click="collapse = !collapse" :collapse="collapse" />
     <main>
       <fr-nav :collapse="collapse" @indent="collapse = !collapse" />
       <article :style="background" :class="{ indent: collapse }">
@@ -76,6 +76,8 @@ export default {
   padding: 0;
   flex-wrap: nowrap;
   background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/bg.png);
+  background-size: cover;
+  background-position: center;
 }
 .row > * {
   padding: 0;

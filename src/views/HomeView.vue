@@ -35,7 +35,7 @@ export default {
     };
   },
   mounted() {
-    this.svgFun();
+    // this.svgFun();
   },
   methods: {
     go() {
