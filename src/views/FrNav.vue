@@ -24,7 +24,7 @@
       <el-dropdown
         trigger="click"
         class="Notification"
-        v-if="this.$store.state.token !== undefined"
+        v-if="this.$store.state.token"
       >
         <div class="el-dropdown-link d-flex align-items-center">
           <el-badge
@@ -239,6 +239,21 @@ export default {
         this.name = this.$store.state.username;
       }
       console.log(this.name)
+    },
+    indentSignal() {
+      this.$emit("indent");
+    },
+    gotoListFollow() {
+      this.$router.push({ name: "List" });
+    },
+    gotoListLike() {
+      this.$router.push({ name: "ListLike" });
+    },
+    gotoListComment() {
+      this.$router.push({ name: "ListCommit" });
+    },
+    gotoListSys() {
+      this.$router.push({ name: "ListSys" });
     },
     login() {
       this.$router.push("/login");
