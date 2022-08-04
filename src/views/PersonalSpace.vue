@@ -52,7 +52,7 @@
               font-size: 15px;
             "
           />
-          <img v-if="editing == 0" src="../assets/img/xingbienv.png" />
+          <img v-if="editing == 0" :src="genderimg" />
           <el-input
             v-else
             v-model="data.gender"
@@ -62,14 +62,7 @@
           />
         </div>
         <div style="font-size: 10px">
-          真实姓名：<span v-if="editing == 0">{{ data.name }}</span>
-          <el-input
-            v-else
-            v-model="data.name"
-            placeholder="姓名"
-            size="small"
-            style="display: line; width: 50px; font-size: 10px"
-          />
+          用户名：<span >{{ data.username }}</span>
         </div>
         <hr style="margin: 5px; width: 100%" />
         <div class="tel">
@@ -86,22 +79,16 @@
         </div>
         <div class="tel">
           <span>Email</span>
-          <span style="font-size: 20px" v-if="editing == 0">{{
-            data.email
+          <span style="font-size: 20px" >{{
+            email
           }}</span>
-          <el-input
-            v-else
-            v-model="data.email"
-            placeholder="邮箱"
-            style="display: line; width: 200px; font-size: 15px"
-          />
         </div>
-        <div class="tel" style="margin-bottom: 0px">Intro</div>
-        <div class="tel introdetail" style="font-size: 15px; margin-top: 0px">
-          <span v-if="editing == 0">{{ data.intro }}</span>
+        <div class="tel" style="margin-bottom: 0px">brief_intro</div>
+        <div class="tel brief_introdetail" style="font-size: 15px; margin-top: 0px">
+          <span v-if="editing == 0">{{ data.brief_intro }}</span>
           <el-input
             v-else
-            v-model="data.intro"
+            v-model="data.brief_intro"
             placeholder="简介"
             type="textarea"
             :rows="4"
@@ -117,33 +104,44 @@
 import { client, getFileNameUUID } from "../assets/alioss.js";
 import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
 import { Edit, Upload, Plus } from "@element-plus/icons-vue";
-import {getuserinfo} from "@/utils/api";
+import {edituserinfo, getuserinfo} from "@/utils/api";
 export default {
   name: "Login",
   components: { Edit, Upload, Plus },
   created() {
-    getuserinfo({username:this.$store.state.username}).then((response)=>{
-      if(response.status_code==1){
-        this.data.nickname=
-        console.log(response.data);
-        this.head=response.data.head;}
+    getuserinfo({username:this.$store.state.username}).then((response)=>{console.log(response.data);
+      if(response.data.status_code==1){
+        this.data.nickname=response.data.nickname
+        this.data.tel=response.data.tel
+        this.data.username=this.$store.state.username
+        this.data.avatar=response.data.avatar
+        this.data.gender=response.data.gender
+        if(response.data.gender==0)
+        this.genderimg=require( '../assets/img/xingbienv.png');
+        else this.genderimg=require( '../assets/img/xingbienan.png');
+        console.log(this.genderimg)
+        this.data.brief_intro=response.data.brief_intro
+        this.email=response.data.email
+  }
       else
         ElMessage.error(response.data.message);
-    })
+    }
+    )
 
   },
   data() {
     return {
+      email: "sss",
+      genderimg: require('../assets/img/xingbienv.png'),
       editing: 0,
       data: {
+        username:"包新蕾",
         nickname: "小七",
-        name: "包新蕾",
         tel: "13947354199",
-        email: "3499475017@qq.com",
-        gender: "女",
+        gender: 1,
         avatar:
           "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg",
-        intro:
+        brief_intro:
           "你若去往「绝云间」，便替我采来一束[清心」吧。一束就好。此行的旅费.啊，差些忘了，「契约」生效期间，旅费由你代为垫付。那就有劳了你说，归离原的少年仙人.啊.直至今日，他仍在履行他的职责.哦，这副「连理镇心散」，请替我带给他。对了，可千万不能让小派蒙偷吃了去，这里的药力.绝非常人所能承受。",
       },
     };
@@ -154,11 +152,21 @@ export default {
         this.editing = 1;
       } else {
         this.editing = 0;
-        ///上传
-        ElMessage({
-          message: this.data,
-          type: "success",
-        });
+        console.log(this.data),
+        edituserinfo((this.data)).then((response)=>{console.log(response.data);
+              if(response.data.status_code==1){
+                ElMessage({
+                  message: "修改成功",
+                  type: "success",
+                });
+                if(response.data.gender==0)
+                this.genderimg=require( '../assets/img/xingbienv.png');
+                else this.genderimg=require( '../assets/img/xingbienan.png');
+              }
+              else
+                ElMessage.error(response.data.message);
+            }
+        );
       }
 
     },
@@ -271,7 +279,7 @@ export default {
     }
   }
 }
-.introdetail {
+.brief_introdetail {
   height: 80px;
   overflow-y: scroll;
   text-indent: 2em;
