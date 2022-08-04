@@ -1,7 +1,6 @@
-import {createRouter, createWebHashHistory} from 'vue-router'
+import {createRouter, createWebHistory,createWebHashHistory} from 'vue-router'
 import { stringifyQuery, parseQuery } from "../utils/query";
 import HomeView from '../views/HomeView.vue'
-
 const routes = [
   {
     path: '/',
@@ -96,14 +95,30 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Calendar.vue')
   },
   {
+    path: '/confirm',
+    name: 'confirm',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/Confirm.vue')
+  },
+  {
     path: '/test',
     name: 'test',
     component: ()=>import('../components/UMLEditor')
-  }
+  },{
+		path: "/404",
+		component: () => import("@/views/404.vue"),
+	},
+	{
+		path: "/:pathMatch(.*)*", //匹配未定义的路由
+		redirect: "/404", //重定向
+	},
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+
+    history:createWebHashHistory(),
   base: process.env.B,
   stringifyQuery: stringifyQuery,
   parseQuery: parseQuery,
