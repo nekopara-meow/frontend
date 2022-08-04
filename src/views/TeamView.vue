@@ -1,5 +1,32 @@
 <template>
   <div class="big">
+    <el-dialog v-model="dialogFormVisible" title="创建团队" width="30%" center>
+      <el-form :model="createteamform">
+        <el-form-item label="团队名称">
+          <el-input v-model="createteamform.name" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="团队介绍">
+          <el-input
+            type="textarea"
+            :rows="3"
+            v-model="createteamform.intro"
+            autocomplete="off"
+          />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button
+            @click="dialogFormVisible = false"
+            style="background-color: white"
+            >Cancel</el-button
+          >
+          <el-button type="primary" @click="dialogFormVisible = false"
+            >Confirm</el-button
+          >
+        </span>
+      </template>
+    </el-dialog>
     <div id="content">
       <div id="left">
         <div id="leftup">
@@ -35,7 +62,7 @@
           </div>
 
           <div class="buttons">
-            <el-dropdown style="margin-right: 30px">
+            <!-- <el-dropdown style="margin-right: 30px">
               <el-button type="primary"
                 ><el-icon><Sort /></el-icon
               ></el-button>
@@ -46,9 +73,9 @@
                   <el-dropdown-item>按xx排序</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
-            </el-dropdown>
+            </el-dropdown> -->
 
-            <el-button type="primary"
+            <el-button type="primary" @click="this.dialogFormVisible = true"
               ><el-icon><Plus /></el-icon
             ></el-button>
           </div>
@@ -211,6 +238,12 @@ export default {
   data() {
     return {
       tab: "tab-0",
+      dialogFormVisible: false,
+      createteamform: {
+        name: "",
+        intro: "",
+      },
+      formLabelWidth: "140px",
     };
   },
 };
@@ -500,5 +533,28 @@ nav a:nth-child(3):hover ~ .animation {
 }
 .text-wrap > :last-child {
   margin-bottom: 0;
+}
+::v-deep .el-dialog {
+  background: linear-gradient(
+    to right bottom,
+    rgba(255, 255, 255, 0.905),
+    rgba(255, 255, 255, 0.622)
+  );
+  backdrop-filter: blur(1rem);
+  border-radius: 10px;
+  box-shadow: 0px 15px 10px -15px lightgray;
+  font-weight: lighter;
+  font-size: 23px;
+  color: #26476d;
+  overflow: hidden;
+  .el-button {
+    background-color: #26476d;
+    border: none;
+  }
+}
+::v-deep .el-dialog__header {
+  margin-right: 0;
+  color: white;
+  background: linear-gradient(to right bottom, #26476def, #26476dc5);
 }
 </style>
