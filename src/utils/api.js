@@ -15,6 +15,22 @@ export async function register(data) {
         data,
     })
 }
+
+export function save_uml(data){
+    return request({
+        url: 'api/team/uml/save',
+        method: 'post',
+        data,
+    })
+}
+
+export function load_uml(data){
+    return request({
+        url: 'api/team/uml/load',
+        method: 'post',
+        data,
+    })
+}
 /*export const loginApi=data=>{
     return post({
         url: "api/users/login",
