@@ -43,53 +43,27 @@
             style="border: none"
             class="onegroup"
           >
+            <div v-for="(project, index) in file" :key="index">
             <el-collapse-item
-              title="小学期项目"
-              name="1"
+              :title=project.pid
+              :name=index
               style="font-size: 20px; font-weight: lighter"
             >
               <el-dropdown
                 trigger="contextmenu"
-                v-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9]"
+                v-for="(file,index) in project.filelist" :key="index"
               >
                 <div class="oneitem">
                   <img src="..\assets\img\fileicons\Word.png" />
-                  <div>少年阿宾.txt</div>
+                  <div>{{ file.fid }}</div>
                   <div style="font-size: smaller; margin-top: 2px">
                     2022/8/3
                   </div>
                 </div>
 
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <el-dropdown-item>打开</el-dropdown-item>
-                    <el-dropdown-item>在新标签页中打开</el-dropdown-item>
-                    <el-dropdown-item>移出工作台</el-dropdown-item>
-                    <el-dropdown-item>历史版本</el-dropdown-item>
-                    <el-dropdown-item>属性</el-dropdown-item>
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
-            </el-collapse-item>
-
-            <hr style="margin: 5px" />
-            <el-collapse-item
-              title="软工项目"
-              name="2"
-              style="font-size: 20px; font-weight: lighter"
-            >
-              <el-dropdown
-                trigger="contextmenu"
-                v-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9]"
-              >
-                <div class="oneitem">
-                  <img src="..\assets\img\fileicons\txt.png" />
-                  <div>少年阿宾.txt</div>
-                </div>
-
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <el-dropdown-item>打开</el-dropdown-item>
+                <template #dropdown  >
+                  <el-dropdown-menu >
+                    <el-dropdown-item @click.native="go(file.fid)">打开</el-dropdown-item>
                     <el-dropdown-item>在新标签页中打开</el-dropdown-item>
                     <el-dropdown-item>移出工作台</el-dropdown-item>
                     <el-dropdown-item>历史版本</el-dropdown-item>
@@ -99,6 +73,7 @@
               </el-dropdown>
             </el-collapse-item>
             <hr style="margin: 5px" />
+            </div>
           </el-collapse>
         </div>
       </div>
@@ -143,14 +118,15 @@
             style="border: none"
             class="onegroup"
           >
+            <div v-for="(project, index) in task" :key="index">
             <el-collapse-item
-              title="小学期项目"
-              name="1"
+              :title=project.pid
+              :name=index
               style="font-size: 20px; font-weight: lighter"
             >
               <el-dropdown
                 trigger="contextmenu"
-                v-for="i in [1, 2, 3]"
+                v-for="(task,index) in project.tasklist" :key="index"
                 style="
                   display: block;
                   width: 100%;
@@ -158,139 +134,26 @@
                   white-space: nowrap;
                 "
               >
-                <div class="onediedai busy">
-                  <div style="color: #26476d; font-size: 20px">前端设计</div>
+                <div class="onediedai" :class="{
+                  verybusy: task.tid==2,
+                  busy: task.tid ==1,
+                  easy: task.tid==3
+                }">
+                  <div style="color: #26476d; font-size: 20px">{{task.name}}</div>
                   <div style="margin: 5px 0">截止时间：明天12:00</div>
                   <div style="margin: 5px 0">团队：猫娘乐园</div>
                 </div>
 
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item>标记为已完成</el-dropdown-item>
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
-              <el-dropdown
-                trigger="contextmenu"
-                v-for="i in [1, 2, 3]"
-                style="
-                  display: block;
-                  width: 100%;
-                  text-overflow: ellipsis;
-                  white-space: nowrap;
-                "
-              >
-                <div class="onediedai warn">
-                  <div style="color: #26476d; font-size: 20px">前端设计</div>
-                  <div style="margin: 5px 0">截止时间：明天12:00</div>
-                  <div style="margin: 5px 0">团队：猫娘乐园</div>
-                </div>
-
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <el-dropdown-item>标记为已完成</el-dropdown-item>
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
-              <el-dropdown
-                trigger="contextmenu"
-                v-for="i in [1, 2, 3]"
-                style="
-                  display: block;
-                  width: 100%;
-                  text-overflow: ellipsis;
-                  white-space: nowrap;
-                "
-              >
-                <div class="onediedai">
-                  <div style="color: #26476d; font-size: 20px">前端设计</div>
-                  <div style="margin: 5px 0">截止时间：明天12:00</div>
-                  <div style="margin: 5px 0">团队：猫娘乐园</div>
-                </div>
-
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <el-dropdown-item>标记为已完成</el-dropdown-item>
+                    <el-dropdown-item @click.native="finish(task.id)">标记为已完成</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
             </el-collapse-item>
 
             <hr style="margin: 5px" />
-            <el-collapse-item
-              title="猫娘项目"
-              name="2"
-              style="font-size: 20px; font-weight: lighter"
-            >
-              <el-dropdown
-                trigger="contextmenu"
-                v-for="i in [1, 2, 3]"
-                style="
-                  display: block;
-                  width: 100%;
-                  text-overflow: ellipsis;
-                  white-space: nowrap;
-                "
-              >
-                <div class="onediedai busy">
-                  <div style="color: #26476d; font-size: 20px">前端设计</div>
-                  <div style="margin: 5px 0">截止时间：明天12:00</div>
-                  <div style="margin: 5px 0">团队：猫娘乐园</div>
-                </div>
-
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <el-dropdown-item>标记为已完成</el-dropdown-item>
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
-              <el-dropdown
-                trigger="contextmenu"
-                v-for="i in [1, 2, 3]"
-                style="
-                  display: block;
-                  width: 100%;
-                  text-overflow: ellipsis;
-                  white-space: nowrap;
-                "
-              >
-                <div class="onediedai warn">
-                  <div style="color: #26476d; font-size: 20px">前端设计</div>
-                  <div style="margin: 5px 0">截止时间：明天12:00</div>
-                  <div style="margin: 5px 0">团队：猫娘乐园</div>
-                </div>
-
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <el-dropdown-item>标记为已完成</el-dropdown-item>
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
-              <el-dropdown
-                trigger="contextmenu"
-                v-for="i in [1, 2, 3]"
-                style="
-                  display: block;
-                  width: 100%;
-                  text-overflow: ellipsis;
-                  white-space: nowrap;
-                "
-              >
-                <div class="onediedai">
-                  <div style="color: #26476d; font-size: 20px">前端设计</div>
-                  <div style="margin: 5px 0">截止时间：明天12:00</div>
-                  <div style="margin: 5px 0">团队：猫娘乐园</div>
-                </div>
-
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <el-dropdown-item>标记为已完成</el-dropdown-item>
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
-            </el-collapse-item>
-
-            <hr style="margin: 5px" />
+            </div>
           </el-collapse>
         </div>
       </div>
@@ -301,9 +164,31 @@
 <script>
 import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
 import { Filter, Sort, CaretBottom } from "@element-plus/icons-vue";
+import {reactive, toRefs} from "vue";
+import router from "@/router";
+import store from "@/store";
 export default {
   name: "workspace",
   components: { Filter, Sort, CaretBottom },
+  setup(){
+    const data=reactive({
+      file:[{pid:1,filelist:[{fid:1},{fid: 2}]},{pid:2,filelist:[{fid:1},{fid: 2}]}],
+      task:[{pid:1,tasklist:[{tid:1,name:"前端设计"},{tid: 2,name:"前端设计"}]},{pid:2,tasklist:[{tid:1},{tid: 2}]}]
+    })
+    const methods = {
+      go(fid) {
+        console.log(store.state.token)
+      },
+      finish(tid){
+
+      }
+    }
+    return{
+      ...toRefs(data),
+          ...methods,
+    }
+  }
+
 };
 </script>
 
@@ -468,13 +353,14 @@ export default {
   backdrop-filter: blur(1rem);
   padding: 10px;
   border-radius: 5px;
-  box-shadow: 0px 15px 10px -15px rgba(211, 211, 211, 0.664);
+  box-shadow: 0px 15px 10px -15px rgba(211, 211, 211, 0.664);}
+.easy{
   border-left: 10px solid rgba(144, 238, 144, 0.307);
 }
-.busy {
+.verybusy {
   border-left: 10px solid rgba(240, 128, 128, 0.259);
 }
-.warn {
+.busy {
   border-left: 10px solid rgba(233, 233, 133, 0.377);
 }
 </style>

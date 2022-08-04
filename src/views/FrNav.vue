@@ -24,7 +24,7 @@
       <el-dropdown
         trigger="click"
         class="Notification"
-        v-if="this.$store.state.userinfo !== undefined"
+        v-if="this.$store.state.token"
       >
         <div class="el-dropdown-link d-flex align-items-center">
           <el-badge
@@ -125,34 +125,45 @@
         <template #dropdown>
           <el-dropdown-menu style="width: 160px">
             <el-dropdown-item
-              :icon="Setting"
-              v-if="this.$store.state.userinfo !== undefined"
+                :icon="User"
+                v-if="this.$store.state.token"
+                @click="checkInfo"
+            >查看资料</el-dropdown-item
             >
-              <router-link to="/appearance">设置</router-link>
-            </el-dropdown-item>
             <el-dropdown-item
               :icon="User"
-              v-if="this.$store.state.userinfo !== undefined"
-              @click="gotocenter"
-              >个人空间</el-dropdown-item
+              v-if="this.$store.state.token"
+              @click="changePassword"
+              >修改密码</el-dropdown-item
             >
             <el-dropdown-item
               :icon="TurnOff"
               divided
               @click="logout"
-              v-if="this.$store.state.userinfo !== undefined"
+              v-if="this.$store.state.token"
               >退出登录</el-dropdown-item
             >
             <el-dropdown-item
               :icon="TurnOff"
               divided
               @click="login"
-              v-if="this.$store.state.userinfo === undefined"
+              v-if="!this.$store.state.token"
               >登录</el-dropdown-item
             >
           </el-dropdown-menu>
         </template>
       </el-dropdown>
+      <el-dialog title="修改密码" :visible.sync="addDialogVisible" width="50%" >
+        <hr>
+        <span>你觉得这个稿件有什么问题呢</span>
+        <p>为帮助审核人员尽快处理,请补充转载来源等详细信息</p>
+        <el-input type="textarea" autosize placeholder="请输入内容" v-model="textarea1">
+        </el-input>
+        <span slot="footer" class="dialog-footer">
+                <el-button @click="addDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="submit">确 定</el-button>
+            </span>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -186,14 +197,12 @@ export default {
   },
   data() {
     return {
+      addDialogVisible: false,
       query: "",
-      userinfo: undefined,
-      head: "",
+      token: undefined,
       name: "",
-      numofcomments: 0,
-      numoffollowers: 0,
-      numoflikes: 0,
-      numofsys: 0,
+      head: "",
+      textarea1:""
     };
   },
   mounted() {
@@ -201,12 +210,13 @@ export default {
   },
 
   watch: {
-    "$store.state.userinfo"() {
+    "$store.state.token"() {
       // console.log("changed!");
       this.updateinfo();
     },
   },
-  updated() {},
+  updated() {
+  },
   methods: {
     browse() {
       this.$router.push({
@@ -217,6 +227,18 @@ export default {
         },
       });
       // ???
+    },
+    updateinfo() {
+      this.token = this.$store.state.token;
+      if (this.token === undefined) {
+        this.head =
+            "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/Transparent_Akkarin.jpg";
+        this.name = "请登录";
+      } else {
+        //this.head = this.userinfo.head;
+        this.name = this.$store.state.username;
+      }
+      console.log(this.name)
     },
     indentSignal() {
       this.$emit("indent");
@@ -233,23 +255,11 @@ export default {
     gotoListSys() {
       this.$router.push({ name: "ListSys" });
     },
-    updateinfo() {
-      this.userinfo = this.$store.state.userinfo;
-      if (this.userinfo === undefined) {
-        this.head =
-          "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/Transparent_Akkarin.jpg";
-        this.name = "请登录";
-      } else {
-        this.head = this.userinfo.head;
-        this.name = this.userinfo.username;
-        console.log(this.head);
-      }
-    },
     login() {
       this.$router.push("/login");
     },
     logout() {
-      Axios.post(
+      /*Axios.post(
         "http://127.0.0.1:8000/api/users/logout",
         {},
         {
@@ -281,15 +291,54 @@ export default {
           // 请求失败处理
           console.log(error);
           ElMessage.error("网络有错误噢");
-        });
-      this.$store.state.userinfo = undefined;
+        });*/
+      this.$store.commit("removeInfo");
       localStorage.clear();
     },
-    gotocenter() {
-      this.$router.push({
-        name: "PersonalSpace",
-        query: { UName: this.$store.state.userinfo.username },
-      });
+    checkInfo() {
+    },
+    changePassword() {
+      console.log("tanchuanchuxian")
+      this.addDialogVisible = true
+
+    },
+    submit() {/*
+      var t = this.newAll;
+      if(t.username.length === 0){
+        alert("用户名不能为空！！！");
+      }
+      if(t.password.length === 0){
+        alert("密码不能为空！！！");
+      }
+      if(this.standard.toLowerCase() !== this.viaCode.toLowerCase()){
+        alert("验证码不正确");
+      }
+      let that=this;
+      this.$axios({
+        method:'post',
+        url:'users/change_password/',
+        headers:{
+          'Authorization':localStorage.key
+        },
+        transformRequest: [function (data) {
+          // 对 data 进行任意转换处理
+          return Qs.stringify(data)
+        }],
+        data:{
+          newusername:this.newAll.username,
+          newpassword:this.newAll.password,
+        }
+      }).then(function (res){
+        if(res.data.errno==1){
+          alert("用户名已存在");
+        }
+        else{
+          alert('修改成功！！');
+        }
+      }).catch(err=>{
+        console.log(err);
+      })
+    },*/
     },
   },
 };

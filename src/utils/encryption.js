@@ -8,7 +8,6 @@ import CryptoJS from "crypto-js"
 const baseCryptoCode = "这一段文字用来做给路由加密的私钥"; // 私钥自己指定
 
 const getKeyHex = cryptoCode => CryptoJS.enc.Latin1.parse(cryptoCode || baseCryptoCode);
-
 const getIvHex = () => CryptoJS.enc.Latin1.parse(baseCryptoCode);
 
 /**

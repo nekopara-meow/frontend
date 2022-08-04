@@ -1,4 +1,5 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import {createRouter, createWebHashHistory} from 'vue-router'
+import { stringifyQuery, parseQuery } from "../utils/query";
 import HomeView from '../views/HomeView.vue'
 
 const routes = [
@@ -89,6 +90,8 @@ const routes = [
 const router = createRouter({
   history: createWebHashHistory(),
   base: process.env.B,
+  stringifyQuery: stringifyQuery,
+  parseQuery: parseQuery,
   routes
 })
 /*router.beforeEach((to, from, next) => {
