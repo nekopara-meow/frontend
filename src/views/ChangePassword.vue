@@ -67,18 +67,25 @@ export default {
           "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg",
       },
       form: {
-        oldpassword: "",
-        newpassword1: "",
-        newpassword2: "",
+        password: "",
+        password1: "",
+        password2: "",
       },
     };
   },
   methods: {
     submit() {
-      ElMessage({
-        message: this.form,
-        type: "success",
-      });
+      changepassword(this.form).then((response)=>{
+        if(response.status_code==1){
+          console.log(response.data);
+          ElMessage({
+            message: "更改成功",
+            type: "success",
+          })
+        }
+        else
+          ElMessage.error(response.data.message);
+      })
     },
   },
 };

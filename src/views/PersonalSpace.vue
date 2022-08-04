@@ -117,9 +117,21 @@
 import { client, getFileNameUUID } from "../assets/alioss.js";
 import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
 import { Edit, Upload, Plus } from "@element-plus/icons-vue";
+import {getuserinfo} from "@/utils/api";
 export default {
   name: "Login",
   components: { Edit, Upload, Plus },
+  created() {
+    getuserinfo({username:this.$store.state.username}).then((response)=>{
+      if(response.status_code==1){
+        this.data.nickname=
+        console.log(response.data);
+        this.head=response.data.head;}
+      else
+        ElMessage.error(response.data.message);
+    })
+
+  },
   data() {
     return {
       editing: 0,
@@ -138,15 +150,17 @@ export default {
   },
   methods: {
     edit() {
-      if (this.editing == 0) {
+      if (this.editing == 0){
         this.editing = 1;
       } else {
         this.editing = 0;
+        ///上传
         ElMessage({
           message: this.data,
           type: "success",
         });
       }
+
     },
     handleBeforeUpload(file) {
       const isJPEG = file.name.split(".")[1] === "jpeg";
