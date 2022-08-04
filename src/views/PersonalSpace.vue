@@ -129,6 +129,16 @@ export default {
     )
 
   },
+  mounted() {
+    this.updategender();
+  },
+
+  watch: {
+    "data.gender"() {
+      // console.log("changed!");
+      this.updategender();
+    },
+  },
   data() {
     return {
       email: "sss",
@@ -159,9 +169,6 @@ export default {
                   message: "修改成功",
                   type: "success",
                 });
-                if(response.data.gender==0)
-                this.genderimg=require( '../assets/img/xingbienv.png');
-                else this.genderimg=require( '../assets/img/xingbienan.png');
               }
               else
                 ElMessage.error(response.data.message);
@@ -184,6 +191,11 @@ export default {
         this.$message.error("单张图片大小不能超过 4mb!");
       }
       return (isJPEG || isJPG || isPNG || isWEBP || isGIF) && isLt500K;
+    },
+    updategender(){
+      if(this.data.gender==0)
+        this.genderimg=require( '../assets/img/xingbienv.png');
+      else this.genderimg=require( '../assets/img/xingbienan.png');
     },
     uploadURL(file) {
       console.log(file.file);
