@@ -39,6 +39,14 @@ export async function getuserinfo(data) {
         data,
     })
 }
+
+export async function edituserinfo(data) {
+    return request({
+        url: 'api/users/update/info',
+        method: 'post',
+        data,
+    })
+}
 export async function changepassword(data) {
     return request({
         url: 'api/users/change_password',

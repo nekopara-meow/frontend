@@ -38,6 +38,8 @@ export default {
     this.svgFun();
   },
   methods: {
+    go(){
+      this.$router.push("/workspace");},
     svgFun() {
       let params = {
         container: document.getElementById("lottie"),
