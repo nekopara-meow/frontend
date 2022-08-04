@@ -75,6 +75,7 @@ export default {
   margin: 0;
   padding: 0;
   flex-wrap: nowrap;
+  background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/bg.png);
 }
 .row > * {
   padding: 0;
