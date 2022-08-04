@@ -84,17 +84,17 @@ export default {
             store.commit("setToken", response.data.token);
             store.commit("setUsername", response.data.username);
             ElMessage({
-              message: "登录成功，三秒后跳转到个人中心",
+              message: "登录成功，两秒后跳转到主页",
               type: "success",
             });
             console.log("token", localStorage.getItem("token"));
-            /*setTimeout(() => {
+            setTimeout(() => {
                 //需要延迟的代码 :3秒后延迟跳转到首页，可以加提示什么的
                 router.push({
                   path: "/",
                 });
                 //延迟时间：3秒
-              }, 3000);*/
+              }, 2000);
           } else ElMessage.error(response.data.message);
         })
         .catch((error) => {
