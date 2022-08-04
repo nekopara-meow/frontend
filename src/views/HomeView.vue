@@ -22,7 +22,7 @@
 // @ is an alias to /src
 import HelloWorld from "@/components/HelloWorld.vue";
 import lottie from "lottie-web";
-import animationData from "../assets/img/图表.json";
+
 export default {
   name: "HomeView",
   components: {
@@ -38,18 +38,8 @@ export default {
     this.svgFun();
   },
   methods: {
-    go(){
-      this.$router.push("/workspace");},
-    svgFun() {
-      let params = {
-        container: document.getElementById("lottie"),
-        renderer: "svg",
-        loop: true,
-        autoplay: true,
-        animationData: animationData,
-      };
-      let anim;
-      anim = lottie.loadAnimation(params);
+    go() {
+      this.$router.push("/workspace");
     },
   },
 };
