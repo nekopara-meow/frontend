@@ -68,7 +68,6 @@ export default {
         ) {
           this.ans.push(this.calendarData[i].thing);
         }
-        console.log(i);
       }
       return this.ans;
       return ["neow", "!23"];
