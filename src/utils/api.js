@@ -31,6 +31,22 @@ export function load_uml(data){
         data,
     })
 }
+
+export function save_doc(data){
+    return request({
+        url: 'api/team/doc/save',
+        method: 'post',
+        data,
+    })
+}
+
+export function load_doc(data){
+    return request({
+        url: 'api/team/doc/load',
+        method: 'post',
+        data,
+    })
+}
 /*export const loginApi=data=>{
     return post({
         url: "api/users/login",

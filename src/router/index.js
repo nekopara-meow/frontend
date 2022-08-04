@@ -83,7 +83,12 @@ const routes = [
   {
     path: '/test',
     name: 'test',
-    component: ()=>import('../components/UMLEditor')
+    component: ()=>import('../components/Tiptap')
+  },
+  {
+    path: '/editor',
+    name: 'editor',
+    component: ()=>import('../components/Tiptap')
   }
 ]
 

@@ -112,7 +112,8 @@
                 v-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9]"
               >
                 <div class="oneitem">
-                  <img src="..\assets\img\fileicons\Word.png" />
+<!--                  <img src="..\assets\img\fileicons\Word.png" />-->
+                  <co-editor></co-editor>
                   <div>少年阿宾.txt</div>
                   <div style="font-size: smaller; margin-top: 2px">
                     2022/8/3
@@ -173,9 +174,10 @@
 import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
 import { Filter, Sort, Plus, CaretBottom } from "@element-plus/icons-vue";
 import UMLEditor from "@/components/UMLEditor";
+import CoEditor from "@/components/CoEditor";
 export default {
   name: "workspace",
-  components: {UMLEditor, Filter, Sort, Plus, CaretBottom },
+  components: {CoEditor, UMLEditor, Filter, Sort, Plus, CaretBottom },
   data() {
     return {
       tab: "tab-0",
