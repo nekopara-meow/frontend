@@ -24,7 +24,7 @@
       <el-dropdown
         trigger="click"
         class="Notification"
-        v-if="this.$store.state.token"
+        v-if="$store.state.token"
       >
         <div class="el-dropdown-link d-flex align-items-center">
           <el-badge
@@ -113,7 +113,7 @@
         class="justify-content-end"
       >
         <div class="el-dropdown-link d-flex align-items-center">
-          {{ this.name }}
+          {{ name }}
           <!-- {{YL}} -->
           <i class="bi-caret-down-fill" />
           <el-avatar :size="40">
@@ -125,14 +125,14 @@
         <template #dropdown>
           <el-dropdown-menu style="width: 160px">
             <el-dropdown-item
-                :icon="User"
-                v-if="this.$store.state.token"
-                @click="checkInfo"
-            >查看资料</el-dropdown-item
+              :icon="User"
+              v-if="$store.state.token"
+              @click="checkInfo"
+              >查看资料</el-dropdown-item
             >
             <el-dropdown-item
               :icon="User"
-              v-if="this.$store.state.token"
+              v-if="$store.state.token"
               @click.native="changePassword"
               >修改密码</el-dropdown-item
             >
@@ -140,14 +140,14 @@
               :icon="TurnOff"
               divided
               @click="logout"
-              v-if="this.$store.state.token"
+              v-if="$store.state.token"
               >退出登录</el-dropdown-item
             >
             <el-dropdown-item
               :icon="TurnOff"
               divided
               @click="login"
-              v-if="!this.$store.state.token"
+              v-if="!$store.state.token"
               >登录</el-dropdown-item
             >
           </el-dropdown-menu>
@@ -179,8 +179,8 @@ import {
 </script>
 
 <script>
-import {changepassword, getuserinfo} from "@/utils/api";
-import {ElMessage} from "element-plus";
+import { changepassword, getuserinfo } from "@/utils/api";
+import { ElMessage } from "element-plus";
 import qs from "qs";
 export default {
   name: "FrNav",
@@ -189,21 +189,21 @@ export default {
   },
   data() {
     return {
-      numoffollowers :0,
-      numofcomments :0,
-      numoflikes :0,
-      numofsys:0,
+      numoffollowers: 0,
+      numofcomments: 0,
+      numoflikes: 0,
+      numofsys: 0,
       query: "",
-      token: '',
+      token: "",
       name: "",
       head: "",
-      textarea1:"",
+      textarea1: "",
       changedata: {
-        username:'luanbu',
-        password:'yaoyaoling110YAO',
-        password1:'yaoyaoling112YAO',
-        password2:'yaoyaoling11111'
-      }
+        username: "luanbu",
+        password: "yaoyaoling110YAO",
+        password1: "yaoyaoling112YAO",
+        password2: "yaoyaoling11111",
+      },
     };
   },
   mounted() {
@@ -216,8 +216,7 @@ export default {
       this.updateinfo();
     },
   },
-  updated() {
-  },
+  updated() {},
   methods: {
     browse() {
       this.$router.push({
@@ -233,21 +232,22 @@ export default {
       this.token = this.$store.state.token;
       if (!this.token) {
         this.head =
-            "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/Transparent_Akkarin.jpg";
+          "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/Transparent_Akkarin.jpg";
         this.name = "请登录";
       } else {
-        console.log(this.$store.state.username,this.$store.state.token)
-        getuserinfo({username:this.$store.state.username}).then((response)=>{
-          if(response.status_code==1){
-            console.log(response.data);
-          this.head=response.data.head;}
-          else
-          ElMessage.error(response.data.message);
-        })
+        console.log(this.$store.state.username, this.$store.state.token);
+        getuserinfo({ username: this.$store.state.username }).then(
+          (response) => {
+            if (response.status_code == 1) {
+              console.log(response.data);
+              this.head = response.data.head;
+            } else ElMessage.error(response.data.message);
+          }
+        );
         //this.head = this.userinfo.head;
         this.name = this.$store.state.username;
       }
-      console.log(this.name)
+      console.log(this.name);
     },
     indentSignal() {
       this.$emit("indent");
