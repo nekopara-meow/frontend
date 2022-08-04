@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory} from 'vue-router'
+import {createRouter, createWebHistory,createWebHashHistory} from 'vue-router'
 import { stringifyQuery, parseQuery } from "../utils/query";
 import HomeView from '../views/HomeView.vue'
 const routes = [
@@ -106,13 +106,19 @@ const routes = [
     path: '/test',
     name: 'test',
     component: ()=>import('../components/UMLEditor')
-  }
+  },{
+		path: "/404",
+		component: () => import("@/views/404.vue"),
+	},
+	{
+		path: "/:pathMatch(.*)*", //匹配未定义的路由
+		redirect: "/404", //重定向
+	},
 ]
 
 const router = createRouter({
 
-	mode: 'history',
-    history:createWebHistory(),
+    history:createWebHashHistory(),
   base: process.env.B,
   stringifyQuery: stringifyQuery,
   parseQuery: parseQuery,

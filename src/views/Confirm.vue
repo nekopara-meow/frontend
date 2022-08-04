@@ -13,10 +13,8 @@
 </template>
 
 <script>
-// https://blog.csdn.net/m0_58039950/article/details/124721115
-
 export default {
-  name: "Login",
+  name: "confirm",
   components: {},
 };
 </script>
