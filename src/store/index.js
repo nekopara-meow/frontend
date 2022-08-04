@@ -3,7 +3,8 @@ import { createStore } from 'vuex'
 export default createStore({
   state: {
     token: '',
-    username: ''
+    username: '',
+    head:''
   },
   mutations: {
     // set
@@ -15,9 +16,14 @@ export default createStore({
       localStorage.setItem("username", username)
       state.username = username
     },
+    setHead(state , head){
+      localStorage.setItem("head", head)
+      state.head = head
+    },
     removeInfo(state){
       state.token = ''
       state.username = ''
+      state.head=''
       localStorage.setItem("token", '')
     }
   },

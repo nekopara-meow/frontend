@@ -207,6 +207,7 @@ import { Filter, Sort, Plus, CaretBottom } from "@element-plus/icons-vue";
 export default {
   name: "workspace",
   components: { Filter, Sort, Plus, CaretBottom },
+
   data() {
     return {
       tab: "tab-0",

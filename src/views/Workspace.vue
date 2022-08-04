@@ -175,6 +175,7 @@ export default {
       file:[{pid:1,filelist:[{fid:1},{fid: 2}]},{pid:2,filelist:[{fid:1},{fid: 2}]}],
       task:[{pid:1,tasklist:[{tid:1,name:"前端设计"},{tid: 2,name:"前端设计"}]},{pid:2,tasklist:[{tid:1},{tid: 2}]}]
     })
+    //请求数据
     const methods = {
       go(fid) {
         console.log(store.state.token)

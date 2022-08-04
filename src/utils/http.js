@@ -10,6 +10,7 @@ const instance=axios.create({
         'Content-Type':'application/json;charset=UTF'
     },
 })
+instance.defaults.withCredentials=false
 
 /**
  * @author chuzhixin 1204505056@qq.com
@@ -22,6 +23,7 @@ instance.interceptors.request.use(
         // 若 localStorage 中含有这两个字段，则添加入请求头
         //config.data = qs.stringify(config.data)
         if (username && authorization) {
+            console.log(authorization)
             config.headers.authorization = authorization;
             config.headers.username = username;
         }
@@ -32,7 +34,7 @@ instance.interceptors.request.use(
     }
 )
 instance.interceptors.response.use(
-    (response) => {
+    response=> {
         /*const { data, config } = response
         const { code, msg } = data
         // 操作正常Code数组

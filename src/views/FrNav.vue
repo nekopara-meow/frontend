@@ -133,7 +133,7 @@
             <el-dropdown-item
               :icon="User"
               v-if="this.$store.state.token"
-              @click="changePassword"
+              @click.native="changePassword"
               >修改密码</el-dropdown-item
             >
             <el-dropdown-item
@@ -153,17 +153,6 @@
           </el-dropdown-menu>
         </template>
       </el-dropdown>
-      <el-dialog title="修改密码" :visible.sync="addDialogVisible" width="50%" >
-        <hr>
-        <span>你觉得这个稿件有什么问题呢</span>
-        <p>为帮助审核人员尽快处理,请补充转载来源等详细信息</p>
-        <el-input type="textarea" autosize placeholder="请输入内容" v-model="textarea1">
-        </el-input>
-        <span slot="footer" class="dialog-footer">
-                <el-button @click="addDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="submit">确 定</el-button>
-            </span>
-      </el-dialog>
     </div>
   </div>
 </template>
@@ -190,6 +179,9 @@ import {
 </script>
 
 <script>
+import {changepassword, getuserinfo} from "@/utils/api";
+import {ElMessage} from "element-plus";
+import qs from "qs";
 export default {
   name: "FrNav",
   props: {
@@ -197,12 +189,21 @@ export default {
   },
   data() {
     return {
-      addDialogVisible: false,
+      numoffollowers :0,
+      numofcomments :0,
+      numoflikes :0,
+      numofsys:0,
       query: "",
-      token: undefined,
+      token: '',
       name: "",
       head: "",
-      textarea1:""
+      textarea1:"",
+      changedata: {
+        username:'luanbu',
+        password:'yaoyaoling110YAO',
+        password1:'yaoyaoling112YAO',
+        password2:'yaoyaoling11111'
+      }
     };
   },
   mounted() {
@@ -230,11 +231,19 @@ export default {
     },
     updateinfo() {
       this.token = this.$store.state.token;
-      if (this.token === undefined) {
+      if (!this.token) {
         this.head =
             "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/Transparent_Akkarin.jpg";
         this.name = "请登录";
       } else {
+        console.log(this.$store.state.username,this.$store.state.token)
+        getuserinfo({username:this.$store.state.username}).then((response)=>{
+          if(response.status_code==1){
+            console.log(response.data);
+          this.head=response.data.head;}
+          else
+          ElMessage.error(response.data.message);
+        })
         //this.head = this.userinfo.head;
         this.name = this.$store.state.username;
       }
@@ -259,86 +268,14 @@ export default {
       this.$router.push("/login");
     },
     logout() {
-      /*Axios.post(
-        "http://127.0.0.1:8000/api/users/logout",
-        {},
-        {
-          headers: { "Content-Type": "application/x-www-form-urlencoded" }, //加上这个
-        }
-      )
-        .then((response) => {
-          console.log(response);
-          let ret = response.data.status_code;
-          if (ret === 200) {
-            sessionStorage.clear();
-            localStorage.clear();
-            ElMessage({
-              message: "注销成功",
-              type: "success",
-            });
-            setTimeout(() => {
-              //需要延迟的代码 :3秒后延迟跳转到首页，可以加提示什么的
-              this.$router.push({
-                path: "/",
-              });
-              //延迟时间：3秒
-            }, 3000);
-          } else if (ret === 401) {
-            ElMessage.error("未登录");
-          }
-        })
-        .catch((error) => {
-          // 请求失败处理
-          console.log(error);
-          ElMessage.error("网络有错误噢");
-        });*/
       this.$store.commit("removeInfo");
       localStorage.clear();
     },
     checkInfo() {
+      this.$router.push("/personalspace");
     },
     changePassword() {
-      console.log("tanchuanchuxian")
-      this.addDialogVisible = true
-
-    },
-    submit() {/*
-      var t = this.newAll;
-      if(t.username.length === 0){
-        alert("用户名不能为空！！！");
-      }
-      if(t.password.length === 0){
-        alert("密码不能为空！！！");
-      }
-      if(this.standard.toLowerCase() !== this.viaCode.toLowerCase()){
-        alert("验证码不正确");
-      }
-      let that=this;
-      this.$axios({
-        method:'post',
-        url:'users/change_password/',
-        headers:{
-          'Authorization':localStorage.key
-        },
-        transformRequest: [function (data) {
-          // 对 data 进行任意转换处理
-          return Qs.stringify(data)
-        }],
-        data:{
-          newusername:this.newAll.username,
-          newpassword:this.newAll.password,
-        }
-      }).then(function (res){
-        if(res.data.errno==1){
-          alert("用户名已存在");
-        }
-        else{
-          alert('修改成功！！');
-        }
-      }).catch(err=>{
-        console.log(err);
-      })
-    },*/
+      this.$router.push("/changepassword");
     },
   },
 };
