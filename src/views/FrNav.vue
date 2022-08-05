@@ -187,6 +187,10 @@ export default {
   props: {
     collapse: Boolean,
   },
+  created() {
+    this.updateinfo();
+    console.log(this.head);
+  },
   data() {
     return {
       numoffollowers: 0,
@@ -198,12 +202,6 @@ export default {
       name: "",
       head: "",
       textarea1: "",
-      changedata: {
-        username: "luanbu",
-        password: "yaoyaoling110YAO",
-        password1: "yaoyaoling112YAO",
-        password2: "yaoyaoling11111",
-      },
     };
   },
   mounted() {
@@ -239,7 +237,7 @@ export default {
             (response) => {
               if (response.data.status_code == 1) {
                 console.log(response.data);
-                this.head = response.data.head;
+                this.head = response.data.avatar;
               } else ElMessage.error(response.data.message);
             }
         );
