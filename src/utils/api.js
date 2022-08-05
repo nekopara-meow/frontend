@@ -47,6 +47,13 @@ export async function edituserinfo(data) {
         data,
     })
 }
+export async function comfirm(data) {
+    return request({
+        url: 'api/users/confirm/email',
+        method: 'post',
+        data,
+    })
+}
 export async function changepassword(data) {
     return request({
         url: 'api/users/change_password',
@@ -54,7 +61,76 @@ export async function changepassword(data) {
         data,
     })
 }
-
+export async function getteamuserin(data) {
+    return request({
+        url: 'api/team/viewSomeonesTeams0',
+        method: 'post',
+        data,
+    })
+}
+export async function getteamuseradmin(data) {
+    return request({
+        url: 'api/team/viewSomeonesTeams1',
+        method: 'post',
+        data,
+    })
+}
+export async function getteamusercreat(data) {
+    return request({
+        url: 'api/team/viewSomeonesTeams2',
+        method: 'post',
+        data,
+    })
+}
+export async function establishteam(data) {
+    return request({
+        url: 'api/team/establish',
+        method: 'post',
+        data,
+    })
+}
+export async function getteammemberbyid(data) {
+    return request({
+        url: 'api/team/viewMembersInTeam',
+        method: 'post',
+        data,
+    })
+}
+export async function getteamprojectbyid(data) {
+    return request({
+        url: 'api/team/viewProjectsInTeam',
+        method: 'post',
+        data,
+    })
+}
+export async function getteammsgbyid(data) {
+    return request({
+        url: 'api/team/viewTeam',
+        method: 'post',
+        data,
+    })
+}
+export async function getteammember(data) {
+    return request({
+        url: 'api/team/getUsersOfTeam',
+        method: 'post',
+        data,
+    })
+}
+export async function getteamcreator(data) {
+    return request({
+        url: 'api/team/getCreatorOfTeam',
+        method: 'post',
+        data,
+    })
+}
+export async function getteamadmin(data) {
+    return request({
+        url: 'api/team/getAdminsOfTeam',
+        method: 'post',
+        data,
+    })
+}
 /*export const loginApi=data=>{
     return post({
         url: "api/users/login",
