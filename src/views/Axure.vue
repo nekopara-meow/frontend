@@ -9,7 +9,7 @@
                 <template #dropdown>
                     <el-dropdown-menu>
                         <el-dropdown-item>保存</el-dropdown-item>
-                        <el-dropdown-item>下载</el-dropdown-item>
+                        <el-dropdown-item @click="bePic">导出</el-dropdown-item>
                         <el-dropdown-item>重命名</el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
@@ -69,7 +69,7 @@
             </div>
             <div class="right">
                 <div class="canvas">
-                    <div class="my-table">
+                    <div class="my-table" ref="imgDom">
                         <DraggableContainer referenceLineColor="#acbbdc">
                             <Vue3DraggableResizable v-for="(item, index) in pages[nowpage]"
                                 :initW = item.transform.width
@@ -466,6 +466,9 @@ import Vue3DraggableResizable from 'vue3-draggable-resizable'
 import { DraggableContainer } from 'vue3-draggable-resizable'
 import 'vue3-draggable-resizable/dist/Vue3DraggableResizable.css'
 
+import html2canvas from "html2canvas"
+import {ImagePreview} from 'vant'
+
 export default{
     components: { 
         ElDropdown, ElMenu, ElCollapse,
@@ -475,6 +478,8 @@ export default{
 
         Vue3DraggableResizable, 
         DraggableContainer,
+
+        html2canvas, ImagePreview
     },
     data() {
         return {
@@ -501,10 +506,28 @@ export default{
             cnt: [4],
             now: null,
             nowpage: 0,
+            
         }
         
     },
     methods: {
+        bePic(){
+            console.log("bePic")
+            html2canvas(this.$refs.imgDom).then(canvas => {
+                // 转成图片，生成图片地址
+                let imgUrl = canvas.toDataURL("image/png");
+                //赋值给vant组件直接显示
+                console.log(imgUrl)
+                //ImagePreview({images: [imgUrl], closeable: true});
+                //window.open(imgUrl.toString(), '_self')
+
+                var iframe = "<iframe width='100%' height='100%' src='" + imgUrl + "'></iframe>"
+                var x = window.open()
+                x.document.open()
+                x.document.write(iframe)
+                x.document.close()
+            });
+        },
         mytoString(num){
             if(num == null)
                 return null
