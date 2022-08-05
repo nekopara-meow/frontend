@@ -3,7 +3,7 @@
     <el-dialog v-model="dialogFormVisible1" title="邀请成员" width="30%" center>
       <el-form :model="invite">
         <el-form-item label="用户名称">
-          <el-input v-model="invite.name" autocomplete="off" />
+          <el-input v-model="invite.invitee" autocomplete="off" />
         </el-form-item>
         <!-- <el-form-item label="团队介绍">
           <el-input
@@ -17,12 +17,12 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button
-            @click="this.dialogFormVisible1 = false"
-            style="background-color: white"
-            >Cancel</el-button
+              @click="invite"
+              style="background-color: white"
+          >Cancel</el-button
           >
           <el-button type="primary" @click="this.dialogFormVisible1 = false"
-            >Confirm</el-button
+          >Confirm</el-button
           >
         </span>
       </template>
@@ -30,26 +30,26 @@
     <el-dialog v-model="dialogFormVisible2" title="新建项目" width="30%" center>
       <el-form :model="newproject">
         <el-form-item label="项目名称">
-          <el-input v-model="newproject.name" autocomplete="off" />
+          <el-input v-model="newproject.project_name" autocomplete="off" />
         </el-form-item>
         <el-form-item label="项目简介">
           <el-input
-            type="textarea"
-            :rows="3"
-            v-model="newproject.intro"
-            autocomplete="off"
+              type="textarea"
+              :rows="3"
+              v-model="newproject.brief_intro"
+              autocomplete="off"
           />
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
           <el-button
-            @click="this.dialogFormVisible2 = false"
-            style="background-color: white"
-            >Cancel</el-button
+              @click="this.dialogFormVisible2 = false"
+              style="background-color: white"
+          >Cancel</el-button
           >
-          <el-button type="primary" @click="this.dialogFormVisible2 = false"
-            >Confirm</el-button
+          <el-button type="primary" @click="creatproject"
+          >Confirm</el-button
           >
         </span>
       </template>
@@ -57,8 +57,8 @@
     <div id="content">
       <div id="left">
         <div id="leftup">
-          <div style="display: flex; width: 100%">
-            <h2 class="title gradient">猫娘乐园</h2>
+          <div style="display: flex">
+            <h2 class="title gradient">maomao</h2>
             <nav>
               <a
                 @click="
@@ -87,68 +87,39 @@
               <div class="animation" :class="tab"></div>
             </nav>
           </div>
-          <el-button
-            type="primary"
-            style="margin-right: 30px"
-            v-if="tab == 'tab-0' && editing == 0"
-            @click="edit"
-            ><el-icon><Edit /></el-icon
-          ></el-button>
-          <el-button
-            type="primary"
-            style="margin-right: 30px"
-            @click="edit"
-            v-if="tab == 'tab-0' && editing == 1"
-            ><el-icon><Upload /></el-icon
-          ></el-button>
-          <el-button
-            type="primary"
-            style="margin-right: 30px"
-            @click="this.dialogFormVisible1 = true"
-            v-if="tab == 'tab-1'"
+          <div class="buttons">
+            <!-- <el-dropdown style="margin-right: 30px">
+              <el-button type="primary"
+                ><el-icon><Sort /></el-icon
+              ></el-button>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item>按xx排序</el-dropdown-item>
+                  <el-dropdown-item>按xx排序</el-dropdown-item>
+                  <el-dropdown-item>按xx排序</el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown> -->
+
+            <el-button type="primary" @click="this.dialogFormVisible1 = true"
             ><el-icon><Plus /></el-icon
-          ></el-button>
-          <el-button
-            type="primary"
-            style="margin-right: 30px"
-            @click="this.dialogFormVisible2 = true"
-            v-if="tab == 'tab-2'"
+            ></el-button>
+            <el-button type="primary" @click="this.dialogFormVisible2 = true"
             ><el-icon><Plus /></el-icon
-          ></el-button>
+            ></el-button>
+          </div>
         </div>
 
         <hr style="margin: 5px; margin-bottom: 20px" />
         <div id="leftdown1" v-if="tab == 'tab-0'">
           <div id="leftdown1left">
-            <img id="teamavatar" :src="data.avatar" v-if="editing == 0" />
-            <el-upload
-              v-else
-              class="avatar-uploader"
-              action=""
-              :show-file-list="false"
-              :on-success="handleAvatarSuccess"
-              :before-upload="handleBeforeUpload"
-              :http-request="uploadURL"
-              v-model="data.avatar"
-              :style="
-                'background-image: url(' +
-                data.avatar +
-                ');background-size:cover;background-position:center'
-              "
-              style="
-                width: 200px !important;
-                height: 200px !important;
-                flex-shrink: 0;
-                box-shadow: 0px 15px 10px -15px lightgray;
-                margin-bottom: 15px;
-              "
-            >
-              <!-- <img v-if="flag == 1" class="upper" :src="url" /> -->
-              <el-icon class="avatar-uploader-icon"><Plus /></el-icon>
-            </el-upload>
-            <span class="bluelight">{{ data.creator }}</span
+            <img
+              id="teamavatar"
+              :src="teammsg.avatar"
+            />
+            <span class="bluelight">{{teammsg.creator}}</span
             ><span style="font-size: 13px" class="bluelight"
-              >创建于{{ data.createtime }}</span
+              >创建于{{teammsg.create_time}}</span
             >
             <div class="text-wrap" style="margin: 10px 0">
               <div class="example">
@@ -187,17 +158,9 @@
                 </div>
               </div>
             </div>
-            <div class="intro bluelight" v-if="editing == 0">
-              {{ data.intro }}
+            <div class="intro bluelight">
+              {{teammsg.brief_intro}}
             </div>
-            <el-input
-              v-else
-              v-model="data.brief_intro"
-              placeholder="简介"
-              type="textarea"
-              :rows="4"
-              style="display: line; width: 200px; font-size: 10px"
-            />
           </div>
           <div id="leftdown1right">
             <div style="display: flex; justify-content: space-between">
@@ -258,20 +221,18 @@
                 <div class="oneteam">
                   <div
                     class="teamimage"
-                    style="
-                      background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                    "
+                    :style="{ backgroundImage: `url(` +teamcreator.avatar + ')' }"
                   ></div>
                   <div class="oneteamdown">
-                    <div style="font-size: 18px">小秋月</div>
-                    <div>真实姓名：贠启豪</div>
-                    <div>Email：3499475017@qq.com</div>
-                    <div>简介：我将无我，不负人民</div>
+                    <div style="font-size: 18px">{{teamcreator.nickname}}</div>
+                    <div>用户名：{{teamcreator.creator}}</div>
+                    <div>{{teamcreator.email}}</div>
+                    <div>简介：{{teamcreator.brief_intro}}</div>
                   </div>
                 </div>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item>查看个人资料</el-dropdown-item>
+                    <el-dropdown-item @click.natice="checkuserinfo(teamcreator.creator)">查看个人资料</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
@@ -283,30 +244,28 @@
               name="2"
               style="font-size: 20px; font-weight: lighter"
             >
-              <el-dropdown trigger="contextmenu" v-for="i in [1, 2, 3, 4]">
+              <el-dropdown trigger="contextmenu" v-for="(teamadmin,index) in teamadmins" :key="index">
                 <div class="oneteam">
                   <div
                     class="teamimage"
-                    style="
-                      background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                    "
+                    :style="{ backgroundImage: `url(` +teamadmin.avatar + ')' }"
                   ></div>
                   <div class="oneteamdown">
-                    <div style="font-size: 18px">小秋月</div>
-                    <div>真实姓名：贠启豪</div>
-                    <div>Email：3499475017@qq.com</div>
-                    <div>简介：我将无我，不负人民</div>
+                    <div style="font-size: 18px">{{teamadmin.nickname}}</div>
+                    <div>用户名：{{teamadmin.username}}</div>
+                    <div>{{teamadmin.email}}</div>
+                    <div>简介：{{teamadmin.brief_intro}}</div>
                   </div>
                 </div>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item>查看个人资料</el-dropdown-item>
+                    <el-dropdown-item @click.natice="checkuserinfo(teamadmin.username)">查看个人资料</el-dropdown-item>
                     <el-dropdown-item>移出管理员</el-dropdown-item>
                     <el-dropdown-item>移出团队</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
-              </el-dropdown>
-            </el-collapse-item>
+            </el-dropdown>
+          </el-collapse-item>
             <hr style="margin: 5px" />
             <el-collapse-item
               title="成员"
@@ -315,25 +274,23 @@
             >
               <el-dropdown
                 trigger="contextmenu"
-                v-for="i in [1, 2, 3, 4, 5, 6]"
+                v-for="(teamadmember,index) in teammembers" :key="index"
               >
                 <div class="oneteam">
                   <div
-                    class="teamimage"
-                    style="
-                      background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                    "
+                      class="teamimage"
+                      :style="{ backgroundImage: `url(` +teammember.avatar + ')' }"
                   ></div>
                   <div class="oneteamdown">
-                    <div style="font-size: 18px">小秋月</div>
-                    <div>真实姓名：贠启豪</div>
-                    <div>Email：3499475017@qq.com</div>
-                    <div>简介：我将无我，不负人民</div>
+                    <div style="font-size: 18px">{{teammember.nickname}}</div>
+                    <div>用户名：{{teammember.username}}</div>
+                    <div>{{teammember.email}}</div>
+                    <div>简介：{{teammember.brief_intro}}</div>
                   </div>
                 </div>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item>查看个人资料</el-dropdown-item>
+                    <el-dropdown-item @click.natice="checkuserinfo(teamadmember.username)">查看个人资料</el-dropdown-item>
                     <el-dropdown-item>设为管理员</el-dropdown-item>
                     <el-dropdown-item>移出团队</el-dropdown-item>
                   </el-dropdown-menu>
@@ -342,18 +299,55 @@
             </el-collapse-item>
             <hr style="margin: 5px" />
           </el-collapse>
+          <!-- <div class="oneteam" v-for="i in [1, 2, 3, 4, 5, 6]">
+            <div
+              class="teamimage"
+              style="
+                background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
+              "
+            ></div>
+            <div class="oneteamdown">
+              <div style="font-size: 18px">小秋月</div>
+              <div>我是傻逼，我是傻逼，我真的是傻逼</div>
+              <div class="text-wrap">
+                <div class="example">
+                  <div class="avatar-list avatar-list-stacked">
+                    <span
+                      class="avatar cover-image brround"
+                      style="
+                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
+                      "
+                    ></span
+                    ><span
+                      class="avatar cover-image brround"
+                      style="
+                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
+                      "
+                    ></span
+                    ><span
+                      class="avatar cover-image brround"
+                      style="
+                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
+                      "
+                    ></span
+                    ><span class="avatar cover-image brround">+8</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> -->
         </div>
         <div id="leftdown" v-if="tab == 'tab-2'">
           <div
             class="oneteam"
             style="height: 120px; margin-bottom: 20px"
-            v-for="i in [1, 2, 3, 4, 5, 6, 7]"
+            v-for="(teamproject,index) in teamprojects" :key="index" @click="go(teamprojects.project_id)"
           >
             <div class="oneteamdown">
-              <div style="font-size: 18px">小猫猫</div>
-              <div>我是傻逼，我是傻逼，我真的是傻逼</div>
-              <div style="margin-bottom: 0">创建日期：2022/8/5</div>
-              <div>更新日期：2022/8/6</div>
+              <div style="font-size: 18px">{{ teamproject.project_id }}</div>
+              <div>{{teamproject.project_brief_intro}}</div>
+              <div style="margin-bottom: 0">创建日期：{{ teamproject.project_create_time }}</div>
+              <div>更新日期：2022/8/5</div>
             </div>
           </div>
         </div>
@@ -364,41 +358,97 @@
 
 <script>
 import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
+import { Filter, Sort, Plus, CaretBottom } from "@element-plus/icons-vue";
 import {
-  Filter,
-  Sort,
-  Plus,
-  CaretBottom,
-  Edit,
-  Upload,
-} from "@element-plus/icons-vue";
+  establishproject,
+  establishteam, estavlishproject,
+  getteamadmin,
+  getteamcreator, getteammember, getteammsgbyid, getteamprojectbyid,
+  getteamuseradmin,
+  getteamusercreat,
+  getteamuserin, invitemember
+} from "@/utils/api";
 export default {
   name: "workspace",
-  components: { Filter, Edit, Sort, Plus, CaretBottom, Upload },
+  components: { Filter, Sort, Plus, CaretBottom },
+  created() {
+    console.log("team_idhhh",this.team_id)
+      getteamcreator({ team_id: this.$route.query.team_id }).then(
+          (response) => {
+            console.log(response.data);
+            if (response.data.status_code == 1) {
+              this.teamcreator.creator=response.data.creator ,
+              this.teamcreator.nickname=response.data.nickname,
+              this.teamcreator.email= response.data.email,
+              this.teamcreator. avatar=response.data.avatar ,
+              this.teamcreator.brief_intro=response.data.brief_intro
+              console.log("creator",response.data);
+              this.teamuserin = response.data.ans_list;
+            } else ElMessage.error(response.data.message);
+          }
+      );
+    this.initializationdata()
+  },
   data() {
     return {
+      tab: "tab-0",
       dialogFormVisible1: false,
       dialogFormVisible2: false,
-      tab: "tab-0",
-      editing: 0,
-      data: {
-        creator: "刘华阳",
-        createtime: "2022/8/5",
-        avatar:
-          "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg",
-        intro:
-          "你若去往「绝云间」，便替我采来一束[清心」吧。一束就好。此行的旅费.啊，差些忘了，「契约」生效期间，旅费由你代为垫付。那就有劳了你说，归离原的少年仙人.啊.直至今日，他仍在履行他的职责.哦，这副「连理镇心散」，请替我带给他。对了，可千万不能让小派蒙偷吃了去，这里的药力.绝非常人所能承受。",
+      teamcreator:{
+        creator: "", nickname:"", email: "",
+        avatar:"" , brief_intro:" "
       },
       invite: {
-        name: "",
+        inviter:this.$store.state.username,
+        invitee:"",
+        team_id:this.$route.query.team_id
       },
+      editing: 0,
       newproject: {
-        name: "",
-        intro: "",
+        team_id:this.$route.query.team_id,
+        username: this.$store.state.username,
+        project_name:"",
+        brief_intro: "",
+
       },
+      teamadmins:[],
+      teammembers:[],
+      teamprojects:[],
+      teammsg: {
+        brief_intro: "",
+        create_time: "",
+        creator: "",
+        team_name: "",
+        avatar:"",
+      },
+        username:this.$store.state.username,
+      formLabelWidth: "140px",
     };
   },
-  methods: {
+  methods:{
+    invite(){
+      invitemember(this.invite).then(
+          (response) => {
+            if (response.data.status_code == 1) {
+              console.log("invite",response.data);
+              this.initializationdata()
+            } else ElMessage.error(response.data.message);
+          }
+      );
+      this.dialogFormVisible1 = false
+    },
+    creatproject(){
+      console.log("ccjin",this.newproject),
+      establishproject(this.newproject).then(
+          (response) => {
+            if (response.data.status_code == 1) {
+              console.log("chuangjian",response.data);
+              this.initializationdata()
+            } else ElMessage.error(response.data.message);
+          }
+      );
+      this.dialogFormVisible2 = false
+    },
     edit() {
       if (this.editing == 0) {
         this.editing = 1;
@@ -410,34 +460,65 @@ export default {
         });
       }
     },
-  },
+    addmember(){
+
+    },
+    checkuserinfo(){
+
+    },
+    gotodetail(a) {
+      this.$router.push({
+        path: "projectdetail",
+        params: {
+          project_id: a,
+        },
+      });
+    },
+    initializationdata()
+    {
+      getteammsgbyid({ team_id: this.$route.query.team_id  }).then(
+          (response) => {
+            if (response.data.status_code == 1) {
+              this.teammsg.brief_intro=response.data.brief_intro,
+                  this.teammsg.create_time=response.data.create_time,
+                  this.teammsg.creator=response.data.creator,
+                  this.teammsg.team_name=response.data.team_name,
+                  this.teammsg.avatar=response.data.avatar,
+                console.log(response.data);
+            } else ElMessage.error(response.data.message);
+          }
+      );
+      getteamadmin({ team_id: this.$route.query.team_id  }).then(
+          (response) => {
+            if (response.data.status_code == 1) {
+              console.log(response.data);
+              this.teamadmins = response.data.ans_list;
+            } else ElMessage.error(response.data.message);
+          }
+      );
+      getteammember({ team_id: this.$route.query.team_id  }).then(
+          (response) => {
+            if (response.data.status_code == 1){
+              console.log(response.data);
+              this.teammembers= response.data.ans_list;
+            } else ElMessage.error(response.data.message);
+          }
+      );
+      getteamprojectbyid({ team_id: this.$route.query.team_id  }).then(
+          (response) => {
+            if (response.data.status_code == 1) {
+              console.log(response.data);
+              this.teamprojects= response.data.ans_list;
+            } else ElMessage.error(response.data.message);
+          }
+      );
+    }
+
+  }
 };
 </script>
 
 <style lang="scss" scoped>
-.avatar-uploader {
-  width: 200px;
-  height: 200px;
-  box-sizing: border-box;
-  border: 10px solid white;
-  border-radius: 20px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-.avatar-uploader:hover {
-  border-color: #409eff;
-}
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: white;
-  font-weight: 500;
-  width: 180px;
-  height: 180px;
-  line-height: 180px;
-  text-align: center;
-  background-color: #0000005b;
-}
 .oneteamdown {
   color: #26476d;
   width: 100%;
@@ -825,28 +906,5 @@ nav a:nth-child(3):hover ~ .animation {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-}
-::v-deep .el-dialog {
-  background: linear-gradient(
-    to right bottom,
-    rgba(255, 255, 255, 0.905),
-    rgba(255, 255, 255, 0.622)
-  );
-  backdrop-filter: blur(1rem);
-  border-radius: 10px;
-  box-shadow: 0px 15px 10px -15px lightgray;
-  font-weight: lighter;
-  font-size: 23px;
-  color: #26476d;
-  overflow: hidden;
-  .el-button {
-    background-color: #26476d;
-    border: none;
-  }
-}
-::v-deep .el-dialog__header {
-  margin-right: 0;
-  color: white;
-  background: linear-gradient(to right bottom, #26476def, #26476dc5);
 }
 </style>

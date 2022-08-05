@@ -131,6 +131,20 @@ export async function getteamadmin(data) {
         data,
     })
 }
+export async function establishproject(data) {
+    return request({
+        url: 'api/projects/establish',
+        method: 'post',
+        data,
+    })
+}
+export async function invitemember(data) {
+    return request({
+        url: 'api/team/invite',
+        method: 'post',
+        data,
+    })
+}
 /*export const loginApi=data=>{
     return post({
         url: "api/users/login",

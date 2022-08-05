@@ -23,7 +23,6 @@
     "vue": "^3.2.13",
     "vue-lottie": "^0.2.1",
     "vue-router": "^4.0.3",
-    "vue3-draggable-resizable": "^1.6.4",
     "vuex": "^4.0.0"
   },
   "devDependencies": {
