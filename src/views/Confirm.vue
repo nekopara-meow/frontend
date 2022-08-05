@@ -13,9 +13,37 @@
 </template>
 
 <script>
+import {comfirm, register} from "@/utils/api";
+import {ElMessage} from "element-plus";
+import router from "@/router";
+
 export default {
   name: "confirm",
   components: {},
+  created() {
+    console.log(this.$route.query.code)
+    comfirm({code:this.$route.query.code}).then((response) => {
+      console.log(response.data);
+      let ret = response.data.status_code;
+      if (ret == 1) {
+        // store.commit('setToken',response.data.token)
+        ElMessage({
+          message: "验证成功",
+          type: "success",
+
+        });
+      } else ElMessage.error("验证失败");
+      setTimeout(() => {
+        //需要延迟的代码 :3秒后延迟跳转到首页，可以加提示什么的
+        this.$router.push({
+          path: "/",
+        });
+        //延迟时间：3秒
+      }, 2000);
+
+    });
+
+  }
 };
 </script>
 
