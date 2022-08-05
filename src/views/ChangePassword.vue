@@ -11,7 +11,7 @@
 
         <div>
           <span>{{ data.nickname }} </span>
-          <img src="../assets/img/xingbienv.png" />
+          <img :src="genderimg" />
         </div>
         <div style="font-size: 10px">
           真实姓名：<span>{{ data.name }}</span>
@@ -53,39 +53,57 @@
 import { client, getFileNameUUID } from "../assets/alioss.js";
 import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
 import { Edit, Upload, Plus } from "@element-plus/icons-vue";
+import { edituserinfo, getuserinfo, changepassword } from "@/utils/api";
 export default {
   name: "Login",
   components: { Edit, Upload, Plus },
   data() {
     return {
       editing: 0,
+      genderimg: require("../assets/img/猫.png"),
       data: {
-        nickname: "小七",
-        name: "包新蕾",
-        password: "123456",
+        nickname: "",
+        name: "",
         avatar:
-          "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg",
+          "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/Transparent_Akkarin.jpg",
       },
       form: {
+        username: this.$store.state.username,
         password: "",
         password1: "",
         password2: "",
       },
     };
   },
+  mounted() {
+    getuserinfo({ username: this.$store.state.username }).then((response) => {
+      console.log(response.data);
+      if (response.data.status_code == 1) {
+        console.log("获得个人首页信息");
+        console.log(response.data);
+        this.data.name = response.data.nickname;
+        this.data.nickname = this.$store.state.username;
+        this.data.gender = response.data.gender;
+        this.data.avatar = response.data.avatar;
+        if (response.data.gender == 0)
+          this.genderimg = require("../assets/img/xingbienv.png");
+        else if (response.data.gender == 1)
+          this.genderimg = require("../assets/img/xingbienan.png");
+        else this.genderimg = require("../assets/img/猫.png");
+      } else ElMessage.error(response.data.message);
+    });
+  },
   methods: {
     submit() {
-      changepassword(this.form).then((response)=>{
-        if(response.status_code==1){
+      changepassword(this.form).then((response) => {
+        if (response.status_code == 1) {
           console.log(response.data);
           ElMessage({
             message: "更改成功",
             type: "success",
-          })
-        }
-        else
-          ElMessage.error(response.data.message);
-      })
+          });
+        } else ElMessage.error(response.data.message);
+      });
     },
   },
 };

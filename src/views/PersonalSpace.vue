@@ -40,7 +40,35 @@
           ><el-icon><Upload /></el-icon
         ></el-button>
         <div>
-          <span v-if="editing == 0">{{ data.nickname }} </span
+          <span>{{ data.username }} </span>
+          <img v-if="editing == 0" :src="genderimg" />
+
+          <el-select
+            v-else
+            v-model="data.gender"
+            placeholder="性别"
+            style="
+              display: line;
+              width: 70px;
+              margin-right: 10px;
+              font-size: 15px;
+            "
+          >
+            <el-option label="男" value="1" />
+            <el-option label="女" value="0" />
+            <el-option label="猫猫" value="2" />
+          </el-select>
+
+          <!-- <el-input
+            v-else
+            v-model="data.gender"
+            placeholder="性别"
+            size="small"
+            style="display: line; width: 30px; font-size: 10px"
+          /> -->
+        </div>
+        <div style="font-size: 10px">
+          真实姓名：<span v-if="editing == 0">{{ data.nickname }}</span
           ><el-input
             v-else
             v-model="data.nickname"
@@ -52,18 +80,8 @@
               font-size: 15px;
             "
           />
-          <img v-if="editing == 0" :src="genderimg" />
-          <el-input
-            v-else
-            v-model="data.gender"
-            placeholder="性别"
-            size="small"
-            style="display: line; width: 30px; font-size: 10px"
-          />
         </div>
-        <div style="font-size: 10px">
-          用户名：<span >{{ data.username }}</span>
-        </div>
+
         <hr style="margin: 5px; width: 100%" />
         <div class="tel">
           <span style="">Tel</span>
@@ -79,12 +97,13 @@
         </div>
         <div class="tel">
           <span>Email</span>
-          <span style="font-size: 20px" >{{
-            email
-          }}</span>
+          <span style="font-size: 20px">{{ email }}</span>
         </div>
-        <div class="tel" style="margin-bottom: 0px">brief_intro</div>
-        <div class="tel brief_introdetail" style="font-size: 15px; margin-top: 0px">
+        <div class="tel" style="margin-bottom: 0px">Intro</div>
+        <div
+          class="tel brief_introdetail"
+          style="font-size: 15px; margin-top: 0px"
+        >
           <span v-if="editing == 0">{{ data.brief_intro }}</span>
           <el-input
             v-else
@@ -104,78 +123,95 @@
 import { client, getFileNameUUID } from "../assets/alioss.js";
 import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
 import { Edit, Upload, Plus } from "@element-plus/icons-vue";
-import {edituserinfo, getuserinfo} from "@/utils/api";
+import { edituserinfo, getuserinfo } from "@/utils/api";
 export default {
   name: "Login",
   components: { Edit, Upload, Plus },
   created() {
-    getuserinfo({username:this.$store.state.username}).then((response)=>{console.log(response.data);
-      if(response.data.status_code==1){
-        this.data.nickname=response.data.nickname
-        this.data.tel=response.data.tel
-        this.data.username=this.$store.state.username
-        this.data.avatar=response.data.avatar
-        this.data.gender=response.data.gender
-        if(response.data.gender==0)
-        this.genderimg=require( '../assets/img/xingbienv.png');
-        else this.genderimg=require( '../assets/img/xingbienan.png');
-        console.log(this.genderimg)
-        this.data.brief_intro=response.data.brief_intro
-        this.email=response.data.email
-  }
-      else
-        ElMessage.error(response.data.message);
-    }
-    )
-
+    // getuserinfo({ username: this.$store.state.username }).then((response) => {
+    //   console.log(response.data);
+    //   if (response.data.status_code == 1) {
+    //     console.log("获得个人首页信息");
+    //     console.log(response.data);
+    //     this.data.nickname = response.data.nickname;
+    //     this.data.tel = response.data.tel;
+    //     this.data.username = this.$store.state.username;
+    //     this.data.avatar = response.data.avatar;
+    //     this.data.gender = response.data.gender;
+    //     if (response.data.gender == 0)
+    //       this.genderimg = require("../assets/img/xingbienv.png");
+    //     else if (response.data.gender == 1)
+    //       this.genderimg = require("../assets/img/xingbienan.png");
+    //     else this.genderimg = require("../assets/img/猫.png");
+    //     console.log(this.genderimg);
+    //     this.data.brief_intro = response.data.brief_intro;
+    //     this.email = response.data.email;
+    //   } else ElMessage.error(response.data.message);
+    // });
   },
   mounted() {
-    this.updategender();
+    getuserinfo({ username: this.$store.state.username }).then((response) => {
+      console.log(response.data);
+      if (response.data.status_code == 1) {
+        console.log("获得个人首页信息");
+        console.log(response.data);
+        this.data.nickname = response.data.nickname;
+        this.data.tel = response.data.tel;
+        this.data.username = this.$store.state.username;
+        this.data.avatar = response.data.avatar;
+        this.data.gender = response.data.gender;
+        if (response.data.gender == 0)
+          this.genderimg = require("../assets/img/xingbienv.png");
+        else if (response.data.gender == 1)
+          this.genderimg = require("../assets/img/xingbienan.png");
+        else this.genderimg = require("../assets/img/猫.png");
+        console.log(this.genderimg);
+        this.data.brief_intro = response.data.brief_intro;
+        this.email = response.data.email;
+      } else ElMessage.error(response.data.message);
+    });
   },
 
   watch: {
-    "data.gender"() {
-      // console.log("changed!");
-      this.updategender();
-    },
+    // "data.gender"() {
+    //   // console.log("changed!");
+    //   this.updategender();
+    // },
   },
   data() {
     return {
       email: "sss",
-      genderimg: require('../assets/img/xingbienv.png'),
+      genderimg: require("../assets/img/猫.png"),
       editing: 0,
       data: {
-        username:"包新蕾",
-        nickname: "小七",
-        tel: "13947354199",
-        gender: 1,
+        username: "",
+        nickname: "",
+        tel: "",
+        gender: 2,
         avatar:
-          "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg",
-        brief_intro:
-          "你若去往「绝云间」，便替我采来一束[清心」吧。一束就好。此行的旅费.啊，差些忘了，「契约」生效期间，旅费由你代为垫付。那就有劳了你说，归离原的少年仙人.啊.直至今日，他仍在履行他的职责.哦，这副「连理镇心散」，请替我带给他。对了，可千万不能让小派蒙偷吃了去，这里的药力.绝非常人所能承受。",
+          "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/Transparent_Akkarin.jpg",
+        brief_intro: "",
       },
     };
   },
   methods: {
     edit() {
-      if (this.editing == 0){
+      if (this.editing == 0) {
         this.editing = 1;
       } else {
         this.editing = 0;
         console.log(this.data),
-        edituserinfo((this.data)).then((response)=>{console.log(response.data);
-              if(response.data.status_code==1){
-                ElMessage({
-                  message: "修改成功",
-                  type: "success",
-                });
-              }
-              else
-                ElMessage.error(response.data.message);
-            }
-        );
+          edituserinfo(this.data).then((response) => {
+            console.log(response.data);
+            if (response.data.status_code == 1) {
+              ElMessage({
+                message: "修改成功",
+                type: "success",
+              });
+              this.$router.go(0);
+            } else ElMessage.error(response.data.message);
+          });
       }
-
     },
     handleBeforeUpload(file) {
       const isJPEG = file.name.split(".")[1] === "jpeg";
@@ -192,10 +228,12 @@ export default {
       }
       return (isJPEG || isJPG || isPNG || isWEBP || isGIF) && isLt500K;
     },
-    updategender(){
-      if(this.data.gender==0)
-        this.genderimg=require( '../assets/img/xingbienv.png');
-      else this.genderimg=require( '../assets/img/xingbienan.png');
+    updategender() {
+      if (response.data.gender == 0)
+        this.genderimg = require("../assets/img/xingbienv.png");
+      else if (response.data.gender == 1)
+        this.genderimg = require("../assets/img/xingbienan.png");
+      else this.genderimg = require("../assets/img/猫.png");
     },
     uploadURL(file) {
       console.log(file.file);

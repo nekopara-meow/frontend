@@ -9,7 +9,7 @@
                 <template #dropdown>
                     <el-dropdown-menu>
                         <el-dropdown-item>保存</el-dropdown-item>
-                        <el-dropdown-item>下载</el-dropdown-item>
+                        <el-dropdown-item @click="bePic">导出</el-dropdown-item>
                         <el-dropdown-item>重命名</el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
@@ -31,9 +31,9 @@
                     </div>
                     <div class="line"></div>
                     <div class="page-menu">
-                        <el-menu :default-active="nowpage">
+                        <el-menu :default-active="mytoString(nowpage)">
                             <el-menu-item v-for="(item, Index) in pagesname"
-                                :index="Index" @click="setPage(Index)">
+                                :index="Index.toString()" @click="setPage(Index)">
                                 <div class="menu-item">
                                     <div class="menu-item-left">
                                         <el-icon><Document /></el-icon>
@@ -49,9 +49,9 @@
                     <div class="line"></div>
                     <div class="item-menu">
                         <span>元素</span>
-                        <el-menu :default-active="now">
+                        <el-menu :default-active="mytoString(now)">
                             <el-menu-item v-for="(item, Index) in pages[nowpage]" 
-                                :index="Index" @click="setActive(Index)">
+                                :index="Index.toString()" @click="setActive(Index)">
                                 <div class="myitem">
                                     <span>{{ item.type }} {{ item.id }}</span>
                                     <!--
@@ -69,7 +69,7 @@
             </div>
             <div class="right">
                 <div class="canvas">
-                    <div class="my-table">
+                    <div class="my-table" ref="imgDom">
                         <DraggableContainer referenceLineColor="#acbbdc">
                             <Vue3DraggableResizable v-for="(item, index) in pages[nowpage]"
                                 :initW = item.transform.width
@@ -78,8 +78,8 @@
                                 v-model:y = item.transform.y
                                 v-model:w = item.transform.width
                                 v-model:h = item.transform.height
-                                parent = "true"
-                                v-model:active = "item.active"
+                                :parent = true
+                                v-model:active = item.active
                                 
                                 @activated = "setActive(index)"
                                 @deactivated = "setDeActive(index)">
@@ -91,7 +91,7 @@
                 </div>
                 <div class="right-tool">
                     <div class="toolbox">
-                        <el-menu ref="elMenu" :default-active="nowtool">
+                        <el-menu ref="elMenu" :default-active="mytoString(nowtool)">
                             <el-menu-item index="0" @click="setTool(0)">
                                 <el-icon><Stopwatch /></el-icon>
                             </el-menu-item>
@@ -163,7 +163,10 @@
             </div>
             <div class="line"></div>
         </div>
-
+        
+        <el-dialog v-model="dialogVisible" title="导出预览">
+            <img width="500" :src="imgUrl" />
+        </el-dialog>
     </body>
 </template>
 
@@ -466,6 +469,9 @@ import Vue3DraggableResizable from 'vue3-draggable-resizable'
 import { DraggableContainer } from 'vue3-draggable-resizable'
 import 'vue3-draggable-resizable/dist/Vue3DraggableResizable.css'
 
+import html2canvas from "html2canvas"
+import {ImagePreview} from 'vant'
+
 export default{
     components: { 
         ElDropdown, ElMenu, ElCollapse,
@@ -475,6 +481,8 @@ export default{
 
         Vue3DraggableResizable, 
         DraggableContainer,
+
+        html2canvas, ImagePreview
     },
     data() {
         return {
@@ -501,10 +509,40 @@ export default{
             cnt: [4],
             now: null,
             nowpage: 0,
+            
+            dialogVisible: false,
+            imgUrl: null,
         }
         
     },
     methods: {
+        bePic(){
+            console.log("bePic")
+            html2canvas(this.$refs.imgDom).then(canvas => {
+                // 转成图片，生成图片地址
+                this.imgUrl = canvas.toDataURL("image/png");
+                //赋值给vant组件直接显示
+                console.log(this.imgUrl)
+                //ImagePreview({images: [imgUrl], closeable: true});
+                //window.open(imgUrl.toString(), '_self')
+
+                /*var iframe = "<iframe width='100%' height='100%' src='" + imgUrl + "'></iframe>"
+                var x = window.open()
+                x.document.open()
+                x.document.write(iframe)
+                x.document.close()*/
+
+                this.dialogVisible = true
+            });
+        },
+        mytoString(num){
+            if(num == null)
+                return null
+            return num.toString()
+        },
+        TEST(){
+            console.log('delete')
+        },
         setTool(index){
             this.nowtool = index
             this.tool = [ false, false, false, false, false ]
@@ -550,9 +588,12 @@ export default{
             this.pages[this.nowpage] = []
         },
         Delete(){
-            if(this.now == null)
+            if(this.now == null){
+                this.deletePage()
                 return ;
+            }
             this.pages[this.nowpage].splice(this.now, 1)
+            this.now = null
         },
         AddPage(){
             this.pages.push([])
@@ -581,8 +622,6 @@ export default{
             if(this.now == null)
                 return ;
             let sid = 'el' + this.now
-            console.log(sid)
-            console.log(document.getElementById(sid))
 
             this.pages[this.nowpage][this.now].active = true
             document.getElementById(sid).setAttribute('style', 'background:grey')
@@ -600,6 +639,14 @@ export default{
         moveDown(index){
 
         },
-    }
+    },
+    mounted() {
+        let that = this
+        document.onkeydown = function(e) {
+            console.log(e.which)
+            if(e.which == 8 || e.which == 46)
+                that.Delete()
+        }
+    },
 }
 </script>
