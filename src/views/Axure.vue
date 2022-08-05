@@ -31,9 +31,9 @@
                     </div>
                     <div class="line"></div>
                     <div class="page-menu">
-                        <el-menu :default-active="nowpage">
+                        <el-menu :default-active="mytoString(nowpage)">
                             <el-menu-item v-for="(item, Index) in pagesname"
-                                :index="Index" @click="setPage(Index)">
+                                :index="Index.toString()" @click="setPage(Index)">
                                 <div class="menu-item">
                                     <div class="menu-item-left">
                                         <el-icon><Document /></el-icon>
@@ -49,9 +49,9 @@
                     <div class="line"></div>
                     <div class="item-menu">
                         <span>元素</span>
-                        <el-menu :default-active="now">
+                        <el-menu :default-active="mytoString(now)">
                             <el-menu-item v-for="(item, Index) in pages[nowpage]" 
-                                :index="Index" @click="setActive(Index)">
+                                :index="Index.toString()" @click="setActive(Index)">
                                 <div class="myitem">
                                     <span>{{ item.type }} {{ item.id }}</span>
                                     <!--
@@ -78,8 +78,8 @@
                                 v-model:y = item.transform.y
                                 v-model:w = item.transform.width
                                 v-model:h = item.transform.height
-                                parent = "true"
-                                v-model:active = "item.active"
+                                :parent = true
+                                v-model:active = item.active
                                 
                                 @activated = "setActive(index)"
                                 @deactivated = "setDeActive(index)">
@@ -91,7 +91,7 @@
                 </div>
                 <div class="right-tool">
                     <div class="toolbox">
-                        <el-menu ref="elMenu" :default-active="nowtool">
+                        <el-menu ref="elMenu" :default-active="mytoString(nowtool)">
                             <el-menu-item index="0" @click="setTool(0)">
                                 <el-icon><Stopwatch /></el-icon>
                             </el-menu-item>
@@ -505,6 +505,14 @@ export default{
         
     },
     methods: {
+        mytoString(num){
+            if(num == null)
+                return null
+            return num.toString()
+        },
+        TEST(){
+            console.log('delete')
+        },
         setTool(index){
             this.nowtool = index
             this.tool = [ false, false, false, false, false ]
@@ -550,9 +558,12 @@ export default{
             this.pages[this.nowpage] = []
         },
         Delete(){
-            if(this.now == null)
+            if(this.now == null){
+                this.deletePage()
                 return ;
+            }
             this.pages[this.nowpage].splice(this.now, 1)
+            this.now = null
         },
         AddPage(){
             this.pages.push([])
@@ -581,8 +592,6 @@ export default{
             if(this.now == null)
                 return ;
             let sid = 'el' + this.now
-            console.log(sid)
-            console.log(document.getElementById(sid))
 
             this.pages[this.nowpage][this.now].active = true
             document.getElementById(sid).setAttribute('style', 'background:grey')
@@ -600,6 +609,14 @@ export default{
         moveDown(index){
 
         },
-    }
+    },
+    mounted() {
+        let that = this
+        document.onkeydown = function(e) {
+            console.log(e.which)
+            if(e.which == 8 || e.which == 46)
+                that.Delete()
+        }
+    },
 }
 </script>
