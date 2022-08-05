@@ -369,13 +369,11 @@ export default {
   name: "workspace",
   components: {AxureEditor, CoEditor, UMLEditor, Filter, Sort, Plus, CaretBottom },
   props:{
-    project_id:{
-      type:String,
-      default:114514,
-    },
+
   },
   data() {
     return {
+      project_id:'114514',
       tab: "tab-0",
       dialogFormVisible1: false,
       editing: 0,
@@ -463,6 +461,9 @@ export default {
   mounted() {
     this.load_doc_info()
     this.load_uml_info()
+    if(this.$route.params.project_id) {
+      this.project_id = this.$route.params.project_id
+    }
   },
   computed:{
     umlNumber(){
