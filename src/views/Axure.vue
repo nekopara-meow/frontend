@@ -163,7 +163,10 @@
             </div>
             <div class="line"></div>
         </div>
-
+        
+        <el-dialog v-model="dialogVisible" title="导出预览">
+            <img width="500" :src="imgUrl" />
+        </el-dialog>
     </body>
 </template>
 
@@ -507,6 +510,8 @@ export default{
             now: null,
             nowpage: 0,
             
+            dialogVisible: false,
+            imgUrl: null,
         }
         
     },
@@ -515,17 +520,19 @@ export default{
             console.log("bePic")
             html2canvas(this.$refs.imgDom).then(canvas => {
                 // 转成图片，生成图片地址
-                let imgUrl = canvas.toDataURL("image/png");
+                this.imgUrl = canvas.toDataURL("image/png");
                 //赋值给vant组件直接显示
-                console.log(imgUrl)
+                console.log(this.imgUrl)
                 //ImagePreview({images: [imgUrl], closeable: true});
                 //window.open(imgUrl.toString(), '_self')
 
-                var iframe = "<iframe width='100%' height='100%' src='" + imgUrl + "'></iframe>"
+                /*var iframe = "<iframe width='100%' height='100%' src='" + imgUrl + "'></iframe>"
                 var x = window.open()
                 x.document.open()
                 x.document.write(iframe)
-                x.document.close()
+                x.document.close()*/
+
+                this.dialogVisible = true
             });
         },
         mytoString(num){
