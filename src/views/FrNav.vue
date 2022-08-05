@@ -2,7 +2,7 @@
   <div id="fr-nav" class="d-flex" style="border: none">
     <div class="indent" @click="indentSignal">
       <i
-          :class="{
+        :class="{
           'bi-text-indent-right': !collapse,
           'bi-text-indent-left': collapse,
         }"
@@ -13,28 +13,28 @@
     </div>
     <div class="text">
       <input
-          type="text"
-          v-model="query"
-          @keydown.enter="browse"
-          placeholder="搜索..."
-          style="background-color: rgba(255, 255, 255, 0.437)"
+        type="text"
+        v-model="query"
+        @keydown.enter="browse"
+        placeholder="搜索..."
+        style="background-color: rgba(255, 255, 255, 0.437)"
       />
     </div>
     <div class="end">
       <el-dropdown
-          trigger="click"
-          class="Notification"
-          v-if="$store.state.token"
+        trigger="click"
+        class="Notification"
+        v-if="$store.state.token"
       >
         <div class="el-dropdown-link d-flex align-items-center">
           <el-badge
-              :value="
+            :value="
               numoffollowers + numofcomments + numoflikes + numofsys === 0
                 ? ''
                 : numoffollowers + numofcomments + numoflikes + numofsys
             "
-              class="item"
-              type="danger"
+            class="item"
+            type="danger"
           >
             <i class="bi-bell"></i>
           </el-badge>
@@ -43,8 +43,8 @@
         <template #dropdown>
           <el-dropdown-menu style="width: 300px; margin: 0">
             <div
-                class="dropdown-head"
-                style="
+              class="dropdown-head"
+              style="
                 display: flex;
                 flex-direction: row;
                 justify-content: center;
@@ -58,47 +58,47 @@
             <el-dropdown-item divided class="badgecontainer">
               <div class="badges">
                 <el-badge
-                    :value="numoffollowers === 0 ? '' : numoffollowers"
-                    class="item"
+                  :value="numoffollowers === 0 ? '' : numoffollowers"
+                  class="item"
                 >
                   <el-button
-                      :icon="User"
-                      circle
-                      size="large"
-                      @click="gotoListFollow"
+                    :icon="User"
+                    circle
+                    size="large"
+                    @click="gotoListFollow"
                   />
                   <span>新的粉丝</span>
                 </el-badge>
                 <el-badge
-                    :value="numofcomments === 0 ? '' : numofcomments"
-                    class="item"
+                  :value="numofcomments === 0 ? '' : numofcomments"
+                  class="item"
                 >
                   <el-button
-                      :icon="ChatDotRound"
-                      circle
-                      size="large"
-                      @click="gotoListComment"
+                    :icon="ChatDotRound"
+                    circle
+                    size="large"
+                    @click="gotoListComment"
                   />
                   <span>新的回复</span>
                 </el-badge>
                 <el-badge
-                    :value="numoflikes === 0 ? '' : numoflikes"
-                    class="item"
+                  :value="numoflikes === 0 ? '' : numoflikes"
+                  class="item"
                 >
                   <el-button
-                      :icon="Star"
-                      circle
-                      size="large"
-                      @click="gotoListLike"
+                    :icon="Star"
+                    circle
+                    size="large"
+                    @click="gotoListLike"
                   />
                   <span>新的赞同</span>
                 </el-badge>
                 <el-badge :value="numofsys === 0 ? '' : numofsys" class="item">
                   <el-button
-                      :icon="Service"
-                      circle
-                      size="large"
-                      @click="gotoListSys"
+                    :icon="Service"
+                    circle
+                    size="large"
+                    @click="gotoListSys"
                   />
                   <span>系统消息</span>
                 </el-badge>
@@ -108,9 +108,9 @@
         </template>
       </el-dropdown>
       <el-dropdown
-          :hide-on-click="false"
-          trigger="click"
-          class="justify-content-end"
+        :hide-on-click="false"
+        trigger="click"
+        class="justify-content-end"
       >
         <div class="el-dropdown-link d-flex align-items-center">
           {{ name }}
@@ -125,30 +125,30 @@
         <template #dropdown>
           <el-dropdown-menu style="width: 160px">
             <el-dropdown-item
-                :icon="User"
-                v-if="$store.state.token"
-                @click="checkInfo"
-            >查看资料</el-dropdown-item
+              :icon="User"
+              v-if="$store.state.token"
+              @click="checkInfo"
+              >查看资料</el-dropdown-item
             >
             <el-dropdown-item
-                :icon="User"
-                v-if="$store.state.token"
-                @click.native="changePassword"
-            >修改密码</el-dropdown-item
+              :icon="User"
+              v-if="$store.state.token"
+              @click.native="changePassword"
+              >修改密码</el-dropdown-item
             >
             <el-dropdown-item
-                :icon="TurnOff"
-                divided
-                @click="logout"
-                v-if="$store.state.token"
-            >退出登录</el-dropdown-item
+              :icon="TurnOff"
+              divided
+              @click="logout"
+              v-if="$store.state.token"
+              >退出登录</el-dropdown-item
             >
             <el-dropdown-item
-                :icon="TurnOff"
-                divided
-                @click="login"
-                v-if="!$store.state.token"
-            >登录</el-dropdown-item
+              :icon="TurnOff"
+              divided
+              @click="login"
+              v-if="!$store.state.token"
+              >登录</el-dropdown-item
             >
           </el-dropdown-menu>
         </template>
@@ -187,6 +187,10 @@ export default {
   props: {
     collapse: Boolean,
   },
+  created() {
+    this.updateinfo();
+    console.log(this.head);
+  },
   data() {
     return {
       numoffollowers: 0,
@@ -198,12 +202,6 @@ export default {
       name: "",
       head: "",
       textarea1: "",
-      changedata: {
-        username: "luanbu",
-        password: "yaoyaoling110YAO",
-        password1: "yaoyaoling112YAO",
-        password2: "yaoyaoling11111",
-      },
     };
   },
   mounted() {
@@ -231,17 +229,17 @@ export default {
       this.token = this.$store.state.token;
       if (!this.token) {
         this.head =
-            "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/Transparent_Akkarin.jpg";
+          "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/Transparent_Akkarin.jpg";
         this.name = "请登录";
       } else {
         console.log(this.$store.state.username, this.$store.state.token);
         getuserinfo({ username: this.$store.state.username }).then(
-            (response) => {
-              if (response.data.status_code == 1) {
-                console.log(response.data);
-                this.head = response.data.head;
-              } else ElMessage.error(response.data.message);
-            }
+          (response) => {
+            if (response.data.status_code == 1) {
+              console.log(response.data);
+              this.head = response.data.avatar;
+            } else ElMessage.error(response.data.message);
+          }
         );
         //this.head = this.userinfo.head;
         this.name = this.$store.state.username;
@@ -287,9 +285,9 @@ export default {
     height: 100%;
     flex: none;
     background: linear-gradient(
-            to bottom,
-            rgba(255, 255, 255, 0.737),
-            rgba(255, 255, 255, 0.221)
+      to bottom,
+      rgba(255, 255, 255, 0.737),
+      rgba(255, 255, 255, 0.221)
     );
     box-shadow: 0px 15px 10px -15px rgba(221, 221, 221, 0.479);
     backdrop-filter: blur(2rem);
