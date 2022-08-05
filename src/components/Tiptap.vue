@@ -209,59 +209,64 @@ export default {
     //接受参数
     this.doc_id=this.$route.params.doc_id
     this.project_id=this.$route.params.project_id
-    this.username=this.$router.params.username
+    this.username=this.$route.params.username
     load_doc({
       doc_id:this.doc_id,
       username:this.username,
       project_id: this.project_id
-    }).then((rea)=>{
-      let url=res.data.doc_url
-      readURL(url,(htmlData)=>{
-        this.html=htmlData
-      })
-    })
-    if(this.html){
-      this.initialContent=''
-    }
+    }).then((res)=>{
+      //不是新建文档需要初始化客户
+      if(res.data.doc_url){
+        let url=res.data.doc_url
+        readURL(url,(htmlData)=>{
+          this.html=htmlData
+        })
+      }
+    }).then(()=>{
+      if(this.html){
+        this.initialContent=''
+      }
 // A new Y document
-    const ydoc = new Y.Doc()
+      const ydoc = new Y.Doc()
 // Registered with a WebRTC provider
-    this.provider = new WebrtcProvider('example-document', ydoc)
-    this.editor = new Editor({
-      extensions: [
-        CollaborationCursor.configure({
-          provider: this.provider,
-          user: {
-            name: 'Cyndi Lauper',
-            color: '#f783ac',
-          },
-        }),
-        StarterKit.configure({
-          // The Collaboration extension comes with its own history handling
-          history: false,
-        }),
-        // Register the document with Tiptap
-        Collaboration.configure({
-          document: ydoc,
-        }),
-        Placeholder.configure({
-          placeholder: this.initialContent,
-        }),
+      this.provider = new WebrtcProvider('example-document', ydoc)
+      this.editor = new Editor({
+        extensions: [
+          CollaborationCursor.configure({
+            provider: this.provider,
+            user: {
+              name: 'Other Editor',
+              color: '#f783ac',
+            },
+          }),
+          StarterKit.configure({
+            // The Collaboration extension comes with its own history handling
+            history: false,
+          }),
+          // Register the document with Tiptap
+          Collaboration.configure({
+            document: ydoc,
+          }),
+          Placeholder.configure({
+            placeholder: this.initialContent,
+          }),
           Document,
           Text,
           Underline,
           Paragraph,
-      ],
+        ],
+      })
+      this.editor.on('update', () => {
+        this.html = this.editor.getHTML();
+        this.json = this.editor.getJSON();
+        // this.$emit('update', this.html);
+      })
+      //继承存储的内容
+      if(this.html){
+        this.editor.commands.setContent('<p>未作任何保存</p>')
+      }
     })
-    this.editor.on('update', () => {
-      this.html = this.editor.getHTML();
-      this.json = this.editor.getJSON();
-      // this.$emit('update', this.html);
-    })
-    //继承存储的内容
-    if(this.html){
-      this.editor.commands.setContent('<p>未作任何保存</p>')
-    }
+
   },
   /**
    * @description: 数据传输部分还没写完
@@ -277,7 +282,9 @@ export default {
         doc_id:this.doc_id,
         project_id:this.project_id,
       }
-      save_doc(pojo)
+      save_doc(pojo).then((res)=>{
+        console.log(res.data)
+      })
     },
     exit(){
       //不做更改，返回页面

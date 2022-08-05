@@ -32,14 +32,14 @@
           <div style="display: flex">
             <h2 class="title gradient">NEKOPARA</h2>
             <nav>
-              <a
-                @click="
-                  () => {
-                    this.tab = 'tab-0';
-                  }
-                "
-                >概览</a
-              >
+<!--              <a-->
+<!--                @click="-->
+<!--                  () => {-->
+<!--                    this.tab = 'tab-0';-->
+<!--                  }-->
+<!--                "-->
+<!--                >概览</a-->
+<!--              >-->
               <a
                 @click="
                   () => {
@@ -48,30 +48,30 @@
                 "
                 >文件</a
               >
-              <a
-                @click="
-                  () => {
-                    this.tab = 'tab-2';
-                  }
-                "
-                >需求</a
-              >
-              <a
-                @click="
-                  () => {
-                    this.tab = 'tab-3';
-                  }
-                "
-                >迭代</a
-              >
-              <a
-                @click="
-                  () => {
-                    this.tab = 'tab-4';
-                  }
-                "
-                >统计</a
-              >
+<!--              <a-->
+<!--                @click="-->
+<!--                  () => {-->
+<!--                    this.tab = 'tab-2';-->
+<!--                  }-->
+<!--                "-->
+<!--                >需求</a-->
+<!--              >-->
+<!--              <a-->
+<!--                @click="-->
+<!--                  () => {-->
+<!--                    this.tab = 'tab-3';-->
+<!--                  }-->
+<!--                "-->
+<!--                >迭代</a-->
+<!--              >-->
+<!--              <a-->
+<!--                @click="-->
+<!--                  () => {-->
+<!--                    this.tab = 'tab-4';-->
+<!--                  }-->
+<!--                "-->
+<!--                >统计</a-->
+<!--              >-->
               <div class="animation" :class="tab"></div>
             </nav>
           </div>
@@ -121,7 +121,8 @@
         </div>
 
         <hr style="margin: 5px; margin-bottom: 20px" />
-        <div id="leftdown1" v-if="tab == 'tab-0'">
+<!--        注释-->
+        <div id="leftdown1" v-if="tab == 'tab-111'">
           <div id="leftdown1left">
             <div style="display: flex; justify-content: space-between">
               <h2 class="bluelight">项目信息</h2>
@@ -150,7 +151,7 @@
               placeholder="简介"
               type="textarea"
               :rows="4"
-              style="display: line; width: 200px; font-size: 10px"
+              style="display: inline; width: 200px; font-size: 10px"
             />
             <div
               style="
@@ -236,7 +237,7 @@
             </div>
           </div>
         </div>
-        <div id="leftdown" v-if="tab == 'tab-1'">
+        <div id="leftdown" v-if="tab == 'tab-0'">
           <el-collapse
             v-model="activeNames"
             @change="handleChange"
@@ -250,23 +251,33 @@
             >
               <el-dropdown
                 trigger="contextmenu"
-                v-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9]"
+                v-for="(i,index) in this.doc_file"
               >
-                <div class="oneitem">
-                  <img src="..\assets\img\fileicons\Word.png" />
-                  <div>少年阿宾.txt</div>
+                <div class="oneitem" v-if="index<this.docNumber-1">
+                  <co-editor :username="this.username"
+                             :doc_id="i.file_id"
+                             :prject_id="this.project_id"></co-editor>
+                  <div>{{i.file_name}}</div>
                   <div style="font-size: smaller; margin-top: 2px">
-                    2022/8/3
+<!--                    2022/8/3-->
+                    {{i.creator}}
+                  </div>
+                </div>
+                <div class="oneitem" v-else>
+                  <co-editor :is-new="true"></co-editor>
+                  <div>新建文档</div>
+                  <div style="font-size: smaller; margin-top: 2px">
+                    {{this.$store.state.username}}
                   </div>
                 </div>
 
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item>打开</el-dropdown-item>
-                    <el-dropdown-item>在新标签页中打开</el-dropdown-item>
-                    <el-dropdown-item>移出工作台</el-dropdown-item>
-                    <el-dropdown-item>历史版本</el-dropdown-item>
-                    <el-dropdown-item>属性</el-dropdown-item>
+                    <el-dropdown-item @click="del_doc(i.file_id)">删除</el-dropdown-item>
+<!--                    <el-dropdown-item>在新标签页中打开</el-dropdown-item>-->
+<!--                    <el-dropdown-item>移出工作台</el-dropdown-item>-->
+<!--                    <el-dropdown-item>历史版本</el-dropdown-item>-->
+<!--                    <el-dropdown-item>属性</el-dropdown-item>-->
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
@@ -280,24 +291,60 @@
             >
               <el-dropdown
                 trigger="contextmenu"
-                v-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9]"
+                v-for="(i,index) in this.uml_file"
               >
-                <div class="oneitem">
-<!--                  <img src="..\assets\img\fileicons\txt.png" />-->
-                  <UMLEditor></UMLEditor>
-                  <div>少年阿宾.txt</div>
+                <div class="oneitem" v-if="index<this.umlNumber-1">
+                  <UMLEditor :pro_id="this.project_id"
+                             :uml_id="i.file_id"
+                             :username="this.username"></UMLEditor>
+                  <div>{{ i.file_name }}</div>
                   <div style="font-size: smaller; margin-top: 2px">
-                    2022/8/3
+<!--                    2022/8/3-->
+                    {{i.creator}}
                   </div>
                 </div>
-
+                <div class="oneitem" v-else>
+                  <UMLEditor :is-new="true" :pro_id="this.project_id"></UMLEditor>
+                  <div>{{ i.file_name }}</div>
+                  <div style="font-size: smaller; margin-top: 2px">
+                    {{this.$store.state.username}}
+                  </div>
+                </div>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item>打开</el-dropdown-item>
-                    <el-dropdown-item>在新标签页中打开</el-dropdown-item>
-                    <el-dropdown-item>移出工作台</el-dropdown-item>
-                    <el-dropdown-item>历史版本</el-dropdown-item>
-                    <el-dropdown-item>属性</el-dropdown-item>
+                    <el-dropdown-item @click="del_uml(i.file_id)">删除</el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+            </el-collapse-item>
+            <hr style="margin: 5px" />
+            <el-collapse-item
+                title="原型设计"
+                name="3"
+                style="font-size: 20px; font-weight: lighter"
+            >
+              <el-dropdown
+                  trigger="contextmenu"
+                  v-for="(i,index) in this.axure_file"
+              >
+                <div class="oneitem" v-if="index<this.axureNumber-1">
+                  <axure-editor ></axure-editor>
+                  <div>{{ i.file_name }}</div>
+                  <div style="font-size: smaller; margin-top: 2px">
+                    <!--                    2022/8/3-->
+                    {{i.creator}}
+                  </div>
+                </div>
+                <div class="oneitem" v-else>
+                  <axure-editor :is-new="true"></axure-editor>
+                  <div>{{ i.file_name }}</div>
+                  <div style="font-size: smaller; margin-top: 2px">
+                    {{this.$store.state.username}}
+                  </div>
+                </div>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item >删除</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
@@ -315,9 +362,18 @@ import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
 import { Filter, Sort, Plus, CaretBottom } from "@element-plus/icons-vue";
 import UMLEditor from "@/components/UMLEditor";
 import CoEditor from "@/components/CoEditor";
+import {get_docfile,get_umlfile,del_uml,del_doc} from "@/utils/api";
+import AxureEditor from "@/components/axureEditor";
+
 export default {
   name: "workspace",
-  components: {CoEditor, UMLEditor, Filter, Sort, Plus, CaretBottom },
+  components: {AxureEditor, CoEditor, UMLEditor, Filter, Sort, Plus, CaretBottom },
+  props:{
+    project_id:{
+      type:String,
+      default:114514,
+    },
+  },
   data() {
     return {
       tab: "tab-0",
@@ -335,8 +391,90 @@ export default {
         name: "",
         type: "",
       },
+      uml_file:[{
+        file_id:1919,
+        file_name:'示例文件',
+        creator:'列车头'
+      },{
+        file_id:810,
+        file_name:'示例文件',
+        creator:'列车头'
+      }
+      ],
+      doc_file:[{
+        file_id:1919,
+        file_name:'示例文件',
+        creator:'列车头'
+      },{
+        file_id:810,
+        file_name:'示例文件',
+        creator:'列车头'
+      }],
+      axure_file:[{
+        file_id:1919,
+        file_name:'示例文件',
+        creator:'列车头'
+      },{
+        file_id:810,
+        file_name:'示例文件',
+        creator:'列车头'
+      }],
+      username:this.$store.state.username,
     };
   },
+  methods:{
+    load_uml_info(){
+      get_umlfile({
+        username:this.$store.state.username,
+        project_id: this.project_id,
+      }).then((res)=>{
+        this.uml_file.concat(res.data.ans_list)
+        console.log('加载uml文件成功')
+        console.log(this.uml_file)
+      })
+    },
+    load_doc_info(){
+      get_docfile({
+        username:this.$store.state.username,
+        project_id: this.project_id,
+      }).then((res)=>{
+        this.doc_file.concat(res.data.ans_list)
+        console.log('加载doc文件成功')
+        console.log(this.doc_file)
+      })
+    },
+    del_doc(docID){
+      del_doc({
+        doc_id:docID
+      }).then(res=>{
+        this.load_doc_info()
+      })
+    },
+    del_uml(umlID){
+      del_doc({
+        uml_id:umlID
+      }).then(
+          (res)=>{
+            this.load_uml_info()
+        }
+      )
+    }
+  },
+  mounted() {
+    this.load_doc_info()
+    this.load_uml_info()
+  },
+  computed:{
+    umlNumber(){
+      return this.uml_file.length
+    },
+    docNumber(){
+      return this.doc_file.length
+    },
+    axureNumber(){
+      return this.axure_file.length
+    }
+  }
 };
 </script>
 
@@ -658,7 +796,6 @@ nav a:nth-child(5):hover ~ .animation {
 }
 #leftdown1 {
   display: flex;
-
   justify-content: start;
   overflow-y: scroll;
   height: 63vh;

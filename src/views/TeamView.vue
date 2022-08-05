@@ -378,8 +378,13 @@ export default {
   font-size: 15px;
   font-weight: lighter;
   img {
-    width: 100px;
+    width: 64px;
+    height: 64px;
     margin-bottom: 5px;
+    object-fit: cover;
+    border: 1px;
+    border-color: #26476d;
+    border-radius: 20%;
   }
 }
 #leftdown {

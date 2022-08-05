@@ -338,3 +338,19 @@ h3 {
 }
 
 
+.fileicon{
+    width: 64px;
+    height: 64px;
+    margin-bottom: 5px;
+    object-fit: cover;
+    border: 1px;
+    border-color: #26476d;
+    border-radius: 20%;
+    border-style: solid;
+    &__perimg{
+        object-fit: fill;
+        height: 100%;
+        width: 100%;
+
+    }
+}

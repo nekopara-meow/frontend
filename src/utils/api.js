@@ -24,7 +24,22 @@ export function save_uml(data){
     })
 }
 
+export function create_uml(data){
+    return request({
+        url: 'api/team/doc/load',
+        method: 'post',
+        data,
+    })
+}
 export function load_uml(data){
+    return request({
+        url: 'api/team/uml/load',
+        method: 'post',
+        data,
+    })
+}
+
+export function del_uml(data){
     return request({
         url: 'api/team/uml/load',
         method: 'post',
@@ -67,6 +82,38 @@ export function save_doc(data){
 export function load_doc(data){
     return request({
         url: 'api/team/doc/load',
+        method: 'post',
+        data,
+    })
+}
+
+export function del_doc(data){
+    return request({
+        url: 'api/team/doc/load',
+        method: 'post',
+        data,
+    })
+}
+
+export function create_doc(data){
+    return request({
+        url: 'api/team/doc/load',
+        method: 'post',
+        data,
+    })
+}
+
+export function get_umlfile(data){
+    return request({
+        url: 'api/projects/viewUMLsInProject',
+        method: 'post',
+        data,
+    })
+}
+
+export function get_docfile(data){
+    return request({
+        url: 'api/projects/viewTextsInProject',
         method: 'post',
         data,
     })
