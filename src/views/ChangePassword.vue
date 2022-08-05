@@ -68,6 +68,7 @@ export default {
           "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/Transparent_Akkarin.jpg",
       },
       form: {
+        username: this.$store.state.username,
         password: "",
         password1: "",
         password2: "",
