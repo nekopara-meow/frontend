@@ -3,13 +3,13 @@
     <el-dialog v-model="dialogFormVisible" title="创建团队" width="30%" center>
       <el-form :model="createteamform">
         <el-form-item label="团队名称">
-          <el-input v-model="createteamform.name" autocomplete="off" />
+          <el-input v-model="createteamform.team_name" autocomplete="off" />
         </el-form-item>
         <el-form-item label="团队介绍">
           <el-input
             type="textarea"
             :rows="3"
-            v-model="createteamform.intro"
+            v-model="createteamform.brief_intro"
             autocomplete="off"
           />
         </el-form-item>
@@ -21,7 +21,7 @@
             style="background-color: white"
             >Cancel</el-button
           >
-          <el-button type="primary" @click="dialogFormVisible = false"
+          <el-button type="primary" @click="submit"
             >Confirm</el-button
           >
         </span>
@@ -62,6 +62,19 @@
           </div>
 
           <div class="buttons">
+            <!-- <el-dropdown style="margin-right: 30px">
+              <el-button type="primary"
+                ><el-icon><Sort /></el-icon
+              ></el-button>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item>按xx排序</el-dropdown-item>
+                  <el-dropdown-item>按xx排序</el-dropdown-item>
+                  <el-dropdown-item>按xx排序</el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown> -->
+
             <el-button type="primary" @click="this.dialogFormVisible = true"
               ><el-icon><Plus /></el-icon
             ></el-button>
@@ -70,16 +83,14 @@
 
         <hr style="margin: 5px; margin-bottom: 20px" />
         <div id="leftdown" v-if="tab == 'tab-0'">
-          <div class="oneteam" v-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9]">
+          <div class="oneteam" v-for="(teamcreat,index) in teamusercreat" :key="index" @click="go(teamcreat.team_id)">
             <div
               class="teamimage"
-              style="
-                background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-              "
+              :style="{ backgroundImage: `url(` + teamcreat.team_avatar + ')' }"
             ></div>
             <div class="oneteamdown">
-              <div style="font-size: 18px">猫娘乐园</div>
-              <div>我是傻逼，我是傻逼，我真的是傻逼</div>
+              <div style="font-size: 18px">{{teamcreat.team_name}}</div>
+              <div>{{teamcreat.brief_intro}}</div>
               <div class="text-wrap">
                 <div class="example">
                   <div class="avatar-list avatar-list-stacked">
@@ -121,22 +132,20 @@
           </div>
         </div>
         <div id="leftdown" v-if="tab == 'tab-1'">
-          <div class="oneteam" v-for="i in [1, 2, 3, 4, 5, 6]">
+          <div class="oneteam" v-for="(teamadmin,index) in teamuseradmin" :key="index">
             <div
-              class="teamimage"
-              style="
-                background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-              "
+                class="teamimage"
+                :style="{ backgroundImage: `url(` + teamuseradmin.team_avatar + ')' }"
             ></div>
             <div class="oneteamdown">
-              <div style="font-size: 18px">小秋月</div>
-              <div>我是傻逼，我是傻逼，我真的是傻逼</div>
+              <div style="font-size: 18px">{{teamadmin.team_name}}</div>
+              <div>{{teamadmin.brief_intro}}</div>
               <div class="text-wrap">
                 <div class="example">
                   <div class="avatar-list avatar-list-stacked">
                     <span
-                      class="avatar cover-image brround"
-                      style="
+                        class="avatar cover-image brround"
+                        style="
                         background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
                       "
                     ></span
@@ -145,14 +154,26 @@
                       style="
                         background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
                       "
-                    ></span
-                    ><span
+                  ></span
+                  ><span
                       class="avatar cover-image brround"
                       style="
                         background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
                       "
-                    ></span
-                    ><span class="avatar cover-image brround">+8</span>
+                  ></span
+                  ><span
+                      class="avatar cover-image brround"
+                      style="
+                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
+                      "
+                  ></span
+                  ><span
+                      class="avatar cover-image brround"
+                      style="
+                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
+                      "
+                  ></span
+                  ><span class="avatar cover-image brround">+8</span>
                   </div>
                 </div>
               </div>
@@ -160,22 +181,20 @@
           </div>
         </div>
         <div id="leftdown" v-if="tab == 'tab-2'">
-          <div class="oneteam" v-for="i in [1, 2, 3, 4, 5, 6, 7]">
+          <div class="oneteam" v-for="(teamin,index) in teamuserin" :key="index">
             <div
-              class="teamimage"
-              style="
-                background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-              "
+                class="teamimage"
+                :style="{ backgroundImage: `url(` + teamin.team_avatar + ')' }"
             ></div>
             <div class="oneteamdown">
-              <div style="font-size: 18px">小猫猫</div>
-              <div>我是傻逼，我是傻逼，我真的是傻逼</div>
+              <div style="font-size: 18px">{{teamin.team_name}}}</div>
+              <div>{{teamin.brief_intro}}</div>
               <div class="text-wrap">
                 <div class="example">
                   <div class="avatar-list avatar-list-stacked">
                     <span
-                      class="avatar cover-image brround"
-                      style="
+                        class="avatar cover-image brround"
+                        style="
                         background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
                       "
                     ></span
@@ -184,26 +203,26 @@
                       style="
                         background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
                       "
-                    ></span
-                    ><span
+                  ></span
+                  ><span
                       class="avatar cover-image brround"
                       style="
                         background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
                       "
-                    ></span
-                    ><span
+                  ></span
+                  ><span
                       class="avatar cover-image brround"
                       style="
                         background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
                       "
-                    ></span
-                    ><span
+                  ></span
+                  ><span
                       class="avatar cover-image brround"
                       style="
                         background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
                       "
-                    ></span
-                    ><span class="avatar cover-image brround">+8</span>
+                  ></span
+                  ><span class="avatar cover-image brround">+8</span>
                   </div>
                 </div>
               </div>
@@ -218,21 +237,87 @@
 <script>
 import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
 import { Filter, Sort, Plus, CaretBottom } from "@element-plus/icons-vue";
+import {
+  establishteam,
+  getteamcreator,
+  getteamuseradmin,
+  getteamusercreat,
+  getteamuserin,
+  getuserinfo
+} from "@/utils/api";
 export default {
-  name: "workspace",
+  name: "teamview",
   components: { Filter, Sort, Plus, CaretBottom },
-
+  created() {
+    this.initializationdata()
+  },
   data() {
     return {
       tab: "tab-0",
       dialogFormVisible: false,
+      teamuserin:[],
+      teamuseradmin:[],
+      teamusercreat:[],
       createteamform: {
-        name: "",
-        intro: "",
+        team_name: "",
+        brief_intro: "",
+        username:this.$store.state.username
       },
       formLabelWidth: "140px",
     };
   },
+  methods:{
+    go(tid){
+      this.$router.push({
+        path:'/teamdetail',
+        query:{
+          team_id:tid
+        }
+      })
+    },
+    submit()
+    {
+      this.dialogFormVisible = false
+      console.log(this.createteamform)
+      establishteam(this.createteamform).then(
+          (response) => {
+            if (response.data.status_code == 1) {
+              console.log(response.data);
+              this.initializationdata()
+            } else ElMessage.error(response.data.message);
+          }
+      );
+
+    },
+    initializationdata()
+    {
+      getteamuserin({ username: this.$store.state.username }).then(
+          (response) => {
+            if (response.data.status_code == 1) {
+              console.log("in",response.data);
+              this.teamuserin = response.data.Dict.team_info;
+            } else ElMessage.error(response.data.message);
+          }
+      );
+      getteamuseradmin({ username: this.$store.state.username }).then(
+          (response) => {
+            if (response.data.status_code == 1) {
+              console.log("admin",response.data);
+              this.teamuseradmin = response.data.Dict.team_info;
+            } else ElMessage.error(response.data.message);
+          }
+      );
+      getteamusercreat({ username: this.$store.state.username }).then(
+          (response) => {
+            if (response.data.status_code == 1) {
+              console.log("creat",response.data);
+              this.teamusercreat = response.data.Dict.team_info;
+            } else ElMessage.error(response.data.message);
+          }
+      );
+    }
+
+  }
 };
 </script>
 
