@@ -341,7 +341,7 @@
           <div
             class="oneteam"
             style="height: 120px; margin-bottom: 20px"
-            v-for="(teamproject,index) in teamprojects" :key="index" @click="go(teamprojects.project_id)"
+            v-for="(teamproject,index) in teamprojects" :key="index" @click="gotoproject(teamproject.project_id)"
           >
             <div class="oneteamdown">
               <div style="font-size: 18px">{{ teamproject.project_id }}</div>
@@ -426,6 +426,15 @@ export default {
     };
   },
   methods:{
+    gotoproject(a) {
+      console.log("pp",a),
+      this.$router.push({
+        path: "/projectdetail",
+        params: {
+          project_id: a,
+        },
+      });
+    },
     invite(){
       invitemember(this.invite).then(
           (response) => {
@@ -466,14 +475,6 @@ export default {
     checkuserinfo(){
 
     },
-    gotodetail(a) {
-      this.$router.push({
-        path: "projectdetail",
-        params: {
-          project_id: a,
-        },
-      });
-    },
     initializationdata()
     {
       getteammsgbyid({ team_id: this.$route.query.team_id  }).then(
@@ -507,7 +508,7 @@ export default {
       getteamprojectbyid({ team_id: this.$route.query.team_id  }).then(
           (response) => {
             if (response.data.status_code == 1) {
-              console.log(response.data);
+              console.log("pro",response.data);
               this.teamprojects= response.data.ans_list;
             } else ElMessage.error(response.data.message);
           }
