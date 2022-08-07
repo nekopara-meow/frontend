@@ -3,7 +3,7 @@
       class="icon"
       :class="[`icon--${name}`, `icon--${size}`, { 'has-align-fix': fixAlign }]"
   >
-    <img :src="require(`../assets/icons/${name}.svg`)" :alt="`${name}`" />
+    <img :src="require(`@/assets/icons/${name}.svg`)" :alt="`${name}`" />
 
   </div>
 </template>

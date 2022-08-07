@@ -1,10 +1,14 @@
 import { createStore } from 'vuex'
-
+import { WebrtcProvider } from 'y-webrtc'
+import * as Y from 'yjs'
 export default createStore({
   state: {
     token: '',
     username: '',
-    head:''
+    head:'',
+    ydoc:'',
+    provider:'',
+    sharedDoc:Array,
   },
   mutations: {
     // set
@@ -25,6 +29,19 @@ export default createStore({
       state.username = ''
       state.head=''
       localStorage.setItem("token", '')
+    },
+    initYDoc(state){
+      state.ydoc=new Y.Doc
+      state.provider = new WebrtcProvider('neko', state.ydoc)
+      state.sharedDoc = []
+    },
+    addNewArticle(state,doc_id){
+      console.log(state.sharedDoc)
+      console.log(doc_id)
+      if((state.sharedDoc.indexOf(doc_id)===-1)){
+        state.ydoc.getXmlFragment(doc_id.toString())
+        state.sharedDoc.push(doc_id)
+      }
     }
   },
   getters: {

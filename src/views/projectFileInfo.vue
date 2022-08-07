@@ -1,125 +1,54 @@
 <template>
-  <div id="leftdown">
-    <el-collapse
-        style="border: none"
-        class="onegroup"
-    >
-      <el-collapse-item
-          title="文本文件"
-          name="1"
-          style="font-size: 20px; font-weight: lighter"
-      >
-        <el-dropdown
-            trigger="contextmenu"
-            v-for="(i,index) in this.doc_file"
-        >
-          <div class="oneitem" v-if="index<this.docNumber-1">
-            <co-editor :username="this.username"
-                       :doc_id="i.file_id"
-                       :prject_id="this.project_id"></co-editor>
-            <div>{{i.file_name}}</div>
-            <div style="font-size: smaller; margin-top: 2px">
-              <!--                    2022/8/3-->
-              {{i.creator}}
-            </div>
-          </div>
-          <div class="oneitem" v-else>
-            <co-editor :is-new="true"></co-editor>
-            <div>新建文档</div>
-            <div style="font-size: smaller; margin-top: 2px">
-              {{this.$store.state.username}}
-            </div>
-          </div>
-
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item>打开</el-dropdown-item>
-              <el-dropdown-item>在新标签页中打开</el-dropdown-item>
-              <el-dropdown-item>移出工作台</el-dropdown-item>
-              <el-dropdown-item>历史版本</el-dropdown-item>
-              <el-dropdown-item>属性</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-      </el-collapse-item>
-
-      <hr style="margin: 5px" />
-      <el-collapse-item
-          title="UML文件"
-          name="2"
-          style="font-size: 20px; font-weight: lighter"
-      >
-        <el-dropdown
-            trigger="contextmenu"
-            v-for="(i,index) in this.uml_file"
-        >
-          <div class="oneitem" v-if="index<this.umlNumber-1">
-            <UMLEditor :pro_id="this.project_id"
-                       :uml_id="i.file_id"
-                       :username="this.username"></UMLEditor>
-            <div>{{ i.file_name }}</div>
-            <div style="font-size: smaller; margin-top: 2px">
-              <!--                    2022/8/3-->
-              {{i.creator}}
-            </div>
-          </div>
-          <div class="oneitem" v-else>
-            <UMLEditor :is-new="true" :pro_id="this.project_id"></UMLEditor>
-            <div>{{ i.file_name }}</div>
-            <div style="font-size: smaller; margin-top: 2px">
-              {{this.$store.state.username}}
-            </div>
-          </div>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item @click="del_uml(i.file_id)">删除</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-      </el-collapse-item>
-      <hr style="margin: 5px" />
-      <el-collapse-item
-          title="原型设计"
-          name="3"
-          style="font-size: 20px; font-weight: lighter"
-      >
-        <el-dropdown
-            trigger="contextmenu"
-            v-for="(i,index) in this.axure_file"
-        >
-          <div class="oneitem" v-if="index<this.axureNumber-1">
-            <axure-editor ></axure-editor>
-            <div>{{ i.file_name }}</div>
-            <div style="font-size: smaller; margin-top: 2px">
-              <!--                    2022/8/3-->
-              {{i.creator}}
-            </div>
-          </div>
-          <div class="oneitem" v-else>
-            <axure-editor :is-new="true"></axure-editor>
-            <div>{{ i.file_name }}</div>
-            <div style="font-size: smaller; margin-top: 2px">
-              {{this.$store.state.username}}
-            </div>
-          </div>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item >删除</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-      </el-collapse-item>
-      <hr style="margin: 5px" />
-    </el-collapse>
+  <div class="file-container">
+    <el-tabs tab-position="left" class="file-tabs" type="card">
+      <el-tab-pane label="User">
+        <div class="fileDisplayer">
+          <file-preview :file_type="0" creator="罗亚硕" :file_id="1" v-for="i in 20"></file-preview>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="Config">
+        <div class="fileDisplayer">
+          <file-preview :file_type="1" creator="罗亚硕" :file_id="1" username="罗亚硕" :project_id="1"></file-preview>
+          <file-preview :file_type="1" creator="lalala" :file_id="1" username="蔡徐坤" :project_id="1"></file-preview>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="Role">
+        <div class="fileDisplayer">
+          <axure-editor v-for="i in 50"></axure-editor>
+          <axure-editor is-new="true"></axure-editor>
+        </div>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 
 <script>
+import AxureEditor from "@/components/rubbish/axureEditor";
+import FilePreview from "@/components/file_componets/filePreview";
 export default {
-  name: "projectFileInfo"
+  name: "projectFileInfo",
+  components: {FilePreview, AxureEditor}
 }
 </script>
 
 <style lang="scss" scoped>
-@import "src/assets/scss/projectDetail";
+.file-container{
+  height: 100%;
+  width: 100%;
+
+  > .el-tabs{
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+  }
+  > .el-tab-pane{
+    background: red;
+  }
+}
+.fileDisplayer{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
 </style>

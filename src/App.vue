@@ -30,6 +30,8 @@ export default {
     },
   },
   mounted() {
+    //初始化YDoc，建立webrtc链接
+    this.$store.commit('initYDoc')
     // 检测浏览器路由改变页面不刷新问题,hash模式的工作原理是 hashchange事件
     window.addEventListener(
       "hashchange",

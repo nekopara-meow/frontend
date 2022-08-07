@@ -49,6 +49,16 @@ const routes = [
     ],
   },
   {
+    path: '/UmlDrawer',
+    name: 'UmlDrawer',
+    component: () => import(/* webpackChunkName: "about" */ '../components/file_componets/UmlDrawer.vue')
+  },
+  {
+    path: '/DocEditor',
+    name: 'DocEditor',
+    component: () => import(/* webpackChunkName: "about" */ '../components/file_componets/DocEditor.vue')
+  },
+  {
     path: '/workspace',
     name: 'workspace',
     component: () => import(/* webpackChunkName: "about" */ '../views/Workspace.vue')
@@ -89,14 +99,9 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Confirm.vue')
   },
   {
-    path: '/test',
-    name: 'test',
-    component: ()=>import('../components/UMLEditor')
-  },
-  {
     path: '/editor',
     name: 'editor',
-    component: ()=>import('../components/Tiptap')
+    component: ()=>import('../components/rubbish/Tiptap')
   },
   {
     path: "/404",
