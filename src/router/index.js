@@ -56,6 +56,14 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Workspace.vue')
   },
   {
+    path: '/axure',
+    name: 'axure',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/Axure.vue')
+  },
+  {
     path: '/login',
     name: 'login',
     // zroute level code-splitting

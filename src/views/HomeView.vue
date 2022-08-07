@@ -22,7 +22,7 @@
 // @ is an alias to /src
 import HelloWorld from "@/components/HelloWorld.vue";
 import lottie from "lottie-web";
-import router from "@/router";
+
 export default {
   name: "HomeView",
   components: {

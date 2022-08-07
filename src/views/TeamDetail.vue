@@ -337,11 +337,11 @@
             </div>
           </div> -->
         </div>
-        <div id="leftdown" v-if="tab == 'tab-2'">
+        <div id="leftdown" v-if="tab === 'tab-2'">
           <div
             class="oneteam"
             style="height: 120px; margin-bottom: 20px"
-            v-for="(teamproject,index) in teamprojects" :key="index" @click="go(teamprojects.project_id)"
+            v-for="(teamproject,index) in teamprojects" :key="index" @click="gotoproject(teamproject.project_id)"
           >
             <div class="oneteamdown">
               <div style="font-size: 18px">{{ teamproject.project_id }}</div>
@@ -374,7 +374,7 @@ export default {
   created() {
     console.log("team_idhhh",this.team_id)
       getteamcreator({ team_id: this.$route.query.team_id }).then(
-          (response) => {
+          (response) => {F
             console.log(response.data);
             if (response.data.status_code == 1) {
               this.teamcreator.creator=response.data.creator ,
@@ -426,6 +426,14 @@ export default {
     };
   },
   methods:{
+    gotoproject(a){
+      this.$router.push({
+        path:"/projectdetail",
+        params:{
+          project_id:a,
+        }
+      })
+    },
     invite(){
       invitemember(this.invite).then(
           (response) => {
@@ -601,7 +609,7 @@ export default {
   background-image: linear-gradient(90deg, #4facfe, #7bd4fe, #6acaf7, #4facfe);
   background-size: 200%;
   animation: streamer 5s linear infinite;
-  background-clip: text;
+  background-clip:txt;
   color: transparent;
 }
 @keyframes streamer {

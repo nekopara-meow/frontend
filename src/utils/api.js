@@ -18,7 +18,7 @@ export async function register(data) {
 
 export function save_uml(data){
     return request({
-        url: 'api/save/xml',
+        url: 'api/projects/save/xml',
         method: 'post',
         data,
     })
@@ -26,14 +26,14 @@ export function save_uml(data){
 
 export function create_uml(data){
     return request({
-        url: 'api/new/xml',
+        url: 'api/projects/new/xml',
         method: 'post',
         data,
     })
 }
 export function load_uml(data){
     return request({
-        url: 'api/load/xml',
+        url: 'api/projects/load/xml',
         method: 'post',
         data,
     })
@@ -41,7 +41,7 @@ export function load_uml(data){
 
 export function del_uml(data){
     return request({
-        url: 'api/delete/xml',
+        url: 'api/projects/delete/xml',
         method: 'post',
         data,
     })
@@ -80,7 +80,7 @@ export async function changepassword(data) {
 
 export function save_doc(data){
     return request({
-        url: 'api/save/doc',
+        url: 'api/projects/save/doc',
         method: 'post',
         data,
     })
@@ -88,7 +88,7 @@ export function save_doc(data){
 
 export function load_doc(data){
     return request({
-        url: 'api/load/doc',
+        url: 'api/projects/load/doc',
         method: 'post',
         data,
     })
@@ -96,7 +96,7 @@ export function load_doc(data){
 
 export function del_doc(data){
     return request({
-        url: 'api/delete/doc',
+        url: 'api/projects/delete/doc',
         method: 'post',
         data,
     })
@@ -104,7 +104,7 @@ export function del_doc(data){
 
 export function create_doc(data){
     return request({
-        url: 'api/new/doc',
+        url: 'api/projects/new/doc',
         method: 'post',
         data,
     })
@@ -191,20 +191,6 @@ export async function getteamcreator(data) {
 export async function getteamadmin(data) {
     return request({
         url: 'api/team/getAdminsOfTeam',
-        method: 'post',
-        data,
-    })
-}
-export async function establishproject(data) {
-    return request({
-        url: 'api/projects/establish',
-        method: 'post',
-        data,
-    })
-}
-export async function invitemember(data) {
-    return request({
-        url: 'api/team/invite',
         method: 'post',
         data,
     })

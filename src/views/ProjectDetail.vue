@@ -1,6 +1,6 @@
 <template>
   <div class="big">
-    <el-dialog v-model="dialogFormVisible1" title="邀请成员" width="30%" center>
+    <el-dialog v-model="dialogFormVisible1" title="邀请成员" width="30%" center style="background: red;z-index:9999">
       <el-form :model="newfile">
         <el-form-item label="文件名称">
           <el-input v-model="newfile.name" autocomplete="off" />
@@ -14,16 +14,18 @@
         </el-form-item>
       </el-form>
       <template #footer>
-        <span class="dialog-footer">
+        <div>
+                  <span class="dialog-footer">
           <el-button
-            @click="this.dialogFormVisible1 = false"
-            style="background-color: white"
-            >Cancel</el-button
+              @click="this.dialogFormVisible1 = false"
+              style="background-color: white"
+          >Cancel</el-button
           >
           <el-button type="primary" @click="this.dialogFormVisible1 = false"
-            >Confirm</el-button
+          >Confirm</el-button
           >
         </span>
+        </div>
       </template>
     </el-dialog>
     <div id="content">
@@ -32,14 +34,14 @@
           <div style="display: flex">
             <h2 class="title gradient">NEKOPARA</h2>
             <nav>
-<!--              <a-->
-<!--                @click="-->
-<!--                  () => {-->
-<!--                    this.tab = 'tab-0';-->
-<!--                  }-->
-<!--                "-->
-<!--                >概览</a-->
-<!--              >-->
+              <a
+                @click="
+                  () => {
+                    this.tab = 'tab-0';
+                  }
+                "
+                >概览</a
+              >
               <a
                 @click="
                   () => {
@@ -48,30 +50,30 @@
                 "
                 >文件</a
               >
-<!--              <a-->
-<!--                @click="-->
-<!--                  () => {-->
-<!--                    this.tab = 'tab-2';-->
-<!--                  }-->
-<!--                "-->
-<!--                >需求</a-->
-<!--              >-->
-<!--              <a-->
-<!--                @click="-->
-<!--                  () => {-->
-<!--                    this.tab = 'tab-3';-->
-<!--                  }-->
-<!--                "-->
-<!--                >迭代</a-->
-<!--              >-->
-<!--              <a-->
-<!--                @click="-->
-<!--                  () => {-->
-<!--                    this.tab = 'tab-4';-->
-<!--                  }-->
-<!--                "-->
-<!--                >统计</a-->
-<!--              >-->
+              <a
+                @click="
+                  () => {
+                    this.tab = 'tab-2';
+                  }
+                "
+                >需求</a
+              >
+              <a
+                @click="
+                  () => {
+                    this.tab = 'tab-3';
+                  }
+                "
+                >迭代</a
+              >
+              <a
+                @click="
+                  () => {
+                    this.tab = 'tab-4';
+                  }
+                "
+                >统计</a
+              >
               <div class="animation" :class="tab"></div>
             </nav>
           </div>
@@ -121,8 +123,7 @@
         </div>
 
         <hr style="margin: 5px; margin-bottom: 20px" />
-<!--        注释-->
-        <div id="leftdown1" v-if="tab == 'tab-111'">
+        <div id="leftdown1" v-if="tab === 'tab-0'">
           <div id="leftdown1left">
             <div style="display: flex; justify-content: space-between">
               <h2 class="bluelight">项目信息</h2>
@@ -237,7 +238,7 @@
             </div>
           </div>
         </div>
-        <div id="leftdown" v-if="tab == 'tab-0'">
+        <div id="leftdown" v-if="tab == 'tab-1'">
           <el-collapse
             v-model="activeNames"
             @change="handleChange"
@@ -273,11 +274,11 @@
 
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item @click="del_doc(i.file_id)">删除</el-dropdown-item>
-<!--                    <el-dropdown-item>在新标签页中打开</el-dropdown-item>-->
-<!--                    <el-dropdown-item>移出工作台</el-dropdown-item>-->
-<!--                    <el-dropdown-item>历史版本</el-dropdown-item>-->
-<!--                    <el-dropdown-item>属性</el-dropdown-item>-->
+                    <el-dropdown-item>打开</el-dropdown-item>
+                    <el-dropdown-item>在新标签页中打开</el-dropdown-item>
+                    <el-dropdown-item>移出工作台</el-dropdown-item>
+                    <el-dropdown-item>历史版本</el-dropdown-item>
+                    <el-dropdown-item>属性</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
