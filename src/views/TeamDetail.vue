@@ -341,7 +341,7 @@
           <div
             class="oneteam"
             style="height: 120px; margin-bottom: 20px"
-            v-for="(teamproject,index) in teamprojects" :key="index" @click="gotoproject(teamproject.project_id)"
+            v-for="(teamproject,index) in teamprojects" :key="index" @click="go(teamprojects.project_id)"
           >
             <div class="oneteamdown">
               <div style="font-size: 18px">{{ teamproject.project_id }}</div>
@@ -374,7 +374,7 @@ export default {
   created() {
     console.log("team_idhhh",this.team_id)
       getteamcreator({ team_id: this.$route.query.team_id }).then(
-          (response) => {F
+          (response) => {
             console.log(response.data);
             if (response.data.status_code == 1) {
               this.teamcreator.creator=response.data.creator ,
@@ -426,13 +426,14 @@ export default {
     };
   },
   methods:{
-    gotoproject(a){
+    gotoproject(a) {
+      console.log("pp",a),
       this.$router.push({
-        path:"/projectdetail",
-        params:{
-          project_id:a,
-        }
-      })
+        path: "/projectdetail",
+        params: {
+          project_id: a,
+        },
+      });
     },
     invite(){
       invitemember(this.invite).then(
