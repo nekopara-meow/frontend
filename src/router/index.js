@@ -29,7 +29,7 @@ const routes = [
   },
   {
     path: '/projectdetail',
-    name: 'projectdetail',
+    // name: 'projectdetail',
     component: () => import(/* webpackChunkName: "about" */ '../views/ProjectDetail.vue'),
     children:[
       // {

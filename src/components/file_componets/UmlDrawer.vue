@@ -173,8 +173,19 @@ export default {
 
       window.removeEventListener("message", this.receive);
       this.iframe_class = "iframe_close";
-      this.saveUML();
+      let url = upload("testUML", this.imgData);
+      let pojo = {
+        username:this.username,
+        uml_id:this.uml_id,
+        uml_url: url,
+      };
+      console.log(pojo)
+      save_uml(pojo).then((res) => {
+        console.log("uml已上传");
+        console.log(res.data);
+      })
       document.getElementById("app").removeChild(iframe);
+      console.log(this.project_id)
       this.$router.replace({
         name:'projectFileInfo',
         params:{
@@ -203,6 +214,7 @@ export default {
   },
   mounted() {
     this.start();
+    console.log('检查router',this.$route.params)
     this.project_id=this.$route.params.project_id
     this.username=this.$store.state.username
     window.addEventListener("hashchange", this.start);

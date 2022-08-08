@@ -18,7 +18,7 @@
                         :file_type="tmp.file_type" :creator="tmp.creator" :file_name="tmp.file_name" :update_time="tmp.update_time"
                         :file_content="tmp.file_content" :project_id="tmp.project_id" :key="index"></file-preview>
           <file-preview :file_type="1" :creator="this.username" :file_id="this.project_id"
-                        username="蔡徐坤" :project_id="this.project_id" :is-new="true"></file-preview>
+                         :project_id="this.project_id" :is-new="true"></file-preview>
         </div>
       </el-tab-pane>
       <el-tab-pane label="原型设计">
@@ -51,6 +51,7 @@ export default {
     }
   },
   mounted() {
+    console.log('检查router',this.$route.params)
     this.username=this.$store.state.username
     this.project_id=this.$route.params.project_id
     get_umlfile({

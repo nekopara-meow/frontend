@@ -215,7 +215,7 @@ export default {
     console.log(this.$route.params)
     this.doc_id=this.$route.params.doc_id
     this.project_id=this.$route.params.project_id
-    this.username=this.$route.params.username
+    this.username=this.$store.state.username
     this.$store.commit('addNewArticle',this.doc_id)
 
     if(this.$route.params.doc_url){
@@ -224,48 +224,48 @@ export default {
       readURL(url,(htmlData)=>{
         this.html=htmlData
         console.log(this.html)
-        this.initialContent=this.html
-        this.editor = new Editor({
-          content:this.initialContent,
-          extensions: [
-            CollaborationCursor.configure({
-              provider: this.$store.state.provider,
-              user: {
-                name: this.username,
-                color: '#f783ac',
-              },
-            }),
-
-            StarterKit.configure({
-              // The Collaboration extension comes with its own history handling
-              history: false,
-            }),
-            // Register the document with Tiptap
-            Collaboration.configure({
-              document: this.$store.state.ydoc,
-              field:this.doc_id
-            }),
-            Placeholder.configure({
-              placeholder: '请输入',
-            }),
-            Document,
-            Text,
-            Underline,
-            Paragraph,
-          ],
-        })
-        this.editor.on('update', () => {
-          this.html = this.editor.getHTML();
-          this.json = this.editor.getJSON();
-          // this.$emit('update', this.html);
-        })
-        //继承存储的内容
-        // if(!this.html){
-        //   this.editor.commands.setContent('<p>未作任何保存</p>')
-        // }
       })
     }
+    this.initialContent=this.html
+    this.editor = new Editor({
+      content:this.initialContent,
+      extensions: [
+        CollaborationCursor.configure({
+          provider: this.$store.state.provider,
+          user: {
+            name: this.username,
+            color: '#f783ac',
+          },
+        }),
 
+        StarterKit.configure({
+          // The Collaboration extension comes with its own history handling
+          history: false,
+        }),
+        // Register the document with Tiptap
+        Collaboration.configure({
+          document: this.$store.state.ydoc,
+          field:this.doc_id
+        }),
+        Placeholder.configure({
+          placeholder: '请输入',
+        }),
+        Document,
+        Text,
+        Underline,
+        Paragraph,
+      ],
+    })
+    this.editor.on('update', () => {
+      this.html = this.editor.getHTML();
+      this.json = this.editor.getJSON();
+      // this.$emit('update', this.html);
+    })
+    this.editor.commands.setContent(this.html)
+    //继承存储的内容
+    // if(!this.html){
+    //   this.editor.commands.setContent('<p>未作任何保存</p>')
+    // }
 
   },
   /**
