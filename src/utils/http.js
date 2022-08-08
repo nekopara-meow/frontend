@@ -4,8 +4,9 @@ import store from '@/store'
 import qs from 'qs'
 import router from '@/router'
 const instance=axios.create({
-    // baseURL:'http://43.138.50.211:8000/',
-    baseURL:'http://43.138.45.223:8000/',
+    baseURL:'http://43.138.50.211:8000/',
+
+    // baseURL:'http://43.138.45.223:8000/',
     timeout: 5000,
     headers: {
         'Content-Type':'application/json;charset=UTF'

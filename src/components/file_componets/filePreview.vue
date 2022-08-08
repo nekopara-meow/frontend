@@ -157,10 +157,26 @@ export default {
       this.visible = false
     },
     deleteFile(){
+      this.$confirm('您将要删除文件:'+this.file_name+', 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteFileById({
+          file_id:this.file_id,
+          new_file_name:this.fileRename.rename
+        }).then(res=> console.log(res.data))
+      }).catch(() => {
+        console.log('删除')
+      });
 
     },
     renameFile(){
-
+      this.dialogFormVisible1=true
+      renameFileById({
+        file_id:this.file_id,
+        new_file_name:this.fileRename.rename
+      }).then(res=> console.log(res.data))
     },
     openFile(){
       //打开老文件
