@@ -17,11 +17,11 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button
-              @click="invite"
+              @click="this.dialogFormVisible1 = false"
               style="background-color: white"
           >Cancel</el-button
           >
-          <el-button type="primary" @click="this.dialogFormVisible1 = false"
+          <el-button type="primary"  @click="invitenewmember"
           >Confirm</el-button
           >
         </span>
@@ -58,7 +58,7 @@
       <div id="left">
         <div id="leftup">
           <div style="display: flex">
-            <h2 class="title gradient">maomao</h2>
+            <h2 class="title gradient">{{teammsg.team_name}}</h2>
             <nav>
               <a
                 @click="
@@ -361,19 +361,18 @@ import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
 import { Filter, Sort, Plus, CaretBottom } from "@element-plus/icons-vue";
 import {
   establishproject,
-  establishteam, estavlishproject,
   getteamadmin,
   getteamcreator, getteammember, getteammsgbyid, getteamprojectbyid,
-  getteamuseradmin,
-  getteamusercreat,
-  getteamuserin, invitemember
+  invitemember
 } from "@/utils/api";
+import Base64 from "@/utils/Base64";
 export default {
   name: "workspace",
   components: { Filter, Sort, Plus, CaretBottom },
   created() {
+    console.log("invitee",this.invite.invitee)
     console.log("team_idhhh",this.team_id)
-      getteamcreator({ team_id: this.$route.query.team_id }).then(
+      getteamcreator({ team_id: this.team_id }).then(
           (response) => {
             console.log(response.data);
             if (response.data.status_code == 1) {
@@ -391,6 +390,7 @@ export default {
   },
   data() {
     return {
+      team_id :JSON.parse(Base64.decode(this.$route.query.info)).team_id,
       tab: "tab-0",
       dialogFormVisible1: false,
       dialogFormVisible2: false,
@@ -401,11 +401,11 @@ export default {
       invite: {
         inviter:this.$store.state.username,
         invitee:"",
-        team_id:this.$route.query.team_id
+        team_id:JSON.parse(Base64.decode(this.$route.query.info)).team_id,
       },
       editing: 0,
       newproject: {
-        team_id:this.$route.query.team_id,
+        team_id:JSON.parse(Base64.decode(this.$route.query.info)).team_id,
         username: this.$store.state.username,
         project_name:"",
         brief_intro: "",
@@ -435,25 +435,23 @@ export default {
         },
       });
     },
-    invite(){
+    invitenewmember(){
       invitemember(this.invite).then(
           (response) => {
             if (response.data.status_code == 1) {
-              console.log("invite",response.data);
               this.initializationdata()
-            } else ElMessage.error(response.data.message);
+            } else ElMessage.error(response.data.msg);
           }
       );
+      this.invite.invitee=""
       this.dialogFormVisible1 = false
     },
     creatproject(){
-      console.log("ccjin",this.newproject),
       establishproject(this.newproject).then(
           (response) => {
             if (response.data.status_code == 1) {
-              console.log("chuangjian",response.data);
               this.initializationdata()
-            } else ElMessage.error(response.data.message);
+            } else ElMessage.error(response.data.msg);
           }
       );
       this.dialogFormVisible2 = false
@@ -469,46 +467,39 @@ export default {
         });
       }
     },
-    addmember(){
-
-    },
     checkuserinfo(){
 
     },
     initializationdata()
     {
-      getteammsgbyid({ team_id: this.$route.query.team_id  }).then(
+      getteammsgbyid({ team_id: this.team_id  }).then(
           (response) => {
             if (response.data.status_code == 1) {
               this.teammsg.brief_intro=response.data.brief_intro,
                   this.teammsg.create_time=response.data.create_time,
                   this.teammsg.creator=response.data.creator,
                   this.teammsg.team_name=response.data.team_name,
-                  this.teammsg.avatar=response.data.avatar,
-                console.log(response.data);
+                  this.teammsg.avatar=response.data.avatar
             } else ElMessage.error(response.data.message);
           }
       );
-      getteamadmin({ team_id: this.$route.query.team_id  }).then(
+      getteamadmin({ team_id: this.team_id  }).then(
           (response) => {
             if (response.data.status_code == 1) {
-              console.log(response.data);
               this.teamadmins = response.data.ans_list;
             } else ElMessage.error(response.data.message);
           }
       );
-      getteammember({ team_id: this.$route.query.team_id  }).then(
+      getteammember({ team_id: this.team_id  }).then(
           (response) => {
             if (response.data.status_code == 1){
-              console.log(response.data);
               this.teammembers= response.data.ans_list;
             } else ElMessage.error(response.data.message);
           }
       );
-      getteamprojectbyid({ team_id: this.$route.query.team_id  }).then(
+      getteamprojectbyid({ team_id: this.team_id  }).then(
           (response) => {
             if (response.data.status_code == 1) {
-              console.log("pro",response.data);
               this.teamprojects= response.data.ans_list;
             } else ElMessage.error(response.data.message);
           }

@@ -126,8 +126,6 @@ const routes = [
 const router = createRouter({
   history: createWebHashHistory(),
   base: process.env.BASE_URL,
-  //stringifyQuery: stringifyQuery,
- // parseQuery: parseQuery,
   routes
 })
 /*router.beforeEach((to, from, next) => {
