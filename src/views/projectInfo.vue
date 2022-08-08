@@ -3,9 +3,9 @@
     <div id="leftdown1left">
       <div style="display: flex; justify-content: space-between">
         <h2 class="bluelight">项目信息</h2>
-        <el-button type="primary" style="margin-right: 30px"
-        ><el-icon><Filter /></el-icon
-        ></el-button>
+<!--        <el-button type="primary" style="margin-right: 30px"-->
+<!--        ><el-icon><Filter /></el-icon-->
+<!--        ></el-button>-->
       </div>
 
       <hr style="margin: 5px; margin-bottom: 20px" />
@@ -137,4 +137,33 @@ export default {
 
 <style lang="scss" scoped>
 @import "../assets/scss/projectDetail";
+#leftdown {
+  overflow-y: scroll;
+  height: 63vh;
+  padding: 0 5px;
+}
+#leftdown1 {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  overflow-y: scroll;
+  height: 63vh;
+  padding: 0 5px;
+  flex-direction: row;
+}
+#leftdown1left {
+  flex: 0 1 30%;
+  height: 100%;
+  min-width: 230px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid lightgray;
+}
+#leftdown1right {
+  flex: 0 1 70%;
+  height: 100%;
+
+  padding: 20px;
+}
 </style>

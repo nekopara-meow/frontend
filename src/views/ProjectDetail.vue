@@ -5,9 +5,11 @@
         <div id="leftup">
           <div style="display: flex">
             <h2 class="title gradient">NEKOPARA</h2>
-            <nav>
+            <nav class="nav-link">
               <router-link to="/projectdetail/projectInfo" @click="tab='tab-0'">概览</router-link>
-              <router-link to="/projectdetail/projectFileInfo" @click="tab='tab-1'">文件</router-link>
+              <router-link :to="{path:'/projectdetail/projectFileInfo',params:{
+                project_id:this.project_id
+              }}" @click="tab='tab-1'">文件</router-link>
               <router-link to="" @click="tab='tab-2'">需求</router-link>
               <router-link to="" @click="tab='tab-3'">迭代</router-link>
               <router-link to="" @click="tab='tab-4'">统计</router-link>
@@ -39,26 +41,7 @@
               </div>
             </div>
           </div>
-          <div class="buttons">
-            <el-dropdown style="margin-right: 30px">
-              <el-button type="primary"
-                ><el-icon><Sort /></el-icon
-              ></el-button>
-              <template #dropdown>
-                <el-dropdown-menu>
-                  <el-dropdown-item>按xx排序</el-dropdown-item>
-                  <el-dropdown-item>按xx排序</el-dropdown-item>
-                  <el-dropdown-item>按xx排序</el-dropdown-item>
-                </el-dropdown-menu>
-              </template>
-            </el-dropdown>
-
-            <el-button type="primary"
-              ><el-icon><Plus /></el-icon
-            ></el-button>
-          </div>
         </div>
-
         <hr style="margin: 5px; margin-bottom: 20px" />
         <router-view></router-view>
 
@@ -94,6 +77,9 @@ export default {
 
   },
   mounted() {
+    if(this.$route.params.project_id){
+      this.project_id=this.$route.params.project_id
+    }
   },
   computed:{
   }
@@ -102,4 +88,9 @@ export default {
 
 <style lang="scss" scoped>
 @import "src/assets/scss/projectDetail.scss";
+.nav-link{
+  a{
+    color: black;
+  }
+}
 </style>
