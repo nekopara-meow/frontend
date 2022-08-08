@@ -23,7 +23,7 @@ export default {
     };
   },
   computed: {
-   /* background() {
+    /* background() {
       return {
         background: `url("${this.$store.getters.backImg}") center / cover`,
       };
@@ -31,7 +31,7 @@ export default {
   },
   mounted() {
     //初始化YDoc，建立webrtc链接
-    this.$store.commit('initYDoc')
+    this.$store.commit("initYDoc");
     // 检测浏览器路由改变页面不刷新问题,hash模式的工作原理是 hashchange事件
     window.addEventListener(
       "hashchange",
@@ -95,6 +95,7 @@ main {
   font-family: "Times New Roman", "simsun";
 }
 article {
+  border: 1px solid transparent;
   height: calc(100vh - 4rem);
   width: calc(100vw - 200px);
   &.indent {

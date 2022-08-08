@@ -4,17 +4,31 @@
       <div id="left">
         <div id="leftup">
           <div style="display: flex">
-            <h2 class="title gradient">NEKOPARA</h2>
+            <h2 class="title">NEKOPARA</h2>
             <nav class="nav-link">
-              <router-link :to="{name:'projectInfo',params:{
-                project_id:this.project_id
-              }}" @click="tab='tab-0'">概览</router-link>
-              <router-link :to="{name:'projectFileInfo',params:{
-                project_id:this.project_id
-              }}" @click="tab='tab-1'">文件</router-link>
-              <router-link to="" @click="tab='tab-2'">需求</router-link>
-              <router-link to="" @click="tab='tab-3'">迭代</router-link>
-              <router-link to="" @click="tab='tab-4'">统计</router-link>
+              <router-link
+                :to="{
+                  name: 'projectInfo',
+                  params: {
+                    project_id: this.project_id,
+                  },
+                }"
+                @click="tab = 'tab-0'"
+                >概览</router-link
+              >
+              <router-link
+                :to="{
+                  name: 'projectFileInfo',
+                  params: {
+                    project_id: this.project_id,
+                  },
+                }"
+                @click="tab = 'tab-1'"
+                >文件</router-link
+              >
+              <router-link to="" @click="tab = 'tab-2'">需求</router-link>
+              <router-link to="" @click="tab = 'tab-3'">迭代</router-link>
+              <router-link to="" @click="tab = 'tab-4'">统计</router-link>
               <div class="animation" :class="tab"></div>
             </nav>
           </div>
@@ -46,7 +60,6 @@
         </div>
         <hr style="margin: 5px; margin-bottom: 20px" />
         <router-view></router-view>
-
       </div>
     </div>
   </div>
@@ -54,48 +67,43 @@
 
 <script>
 import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
-import { Filter, Sort, Plus, CaretBottom } from "@element-plus/icons-vue";
+import { Filter, Sort, Edit, Plus, CaretBottom } from "@element-plus/icons-vue";
 import UMLEditor from "@/components/rubbish/UMLEditor";
 import CoEditor from "@/components/rubbish/CoEditor";
-import {get_docfile,get_umlfile,del_uml,del_doc} from "@/utils/api";
+import { get_docfile, get_umlfile, del_uml, del_doc } from "@/utils/api";
 import AxureEditor from "@/components/rubbish/axureEditor";
 
 export default {
   name: "projectDetail",
-  // components: {},
-  props:{
-
-  },
+  components: { Edit },
+  props: {},
   data() {
     return {
-      project_id:'',
+      project_id: "",
       tab: "tab-0",
       dialogFormVisible1: false,
       editing: 0,
-      username:'',
+      username: "",
     };
   },
-  methods:{
-
-  },
+  methods: {},
   created() {
-    console.log('route')
-    console.log(this.$route.params)
-    if(this.$route.params.project_id){
-      this.project_id=this.$route.params.project_id
-      this.username=this.$store.state.username
+    console.log("route");
+    console.log(this.$route.params);
+    if (this.$route.params.project_id) {
+      this.project_id = this.$route.params.project_id;
+      this.username = this.$store.state.username;
     }
-    console.log(this.project_id)
+    console.log(this.project_id);
   },
-  computed:{
-  }
+  computed: {},
 };
 </script>
 
 <style lang="scss" scoped>
 @import "src/assets/scss/projectDetail.scss";
-.nav-link{
-  a{
+.nav-link {
+  a {
     color: black;
   }
 }

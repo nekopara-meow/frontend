@@ -4,15 +4,34 @@ $color-black: #000000;
 $color-white: #ffffff;
 $color-grey: #dddddd;
 
+.titlebar{
+    h2{ font-size: 30px;
+  font-weight: lighter;
+   
+    color: #26476d;
+    }
+  
+}
 .editor {
-    position: absolute;
-    //max-width: 30rem;
+box-shadow: 0px 15px 10px -15px rgba(211, 211, 211, 0.664);
     $max-length:70em;
-    border: solid;
-    padding: 1em;
-    height: 100%;
-    width: 100%;
-    background-image: linear-gradient(to bottom,#d2edfb,#ffffff);
+   
+    padding: 20px;
+    margin:50px;
+    box-sizing: border-box;
+    // height: 100%;
+  
+    // width: 100%;
+    width:calc(100% - 55px - 40px);
+  
+     background: linear-gradient(
+    to right bottom,
+    rgba(255, 255, 255, 0.4),
+    rgba(255, 255, 255, 0.2)
+  );
+  backdrop-filter: blur(1rem);
+  border-radius: 10px;
+
 &__content {
     border: solid;
     padding:.3rem;
@@ -20,7 +39,19 @@ $color-grey: #dddddd;
      word-wrap: break-word;
      word-break: break-word;
     //margin: 1em;
-    max-width: $max-length;
+    // max-width: $max-length;
+    width:100%;
+    height:50vh;
+    overflow-y: scroll;
+    border:none;
+     background: linear-gradient(
+    to right bottom,
+    rgba(255, 255, 255, 0.4),
+    rgba(255, 255, 255, 0.2)
+  );
+ font-weight: lighter;
+   
+    color: #26476d;
 * {
     caret-color: currentColor;
 }
@@ -239,14 +270,16 @@ h3 {
     border-bottom: solid;
     height: 2em;
     margin-bottom: 1rem;
-    max-width: 35em;
+    // max-width: 35em;
+    width:100%;
     transition: visibility 0.2s 0.4s, opacity 0.2s 0.4s;
     padding-left: .3rem;
     display: flex;
     align-items: center;
     flex-direction: row;
     justify-content: flex-start;
-    background: #d2edfb;
+    // background: #d2edfb;
+    border-bottom:1px solid #26476d;
     &.is-hidden {
         visibility: hidden;
         opacity: 0;
