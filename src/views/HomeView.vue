@@ -19,15 +19,12 @@
 </template>
 
 <script>
-
 export default {
   name: "HomeView",
   components: {
   },
   data() {
     return {
-      dataJson: "../assets/img/沟通.json",
-      anim: "", // lottie实例
     };
   },
   mounted() {

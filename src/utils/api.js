@@ -225,6 +225,20 @@ export async function invitemember(data) {
         data,
     })
 }
+export async function setteamadmin(data) {
+    return request({
+        url: 'api/team/setAdmins',
+        method: 'post',
+        data,
+    })
+}
+export async function deleteteammem(data) {
+    return request({
+        url: 'api/team/deleteMem',
+        method: 'post',
+        data,
+    })
+}
 /*export const loginApi=data=>{
     return post({
         url: "api/users/login",

@@ -259,9 +259,9 @@
                 </div>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item @click.natice="checkuserinfo(teamadmin.username)">查看个人资料</el-dropdown-item>
-                    <el-dropdown-item>移出管理员</el-dropdown-item>
-                    <el-dropdown-item>移出团队</el-dropdown-item>
+                    <el-dropdown-item @click.native="checkuserinfo(teamadmin.username)">查看个人资料</el-dropdown-item>
+                    <el-dropdown-item @click.native="deleteadmin(teamadmin.username)">移出管理员</el-dropdown-item>
+                    <el-dropdown-item @click.native="deletemember(teamadmin.username)">移出团队</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
             </el-dropdown>
@@ -274,7 +274,7 @@
             >
               <el-dropdown
                 trigger="contextmenu"
-                v-for="(teamadmember,index) in teammembers" :key="index"
+                v-for="(teammember,index) in teammembers" :key="index"
               >
                 <div class="oneteam">
                   <div
@@ -290,52 +290,15 @@
                 </div>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item @click.natice="checkuserinfo(teamadmember.username)">查看个人资料</el-dropdown-item>
-                    <el-dropdown-item>设为管理员</el-dropdown-item>
-                    <el-dropdown-item>移出团队</el-dropdown-item>
+                    <el-dropdown-item @click.natice="checkuserinfo(teammember.username)">查看个人资料</el-dropdown-item>
+                    <el-dropdown-item @click.natice="setadmin(teammember.username)">设为管理员</el-dropdown-item>
+                    <el-dropdown-item @click.natice="deletemember(teammember.username)">移出团队</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
             </el-collapse-item>
             <hr style="margin: 5px" />
           </el-collapse>
-          <!-- <div class="oneteam" v-for="i in [1, 2, 3, 4, 5, 6]">
-            <div
-              class="teamimage"
-              style="
-                background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-              "
-            ></div>
-            <div class="oneteamdown">
-              <div style="font-size: 18px">小秋月</div>
-              <div>我是傻逼，我是傻逼，我真的是傻逼</div>
-              <div class="text-wrap">
-                <div class="example">
-                  <div class="avatar-list avatar-list-stacked">
-                    <span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span class="avatar cover-image brround">+8</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> -->
         </div>
         <div id="leftdown" v-if="tab == 'tab-2'">
           <div
@@ -344,7 +307,7 @@
             v-for="(teamproject,index) in teamprojects" :key="index" @click="gotoproject(teamproject.project_id)"
           >
             <div class="oneteamdown">
-              <div style="font-size: 18px">{{ teamproject.project_id }}</div>
+              <div style="font-size: 18px">{{ teamproject.project_name }}</div>
               <div>{{teamproject.project_brief_intro}}</div>
               <div style="margin-bottom: 0">创建日期：{{ teamproject.project_create_time }}</div>
               <div>更新日期：2022/8/5</div>
@@ -360,10 +323,11 @@
 import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
 import { Filter, Sort, Plus, CaretBottom } from "@element-plus/icons-vue";
 import {
+  deleteteammem,
   establishproject,
   getteamadmin,
   getteamcreator, getteammember, getteammsgbyid, getteamprojectbyid,
-  invitemember
+  invitemember, setteamadmin
 } from "@/utils/api";
 import Base64 from "@/utils/Base64";
 export default {
@@ -439,7 +403,11 @@ export default {
       invitemember(this.invite).then(
           (response) => {
             if (response.data.status_code == 1) {
-              this.initializationdata()
+              ElMessage({
+                message: "邀请成功",
+                type: "success",
+              });
+              this.initializationmember();
             } else ElMessage.error(response.data.msg);
           }
       );
@@ -464,7 +432,7 @@ export default {
       } else {
         this.editing = 0;
         ElMessage({
-          message: "修改成功",
+          message: "邀请成功",
           type: "success",
         });
       }
@@ -506,7 +474,61 @@ export default {
             } else ElMessage.error(response.data.message);
           }
       );
-    }
+    },
+    //成员操作
+    initializationmember(){
+      getteamadmin({ team_id: this.team_id  }).then(
+          (response) => {
+            if (response.data.status_code == 1) {
+              this.teamadmins = response.data.ans_list;
+            } else ElMessage.error(response.data.message);
+          }
+      );
+      getteammember({ team_id: this.team_id  }).then(
+          (response) => {
+            if (response.data.status_code == 1){
+              this.teammembers= response.data.ans_list;
+            } else ElMessage.error(response.data.message);
+          }
+      );
+    },
+    setadmin(membername){
+      setteamadmin({setter:this.$store.state.username,settee:membername,team_id:this.team_id}).then(
+          (response) =>{
+            if (response.data.status_code == 1) {
+              this.initializationmember();
+              console.log(response.data)
+              ElMessage({
+                message: "设置成功",
+                type: "success",
+              });
+            } else ElMessage.error(response.data.msg);
+          }
+      )
+
+    },
+    deletemember(membername){
+      console.log({deleter_username:this.$store.state.username,deletee_username:membername,team_id:this.team_id})
+      deleteteammem({deleter_username:this.$store.state.username,deletee_username:membername,team_id:this.team_id}).then(
+          (response) =>{
+            if (response.data.status_code == 1) {
+              this.initializationmember(),
+              ElMessage({
+                message: "移出成功",
+                type: "success",
+              });
+            } else ElMessage.error(response.data.msg);
+          }
+      )
+
+    },
+    deleteadmin(){
+
+    },
+    checkinfo(){
+
+    },
+    //项目操作
 
   }
 };

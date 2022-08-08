@@ -4,9 +4,8 @@ import store from '@/store'
 import qs from 'qs'
 import router from '@/router'
 const instance=axios.create({
-    baseURL:'http://43.138.50.211:8000/',
-
-    // baseURL:'http://43.138.45.223:8000/',
+     baseURL:'http://43.138.50.211:8000/', //开发
+    //baseURL:'http://43.138.45.223:8000/',  //部署
     timeout: 5000,
     headers: {
         'Content-Type':'application/json;charset=UTF'
@@ -25,7 +24,7 @@ instance.interceptors.request.use(
         // 若 localStorage 中含有这两个字段，则添加入请求头
         //config.data = qs.stringify(config.data)
         if (username && authorization) {
-            // console.log(authorization)
+            console.log(authorization)
             config.headers.authorization = authorization;
             config.headers.username = username;
         }
@@ -118,19 +117,5 @@ Service.interceptors.response.use(
         // console.log(JSON.stringify(error));//console : Error: Request failed with status code 402
         return Promise.reject(error.response.data)
     },
-)
-export const post=config=>{
-    return Service({
-        ...config,
-        method: "post",
-        data:config.data
-    })
-}
-export const get=config=>{
-    return Service({
-        ...config,
-        method: "get",
-        params:config.data
-    })
-}
 */
+
