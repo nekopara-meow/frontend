@@ -140,43 +140,23 @@
             <div class="oneteamdown">
               <div style="font-size: 18px">{{teamadmin.team_name}}</div>
               <div>{{teamadmin.brief_intro}}</div>
-              <div class="text-wrap">
-                <div class="example">
-                  <div class="avatar-list avatar-list-stacked">
-                    <span
-                        class="avatar cover-image brround"
-                        style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                  ></span
-                  ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                  ></span
-                  ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                  ></span
-                  ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                  ></span
-                  ><span class="avatar cover-image brround">+8</span>
-                  </div>
+              <div class="text-wrap" style="margin: 10px 0">
+                 <div class="example">
+                <div class="avatar-list avatar-list-stacked">
+                 <span
+                   v-for="i in teamadmin.teammateavatars.slice(0, 6)"
+                   class="avatar cover-image brround"
+                  :style="{ backgroundImage: `url(` + i + ')' }"
+                  >
+                 </span>
+                 <span
+                   v-if="teammateavatars.length > 6"
+                   class="avatar cover-image brround"
+                   >+{{ teammateavatars.length - 6 }}</span
+                   >
+                 </div>
+                 </div>
                 </div>
-              </div>
             </div>
           </div>
         </div>
@@ -245,6 +225,7 @@ import {
   getteamuserin,
   getuserinfo
 } from "@/utils/api";
+import Base64 from "@/utils/Base64";
 export default {
   name: "teamview",
   components: { Filter, Sort, Plus, CaretBottom },
@@ -271,8 +252,11 @@ export default {
       this.$router.push({
         path:'/teamdetail',
         query:{
-          team_id:tid
+          info:Base64.encode(JSON.stringify({
+            team_id:tid
+          }))
         }
+
       })
     },
     submit()
