@@ -51,27 +51,21 @@
             class="menubar__button"
             :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
             @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
-        >
-          H1
-        </button>
+        >H1</button>
 
         <button
             v-if="actionName === 'h2'"
             class="menubar__button"
             :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
             @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
-        >
-          H2
-        </button>
+        >H2</button>
 
         <button
             v-if="actionName === 'h3'"
             class="menubar__button"
             :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
             @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
-        >
-          H3
-        </button>
+        >H3</button>
 
         <button
             v-if="actionName === 'bulletList'"
@@ -132,17 +126,24 @@
         >
           <icon name="redo" />
         </button>
-      </span>
-      <span>
-         <button type="button" class="menubar__button" @click="save">
+
+        <button
+            v-if="actionName === 'save'"
+            class="menubar__button"
+            @click="save"
+        >
            <icon name="save" />
          </button>
-      </span>
-      <span>
-         <button type="button" class="menubar__button" @click="exit">
+
+        <button
+            v-if="actionName === 'exit'"
+            class="menubar__button"
+            @click="exit"
+        >
            <icon name="exitEdit" />
          </button>
       </span>
+
     </div>
     <editor-content class="editor__content" :editor="editor" />
 
@@ -198,7 +199,10 @@ export default {
         'codeBlock',
         'horizontalRule',
         'undo',
-        'redo',],
+        'redo',
+        'save',
+        'exit',
+      ],
       editor: null,
       provider: null,
       html: '',

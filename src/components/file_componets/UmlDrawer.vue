@@ -181,10 +181,12 @@ export default {
      * @date: 2022/8/4
      */
     close() {
+      this.$router.go(-1)
       window.removeEventListener("message", this.receive);
       this.iframe_class = "iframe_close";
       this.saveUML();
       document.getElementById("app").removeChild(iframe);
+
     },
     /**
      * @description: 将uml图的信息存在后端

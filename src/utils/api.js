@@ -118,6 +118,14 @@ export function get_umlfile(data){
     })
 }
 
+export function get_file(data){
+    return request({
+        url: 'api/projects/viewFilesInProject',
+        method: 'post',
+        data,
+    })
+}
+
 export function get_docfile(data){
     return request({
         url: 'api/projects/viewTextsInProject',
