@@ -2,11 +2,12 @@
 <div class="file-pre-container"  >
   <img :src="imgData" @click="openFile" @contextmenu.prevent.native="openMenu($event)"/>
   <div>{{ author }}</div>
-  <div>上次修改时间</div>
+  <div>{{ file_name }}</div>
   <ul v-show="visible" :style="{left:left+'px',top:top+'px'}" class="contextmenu">
     <li @click="deleteFile">删除</li>
     <li @click="renameFile">重命名</li>
   </ul>
+  <!--新文件对话框-->
   <el-dialog v-model="dialogFormVisible" :title="createFileTitle">
     <el-form :model="fileInitial">
       <el-form-item label="创建的文件名" label-width="140px">
@@ -17,6 +18,22 @@
       <span class="dialog-footer">
         <el-button @click="dialogFormVisible = false;this.fileInitial.name=null">Cancel</el-button>
         <el-button type="primary" @click="dialogFormVisible = false;this.openFile()"
+        >Confirm</el-button
+        >
+      </span>
+    </template>
+  </el-dialog>
+  <!--修改文件名对话框-->
+  <el-dialog v-model="dialogFormVisible1" :title="createFileTitle">
+    <el-form :model="fileRename">
+      <el-form-item label="新文件名" label-width="140px">
+        <el-input v-model="fileRename.rename" autocomplete="off" />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogFormVisible1 = false;">Cancel</el-button>
+        <el-button type="primary" @click="dialogFormVisible1 = false;file_name=fileRename.rename"
         >Confirm</el-button
         >
       </span>
@@ -41,11 +58,15 @@ export default {
       dialogFormVisible:false,
       fileInitial:{
         name:null,
-        type:null,
+        model:null,
+      },
+      fileRename:{
+        rename:null,
       },
       visible:false,
       left:0,
       top:-50,
+      dialogFormVisible1:false,
     }
   },
   props:{
@@ -60,6 +81,10 @@ export default {
     file_type:Number,
     //0-UML,1-axure,2-doc
     username:String,//测试用
+    file_name:{
+      type:String,
+      default:'old filename'
+    }
   },
   computed:{
 

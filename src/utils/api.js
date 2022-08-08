@@ -118,9 +118,17 @@ export function get_umlfile(data){
     })
 }
 
-export function get_file(data){
+export function renameFileById(data){
     return request({
-        url: 'api/projects/viewFilesInProject',
+        url: 'api/projects/rename',
+        method: 'post',
+        data,
+    })
+}
+
+export function deleteFileById(data){
+    return request({
+        url: 'api/projects/delete',
         method: 'post',
         data,
     })

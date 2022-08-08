@@ -675,40 +675,13 @@ export default {
     margin-bottom: 5px;
   }
 }
-#leftdown {
-  overflow-y: scroll;
-  height: 63vh;
-  padding: 0 5px;
-}
-#leftdown1 {
-  display: flex;
-  align-items: center;
-  justify-content: start;
-  overflow-y: scroll;
-  height: 63vh;
-  padding: 0 5px;
-  flex-direction: row;
-}
+
 .bluelight {
   font-weight: lighter;
   font-size: 20px;
   color: #26476d;
 }
-#leftdown1left {
-  flex: 0 1 30%;
-  height: 100%;
-  min-width: 230px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  border-right: 1px solid lightgray;
-}
-#leftdown1right {
-  flex: 0 1 70%;
-  height: 100%;
 
-  padding: 20px;
-}
 .dongtaicontainer {
   display: flex;
   flex-wrap: wrap;

@@ -277,6 +277,7 @@ export default {
   methods:{
     save(){
       let url=upload('docs',this.html)
+      console.log(url)
       let pojo={
         doc_url:url,
         username:this.username,
