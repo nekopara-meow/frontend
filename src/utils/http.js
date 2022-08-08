@@ -25,7 +25,7 @@ instance.interceptors.request.use(
         // 若 localStorage 中含有这两个字段，则添加入请求头
         //config.data = qs.stringify(config.data)
         if (username && authorization) {
-            console.log(authorization)
+            // console.log(authorization)
             config.headers.authorization = authorization;
             config.headers.username = username;
         }

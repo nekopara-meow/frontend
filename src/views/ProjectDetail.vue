@@ -6,8 +6,10 @@
           <div style="display: flex">
             <h2 class="title gradient">NEKOPARA</h2>
             <nav class="nav-link">
-              <router-link to="/projectdetail/projectInfo" @click="tab='tab-0'">概览</router-link>
-              <router-link :to="{path:'/projectdetail/projectFileInfo',params:{
+              <router-link :to="{name:'projectInfo',params:{
+                project_id:this.project_id
+              }}" @click="tab='tab-0'">概览</router-link>
+              <router-link :to="{name:'projectFileInfo',params:{
                 project_id:this.project_id
               }}" @click="tab='tab-1'">文件</router-link>
               <router-link to="" @click="tab='tab-2'">需求</router-link>
@@ -66,7 +68,7 @@ export default {
   },
   data() {
     return {
-      project_id:'114514',
+      project_id:'',
       tab: "tab-0",
       dialogFormVisible1: false,
       editing: 0,
@@ -76,11 +78,14 @@ export default {
   methods:{
 
   },
-  mounted() {
+  created() {
+    console.log('route')
+    console.log(this.$route.params)
     if(this.$route.params.project_id){
       this.project_id=this.$route.params.project_id
       this.username=this.$store.state.username
     }
+    console.log(this.project_id)
   },
   computed:{
   }

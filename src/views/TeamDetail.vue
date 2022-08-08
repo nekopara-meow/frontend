@@ -429,7 +429,7 @@ export default {
     gotoproject(a) {
       console.log("pp",a),
       this.$router.push({
-        path: "/projectdetail",
+        name:'projectInfo',
         params: {
           project_id: a,
         },
@@ -446,7 +446,7 @@ export default {
       this.invite.invitee=""
       this.dialogFormVisible1 = false
     },
-    
+
     creatproject(){
       console.log(111)
       establishproject(this.newproject).then(

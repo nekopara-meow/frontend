@@ -1,8 +1,9 @@
 <template>
 <div class="file-pre-container"  >
   <img :src="imgData" @click="openFile" @contextmenu.prevent.native="openMenu($event)"/>
-  <div>{{ author }}</div>
-  <div>{{ file_name }}</div>
+  <div class="file-info">{{ author }}</div>
+  <div class="file-info">{{ fileName }}</div>
+  <div class="file-info">{{modTime}}</div>
   <ul v-show="visible" :style="{left:left+'px',top:top+'px'}" class="contextmenu">
     <li @click="deleteFile">删除</li>
     <li @click="renameFile">重命名</li>
@@ -33,7 +34,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogFormVisible1 = false;">Cancel</el-button>
-        <el-button type="primary" @click="dialogFormVisible1 = false;file_name=fileRename.rename"
+        <el-button type="primary" @click="dialogFormVisible1 = false;file_name=fileRename.rename;doFileRename()"
         >Confirm</el-button
         >
       </span>
@@ -44,7 +45,7 @@
 
 <script>
 import {readURL} from "@/utils/ali_oss";
-import {create_doc, create_uml} from "@/utils/api";
+import {create_doc, create_uml, deleteFileById, renameFileById} from "@/utils/api";
 
 export default {
   name: "filePreview",
@@ -64,6 +65,7 @@ export default {
       fileRename:{
         rename:null,
       },
+
       visible:false,
       left:0,
       top:-50,
@@ -75,25 +77,29 @@ export default {
       type:Boolean,
       default:false,
     },
-    file_id:String,
-    project_id:String,
-    creator:String,
-    file_content:String,
-    file_type:Number,
+    file_id:'',
+    project_id:'',
+    creator:'',
+    file_content:'',
+    file_type:'',
     //0-UML,1-axure,2-doc
-
-    file_name:{
-      type:String,
-      default:'old filename'
-    }
+    file_name:'',
+    update_time:'',
   },
   computed:{
-
+    modTime(){
+      let ret='上次修改时间:'
+      let datestr=this.update_time
+      return ret+datestr
+    },
     author(){
       if(!this.isNew){
         return '作者：'+this.creator
       }
       return '新建文件'
+    },
+    fileName(){
+      return '文件名:'+this.file_name
     },
     /**
      * @description: 出现错误就返回新建图片的标签
@@ -132,8 +138,6 @@ export default {
       readURL(url, (xmlData) => {
         this.umlData = xmlData;
       });
-      console.log('后端收到初始化数据为')
-      console.log(this.umlData)
       return this.umlData
     },
     createFileTitle(){
@@ -165,7 +169,6 @@ export default {
       }).then(() => {
         deleteFileById({
           file_id:this.file_id,
-          new_file_name:this.fileRename.rename
         }).then(res=> console.log(res.data))
       }).catch(() => {
         console.log('删除')
@@ -174,9 +177,12 @@ export default {
     },
     renameFile(){
       this.dialogFormVisible1=true
+    },
+    doFileRename(){
       renameFileById({
         file_id:this.file_id,
-        new_file_name:this.fileRename.rename
+        new_file_name:this.fileRename.rename,
+        username:this.username,
       }).then(res=> console.log(res.data))
     },
     openFile(){
@@ -184,11 +190,17 @@ export default {
       if(!this.isNew) {
         switch (this.file_type) {
           case 0:
+            console.log({
+              uml_url: this.file_content,
+              uml_id: this.file_id,
+              project_id:this.project_id
+            },'打开已有uml')
             this.$router.push({
               name: 'UmlDrawer',
               params: {
                 uml_url: this.file_content,
                 uml_id: this.file_id,
+                project_id:this.project_id
               }
             })
             break
@@ -207,8 +219,7 @@ export default {
             this.$router.push({
               name: 'axure',
               params: {
-                doc_url: this.file_content,
-                doc_id: this.file_id,
+                project_id:this.project_id,
               }
             })
             break
@@ -223,12 +234,19 @@ export default {
         return
       switch (this.file_type){
         case 0:
+          console.log({
+            username:this.username,
+            project_id:this.project_id,
+            uml_name:this.fileInitial.name,
+          })
           create_uml({
             username:this.username,
-            prject_id:this.prject_id,
+            project_id:this.project_id,
             uml_name:this.fileInitial.name,
           }).then((res)=>{
-            if(!res.data.uml_id){
+            console.log('return')
+            console.log(res.data)
+            if(res.data.uml_id){
               this.$router.push({
                 name:'UmlDrawer',
                 params: {
@@ -241,17 +259,24 @@ export default {
           })
           break
         case 1:
+          console.log({
+            username:this.username,
+            project_id:this.project_id,
+            doc_name:this.fileInitial.name,
+          })
           create_doc({
             username:this.username,
-            prject_id:this.prject_id,
+            project_id:this.project_id,
             doc_name:this.fileInitial.name,
           }).then((res)=>{
-            if(!res.data.uml_id){
+            console.log('return')
+            console.log(res.data)
+            if(res.data.doc_id){
               this.$router.push({
-                name:'UmlDrawer',
+                name:'DocEditor',
                 params: {
                   doc_url: null,
-                  uml_id: res.data.doc_id,
+                  doc_id: res.data.doc_id,
                   username:this.username,
                   project_id:this.project_id
                 }
@@ -304,11 +329,11 @@ export default {
     height: 80px;
     width: 80px;
   }
-  div{
-    font-size: 14px;
-    font-family: 黑体;
-    text-align: center;
-  }
+}
+.file-info{
+  font-size: 10px;
+  font-family: 黑体;
+  text-align: start;
 }
 .contextmenu {
   margin: 0;

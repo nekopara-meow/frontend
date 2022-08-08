@@ -120,7 +120,7 @@ export function get_umlfile(data){
 
 export function renameFileById(data){
     return request({
-        url: 'api/projects/rename',
+        url: 'api/projects/rename/file',
         method: 'post',
         data,
     })
@@ -128,7 +128,7 @@ export function renameFileById(data){
 
 export function deleteFileById(data){
     return request({
-        url: 'api/projects/delete',
+        url: 'api/projects/delete/file',
         method: 'post',
         data,
     })
