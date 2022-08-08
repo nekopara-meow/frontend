@@ -1,16 +1,15 @@
 <template>
-  <img alt="共享文档" src="@/assets/img/fileicons/chengxu.png"
+<div>
+  <img v-if="!isNew" alt="共享文档" src="@/assets/img/fileicons/chengxu.png"
        v-show="!this.isNew" class="fileicon"
-       @click="this.$router.push({
-       name: 'axure',})"
+       @click="this.$router.push ('axure')"
 
   >
   <img alt="共享文档" src="@/assets/img/fileicons/newfile.png"
-       v-show="this.isNew" class="fileicon"
-       @click="this.$router.push({
-       name: 'axure',
-       })"
+       v-else class="fileicon"
+       @click="this.$router.push ('axure')"
   >
+</div>
 </template>
 
 <script>

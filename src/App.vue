@@ -1,6 +1,6 @@
 <template>
   <div id="App" class="row">
-    <fr-aside @click="collapse=!collapse" :collapse="collapse" />
+    <fr-aside @click="collapse = !collapse" :collapse="collapse" />
     <main>
       <fr-nav :collapse="collapse" @indent="collapse = !collapse" />
       <article :style="background" :class="{ indent: collapse }">
@@ -30,6 +30,8 @@ export default {
     },
   },
   mounted() {
+    //初始化YDoc，建立webrtc链接
+    this.$store.commit('initYDoc')
     // 检测浏览器路由改变页面不刷新问题,hash模式的工作原理是 hashchange事件
     window.addEventListener(
       "hashchange",
@@ -75,6 +77,9 @@ export default {
   margin: 0;
   padding: 0;
   flex-wrap: nowrap;
+  background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/bg.png);
+  background-size: cover;
+  background-position: center;
 }
 .row > * {
   padding: 0;

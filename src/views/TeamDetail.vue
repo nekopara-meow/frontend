@@ -365,7 +365,6 @@ import {
   getteamcreator, getteammember, getteammsgbyid, getteamprojectbyid,
   invitemember
 } from "@/utils/api";
-import Base64 from "@/utils/Base64";
 export default {
   name: "workspace",
   components: { Filter, Sort, Plus, CaretBottom },
@@ -593,7 +592,7 @@ export default {
   background-image: linear-gradient(90deg, #4facfe, #7bd4fe, #6acaf7, #4facfe);
   background-size: 200%;
   animation: streamer 5s linear infinite;
-  background-clip: text;
+  -webkit-background-clip: text;
   color: transparent;
 }
 @keyframes streamer {

@@ -144,7 +144,7 @@
          </button>
       </span>
     </div>
-      <editor-content class="editor__content" :editor="editor" />
+    <editor-content class="editor__content" :editor="editor" />
 
   </div>
 </template>
@@ -166,6 +166,7 @@ import {upload,readURL} from "@/utils/ali_oss";
 import {load_doc,save_doc} from "@/utils/api";
 
 export default {
+  name:'DocEditor',
   components: {
     EditorContent,
     Icon,
@@ -183,21 +184,21 @@ export default {
       project_id:'',
       initialContent: '文件编辑器',
       activeButtons:[
-          'bold',
-          'italic',
-          'strike',
-          'underline',
-          'code',
-          'h1',
-          'h2',
-          'h3',
-          'bulletList',
-          'orderedList',
-          'blockquote',
-          'codeBlock',
-          'horizontalRule',
-          'undo',
-          'redo',],
+        'bold',
+        'italic',
+        'strike',
+        'underline',
+        'code',
+        'h1',
+        'h2',
+        'h3',
+        'bulletList',
+        'orderedList',
+        'blockquote',
+        'codeBlock',
+        'horizontalRule',
+        'undo',
+        'redo',],
       editor: null,
       provider: null,
       html: '',
@@ -207,65 +208,61 @@ export default {
   emits: ['update'],
   created() {
     //接受参数
-    this.doc_id=this.$route.params.doc_id
-    this.project_id=this.$route.params.project_id
-    this.username=this.$route.params.username
-    load_doc({
-      doc_id:this.doc_id,
-      username:this.username,
-      project_id: this.project_id
-    }).then((res)=>{
-      //不是新建文档需要初始化客户
-      if(res.data.doc_url){
-        let url=res.data.doc_url
-        readURL(url,(htmlData)=>{
-          this.html=htmlData
-        })
-      }
-    }).then(()=>{
-      if(this.html){
-        this.initialContent=''
-      }
-// A new Y document
-      const ydoc = new Y.Doc()
-// Registered with a WebRTC provider
-      this.provider = new WebrtcProvider('example-document', ydoc)
-      this.editor = new Editor({
-        extensions: [
-          CollaborationCursor.configure({
-            provider: this.provider,
-            user: {
-              name: 'Other Editor',
-              color: '#f783ac',
-            },
-          }),
-          StarterKit.configure({
-            // The Collaboration extension comes with its own history handling
-            history: false,
-          }),
-          // Register the document with Tiptap
-          Collaboration.configure({
-            document: ydoc,
-          }),
-          Placeholder.configure({
-            placeholder: this.initialContent,
-          }),
-          Document,
-          Text,
-          Underline,
-          Paragraph,
-        ],
+    console.log(this.$route)
+    this.doc_id=this.$route.params.doc_id.toString()
+    this.project_id=this.$route.params.project_id.toString()
+    this.username=this.$route.params.username.toString()
+    this.$store.commit('addNewArticle',this.doc_id)
+    if(this.$route.params.doc_url){
+      let url=this.$route.params.doc_url
+      readURL(url,(htmlData)=>{
+        this.html=htmlData
       })
-      this.editor.on('update', () => {
-        this.html = this.editor.getHTML();
-        this.json = this.editor.getJSON();
-        // this.$emit('update', this.html);
-      })
-      //继承存储的内容
-      if(this.html){
-        this.editor.commands.setContent('<p>未作任何保存</p>')
-      }
+    }
+    if(this.html==null){
+      this.initialContent=''
+    }else {
+      this.initialContent=this.html
+    }
+    this.editor = new Editor({
+      content:this.initialContent,
+      extensions: [
+        CollaborationCursor.configure({
+          provider: this.$store.state.provider,
+          user: {
+            name: this.username,
+            color: '#f783ac',
+          },
+        }),
+
+        StarterKit.configure({
+          // The Collaboration extension comes with its own history handling
+          history: false,
+        }),
+        // Register the document with Tiptap
+        Collaboration.configure({
+          document: this.$store.state.ydoc,
+          field:this.doc_id
+        }),
+        Placeholder.configure({
+          placeholder: '请输入',
+        }),
+        Document,
+        Text,
+        Underline,
+        Paragraph,
+      ],
     })
+    this.editor.on('update', () => {
+      this.html = this.editor.getHTML();
+      this.json = this.editor.getJSON();
+      // this.$emit('update', this.html);
+    })
+    //继承存储的内容
+    if(this.html){
+      this.editor.commands.setContent('<p>未作任何保存</p>')
+    }
+
 
   },
   /**
@@ -293,7 +290,6 @@ export default {
   },
   beforeUnmount() {
     this.editor.destroy()
-    this.provider.destroy()
   },
 }
 </script>
@@ -315,6 +311,7 @@ export default {
   pointer-events: none;
   height: 0;
 }
+
 /* Give a remote user a caret */
 .collaboration-cursor__caret {
   position: relative;

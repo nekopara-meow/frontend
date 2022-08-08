@@ -1,0 +1,403 @@
+.oneteamdown {
+    color: #26476d;
+    width: 100%;
+    overflow: hidden;
+    padding: 14px;
+    font-size: 10px;
+    font-weight: lighter;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+div {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #26476d;
+}
+}
+.oneteam {
+    background: linear-gradient(
+            to right bottom,
+            rgba(255, 255, 255, 0.4),
+            rgba(255, 255, 255, 0.2)
+    );
+    backdrop-filter: blur(1rem);
+    box-shadow: 0px 15px 10px -15px rgba(211, 211, 211, 0.664);
+    width: 170px;
+    height: 280px;
+    margin-right: 50px;
+    margin-bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-self: start;
+    overflow: hidden;
+.teamimage {
+    width: 100%;
+    height: 170px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+}
+.el-progress--line {
+    margin-bottom: 15px;
+    width: 80px;
+}
+.big {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#content {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    //background: linear-gradient(
+    //        to right bottom,
+    //        rgba(255, 255, 255, 0.4),
+    //        rgba(255, 255, 255, 0.2)
+    //);
+    //backdrop-filter: blur(1rem);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0px 15px 10px -15px lightgray;
+    height: 90%;
+    width: 85%;
+}
+#left {
+    height: 100%;
+    flex: 1 1 70%;
+    padding: 10px;
+}
+#right {
+    height: 100%;
+    flex: 1 1 30%;
+    min-width: 200px;
+    padding: 10px;
+}
+.bluelight {
+    font-weight: lighter;
+    font-size: 20px;
+    color: #26476d;
+}
+.gradient {
+    background-image: linear-gradient(90deg, #4facfe, #7bd4fe, #6acaf7, #4facfe);
+    background-size: 200%;
+    animation: streamer 5s linear infinite;
+//background-clip: text;
+    color: transparent;
+}
+@keyframes streamer {
+    0% {
+        background-position: 0;
+    }
+    100% {
+        background-position: 200%;
+    }
+}
+.title {
+    font-weight: 700;
+    font-size: 50px;
+    color: #26476d;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+#leftup {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+::v-deep .el-collapse-item__header {
+    background-color: transparent;
+    border: none;
+    font-size: 20px;
+    font-weight: lighter;
+    color: #26476d;
+}
+::v-deep .el-collapse-item__wrap {
+    background-color: transparent;
+    border: none;
+    display: flex;
+}
+::v-deep .el-collapse-item__content {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.buttons {
+    margin-right: 50px;
+.el-button {
+    background-color: #26476d;
+    border: none;
+}
+}
+.onegroupup {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.onegroupdown {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: left;
+    padding: 15px;
+}
+.oneitem {
+    width: 120px;
+    height: 140px;
+    margin-right: 30px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-self: start;
+    font-size: 15px;
+    font-weight: lighter;
+img {
+    width: 100px;
+    margin-bottom: 5px;
+}
+}
+#leftdown {
+    overflow-y: scroll;
+    height: 63vh;
+    padding: 0 5px;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background-color: #f5f5f5;
+}
+
+/*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: #f5f5f5;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+
+    background-color: #26476d;
+}
+
+nav {
+    position: relative;
+    width: 300px;
+    height: 50px;
+
+    border-radius: 8px;
+    transform: translate(0px, 24px);
+    margin-left: 20px;
+}
+
+nav a {
+    position: relative;
+    display: block;
+    float: left;
+    font-size: 15px;
+    line-height: 50px;
+    width: 60px;
+    height: 50px;
+    color: #fff;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-align: center;
+    font-size: 15px;
+    font-weight: lighter;
+    cursor: pointer;
+    /* background-color: #00b894; */
+    z-index: 10;
+}
+
+nav .animation {
+    position: absolute;
+    height: 100%;
+     /*background-color: #f97f51;*/
+    z-index: 9;
+    transition: all 0.3s;
+    border-bottom: 5px solid #26476d;
+}
+
+.tab-0,
+nav a:hover ~ .animation {
+    width: 60px;
+    left: 0px;
+}
+.tab-1,
+nav a:nth-child(2):hover ~ .animation {
+    width: 60px;
+    left: 60px;
+}
+.tab-2,
+nav a:nth-child(3):hover ~ .animation {
+    width: 60px;
+    left: 120px;
+}
+.tab-3,
+nav a:nth-child(4):hover ~ .animation {
+    width: 60px;
+    left: 180px;
+}
+.tab-4,
+nav a:nth-child(5):hover ~ .animation {
+    width: 60px;
+    left: 240px;
+}
+
+.avatar {
+    width: 2rem;
+    height: 2rem;
+    line-height: 2rem;
+    display: inline-block;
+    background: #26476d no-repeat center/cover;
+    position: relative;
+    text-align: center;
+    color: #fff;
+    font-weight: 600;
+    vertical-align: bottom;
+    font-size: 0.875rem;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.avatar i {
+    font-size: 125%;
+    vertical-align: sub;
+}
+
+.avatar-list {
+    margin: 0 0 -0.5rem;
+    padding: 0;
+    font-size: 0;
+}
+.avatar-list .avatar {
+    margin-bottom: 0.5rem;
+}
+.avatar-list .avatar:not(:last-child) {
+    margin-right: 0.5rem;
+}
+.avatar-list-stacked .avatar {
+    margin-right: -0.8em !important;
+}
+.avatar-list-stacked .avatar {
+    box-shadow: 0 0 0 2px #fff;
+}
+
+.brround {
+    border-radius: 50%;
+}
+.example {
+    padding: 0;
+    border: 1px solid rgba(167, 180, 201, 0.3);
+    border-radius: 3px 3px 0 0;
+    font-size: 0.9375rem;
+    border: none;
+    width: 150px;
+}
+.text-wrap {
+    font-size: 14px;
+    line-height: 1.66;
+    margin-top: 3px;
+    border: none;
+}
+.text-wrap > :first-child {
+    margin-top: 0;
+}
+.text-wrap > :last-child {
+    margin-bottom: 0;
+}
+
+.dongtaicontainer {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+.dongtai {
+    background: linear-gradient(
+            to right bottom,
+            rgba(255, 255, 255, 0.185),
+            rgba(255, 255, 255, 0.042)
+    );
+    backdrop-filter: blur(1rem);
+    width: 300px;
+    height: 100px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 15px 10px -15px rgba(211, 211, 211, 0.392);
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin-right: 60px;
+img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0px 15px 10px -15px rgb(211, 211, 211);
+    margin-right: 10px;
+}
+}
+#teamavatar {
+    width: 200px !important;
+    height: 200px !important;
+    object-fit: cover;
+    border: 10px solid white;
+    border-radius: 20px;
+    box-shadow: 0px 15px 10px -15px lightgray;
+    margin-bottom: 15px;
+    flex-shrink: 0;
+}
+.el-button {
+    background-color: #26476d;
+    border: none;
+}
+.intro {
+    font-size: 14px;
+    width: 200px;
+    text-indent: 2em;
+}
+.pg {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(
+            to right bottom,
+            rgba(255, 255, 255, 0.185),
+            rgba(255, 255, 255, 0.042)
+    );
+    backdrop-filter: blur(1rem);
+    justify-content: space-around;
+    border-radius: 10px;
+    box-shadow: 0px 15px 10px -15px rgba(211, 211, 211, 0.696);
+}
+::v-deep .el-dialog {
+    background: linear-gradient(
+            to right bottom,
+            rgba(255, 255, 255, 0.905),
+            rgba(255, 255, 255, 0.622)
+    );
+    backdrop-filter: blur(1rem);
+    border-radius: 10px;
+    box-shadow: 0px 15px 10px -15px lightgray;
+    font-weight: lighter;
+    font-size: 23px;
+    color: #26476d;
+    overflow: hidden;
+.el-button {
+    background-color: #26476d;
+    border: none;
+}
+}
+::v-deep .el-dialog__header {
+    margin-right: 0;
+    color: white;
+    background: linear-gradient(to right bottom, #26476def, #26476dc5);
+}
