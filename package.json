@@ -32,7 +32,6 @@
     "qs": "^6.11.0",
     "vant": "^3.5.3",
     "vue": "^3.2.13",
-    "vue-lottie": "^0.2.1",
     "vue-router": "^4.0.3",
     "vue3-draggable-resizable": "^1.6.4",
     "vuex": "^4.0.0",
@@ -45,7 +44,6 @@
     "@vue/cli-plugin-router": "~5.0.0",
     "@vue/cli-plugin-vuex": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
-    "lottie-web": "^5.9.6",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2"
   },

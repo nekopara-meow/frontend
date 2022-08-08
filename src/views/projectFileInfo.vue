@@ -12,8 +12,8 @@
       </el-tab-pane>
       <el-tab-pane label="文档">
         <div class="fileDisplayer">
-          <file-preview :file_type="1" creator="罗亚硕" :file_id="1" username="罗亚硕" :project_id="this.project_id"></file-preview>
-          <file-preview :file_type="1" creator="罗亚硕" :file_id="1" username="蔡徐坤" :project_id="this.project_id"></file-preview>
+          <file-preview :file_type="1" creator="罗亚硕" :file_id="1"  :project_id="this.project_id"></file-preview>
+          <file-preview :file_type="1" creator="罗亚硕" :file_id="1"  :project_id="this.project_id"></file-preview>
           <file-preview v-for="(tmp,index) in doc_file" :file_id="tmp.file_id"
                         :file_type="tmp.file_type" :creator="tmp.creator"
                         :file_content="tmp.file_content" :project_id="tmp.project_id"></file-preview>

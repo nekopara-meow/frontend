@@ -365,6 +365,7 @@ import {
   getteamcreator, getteammember, getteammsgbyid, getteamprojectbyid,
   invitemember
 } from "@/utils/api";
+import Base64 from "@/utils/Base64";
 export default {
   name: "workspace",
   components: { Filter, Sort, Plus, CaretBottom },
@@ -445,10 +446,12 @@ export default {
       this.invite.invitee=""
       this.dialogFormVisible1 = false
     },
+    
     creatproject(){
+      console.log(111)
       establishproject(this.newproject).then(
           (response) => {
-            if (response.data.status_code == 1) {
+            if (response.data.status_code === 1) {
               this.initializationdata()
             } else ElMessage.error(response.data.msg);
           }
@@ -456,7 +459,7 @@ export default {
       this.dialogFormVisible2 = false
     },
     edit() {
-      if (this.editing == 0) {
+      if (this.editing === 0) {
         this.editing = 1;
       } else {
         this.editing = 0;
