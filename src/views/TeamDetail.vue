@@ -259,9 +259,9 @@
                 </div>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item @click.natice="checkuserinfo(teamadmin.username)">查看个人资料</el-dropdown-item>
-                    <el-dropdown-item>移出管理员</el-dropdown-item>
-                    <el-dropdown-item>移出团队</el-dropdown-item>
+                    <el-dropdown-item @click.native="checkuserinfo(teamadmin.username)">查看个人资料</el-dropdown-item>
+                    <el-dropdown-item @click.native="deleteadmin(teamadmin.username)">移出管理员</el-dropdown-item>
+                    <el-dropdown-item @click.native="deletemember(teamadmin.username)">移出团队</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
             </el-dropdown>
@@ -291,8 +291,8 @@
                 <template #dropdown>
                   <el-dropdown-menu>
                     <el-dropdown-item @click.natice="checkuserinfo(teammember.username)">查看个人资料</el-dropdown-item>
-                    <el-dropdown-item>设为管理员</el-dropdown-item>
-                    <el-dropdown-item>移出团队</el-dropdown-item>
+                    <el-dropdown-item @click.natice="setadmin(teammember.username)">设为管理员</el-dropdown-item>
+                    <el-dropdown-item @click.natice="deletemember(teammember.username)">移出团队</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
@@ -323,10 +323,11 @@
 import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
 import { Filter, Sort, Plus, CaretBottom } from "@element-plus/icons-vue";
 import {
+  deleteteammem,
   establishproject,
   getteamadmin,
   getteamcreator, getteammember, getteammsgbyid, getteamprojectbyid,
-  invitemember
+  invitemember, setteamadmin
 } from "@/utils/api";
 import Base64 from "@/utils/Base64";
 export default {
@@ -399,12 +400,14 @@ export default {
       });
     },
     invitenewmember(){
-      console.log(this.invite),
       invitemember(this.invite).then(
           (response) => {
-            console.log("invite",response.data)
             if (response.data.status_code == 1) {
-              this.initializationdata()
+              ElMessage({
+                message: "邀请成功",
+                type: "success",
+              });
+              this.initializationmember();
             } else ElMessage.error(response.data.msg);
           }
       );
@@ -427,7 +430,7 @@ export default {
       } else {
         this.editing = 0;
         ElMessage({
-          message: "修改成功",
+          message: "邀请成功",
           type: "success",
         });
       }
@@ -471,13 +474,53 @@ export default {
       );
     },
     //成员操作
-    setadmin(){
+    initializationmember(){
+      getteamadmin({ team_id: this.team_id  }).then(
+          (response) => {
+            if (response.data.status_code == 1) {
+              this.teamadmins = response.data.ans_list;
+            } else ElMessage.error(response.data.message);
+          }
+      );
+      getteammember({ team_id: this.team_id  }).then(
+          (response) => {
+            if (response.data.status_code == 1){
+              this.teammembers= response.data.ans_list;
+            } else ElMessage.error(response.data.message);
+          }
+      );
+    },
+    setadmin(membername){
+      setteamadmin({setter:this.$store.state.username,settee:membername,team_id:this.team_id}).then(
+          (response) =>{
+            if (response.data.status_code == 1) {
+              this.initializationmember();
+              console.log(response.data)
+              ElMessage({
+                message: "设置成功",
+                type: "success",
+              });
+            } else ElMessage.error(response.data.msg);
+          }
+      )
+
+    },
+    deletemember(membername){
+      console.log({deleter_username:this.$store.state.username,deletee_username:membername,team_id:this.team_id})
+      deleteteammem({deleter_username:this.$store.state.username,deletee_username:membername,team_id:this.team_id}).then(
+          (response) =>{
+            if (response.data.status_code == 1) {
+              this.initializationmember(),
+              ElMessage({
+                message: "移出成功",
+                type: "success",
+              });
+            } else ElMessage.error(response.data.msg);
+          }
+      )
 
     },
     deleteadmin(){
-
-    },
-    deletemember(){
 
     },
     checkinfo(){
