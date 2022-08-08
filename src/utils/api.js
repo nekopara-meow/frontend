@@ -1,4 +1,4 @@
-import request from '@/utils/http'
+import request, {post} from '@/utils/http'
 
 export async function login(data) {
     return request({
@@ -207,6 +207,20 @@ export async function getteamcreator(data) {
 export async function getteamadmin(data) {
     return request({
         url: 'api/team/getAdminsOfTeam',
+        method: 'post',
+        data,
+    })
+}
+export async function establishproject(data) {
+    return request({
+        url: 'api/projects/establish',
+        method: 'post',
+        data,
+    })
+}
+export async function invitemember(data) {
+    return request({
+        url: 'api/team/invite',
         method: 'post',
         data,
     })
