@@ -3,8 +3,8 @@ import { WebrtcProvider } from 'y-webrtc'
 import * as Y from 'yjs'
 export default createStore({
   state: {
-    token: '',
-    username: '',
+    token: localStorage.getItem("token"),
+    username: localStorage.getItem("username"),
     head:'',
     ydoc:'',
     provider:'',
@@ -39,7 +39,7 @@ export default createStore({
       console.log(state.sharedDoc)
       console.log(doc_id)
       if((state.sharedDoc.indexOf(doc_id)===-1)){
-        state.ydoc.getXmlFragment(doc_id.toString())
+        state.ydoc.getXmlFragment(doc_id)
         state.sharedDoc.push(doc_id)
       }
     }

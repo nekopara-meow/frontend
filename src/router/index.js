@@ -29,13 +29,13 @@ const routes = [
   },
   {
     path: '/projectdetail',
-    name: 'projectdetail',
+    // name: 'projectdetail',
     component: () => import(/* webpackChunkName: "about" */ '../views/ProjectDetail.vue'),
     children:[
-      {
-        path:'',
-        redirect:'/projectdetail/projectInfo'
-      },
+      // {
+      //   path:'',
+      //   redirect:'/projectdetail/projectInfo'
+      // },
       {
         path:'projectInfo',
         name:'projectInfo',
@@ -121,8 +121,6 @@ const routes = [
 const router = createRouter({
   history: createWebHashHistory(),
   base: process.env.BASE_URL,
-  //stringifyQuery: stringifyQuery,
- // parseQuery: parseQuery,
   routes
 })
 /*router.beforeEach((to, from, next) => {

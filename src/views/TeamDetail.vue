@@ -17,11 +17,11 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button
-              @click="invite"
+              @click="this.dialogFormVisible1 = false"
               style="background-color: white"
           >Cancel</el-button
           >
-          <el-button type="primary" @click="this.dialogFormVisible1 = false"
+          <el-button type="primary"  @click="invitenewmember"
           >Confirm</el-button
           >
         </span>
@@ -58,7 +58,7 @@
       <div id="left">
         <div id="leftup">
           <div style="display: flex">
-            <h2 class="title gradient">maomao</h2>
+            <h2 class="title gradient">{{teammsg.team_name}}</h2>
             <nav>
               <a
                 @click="
@@ -259,9 +259,9 @@
                 </div>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item @click.natice="checkuserinfo(teamadmin.username)">查看个人资料</el-dropdown-item>
-                    <el-dropdown-item>移出管理员</el-dropdown-item>
-                    <el-dropdown-item>移出团队</el-dropdown-item>
+                    <el-dropdown-item @click.native="checkuserinfo(teamadmin.username)">查看个人资料</el-dropdown-item>
+                    <el-dropdown-item @click.native="deleteadmin(teamadmin.username)">移出管理员</el-dropdown-item>
+                    <el-dropdown-item @click.native="deletemember(teamadmin.username)">移出团队</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
             </el-dropdown>
@@ -274,7 +274,7 @@
             >
               <el-dropdown
                 trigger="contextmenu"
-                v-for="(teamadmember,index) in teammembers" :key="index"
+                v-for="(teammember,index) in teammembers" :key="index"
               >
                 <div class="oneteam">
                   <div
@@ -290,61 +290,24 @@
                 </div>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item @click.natice="checkuserinfo(teamadmember.username)">查看个人资料</el-dropdown-item>
-                    <el-dropdown-item>设为管理员</el-dropdown-item>
-                    <el-dropdown-item>移出团队</el-dropdown-item>
+                    <el-dropdown-item @click.natice="checkuserinfo(teammember.username)">查看个人资料</el-dropdown-item>
+                    <el-dropdown-item @click.natice="setadmin(teammember.username)">设为管理员</el-dropdown-item>
+                    <el-dropdown-item @click.natice="deletemember(teammember.username)">移出团队</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
             </el-collapse-item>
             <hr style="margin: 5px" />
           </el-collapse>
-          <!-- <div class="oneteam" v-for="i in [1, 2, 3, 4, 5, 6]">
-            <div
-              class="teamimage"
-              style="
-                background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-              "
-            ></div>
-            <div class="oneteamdown">
-              <div style="font-size: 18px">小秋月</div>
-              <div>我是傻逼，我是傻逼，我真的是傻逼</div>
-              <div class="text-wrap">
-                <div class="example">
-                  <div class="avatar-list avatar-list-stacked">
-                    <span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span class="avatar cover-image brround">+8</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> -->
         </div>
-        <div id="leftdown" v-if="tab === 'tab-2'">
+        <div id="leftdown" v-if="tab == 'tab-2'">
           <div
             class="oneteam"
             style="height: 120px; margin-bottom: 20px"
-            v-for="(teamproject,index) in teamprojects" :key="index" @click="go(teamprojects.project_id)"
+            v-for="(teamproject,index) in teamprojects" :key="index" @click="gotoproject(teamproject.project_id)"
           >
             <div class="oneteamdown">
-              <div style="font-size: 18px">{{ teamproject.project_id }}</div>
+              <div style="font-size: 18px">{{ teamproject.project_name }}</div>
               <div>{{teamproject.project_brief_intro}}</div>
               <div style="margin-bottom: 0">创建日期：{{ teamproject.project_create_time }}</div>
               <div>更新日期：2022/8/5</div>
@@ -360,20 +323,20 @@
 import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
 import { Filter, Sort, Plus, CaretBottom } from "@element-plus/icons-vue";
 import {
+  deleteteammem,
   establishproject,
-  establishteam, estavlishproject,
   getteamadmin,
   getteamcreator, getteammember, getteammsgbyid, getteamprojectbyid,
-  getteamuseradmin,
-  getteamusercreat,
-  getteamuserin, invitemember
+  invitemember, setteamadmin
 } from "@/utils/api";
+import Base64 from "@/utils/Base64";
 export default {
   name: "workspace",
   components: { Filter, Sort, Plus, CaretBottom },
   created() {
+    console.log("invitee",this.invite.invitee)
     console.log("team_idhhh",this.team_id)
-      getteamcreator({ team_id: this.$route.query.team_id }).then(
+      getteamcreator({ team_id: this.team_id }).then(
           (response) => {
             console.log(response.data);
             if (response.data.status_code == 1) {
@@ -391,6 +354,7 @@ export default {
   },
   data() {
     return {
+      team_id :JSON.parse(Base64.decode(this.$route.query.info)).team_id,
       tab: "tab-0",
       dialogFormVisible1: false,
       dialogFormVisible2: false,
@@ -401,11 +365,11 @@ export default {
       invite: {
         inviter:this.$store.state.username,
         invitee:"",
-        team_id:this.$route.query.team_id
+        team_id:JSON.parse(Base64.decode(this.$route.query.info)).team_id,
       },
       editing: 0,
       newproject: {
-        team_id:this.$route.query.team_id,
+        team_id:JSON.parse(Base64.decode(this.$route.query.info)).team_id,
         username: this.$store.state.username,
         project_name:"",
         brief_intro: "",
@@ -429,99 +393,142 @@ export default {
     gotoproject(a) {
       console.log("pp",a),
       this.$router.push({
-        path: "/projectdetail",
+        name:'projectInfo',
         params: {
           project_id: a,
         },
       });
     },
-    invite(){
+    invitenewmember(){
       invitemember(this.invite).then(
           (response) => {
             if (response.data.status_code == 1) {
-              console.log("invite",response.data);
-              this.initializationdata()
-            } else ElMessage.error(response.data.message);
+              ElMessage({
+                message: "邀请成功",
+                type: "success",
+              });
+              this.initializationmember();
+            } else ElMessage.error(response.data.msg);
           }
       );
+      this.invite.invitee=""
       this.dialogFormVisible1 = false
     },
+
     creatproject(){
-      console.log("ccjin",this.newproject),
+      console.log(111)
       establishproject(this.newproject).then(
           (response) => {
-            if (response.data.status_code == 1) {
-              console.log("chuangjian",response.data);
+            if (response.data.status_code === 1) {
               this.initializationdata()
-            } else ElMessage.error(response.data.message);
+            } else ElMessage.error(response.data.msg);
           }
       );
       this.dialogFormVisible2 = false
     },
     edit() {
-      if (this.editing == 0) {
+      if (this.editing === 0) {
         this.editing = 1;
       } else {
         this.editing = 0;
         ElMessage({
-          message: "修改成功",
+          message: "邀请成功",
           type: "success",
         });
       }
     },
-    addmember(){
-
-    },
     checkuserinfo(){
 
     },
-    gotodetail(a) {
-      this.$router.push({
-        path: "projectdetail",
-        params: {
-          project_id: a,
-        },
-      });
-    },
     initializationdata()
     {
-      getteammsgbyid({ team_id: this.$route.query.team_id  }).then(
+      getteammsgbyid({ team_id: this.team_id  }).then(
           (response) => {
             if (response.data.status_code == 1) {
               this.teammsg.brief_intro=response.data.brief_intro,
                   this.teammsg.create_time=response.data.create_time,
                   this.teammsg.creator=response.data.creator,
                   this.teammsg.team_name=response.data.team_name,
-                  this.teammsg.avatar=response.data.avatar,
-                console.log(response.data);
+                  this.teammsg.avatar=response.data.avatar
             } else ElMessage.error(response.data.message);
           }
       );
-      getteamadmin({ team_id: this.$route.query.team_id  }).then(
+      getteamadmin({ team_id: this.team_id  }).then(
           (response) => {
             if (response.data.status_code == 1) {
-              console.log(response.data);
               this.teamadmins = response.data.ans_list;
             } else ElMessage.error(response.data.message);
           }
       );
-      getteammember({ team_id: this.$route.query.team_id  }).then(
+      getteammember({ team_id: this.team_id  }).then(
           (response) => {
             if (response.data.status_code == 1){
-              console.log(response.data);
               this.teammembers= response.data.ans_list;
             } else ElMessage.error(response.data.message);
           }
       );
-      getteamprojectbyid({ team_id: this.$route.query.team_id  }).then(
+      getteamprojectbyid({ team_id: this.team_id  }).then(
           (response) => {
             if (response.data.status_code == 1) {
-              console.log(response.data);
               this.teamprojects= response.data.ans_list;
             } else ElMessage.error(response.data.message);
           }
       );
-    }
+    },
+    //成员操作
+    initializationmember(){
+      getteamadmin({ team_id: this.team_id  }).then(
+          (response) => {
+            if (response.data.status_code == 1) {
+              this.teamadmins = response.data.ans_list;
+            } else ElMessage.error(response.data.message);
+          }
+      );
+      getteammember({ team_id: this.team_id  }).then(
+          (response) => {
+            if (response.data.status_code == 1){
+              this.teammembers= response.data.ans_list;
+            } else ElMessage.error(response.data.message);
+          }
+      );
+    },
+    setadmin(membername){
+      setteamadmin({setter:this.$store.state.username,settee:membername,team_id:this.team_id}).then(
+          (response) =>{
+            if (response.data.status_code == 1) {
+              this.initializationmember();
+              console.log(response.data)
+              ElMessage({
+                message: "设置成功",
+                type: "success",
+              });
+            } else ElMessage.error(response.data.msg);
+          }
+      )
+
+    },
+    deletemember(membername){
+      console.log({deleter_username:this.$store.state.username,deletee_username:membername,team_id:this.team_id})
+      deleteteammem({deleter_username:this.$store.state.username,deletee_username:membername,team_id:this.team_id}).then(
+          (response) =>{
+            if (response.data.status_code == 1) {
+              this.initializationmember(),
+              ElMessage({
+                message: "移出成功",
+                type: "success",
+              });
+            } else ElMessage.error(response.data.msg);
+          }
+      )
+
+    },
+    deleteadmin(){
+
+    },
+    checkinfo(){
+
+    },
+    //项目操作
 
   }
 };

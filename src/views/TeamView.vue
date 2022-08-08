@@ -132,17 +132,17 @@
           </div>
         </div>
         <div id="leftdown" v-if="tab == 'tab-1'">
-          <div class="oneteam" v-for="(teamadmin,index) in teamuseradmin" :key="index">
+          <div class="oneteam" v-for="(teamadmin,index) in teamuseradmin" :key="index" @click="go(teamadmin.team_id)">
             <div
                 class="teamimage"
-                :style="{ backgroundImage: `url(` + teamuseradmin.team_avatar + ')' }"
+                :style="{ backgroundImage: `url(` + teamadmin.team_avatar + ')' }"
             ></div>
             <div class="oneteamdown">
               <div style="font-size: 18px">{{teamadmin.team_name}}</div>
               <div>{{teamadmin.brief_intro}}</div>
-              <div class="text-wrap">
-                <div class="example">
-                  <div class="avatar-list avatar-list-stacked">
+              <div class="text-wrap" style="margin: 10px 0">
+                 <div class="example">
+                   <div class="avatar-list avatar-list-stacked">
                     <span
                         class="avatar cover-image brround"
                         style="
@@ -150,38 +150,38 @@
                       "
                     ></span
                     ><span
-                      class="avatar cover-image brround"
-                      style="
+                       class="avatar cover-image brround"
+                       style="
                         background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
                       "
-                  ></span
-                  ><span
-                      class="avatar cover-image brround"
-                      style="
+                   ></span
+                   ><span
+                       class="avatar cover-image brround"
+                       style="
                         background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
                       "
-                  ></span
-                  ><span
-                      class="avatar cover-image brround"
-                      style="
+                   ></span
+                   ><span
+                       class="avatar cover-image brround"
+                       style="
                         background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
                       "
-                  ></span
-                  ><span
-                      class="avatar cover-image brround"
-                      style="
+                   ></span
+                   ><span
+                       class="avatar cover-image brround"
+                       style="
                         background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
                       "
-                  ></span
-                  ><span class="avatar cover-image brround">+8</span>
-                  </div>
+                   ></span
+                   ><span class="avatar cover-image brround">+8</span>
+                   </div>
+                 </div>
                 </div>
-              </div>
             </div>
           </div>
         </div>
         <div id="leftdown" v-if="tab == 'tab-2'">
-          <div class="oneteam" v-for="(teamin,index) in teamuserin" :key="index">
+          <div class="oneteam" v-for="(teamin,index) in teamuserin" :key="index" @click="go(teamin.team_id)">
             <div
                 class="teamimage"
                 :style="{ backgroundImage: `url(` + teamin.team_avatar + ')' }"
@@ -245,10 +245,12 @@ import {
   getteamuserin,
   getuserinfo
 } from "@/utils/api";
+import Base64 from "@/utils/Base64";
 export default {
   name: "teamview",
   components: { Filter, Sort, Plus, CaretBottom },
   created() {
+    console.log("ceshi",localStorage.getItem("username"))
     this.initializationdata()
   },
   data() {
@@ -271,18 +273,19 @@ export default {
       this.$router.push({
         path:'/teamdetail',
         query:{
-          team_id:tid
+          info:Base64.encode(JSON.stringify({
+            team_id:tid
+          }))
         }
+
       })
     },
     submit()
     {
       this.dialogFormVisible = false
-      console.log(this.createteamform)
       establishteam(this.createteamform).then(
           (response) => {
             if (response.data.status_code == 1) {
-              console.log(response.data);
               this.initializationdata()
             } else ElMessage.error(response.data.message);
           }
@@ -294,7 +297,6 @@ export default {
       getteamuserin({ username: this.$store.state.username }).then(
           (response) => {
             if (response.data.status_code == 1) {
-              console.log("in",response.data);
               this.teamuserin = response.data.Dict.team_info;
             } else ElMessage.error(response.data.message);
           }
@@ -302,7 +304,6 @@ export default {
       getteamuseradmin({ username: this.$store.state.username }).then(
           (response) => {
             if (response.data.status_code == 1) {
-              console.log("admin",response.data);
               this.teamuseradmin = response.data.Dict.team_info;
             } else ElMessage.error(response.data.message);
           }
@@ -310,12 +311,11 @@ export default {
       getteamusercreat({ username: this.$store.state.username }).then(
           (response) => {
             if (response.data.status_code == 1) {
-              console.log("creat",response.data);
               this.teamusercreat = response.data.Dict.team_info;
             } else ElMessage.error(response.data.message);
           }
       );
-    }
+    },
 
   }
 };

@@ -1,4 +1,4 @@
-import request from '@/utils/http'
+import request, {post} from '@/utils/http'
 
 export async function login(data) {
     return request({
@@ -120,7 +120,7 @@ export function get_umlfile(data){
 
 export function renameFileById(data){
     return request({
-        url: 'api/projects/rename',
+        url: 'api/projects/rename/file',
         method: 'post',
         data,
     })
@@ -128,7 +128,7 @@ export function renameFileById(data){
 
 export function deleteFileById(data){
     return request({
-        url: 'api/projects/delete',
+        url: 'api/projects/delete/file',
         method: 'post',
         data,
     })
@@ -207,6 +207,34 @@ export async function getteamcreator(data) {
 export async function getteamadmin(data) {
     return request({
         url: 'api/team/getAdminsOfTeam',
+        method: 'post',
+        data,
+    })
+}
+export async function establishproject(data) {
+    return request({
+        url: 'api/projects/establish',
+        method: 'post',
+        data,
+    })
+}
+export async function invitemember(data) {
+    return request({
+        url: 'api/team/invite',
+        method: 'post',
+        data,
+    })
+}
+export async function setteamadmin(data) {
+    return request({
+        url: 'api/team/setAdmins',
+        method: 'post',
+        data,
+    })
+}
+export async function deleteteammem(data) {
+    return request({
+        url: 'api/team/deleteMem',
         method: 'post',
         data,
     })

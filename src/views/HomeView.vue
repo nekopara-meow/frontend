@@ -19,19 +19,12 @@
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
-import lottie from "lottie-web";
-
 export default {
   name: "HomeView",
   components: {
-    lottie,
   },
   data() {
     return {
-      dataJson: "../assets/img/沟通.json",
-      anim: "", // lottie实例
     };
   },
   mounted() {

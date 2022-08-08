@@ -45,8 +45,8 @@
 
           <el-select
             v-else
-            v-model="data.gender"
             placeholder="性别"
+            v-model="data.gender"
             style="
               display: line;
               width: 70px;
@@ -54,9 +54,9 @@
               font-size: 15px;
             "
           >
-            <el-option label="男" value="1" />
-            <el-option label="女" value="0" />
-            <el-option label="猫猫" value="2" />
+            <el-option label="男" :value="1" />
+            <el-option label="女" :value="0" />
+            <el-option label="猫猫" :value="2" />
           </el-select>
 
           <!-- <el-input
@@ -72,7 +72,7 @@
           ><el-input
             v-else
             v-model="data.nickname"
-            placeholder="昵称"
+            placeholder="真实姓名"
             style="
               display: line;
               width: 70px;
@@ -125,36 +125,14 @@ import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
 import { Edit, Upload, Plus } from "@element-plus/icons-vue";
 import { edituserinfo, getuserinfo } from "@/utils/api";
 export default {
-  name: "Login",
+  name: "Register",
   components: { Edit, Upload, Plus },
   created() {
-    // getuserinfo({ username: this.$store.state.username }).then((response) => {
-    //   console.log(response.data);
-    //   if (response.data.status_code == 1) {
-    //     console.log("获得个人首页信息");
-    //     console.log(response.data);
-    //     this.data.nickname = response.data.nickname;
-    //     this.data.tel = response.data.tel;
-    //     this.data.username = this.$store.state.username;
-    //     this.data.avatar = response.data.avatar;
-    //     this.data.gender = response.data.gender;
-    //     if (response.data.gender == 0)
-    //       this.genderimg = require("../assets/img/xingbienv.png");
-    //     else if (response.data.gender == 1)
-    //       this.genderimg = require("../assets/img/xingbienan.png");
-    //     else this.genderimg = require("../assets/img/猫.png");
-    //     console.log(this.genderimg);
-    //     this.data.brief_intro = response.data.brief_intro;
-    //     this.email = response.data.email;
-    //   } else ElMessage.error(response.data.message);
-    // });
   },
   mounted() {
     getuserinfo({ username: this.$store.state.username }).then((response) => {
       console.log(response.data);
       if (response.data.status_code == 1) {
-        console.log("获得个人首页信息");
-        console.log(response.data);
         this.data.nickname = response.data.nickname;
         this.data.tel = response.data.tel;
         this.data.username = this.$store.state.username;
@@ -165,7 +143,6 @@ export default {
         else if (response.data.gender == 1)
           this.genderimg = require("../assets/img/xingbienan.png");
         else this.genderimg = require("../assets/img/猫.png");
-        console.log(this.genderimg);
         this.data.brief_intro = response.data.brief_intro;
         this.email = response.data.email;
       } else ElMessage.error(response.data.message);
@@ -173,14 +150,10 @@ export default {
   },
 
   watch: {
-    // "data.gender"() {
-    //   // console.log("changed!");
-    //   this.updategender();
-    // },
   },
   data() {
     return {
-      email: "sss",
+      email: "",
       genderimg: require("../assets/img/猫.png"),
       editing: 0,
       data: {
@@ -200,15 +173,12 @@ export default {
         this.editing = 1;
       } else {
         this.editing = 0;
-        console.log(this.data),
           edituserinfo(this.data).then((response) => {
-            console.log(response.data);
             if (response.data.status_code == 1) {
               ElMessage({
                 message: "修改成功",
                 type: "success",
               });
-              this.$router.go(0);
             } else ElMessage.error(response.data.message);
           });
       }

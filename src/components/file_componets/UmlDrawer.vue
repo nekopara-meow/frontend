@@ -28,7 +28,7 @@ export default {
       iframe: "",
       msg: null,
       username: null,
-      pro_id: "",
+      project_id: "",
       team_id: "",
       uml_id: "",
       uml_name:null
@@ -41,7 +41,6 @@ export default {
      * @date: 2022/8/4
      */
     edit() {
-      console.log("创建iframe");
       this.iframe = document.createElement("iframe");
       this.iframe.setAttribute("id", "iframe");
       this.iframe.setAttribute("frameborder", "0");
@@ -52,16 +51,13 @@ export default {
       this.iframe.style.width = "100%";
       this.iframe.style.zIndex = 999;
       this.iframe.src = this.editor;
-      console.log(this.editor);
       document.getElementById("app").appendChild(this.iframe);
       let iframe = document.getElementById("iframe");
-      console.log(iframe);
       //从浏览器缓存中加载已经编辑的内容，继续编辑
       this.draft = localStorage.getItem(".draft-" + name);
       //如果缓存不为空，用JSON格式化draft缓存，debug发现draft始终为null
       if (this.draft != null) {
         this.draft = JSON.parse(this.draft);
-        console.log("继续绘制么？");
         if (
             !confirm(
                 "上次未保存版本\n时间： " +
@@ -80,7 +76,7 @@ export default {
      * @date: 2022/8/4
      */
     start() {
-      console.log(this.$route)
+      console.log('检查router',this.$route.params)
       this.uml_id=this.$route.params.uml_id
       let url = this.$route.params.uml_url;
       if(url){
@@ -101,11 +97,8 @@ export default {
       let iframe = document.getElementById("iframe");
       let w = window.innerWidth;
       let h = window.innerHeight;
-      // console.log('一轮receive');
       if (evt.data.length > 0) {
         var msg = JSON.parse(evt.data);
-        console.log("msg");
-        console.log(msg);
         if (msg.event === "init") {
           console.log("执行init");
           //在本地缓存draft不为空的情况下，根据本地本地信息初始化iframe
@@ -127,14 +120,13 @@ export default {
                 JSON.stringify({
                   action: "load",
                   autosave: 1,
-                  xmlpng: this.imgData,
+                  xmlpng: this.initial,
                 }),
                 "*"
             );
           }
         } else if (msg.event === "export") {
           //选择了导出,给image设置背景
-          console.log("执行export");
           this.imgData = msg.data;
           localStorage.setItem(
               name,
@@ -145,14 +137,12 @@ export default {
           this.close();
         } else if (msg.event === "autosave") {
           //自动保存,试验发现在每次修改uml之后被调用
-          console.log("执行autosave");
           localStorage.setItem(
               ".draft-" + name,
               JSON.stringify({ lastModified: new Date(), xml: msg.xml })
           );
         } else if (msg.event === "save") {
           //手动保存
-          console.log("执行save");
           iframe.contentWindow.postMessage(
               JSON.stringify({
                 action: "export",
@@ -168,7 +158,6 @@ export default {
           );
         } else if (msg.event === "exit") {
           //退出
-          console.log("执行exit");
           localStorage.removeItem(".draft-" + name);
           this.draft = null;
           this.close();
@@ -181,12 +170,28 @@ export default {
      * @date: 2022/8/4
      */
     close() {
-      this.$router.go(-1)
+
       window.removeEventListener("message", this.receive);
       this.iframe_class = "iframe_close";
-      this.saveUML();
+      let url = upload("testUML", this.imgData);
+      let pojo = {
+        username:this.username,
+        uml_id:this.uml_id,
+        uml_url: url,
+      };
+      console.log(pojo)
+      save_uml(pojo).then((res) => {
+        console.log("uml已上传");
+        console.log(res.data);
+      })
       document.getElementById("app").removeChild(iframe);
-
+      console.log(this.project_id)
+      this.$router.replace({
+        name:'projectFileInfo',
+        params:{
+          project_id:this.project_id
+        }
+      })
     },
     /**
      * @description: 将uml图的信息存在后端
@@ -195,12 +200,12 @@ export default {
      */
     saveUML() {
       let url = upload("testUML", this.imgData);
-      console.log(url);
       let pojo = {
         username:this.username,
         uml_id:this.uml_id,
         uml_url: url,
       };
+      console.log(pojo)
       save_uml(pojo).then((res) => {
         console.log("uml已上传");
         console.log(res.data);
@@ -209,6 +214,9 @@ export default {
   },
   mounted() {
     this.start();
+    console.log('检查router',this.$route.params)
+    this.project_id=this.$route.params.project_id
+    this.username=this.$store.state.username
     window.addEventListener("hashchange", this.start);
     this.edit()
   },

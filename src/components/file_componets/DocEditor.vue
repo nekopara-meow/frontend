@@ -127,13 +127,13 @@
           <icon name="redo" />
         </button>
 
-        <button
-            v-if="actionName === 'save'"
-            class="menubar__button"
-            @click="save"
-        >
-           <icon name="save" />
-         </button>
+<!--        <button-->
+<!--            v-if="actionName === 'save'"-->
+<!--            class="menubar__button"-->
+<!--            @click="save"-->
+<!--        >-->
+<!--           <icon name="save" />-->
+<!--         </button>-->
 
         <button
             v-if="actionName === 'exit'"
@@ -212,22 +212,21 @@ export default {
   emits: ['update'],
   created() {
     //接受参数
-    console.log(this.$route)
-    this.doc_id=this.$route.params.doc_id.toString()
-    this.project_id=this.$route.params.project_id.toString()
-    this.username=this.$route.params.username.toString()
+    console.log(this.$route.params)
+    this.doc_id=this.$route.params.doc_id
+    this.project_id=this.$route.params.project_id
+    this.username=this.$store.state.username
     this.$store.commit('addNewArticle',this.doc_id)
+
     if(this.$route.params.doc_url){
       let url=this.$route.params.doc_url
+      console.log(url)
       readURL(url,(htmlData)=>{
         this.html=htmlData
+        console.log(this.html)
       })
     }
-    if(this.html==null){
-      this.initialContent=''
-    }else {
-      this.initialContent=this.html
-    }
+    this.initialContent=this.html
     this.editor = new Editor({
       content:this.initialContent,
       extensions: [
@@ -262,11 +261,11 @@ export default {
       this.json = this.editor.getJSON();
       // this.$emit('update', this.html);
     })
+    this.editor.commands.setContent(this.html)
     //继承存储的内容
-    if(this.html){
-      this.editor.commands.setContent('<p>未作任何保存</p>')
-    }
-
+    // if(!this.html){
+    //   this.editor.commands.setContent('<p>未作任何保存</p>')
+    // }
 
   },
   /**
@@ -289,8 +288,15 @@ export default {
       })
     },
     exit(){
+      //退出前先保存
+      this.save()
       //不做更改，返回页面
-      this.$router.go(-1)
+      this.$router.replace({
+        name:'projectFileInfo',
+        params:{
+          project_id:this.project_id
+        }
+      })
     }
   },
   beforeUnmount() {

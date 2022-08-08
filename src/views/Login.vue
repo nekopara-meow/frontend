@@ -42,8 +42,6 @@
 // https://blog.csdn.net/m0_58039950/article/details/124721115
 import { login } from "@/utils/api";
 import { reactive, toRef, toRefs } from "vue";
-import store from "@/store";
-import router from "@/router";
 import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
 import { useRouter } from "vue-router/dist/vue-router";
 import { useStore } from "vuex";
@@ -78,30 +76,23 @@ export default {
     const submitForm = () => {
       login(data.form)
         .then((response) => {
-          console.log("返回", response.data);
           let ret = response.data.status_code;
           if (ret == 1) {
             store.commit("setToken", response.data.token);
             store.commit("setUsername", response.data.username);
             //store.commit("setHead",response.data.head);
             ElMessage({
-              message: "登录成功，两秒后跳转到主页",
+              message: "登录成功，即将跳转到主页",
               type: "success",
             });
-            console.log("token", localStorage.getItem("token"));
-            setTimeout(() => {
-                //需要延迟的代码 :3秒后延迟跳转到首页，可以加提示什么的
-                router.push({
-                  path: "/",
-                });
-                //延迟时间：3秒
-              }, 2000);
+            router.push({
+              path: "/",
+            });
           } else
             ElMessage.error(response.data.message);
         })
         .catch((error) => {
           // 请求失败处理
-          console.log(error);
           ElMessage.error("网络有错误噢");
         });
     };

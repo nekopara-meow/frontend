@@ -21,7 +21,8 @@
           <span style="">Old</span>
 
           <el-input
-            v-model="form.oldpassword"
+              type="password"
+            v-model="form.password"
             placeholder="请输入旧密码"
             style="display: line; width: 200px; font-size: 15px"
           />
@@ -30,7 +31,8 @@
           <span>New</span>
 
           <el-input
-            v-model="form.newpassword1"
+              type="password"
+            v-model="form.password1"
             placeholder="请输入新密码"
             style="display: line; width: 200px; font-size: 15px"
           />
@@ -39,7 +41,8 @@
           <span>Confirm</span>
 
           <el-input
-            v-model="form.newpassword2"
+            type="password"
+            v-model="form.password2"
             placeholder="请确认新密码"
             style="display: line; width: 200px; font-size: 15px"
           />
@@ -77,10 +80,7 @@ export default {
   },
   mounted() {
     getuserinfo({ username: this.$store.state.username }).then((response) => {
-      console.log(response.data);
       if (response.data.status_code == 1) {
-        console.log("获得个人首页信息");
-        console.log(response.data);
         this.data.name = response.data.nickname;
         this.data.nickname = this.$store.state.username;
         this.data.gender = response.data.gender;
@@ -96,12 +96,12 @@ export default {
   methods: {
     submit() {
       changepassword(this.form).then((response) => {
-        if (response.status_code == 1) {
-          console.log(response.data);
+        if (response.data.status_code == 1) {
           ElMessage({
             message: "更改成功",
             type: "success",
           });
+          this.$router.go(-1);
         } else ElMessage.error(response.data.message);
       });
     },

@@ -4,7 +4,7 @@
     <h2>喵呜！</h2>
   </div>
 </template>
-<!-- https://blog.csdn.net/qq_42723113/article/details/119846710 -->
+
 <style scoped>
 .root {
   display: flex;

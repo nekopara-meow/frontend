@@ -72,7 +72,7 @@
           <i class="bi-caret-down-fill" />
           <el-avatar :size="40">
             <!-- <img src="@/assets/img/head.jpg"> -->
-            <img :src="head" />
+            <img :src="head?head:''"/>
             <!-- YL -->
           </el-avatar>
         </div>
@@ -138,6 +138,7 @@ import { changepassword, getuserinfo } from "@/utils/api";
 import { ElMessage } from "element-plus";
 import { Check } from "@element-plus/icons-vue";
 import qs from "qs";
+import store from "@/store";
 export default {
   name: "FrNav",
   components: {
@@ -149,7 +150,6 @@ export default {
   },
   created() {
     this.updateinfo();
-    console.log(this.head);
   },
   data() {
     return {
@@ -169,16 +169,15 @@ export default {
       this.updateinfo();
     },
   },
-  updated() {},
   methods: {
     browse() {
-      this.$router.push({
+      /*this.$router.push({
         path: "search",
         query: {
           q: this.query,
           mode: 1,
         },
-      });
+      });*/
       // ???
     },
 
@@ -189,11 +188,9 @@ export default {
           "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/Transparent_Akkarin.jpg";
         this.name = "请登录";
       } else {
-        console.log(this.$store.state.username, this.$store.state.token);
         getuserinfo({ username: this.$store.state.username }).then(
           (response) => {
             if (response.data.status_code == 1) {
-              console.log(response.data);
               this.head = response.data.avatar;
             } else ElMessage.error(response.data.message);
           }
@@ -201,12 +198,11 @@ export default {
         //this.head = this.userinfo.head;
         this.name = this.$store.state.username;
       }
-      console.log(this.name);
     },
     indentSignal() {
       this.$emit("indent");
     },
-    gotoListFollow() {
+   /* gotoListFollow() {
       this.$router.push({ name: "List" });
     },
     gotoListLike() {
@@ -217,7 +213,7 @@ export default {
     },
     gotoListSys() {
       this.$router.push({ name: "ListSys" });
-    },
+    },*/
     login() {
       this.$router.push("/login");
     },
