@@ -68,11 +68,11 @@
           /> -->
         </div>
         <div style="font-size: 10px">
-          昵称：<span v-if="editing == 0">{{ data.nickname }}</span
+          真实姓名：<span v-if="editing == 0">{{ data.nickname }}</span
           ><el-input
             v-else
             v-model="data.nickname"
-            placeholder="昵称"
+            placeholder="真实姓名"
             style="
               display: line;
               width: 70px;
