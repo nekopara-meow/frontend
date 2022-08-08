@@ -1,0 +1,410 @@
+[33mcommit 9840d105f9a001f3b759a7ed13fe07e826223447[m[33m ([m[1;36mHEAD[m[33m, [m[1;32mmain[m[33m)[m
+Author: luoyashuo <914358195@qq.com>
+Date:   Sun Aug 7 19:16:57 2022 +0800
+
+    重构进度50
+
+[33mcommit f3576f2d7a5d6129eb458720e910c682d0f67b5c[m
+Author: luoyashuo <914358195@qq.com>
+Date:   Sun Aug 7 18:07:35 2022 +0800
+
+    保存一下重构工程页面前的版本
+
+[33mcommit 09d0aac7e84611e30bd2a9e193af82e30d44710e[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: 315ac34 8acf1e1
+Author: Chaoticsteven <1525388533@qq.com>
+Date:   Fri Aug 5 13:37:08 2022 +0800
+
+    Merge remote-tracking branch 'origin/main'
+    
+    # Conflicts:
+    #       package-lock.json
+    #       package.json
+    #       src/components/UMLEditor.vue
+    #       src/router/index.js
+    #       src/views/ProjectDetail.vue
+
+[33mcommit 315ac342471b484d7a8b0a8c12efcac5f38872be[m
+Author: Chaoticsteven <1525388533@qq.com>
+Date:   Fri Aug 5 13:34:28 2022 +0800
+
+    new
+
+[33mcommit 8acf1e100579922ddc8b63a695570f314c77df1f[m
+Author: luoyashuo <914358195@qq.com>
+Date:   Fri Aug 5 13:28:55 2022 +0800
+
+    projectdetail路由没加
+
+[33mcommit cd0331635775f504be2f2e99203f8a68ff16418d[m
+Author: luoyashuo <914358195@qq.com>
+Date:   Fri Aug 5 13:22:02 2022 +0800
+
+    projectdetail路由没加
+
+[33mcommit 61404737db5e7511137a22d111c3fb3c877c7362[m
+Merge: a45cbee 0269a2d
+Author: luoyashuo <914358195@qq.com>
+Date:   Fri Aug 5 12:58:27 2022 +0800
+
+    Merge branch 'main' of github.com:nekopara-meow/frontend
+    
+    # Conflicts:
+    #       src/utils/api.js
+
+[33mcommit a45cbeea8d2ae77b55c2b230c80cc2f5875b94e9[m
+Author: luoyashuo <914358195@qq.com>
+Date:   Fri Aug 5 12:57:27 2022 +0800
+
+    生死有命，富贵在天
+
+[33mcommit 0269a2d319a5d0921c423e737bc2cbe44a635db4[m
+Author: xiao7 <3499475017@qq.com>
+Date:   Fri Aug 5 12:55:51 2022 +0800
+
+    我晕了，我也不知道我做了什么
+
+[33mcommit 8533cc6e9a8caaefb5090b947dc9a1dbd0c34391[m
+Merge: 71f5117 dd07fe7
+Author: Chaoticsteven <1525388533@qq.com>
+Date:   Fri Aug 5 12:53:48 2022 +0800
+
+    Merge remote-tracking branch 'origin/main'
+
+[33mcommit 71f51179b299ca5963f8d48687f7123f31e4e901[m
+Author: Chaoticsteven <1525388533@qq.com>
+Date:   Fri Aug 5 12:53:35 2022 +0800
+
+    333
+
+[33mcommit dd07fe739579c121b2f3b17dc9635796e158c15c[m
+Author: zeroEuphemia <1084327995@qq.com>
+Date:   Fri Aug 5 12:04:36 2022 +0800
+
+    导出图片
+
+[33mcommit 5023d7c4d9c2197353525543ccf85ee5b50fe4ac[m
+Merge: b829d44 20a45d5
+Author: xiao7 <3499475017@qq.com>
+Date:   Fri Aug 5 11:20:25 2022 +0800
+
+    Merge branch 'main' of github.com:nekopara-meow/frontend
+
+[33mcommit b829d44ab7f510807569b6c727eb7c8f9459d0b5[m
+Author: xiao7 <3499475017@qq.com>
+Date:   Fri Aug 5 11:17:57 2022 +0800
+
+    个人资料卡和修改密码的一套搞好了
+
+[33mcommit 20a45d5516face1e3b0c0445cde6e10676410761[m
+Author: zeroEuphemia <1084327995@qq.com>
+Date:   Fri Aug 5 11:13:32 2022 +0800
+
+    导出图片
+
+[33mcommit c1c6d28645b72af97426c5046d75893c55edf502[m
+Author: Chaoticsteven <1525388533@qq.com>
+Date:   Fri Aug 5 10:40:48 2022 +0800
+
+    头像
+
+[33mcommit 27ec3cb7687e39d16fd6ebce487b2b5d359a21c4[m
+Merge: bd216b6 54274e8
+Author: Chaoticsteven <1525388533@qq.com>
+Date:   Fri Aug 5 10:25:45 2022 +0800
+
+    Merge remote-tracking branch 'origin/main'
+
+[33mcommit bd216b6f0f8afc613dd4e9d111c936b91f55bd7b[m
+Author: Chaoticsteven <1525388533@qq.com>
+Date:   Fri Aug 5 10:25:34 2022 +0800
+
+    注册验证
+
+[33mcommit 54274e8a146bf4c187c177a29b91005fe0b840c6[m
+Author: zeroEuphemia <1084327995@qq.com>
+Date:   Fri Aug 5 10:11:32 2022 +0800
+
+    原型设计增加了删除
+
+[33mcommit 4963cf7e26767cff0e1b3f4ad5d7d179fa9fa03c[m
+Merge: 2f4d9cf 53f692f
+Author: luoyashuo <914358195@qq.com>
+Date:   Fri Aug 5 07:37:33 2022 +0800
+
+    Merge branch 'main' of github.com:nekopara-meow/frontend
+    
+    # Conflicts:
+    #       package-lock.json
+    #       package.json
+    #       src/router/index.js
+    #       src/utils/api.js
+    #       src/views/ProjectDetail.vue
+
+[33mcommit 2f4d9cf3b4b2c9b49d4e5de6e6e6016068ec1894[m
+Author: luoyashuo <914358195@qq.com>
+Date:   Fri Aug 5 07:29:20 2022 +0800
+
+    完成了编辑器
+
+[33mcommit 53f692fce10821fdf4b725a1531573df3b4ecc9b[m
+Author: xiao7 <3499475017@qq.com>
+Date:   Fri Aug 5 04:41:51 2022 +0800
+
+    第一次迭代需要的前端差不多写完了
+
+[33mcommit 0302aa120596bd4a9dd4cef4a466945d46ac1cdb[m
+Author: zeroEuphemia <1084327995@qq.com>
+Date:   Fri Aug 5 03:00:18 2022 +0800
+
+    axure
+
+[33mcommit fea7579958f532f39c67fdc054cf31fecb285219[m
+Author: xiao7 <3499475017@qq.com>
+Date:   Fri Aug 5 02:37:48 2022 +0800
+
+    写完了团队详情页面的雏形
+
+[33mcommit f6520aa03df07a29b2ce6848a93bfe77e9ccf0d3[m
+Author: Chaoticsteven <1525388533@qq.com>
+Date:   Fri Aug 5 00:34:39 2022 +0800
+
+    修复了打开时弹错误警告的bug
+
+[33mcommit b60b589da5641caad52aeb951812ac0638f57e18[m
+Author: Chaoticsteven <1525388533@qq.com>
+Date:   Fri Aug 5 00:22:45 2022 +0800
+
+    修改性别图标不实时更新bug
+
+[33mcommit 673c604fcee999201fda7b9908b1800f3fa4117e[m
+Merge: 583e7d8 1451d22
+Author: xiao7 <3499475017@qq.com>
+Date:   Thu Aug 4 23:38:27 2022 +0800
+
+    Merge branch 'main' of github.com:nekopara-meow/frontend
+
+[33mcommit 583e7d86e5bc8baf38fb82ffd5c895be115df951[m
+Author: xiao7 <3499475017@qq.com>
+Date:   Thu Aug 4 23:38:04 2022 +0800
+
+    除了验证没有bug了
+
+[33mcommit 1451d22eb306726061935abd24314c1f4486a52a[m
+Merge: 4b3ca7a 1673f52
+Author: Chaoticsteven <1525388533@qq.com>
+Date:   Thu Aug 4 23:31:54 2022 +0800
+
+    Merge remote-tracking branch 'origin/main'
+
+[33mcommit 4b3ca7a3e479d04d6945cac54fb5d4dc402712ca[m
+Author: Chaoticsteven <1525388533@qq.com>
+Date:   Thu Aug 4 23:31:43 2022 +0800
+
+    修改信息 修改密码
+
+[33mcommit 1673f5201c3dfad6188145576c26a46ca13679ca[m
+Author: xiao7 <3499475017@qq.com>
+Date:   Thu Aug 4 23:28:13 2022 +0800
+
+    改回了hash mode，因为不会debug
+
+[33mcommit 51c8df0c7ba502669be28eda39071855706983c2[m
+Merge: 3347a7f a506df6
+Author: xiao7 <3499475017@qq.com>
+Date:   Thu Aug 4 22:16:43 2022 +0800
+
+    Merge branch 'main' of github.com:nekopara-meow/frontend
+
+[33mcommit 3347a7f9a6188ede0f0bf19414f31538f5ce5df3[m
+Author: xiao7 <3499475017@qq.com>
+Date:   Thu Aug 4 22:15:57 2022 +0800
+
+    加了验证页面的前端，有bug
+
+[33mcommit a506df6b2c9e42cb797e87a405e12d8aa45753fc[m
+Merge: 96909c1 810cfb5
+Author: Chaoticsteven <1525388533@qq.com>
+Date:   Thu Aug 4 21:52:27 2022 +0800
+
+    Merge remote-tracking branch 'origin/main'
+
+[33mcommit 96909c1831d2ebaa41e796f7dc4d50d2d7c7a936[m
+Author: Chaoticsteven <1525388533@qq.com>
+Date:   Thu Aug 4 21:51:58 2022 +0800
+
+    update
+
+[33mcommit 810cfb560162984d19d2e2ee62c39b153d7bbdfc[m
+Author: xiao7 <3499475017@qq.com>
+Date:   Thu Aug 4 21:38:32 2022 +0800
+
+    做了创建团队的对话框
+
+[33mcommit 04508996e9f565a1f05ee144cb6316cfd9f39529[m
+Merge: 6917231 3c5bbeb
+Author: xiao7 <3499475017@qq.com>
+Date:   Thu Aug 4 20:31:07 2022 +0800
+
+    Merge branch 'main' of github.com:nekopara-meow/frontend
+
+[33mcommit 6917231db6a51dcffd386736ec2f147ed312bdf0[m
+Author: xiao7 <3499475017@qq.com>
+Date:   Thu Aug 4 20:30:48 2022 +0800
+
+    完成了资料界面和修改密码界面
+
+[33mcommit 0d1a1f63bb98a7a3a34dcbd0c00633d075ae5f5e[m
+Author: xiao7 <3499475017@qq.com>
+Date:   Thu Aug 4 20:28:41 2022 +0800
+
+    做完了个人资料和修改密码的前端
+
+[33mcommit 3c5bbeb4b86d826f281ee67b2ef207c27d02ca65[m
+Merge: c1d4b32 ebe4b4b
+Author: luoyashuo <914358195@qq.com>
+Date:   Thu Aug 4 19:32:34 2022 +0800
+
+    Merge branch 'main' of github.com:nekopara-meow/frontend
+
+[33mcommit c1d4b32b6c9ce634340d512baff7523b324817e6[m
+Author: luoyashuo <914358195@qq.com>
+Date:   Thu Aug 4 19:32:07 2022 +0800
+
+    完成了UML模块
+
+[33mcommit ebe4b4b2b6a7f2c5dcdc6a8dfb1194d46cd57644[m
+Author: Chaoticsteven <1525388533@qq.com>
+Date:   Thu Aug 4 18:02:21 2022 +0800
+
+    修复了导航按钮点不了的bug，未登录时隐藏小铃铛
+
+[33mcommit 9328933a9936193e7dd49376a27e0dcd0a5e6597[m
+Author: Chaoticsteven <1525388533@qq.com>
+Date:   Thu Aug 4 17:11:17 2022 +0800
+
+    修改了上导航条，工作台数据填充，到修改密码（弹不出窗），路由query内容加密
+
+[33mcommit b63ba57047ab66b7fa5eb0e81a1714e122cb1a7e[m
+Author: xiao7 <3499475017@qq.com>
+Date:   Thu Aug 4 05:01:11 2022 +0800
+
+    完成了团队页面，项目页面，日历页面的雏形
+
+[33mcommit 2a1640db63d0f6d549326a43fe17c12a0092e850[m
+Author: Chaoticsteven <1525388533@qq.com>
+Date:   Wed Aug 3 23:19:36 2022 +0800
+
+    图片
+
+[33mcommit 5ff662e8da2c690dde3d9d1d8459fda0776f2229[m
+Author: xiao7 <3499475017@qq.com>
+Date:   Wed Aug 3 22:37:32 2022 +0800
+
+    工作台页面，最近页面
+
+[33mcommit 0725b7647f5a0a85672dd4485c7987e9457427a0[m
+Author: Chaoticsteven <1525388533@qq.com>
+Date:   Wed Aug 3 22:26:10 2022 +0800
+
+    烂，eldiglog弹不出来
+
+[33mcommit 5ec9adf3859e5944ba998951980ffc7f611243e0[m
+Merge: adbf059 75f63ce
+Author: Chaoticsteven <1525388533@qq.com>
+Date:   Wed Aug 3 17:47:49 2022 +0800
+
+    Merge remote-tracking branch 'origin/main'
+    
+    # Conflicts:
+    #       src/views/FrAside.vue
+
+[33mcommit adbf059716690886b94fbe0973c7a010258c06b0[m
+Author: Chaoticsteven <1525388533@qq.com>
+Date:   Wed Aug 3 17:47:13 2022 +0800
+
+    update
+
+[33mcommit 75f63ce3ceea0f89b64ad0a80bcc844b39f7c673[m
+Author: luoyashuo <914358195@qq.com>
+Date:   Wed Aug 3 17:18:47 2022 +0800
+
+    修改了侧边栏对齐问题
+
+[33mcommit 22cde76ed09eaf223798c40028606ecb30776553[m
+Author: luoyashuo <914358195@qq.com>
+Date:   Wed Aug 3 13:10:51 2022 +0800
+
+    修改了aside
+
+[33mcommit 3808812699b2194261edd68d69898ba0472271cc[m
+Author: xiao7 <3499475017@qq.com>
+Date:   Wed Aug 3 12:09:47 2022 +0800
+
+    换了个主题
+
+[33mcommit 9d8c573a14fb0e9dc5e1e351b66303e267bbbc12[m
+Author: xiao7 <3499475017@qq.com>
+Date:   Wed Aug 3 02:15:44 2022 +0800
+
+    完成了页面框架和主题设计（排版和主题可以再修改）
+
+[33mcommit 160dc19be2b9c908826c70acf4ccb485453080f4[m
+Author: Chaoticsteven <1525388533@qq.com>
+Date:   Tue Aug 2 15:09:52 2022 +0800
+
+    登陆注册前后端对接完成
+
+[33mcommit bb0fb93b604883ccd10009f1d0c61c01226aa78e[m
+Author: Chaoticsteven <1525388533@qq.com>
+Date:   Tue Aug 2 12:00:07 2022 +0800
+
+    登录注册逻辑+请求拦截器
+
+[33mcommit e833b8f82df19e3b6779a7a4a215337d0a189c34[m
+Author: Chaoticsteven <1525388533@qq.com>
+Date:   Tue Aug 2 11:59:29 2022 +0800
+
+    登录注册逻辑+请求拦截器
+
+[33mcommit 0e25b455717811ec4d831e1caa0ede3bd5a212d2[m
+Author: xiao7 <3499475017@qq.com>
+Date:   Mon Aug 1 20:26:14 2022 +0800
+
+    添加测试用登录注册页面
+
+[33mcommit 995cc3fddc04fb72505d00b640b0a69205f5aefd[m
+Author: Chaoticsteven <1525388533@qq.com>
+Date:   Wed Jul 27 18:10:18 2022 +0800
+
+    try2
+
+[33mcommit 5415b629bd0d9bd934125841dca18cb30ed4dce7[m
+Author: luanbu <1525388533@qq.com>
+Date:   Wed Jul 27 17:25:15 2022 +0800
+
+    try y
+
+[33mcommit 75ff42845ca349adca184ba1707f9b0e8f093463[m
+Author: luanbu <1525388533@qq.com>
+Date:   Wed Jul 27 17:14:10 2022 +0800
+
+    try y
+
+[33mcommit 13ee0e0f118afa1f8c1248638a12e0a035ad81a5[m
+Author: zeroEuphemia <1084327995@qq.com>
+Date:   Tue Jul 26 17:53:16 2022 +0800
+
+    Changes
+
+[33mcommit b4fd25ec6090bfa4adc99e7b23ed227d95b5f863[m
+Author: xiao7 <3499475017@qq.com>
+Date:   Mon Jul 25 20:38:32 2022 +0800
+
+    first commit
+
+[33mcommit 084a2f0f73577a2ddbf9148583e2815f61b68d5e[m
+Author: xiao7 <3499475017@qq.com>
+Date:   Mon Jul 25 20:37:35 2022 +0800
+
+    first commit
