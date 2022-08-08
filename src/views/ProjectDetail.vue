@@ -70,7 +70,7 @@ export default {
       tab: "tab-0",
       dialogFormVisible1: false,
       editing: 0,
-      username:this.$store.state.username,
+      username:'',
     };
   },
   methods:{
@@ -79,6 +79,7 @@ export default {
   mounted() {
     if(this.$route.params.project_id){
       this.project_id=this.$route.params.project_id
+      this.username=this.$store.state.username
     }
   },
   computed:{

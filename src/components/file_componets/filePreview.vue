@@ -223,7 +223,7 @@ export default {
       switch (this.file_type){
         case 0:
           create_uml({
-            username:this.$store.state.username,
+            username:this.username,
             prject_id:this.prject_id,
             uml_name:this.fileInitial.name,
           }).then((res)=>{
@@ -284,6 +284,9 @@ export default {
       }
     }
   },
+  mounted() {
+    this.username=this.$store.state.username
+  }
 }
 </script>
 

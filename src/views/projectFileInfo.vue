@@ -7,17 +7,18 @@
           <file-preview v-for="(tmp,index) in uml_file" :file_id="tmp.file_id"
                         :file_type="tmp.file_type" :creator="tmp.creator"
                         :file_content="tmp.file_content" :project_id="tmp.project_id"></file-preview>
-          <file-preview :file_type="0" creator="罗亚硕" :file_id="1" is-new="true"></file-preview>
+          <file-preview :file_type="0" :creator="this.username" :file_id="1" is-new="true" :project_id="this.project_id"></file-preview>
         </div>
       </el-tab-pane>
       <el-tab-pane label="文档">
         <div class="fileDisplayer">
-          <file-preview :file_type="1" creator="罗亚硕" :file_id="1" username="罗亚硕" :project_id="1"></file-preview>
-          <file-preview :file_type="1" creator="罗亚硕" :file_id="1" username="蔡徐坤" :project_id="1"></file-preview>
+          <file-preview :file_type="1" creator="罗亚硕" :file_id="1" username="罗亚硕" :project_id="this.project_id"></file-preview>
+          <file-preview :file_type="1" creator="罗亚硕" :file_id="1" username="蔡徐坤" :project_id="this.project_id"></file-preview>
           <file-preview v-for="(tmp,index) in doc_file" :file_id="tmp.file_id"
                         :file_type="tmp.file_type" :creator="tmp.creator"
                         :file_content="tmp.file_content" :project_id="tmp.project_id"></file-preview>
-          <file-preview :file_type="1" creator="lalala" :file_id="1" username="蔡徐坤" :project_id="1" is-new="true"></file-preview>
+          <file-preview :file_type="1" :creator="this.username" :file_id="this.project_id"
+                        username="蔡徐坤" :project_id="this.project_id" is-new="true"></file-preview>
         </div>
       </el-tab-pane>
       <el-tab-pane label="原型设计">
@@ -50,8 +51,10 @@ export default {
     }
   },
   mounted() {
-    this.username=this.$store.getUsername
-    this.project_id=this.$route.params.project_id
+    this.username=this.$store.state.username
+    console.log(this.username)
+    // this.project_id=this.$route.params.project_id
+    this.project_id=3
     get_umlfile({
       username:this.username,
       project_id:this.project_id
