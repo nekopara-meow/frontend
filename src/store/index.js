@@ -3,8 +3,8 @@ import { WebrtcProvider } from 'y-webrtc'
 import * as Y from 'yjs'
 export default createStore({
   state: {
-    token: '',
-    username: '',
+    token: localStorage.getItem("token"),
+    username: localStorage.getItem("username"),
     head:'',
     ydoc:'',
     provider:'',

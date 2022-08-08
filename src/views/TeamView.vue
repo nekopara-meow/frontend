@@ -230,6 +230,7 @@ export default {
   name: "teamview",
   components: { Filter, Sort, Plus, CaretBottom },
   created() {
+    console.log("ceshi",localStorage.getItem("username"))
     this.initializationdata()
   },
   data() {
@@ -262,11 +263,9 @@ export default {
     submit()
     {
       this.dialogFormVisible = false
-      console.log(this.createteamform)
       establishteam(this.createteamform).then(
           (response) => {
             if (response.data.status_code == 1) {
-              console.log(response.data);
               this.initializationdata()
             } else ElMessage.error(response.data.message);
           }
@@ -278,7 +277,6 @@ export default {
       getteamuserin({ username: this.$store.state.username }).then(
           (response) => {
             if (response.data.status_code == 1) {
-              console.log("in",response.data);
               this.teamuserin = response.data.Dict.team_info;
             } else ElMessage.error(response.data.message);
           }
@@ -286,7 +284,6 @@ export default {
       getteamuseradmin({ username: this.$store.state.username }).then(
           (response) => {
             if (response.data.status_code == 1) {
-              console.log("admin",response.data);
               this.teamuseradmin = response.data.Dict.team_info;
             } else ElMessage.error(response.data.message);
           }
@@ -294,12 +291,11 @@ export default {
       getteamusercreat({ username: this.$store.state.username }).then(
           (response) => {
             if (response.data.status_code == 1) {
-              console.log("creat",response.data);
               this.teamusercreat = response.data.Dict.team_info;
             } else ElMessage.error(response.data.message);
           }
       );
-    }
+    },
 
   }
 };

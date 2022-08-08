@@ -274,7 +274,7 @@
             >
               <el-dropdown
                 trigger="contextmenu"
-                v-for="(teamadmember,index) in teammembers" :key="index"
+                v-for="(teammember,index) in teammembers" :key="index"
               >
                 <div class="oneteam">
                   <div
@@ -290,7 +290,7 @@
                 </div>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item @click.natice="checkuserinfo(teamadmember.username)">查看个人资料</el-dropdown-item>
+                    <el-dropdown-item @click.natice="checkuserinfo(teammember.username)">查看个人资料</el-dropdown-item>
                     <el-dropdown-item>设为管理员</el-dropdown-item>
                     <el-dropdown-item>移出团队</el-dropdown-item>
                   </el-dropdown-menu>
@@ -299,43 +299,6 @@
             </el-collapse-item>
             <hr style="margin: 5px" />
           </el-collapse>
-          <!-- <div class="oneteam" v-for="i in [1, 2, 3, 4, 5, 6]">
-            <div
-              class="teamimage"
-              style="
-                background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-              "
-            ></div>
-            <div class="oneteamdown">
-              <div style="font-size: 18px">小秋月</div>
-              <div>我是傻逼，我是傻逼，我真的是傻逼</div>
-              <div class="text-wrap">
-                <div class="example">
-                  <div class="avatar-list avatar-list-stacked">
-                    <span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span class="avatar cover-image brround">+8</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> -->
         </div>
         <div id="leftdown" v-if="tab == 'tab-2'">
           <div
@@ -344,7 +307,7 @@
             v-for="(teamproject,index) in teamprojects" :key="index" @click="gotoproject(teamproject.project_id)"
           >
             <div class="oneteamdown">
-              <div style="font-size: 18px">{{ teamproject.project_id }}</div>
+              <div style="font-size: 18px">{{ teamproject.project_name }}</div>
               <div>{{teamproject.project_brief_intro}}</div>
               <div style="margin-bottom: 0">创建日期：{{ teamproject.project_create_time }}</div>
               <div>更新日期：2022/8/5</div>
@@ -365,6 +328,7 @@ import {
   getteamcreator, getteammember, getteammsgbyid, getteamprojectbyid,
   invitemember
 } from "@/utils/api";
+import Base64 from "@/utils/Base64";
 export default {
   name: "workspace",
   components: { Filter, Sort, Plus, CaretBottom },
@@ -435,8 +399,10 @@ export default {
       });
     },
     invitenewmember(){
+      console.log(this.invite),
       invitemember(this.invite).then(
           (response) => {
+            console.log("invite",response.data)
             if (response.data.status_code == 1) {
               this.initializationdata()
             } else ElMessage.error(response.data.msg);
@@ -503,7 +469,21 @@ export default {
             } else ElMessage.error(response.data.message);
           }
       );
-    }
+    },
+    //成员操作
+    setadmin(){
+
+    },
+    deleteadmin(){
+
+    },
+    deletemember(){
+
+    },
+    checkinfo(){
+
+    },
+    //项目操作
 
   }
 };

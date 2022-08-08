@@ -77,7 +77,7 @@ export default {
       btnText: "获取验证码",
       disabled: false,
       rules: {
-        name: [
+        username: [
           {
             required: true,
             message: "请输入用户名",
@@ -182,10 +182,10 @@ export default {
           // store.commit('setToken',response.data.token)
           store.commit("setUsername", response.data.username);
           ElMessage({
-            message: "注册成功",
+            message: response.data.message,
             type: "success",
           });
-        } else ElMessage.error("注册失败");
+        } else ElMessage.error(response.data.message);
       });
     };
     return {

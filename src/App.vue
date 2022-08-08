@@ -23,11 +23,11 @@ export default {
     };
   },
   computed: {
-    background() {
+   /* background() {
       return {
         background: `url("${this.$store.getters.backImg}") center / cover`,
       };
-    },
+    },*/
   },
   mounted() {
     //初始化YDoc，建立webrtc链接
