@@ -20,6 +20,7 @@
         style="background-color: rgba(255, 255, 255, 0.437)"
       />
     </div>
+
     <div class="end">
       <el-dropdown
         trigger="click"
@@ -27,83 +28,36 @@
         v-if="$store.state.token"
       >
         <div class="el-dropdown-link d-flex align-items-center">
-          <el-badge
-            :value="
-              numoffollowers + numofcomments + numoflikes + numofsys === 0
-                ? ''
-                : numoffollowers + numofcomments + numoflikes + numofsys
-            "
-            class="item"
-            type="danger"
-          >
+          <el-badge is-dot class="item" type="danger">
             <i class="bi-bell"></i>
           </el-badge>
         </div>
 
-        <template #dropdown>
-          <el-dropdown-menu style="width: 300px; margin: 0">
+        <template #dropdown style="">
+          <el-dropdown-menu style="width: 300px; margin: 0; padding: 0">
             <div
-              class="dropdown-head"
-              style="
-                display: flex;
-                flex-direction: row;
-                justify-content: center;
-              "
+              v-infinite-scroll="load"
+              class="infinite-list"
+              infinite-scroll-distance="1"
+              style="overflow: auto; overflow-x: hidden"
             >
-              <!-- 你有{{
-                numoffollowers + numofcomments + numoflikes + numofsys
-              }}条未读消息 -->
-            </div>
-
-            <el-dropdown-item divided class="badgecontainer">
-              <div class="badges">
-                <el-badge
-                  :value="numoffollowers === 0 ? '' : numoffollowers"
-                  class="item"
-                >
-                  <el-button
-                    :icon="User"
-                    circle
-                    size="large"
-                    @click="gotoListFollow"
-                  />
-                  <span>新的粉丝</span>
-                </el-badge>
-                <el-badge
-                  :value="numofcomments === 0 ? '' : numofcomments"
-                  class="item"
-                >
-                  <el-button
-                    :icon="ChatDotRound"
-                    circle
-                    size="large"
-                    @click="gotoListComment"
-                  />
-                  <span>新的回复</span>
-                </el-badge>
-                <el-badge
-                  :value="numoflikes === 0 ? '' : numoflikes"
-                  class="item"
-                >
-                  <el-button
-                    :icon="Star"
-                    circle
-                    size="large"
-                    @click="gotoListLike"
-                  />
-                  <span>新的赞同</span>
-                </el-badge>
-                <el-badge :value="numofsys === 0 ? '' : numofsys" class="item">
-                  <el-button
-                    :icon="Service"
-                    circle
-                    size="large"
-                    @click="gotoListSys"
-                  />
-                  <span>系统消息</span>
-                </el-badge>
+              <div class="dongtai" v-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]">
+                <img
+                  src="https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg"
+                />
+                <div class="dongtairight bluelight">
+                  <div>小七</div>
+                  <div style="font-size: 15px">邀请了成员：吕双羽</div>
+                  <div style="font-size: 13px">2022/8/5</div>
+                </div>
+                <div class="dongtairightright">
+                  <el-button type="success" :icon="Check" size="small" circle />
+                  <el-button type="info" :icon="Close" size="small" circle />
+                </div>
               </div>
-            </el-dropdown-item>
+            </div>
+            <!-- <el-dropdown-item divided class="badgecontainer">
+            </el-dropdown-item> -->
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -171,6 +125,7 @@ import {
   Setting,
   User,
   TurnOff,
+  Close,
   Search,
   ChatDotRound,
   Star,
@@ -181,9 +136,14 @@ import {
 <script>
 import { changepassword, getuserinfo } from "@/utils/api";
 import { ElMessage } from "element-plus";
+import { Check } from "@element-plus/icons-vue";
 import qs from "qs";
 export default {
   name: "FrNav",
+  components: {
+    Check,
+    Close,
+  },
   props: {
     collapse: Boolean,
   },
@@ -193,10 +153,6 @@ export default {
   },
   data() {
     return {
-      numoffollowers: 0,
-      numofcomments: 0,
-      numoflikes: 0,
-      numofsys: 0,
       query: "",
       token: "",
       name: "",
@@ -225,6 +181,7 @@ export default {
       });
       // ???
     },
+
     updateinfo() {
       this.token = this.$store.state.token;
       if (!this.token) {
@@ -341,16 +298,90 @@ export default {
   width: 100%;
   height: 100%;
 }
-.badges {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  // background-color: #fd9f9f;
-  width: 100%;
-  height: 70px;
-}
+
 .item span {
   font-size: small;
   color: rgb(190, 190, 190);
+}
+.infinite-list {
+  height: 300px;
+  padding: 10px;
+  margin: 0;
+  list-style: none;
+  background: linear-gradient(
+    to right bottom,
+    rgba(255, 255, 255, 0.185),
+    rgba(255, 255, 255, 0.042)
+  );
+  backdrop-filter: blur(1rem);
+}
+.infinite-list .infinite-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  background: var(--el-color-primary-light-9);
+  margin: 10px;
+  color: var(--el-color-primary);
+}
+.infinite-list .infinite-list-item + .list-item {
+  margin-top: 10px;
+}
+::-webkit-scrollbar {
+  width: 4px;
+  height: 8px;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+}
+
+/*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: #f5f5f5;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+
+  background-color: #26476d;
+}
+.dongtai {
+  background-color: rgb(202, 229, 250);
+  backdrop-filter: blur(1rem);
+  width: 280px;
+  height: 100px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 15px 10px -15px rgba(211, 211, 211, 0.392);
+  display: flex;
+  align-items: center;
+
+  padding: 10px;
+  margin-right: 60px;
+  img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0px 15px 10px -15px rgb(211, 211, 211);
+    margin-right: 10px;
+  }
+}
+.dongtairightright {
+  flex: 1 1 50%;
+}
+.dongtairightright {
+  flex: 1 1 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  .el-button {
+    margin: 3px 0;
+  }
+}
+.bluelight {
+  font-weight: lighter;
+  font-size: 16px;
+  color: #26476d;
 }
 </style>

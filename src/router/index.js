@@ -99,6 +99,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Confirm.vue')
   },
   {
+    path: '/search',
+    name: 'search',
+    component: () => import(/* webpackChunkName: "about" */ '../views/search.vue')
+  },
+  {
     path: '/editor',
     name: 'editor',
     component: ()=>import('../components/rubbish/Tiptap')
