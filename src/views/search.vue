@@ -1,51 +1,62 @@
 <template>
   <div class="big">
-    <el-dialog v-model="dialogFormVisible" title="创建团队" width="30%" center>
-      <el-form :model="createteamform">
-        <el-form-item label="团队名称">
-          <el-input v-model="createteamform.team_name" autocomplete="off" />
-        </el-form-item>
-        <el-form-item label="团队介绍">
-          <el-input
-            type="textarea"
-            :rows="3"
-            v-model="createteamform.brief_intro"
-            autocomplete="off"
-          />
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button
-            @click="dialogFormVisible = false"
-            style="background-color: white"
-            >Cancel</el-button
-          >
-          <el-button type="primary" @click="submit">Confirm</el-button>
-        </span>
+    <el-drawer v-model="drawer">
+      <template #title>
+        <h4>排序与筛选</h4>
       </template>
-    </el-dialog>
+      <template #default>
+        <div style="display: flex; flex-direction: column; align-items: center">
+          <el-select
+            v-model="value"
+            class="m-2"
+            placeholder="请选择排序方式"
+            size="large"
+            style="width: 240px"
+          >
+            <el-option
+              v-for="item in options0"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+          <el-select
+            v-model="value1"
+            multiple
+            placeholder="请选择所属团队"
+            style="width: 240px"
+            size="large"
+          >
+            <el-option
+              v-for="item in options1"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </div>
+      </template>
+      <template #footer>
+        <div style="flex: auto">
+          <el-button type="primary" @click="confirmClick">confirm</el-button>
+        </div>
+      </template>
+    </el-drawer>
     <div id="content">
       <div id="left">
         <div id="leftup">
           <div style="display: flex">
-            <h2 class="title gradient">我的团队</h2>
+            <h2 class="title gradient" style="font-size: 20px">
+              "猫猫"的搜索结果
+            </h2>
             <nav>
-              <a
-                @click="
-                  () => {
-                    this.tab = 'tab-0';
-                  }
-                "
-                >我创建的</a
-              >
               <a
                 @click="
                   () => {
                     this.tab = 'tab-1';
                   }
                 "
-                >我管理的</a
+                >搜项目</a
               >
               <a
                 @click="
@@ -53,168 +64,92 @@
                     this.tab = 'tab-2';
                   }
                 "
-                >我参与的</a
+                >搜文件</a
+              >
+              <a
+                @click="
+                  () => {
+                    this.tab = 'tab-3';
+                  }
+                "
+                >搜队友</a
               >
               <div class="animation" :class="tab"></div>
             </nav>
           </div>
 
           <div class="buttons">
-            <!-- <el-dropdown style="margin-right: 30px">
-              <el-button type="primary"
-                ><el-icon><Sort /></el-icon
-              ></el-button>
-              <template #dropdown>
-                <el-dropdown-menu>
-                  <el-dropdown-item>按xx排序</el-dropdown-item>
-                  <el-dropdown-item>按xx排序</el-dropdown-item>
-                  <el-dropdown-item>按xx排序</el-dropdown-item>
-                </el-dropdown-menu>
-              </template>
-            </el-dropdown> -->
-
-            <el-button type="primary" @click="this.dialogFormVisible = true"
-              ><el-icon><Plus /></el-icon
+            <!-- <el-button type="primary" @click=""
+              ><el-icon><Sort /></el-icon
+            ></el-button> -->
+            <el-button
+              type="primary"
+              @click="
+                () => {
+                  this.drawer = true;
+                }
+              "
+              ><el-icon><Filter /></el-icon
             ></el-button>
           </div>
         </div>
 
         <hr style="margin: 5px; margin-bottom: 20px" />
-        <div id="leftdown" v-if="tab == 'tab-0'">
-          <div
-            class="oneteam"
-            v-for="(teamcreat, index) in teamusercreat"
-            :key="index"
-            @click="go(teamcreat.team_id)"
-          >
-            <div
-              class="teamimage"
-              :style="{ backgroundImage: `url(` + teamcreat.team_avatar + ')' }"
-            ></div>
-            <div class="oneteamdown">
-              <div style="font-size: 18px">{{ teamcreat.team_name }}</div>
-              <div>{{ teamcreat.brief_intro }}</div>
-              <div class="text-wrap">
-                <div class="example">
-                  <div class="avatar-list avatar-list-stacked">
-                    <span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span class="avatar cover-image brround">+8</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+
         <div id="leftdown" v-if="tab == 'tab-1'">
           <div
             class="oneteam"
-            v-for="(teamadmin, index) in teamuseradmin"
-            :key="index"
-            @click="go(teamadmin.team_id)"
+            style="height: 120px; margin-bottom: 20px"
+            v-for="i in [1, 2, 3, 4, 5]"
           >
-            <div
-              class="teamimage"
-              :style="{ backgroundImage: `url(` + teamadmin.team_avatar + ')' }"
-            ></div>
             <div class="oneteamdown">
-              <div style="font-size: 18px">{{ teamadmin.team_name }}</div>
-              <div>{{ teamadmin.brief_intro }}</div>
-              <div class="text-wrap" style="margin: 10px 0">
-                <div class="example">
-                  <div class="avatar-list avatar-list-stacked">
-                    <span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span class="avatar cover-image brround">+8</span>
-                  </div>
-                </div>
-              </div>
+              <div style="font-size: 18px">我是一个小项目</div>
+              <div>我是一个小猫猫我天天喵喵叫</div>
+              <div style="margin-bottom: 0">创建日期：2022/8/8</div>
+              <div>所属团队：nekopara</div>
             </div>
           </div>
         </div>
         <div id="leftdown" v-if="tab == 'tab-2'">
-          <div
-            class="oneteam"
-            v-for="(teamin, index) in teamuserin"
-            :key="index"
-            @click="go(teamin.team_id)"
+          <el-dropdown
+            trigger="contextmenu"
+            v-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8]"
           >
+            <div class="oneitem">
+              <img src="..\assets\img\fileicons\Word.png" />
+              <div>少年阿宾.vue</div>
+              <div style="font-size: smaller; margin-top: 2px">2022/8/3</div>
+            </div>
+
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item @click.native="go(file.fid)"
+                  >打开</el-dropdown-item
+                >
+                <el-dropdown-item>在新标签页中打开</el-dropdown-item>
+                <el-dropdown-item>移出工作台</el-dropdown-item>
+                <el-dropdown-item>历史版本</el-dropdown-item>
+                <el-dropdown-item>属性</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </div>
+        <div id="leftdown" v-if="tab == 'tab-3'">
+          <div class="oneteam" v-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9]">
             <div
               class="teamimage"
-              :style="{ backgroundImage: `url(` + teamin.team_avatar + ')' }"
+              :style="{
+                backgroundImage:
+                  `url(` +
+                  'https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg' +
+                  ')',
+              }"
             ></div>
             <div class="oneteamdown">
-              <div style="font-size: 18px">{{ teamin.team_name }}}</div>
-              <div>{{ teamin.brief_intro }}</div>
-              <div class="text-wrap">
-                <div class="example">
-                  <div class="avatar-list avatar-list-stacked">
-                    <span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span class="avatar cover-image brround">+8</span>
-                  </div>
-                </div>
-              </div>
+              <div style="font-size: 18px">小七</div>
+              <div>用户名：小猫</div>
+              <div>3499475017@qq.com</div>
+              <div>简介：啊啊哈啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊</div>
             </div>
           </div>
         </div>
@@ -234,17 +169,62 @@ import {
   getteamuserin,
   getuserinfo,
 } from "@/utils/api";
-import Base64 from "@/utils/Base64";
 export default {
   name: "teamview",
   components: { Filter, Sort, Plus, CaretBottom },
   created() {
-    console.log("ceshi", localStorage.getItem("username"));
     this.initializationdata();
   },
   data() {
     return {
-      tab: "tab-0",
+      value: "",
+      value1: "",
+      options1: [
+        {
+          value: "Option1",
+          label: "小猫组织",
+        },
+        {
+          value: "Option2",
+          label: "Option2",
+        },
+        {
+          value: "Option3",
+          label: "Option3",
+        },
+        {
+          value: "Option4",
+          label: "Option4",
+        },
+        {
+          value: "Option5",
+          label: "Option5",
+        },
+      ],
+      options0: [
+        {
+          value: "Option1",
+          label: "按xxx排序",
+        },
+        {
+          value: "Option2",
+          label: "Option2",
+        },
+        {
+          value: "Option3",
+          label: "Option3",
+        },
+        {
+          value: "Option4",
+          label: "Option4",
+        },
+        {
+          value: "Option5",
+          label: "Option5",
+        },
+      ],
+      drawer: false,
+      tab: "tab-1",
       dialogFormVisible: false,
       teamuserin: [],
       teamuseradmin: [],
@@ -262,18 +242,16 @@ export default {
       this.$router.push({
         path: "/teamdetail",
         query: {
-          info: Base64.encode(
-            JSON.stringify({
-              team_id: tid,
-            })
-          ),
+          team_id: tid,
         },
       });
     },
     submit() {
       this.dialogFormVisible = false;
+      console.log(this.createteamform);
       establishteam(this.createteamform).then((response) => {
         if (response.data.status_code == 1) {
+          console.log(response.data);
           this.initializationdata();
         } else ElMessage.error(response.data.message);
       });
@@ -282,6 +260,7 @@ export default {
       getteamuserin({ username: this.$store.state.username }).then(
         (response) => {
           if (response.data.status_code == 1) {
+            console.log("in", response.data);
             this.teamuserin = response.data.Dict.team_info;
           } else ElMessage.error(response.data.message);
         }
@@ -289,6 +268,7 @@ export default {
       getteamuseradmin({ username: this.$store.state.username }).then(
         (response) => {
           if (response.data.status_code == 1) {
+            console.log("admin", response.data);
             this.teamuseradmin = response.data.Dict.team_info;
           } else ElMessage.error(response.data.message);
         }
@@ -296,6 +276,7 @@ export default {
       getteamusercreat({ username: this.$store.state.username }).then(
         (response) => {
           if (response.data.status_code == 1) {
+            console.log("creat", response.data);
             this.teamusercreat = response.data.Dict.team_info;
           } else ElMessage.error(response.data.message);
         }
@@ -481,11 +462,11 @@ export default {
 
 nav {
   position: relative;
-  width: 300px;
+  width: 280px;
   height: 50px;
 
   border-radius: 8px;
-  transform: translate(0px, 24px);
+  //   transform: translate(0px, 24px);
   margin-left: 20px;
 }
 
@@ -495,7 +476,7 @@ nav a {
   float: left;
   font-size: 15px;
   line-height: 50px;
-  width: 100px;
+  width: 70px;
   height: 50px;
   color: #fff;
   text-transform: uppercase;
@@ -517,20 +498,20 @@ nav .animation {
   border-bottom: 5px solid #26476d;
 }
 
-.tab-0,
+.tab-1,
 nav a:hover ~ .animation {
-  width: 100px;
+  width: 70px;
   left: 0px;
 }
-.tab-1,
-nav a:nth-child(2):hover ~ .animation {
-  width: 100px;
-  left: 100px;
-}
 .tab-2,
+nav a:nth-child(2):hover ~ .animation {
+  width: 70px;
+  left: 70px;
+}
+.tab-3,
 nav a:nth-child(3):hover ~ .animation {
-  width: 100px;
-  left: 200px;
+  width: 70px;
+  left: 140px;
 }
 
 .avatar {

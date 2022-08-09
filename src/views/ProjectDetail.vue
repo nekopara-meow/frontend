@@ -46,7 +46,6 @@
         </div>
         <hr style="margin: 5px; margin-bottom: 20px" />
         <router-view></router-view>
-
       </div>
     </div>
   </div>
@@ -54,25 +53,23 @@
 
 <script>
 import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
-import { Filter, Sort, Plus, CaretBottom } from "@element-plus/icons-vue";
+import { Filter, Sort, Edit, Plus, CaretBottom } from "@element-plus/icons-vue";
 import UMLEditor from "@/components/rubbish/UMLEditor";
 import CoEditor from "@/components/rubbish/CoEditor";
-import {get_docfile,get_umlfile,del_uml,del_doc} from "@/utils/api";
+import { get_docfile, get_umlfile, del_uml, del_doc } from "@/utils/api";
 import AxureEditor from "@/components/rubbish/axureEditor";
 
 export default {
   name: "projectDetail",
-  // components: {},
-  props:{
-
-  },
+  components: { Edit },
+  props: {},
   data() {
     return {
-      project_id:'',
+      project_id: "",
       tab: "tab-0",
       dialogFormVisible1: false,
       editing: 0,
-      username:'',
+      username: "",
     };
   },
   methods:{
@@ -98,15 +95,14 @@ export default {
     }
     console.log(this.project_id)
   },
-  computed:{
-  }
+  computed: {},
 };
 </script>
 
 <style lang="scss" scoped>
 @import "src/assets/scss/projectDetail.scss";
-.nav-link{
-  a{
+.nav-link {
+  a {
     color: black;
   }
 }
