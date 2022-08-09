@@ -382,7 +382,11 @@
             v-for="(teamproject, index) in teamprojects"
             :key="index"
           >
-            <div class="oneteam" style="height: 120px; margin-bottom: 20px">
+            <div
+              class="oneteam"
+              @click="gotoproject(teamproject.project_id)"
+              style="height: 120px; margin-bottom: 20px"
+            >
               <div
                 class="oneteamdown"
                 style="
