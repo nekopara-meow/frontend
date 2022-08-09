@@ -1227,6 +1227,10 @@ export default{
             let fileName2 = "Axure/" + this.getFileNameUUID() + ".json"
             that.URLpageName = "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName2
         }
+
+        console.log(that.URLpage)
+        console.log(that.URLpageName)
+        console.log(that.axure_id)
     },
     created() {
         
