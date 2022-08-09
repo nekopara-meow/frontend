@@ -197,11 +197,12 @@ import Paragraph from "@tiptap/extension-paragraph";
 import Placeholder from "@tiptap/extension-placeholder";
 import Text from "@tiptap/extension-text";
 import { Editor, EditorContent } from "@tiptap/vue-3";
-import { WebrtcProvider } from "y-webrtc";
-import * as Y from "yjs";
+import Highlight from '@tiptap/extension-highlight'
+import Typography from '@tiptap/extension-typography'
 import { upload, readURL } from "@/utils/ali_oss";
 import { load_doc, save_doc } from "@/utils/api";
-
+import docModel from "@/assets/fileModels/docModel";
+import Code from '@tiptap/extension-code'
 export default {
   name: "DocEditor",
   components: {
@@ -219,7 +220,7 @@ export default {
       room_id: "",
       username: "",
       project_id: "",
-      initialContent: "文件编辑器",
+      initialContent: "",
       activeButtons: [
         "bold",
         "italic",
@@ -243,6 +244,8 @@ export default {
       provider: null,
       html: "",
       json: "",
+      model_id:-1,//-1表示没有使用模板，模板id从0开始
+      docModel:docModel,
     };
   },
   emits: ["update"],
@@ -250,21 +253,22 @@ export default {
     //接受参数
     console.log(this.$route.params);
     this.doc_id = this.$route.params.doc_id;
+    if(this.$route.params.model_id!=null){
+      this.model_id=this.$route.params.model_id
+    }
     this.project_id = this.$route.params.project_id;
     this.username = this.$store.state.username;
     this.$store.commit("addNewArticle", this.doc_id);
-
     if (this.$route.params.doc_url) {
       let url = this.$route.params.doc_url;
       console.log(url);
       readURL(url, (htmlData) => {
         this.html = htmlData;
         console.log(this.html);
+        this.editor.commands.setContent(this.html);
       });
     }
-    this.initialContent = this.html;
     this.editor = new Editor({
-      content: this.initialContent,
       extensions: [
         CollaborationCursor.configure({
           provider: this.$store.state.provider,
@@ -290,18 +294,20 @@ export default {
         Text,
         Underline,
         Paragraph,
+        Typography,
+        Highlight,
+        Code,
       ],
     });
     this.editor.on("update", () => {
       this.html = this.editor.getHTML();
       this.json = this.editor.getJSON();
-      // this.$emit('update', this.html);
     });
-    this.editor.commands.setContent(this.html);
-    //继承存储的内容
-    // if(!this.html){
-    //   this.editor.commands.setContent('<p>未作任何保存</p>')
-    // }
+    //使用模板
+    if(this.model_id!==-1){
+      this.html=this.docModel[this.model_id].html
+      this.editor.commands.setContent(this.html);
+    }
   },
   /**
    * @description: 数据传输部分还没写完
@@ -347,6 +353,15 @@ export default {
 .ProseMirror {
   > * + * {
     margin-top: 0.75em;
+    z-index: 999;
+  }
+  code {
+    font-size: 0.9rem;
+    padding: 0.25em;
+    border-radius: 0.25em;
+    background-color: rgba(#616161, 0.1);
+    color: #616161;
+    box-decoration-break: clone;
   }
 }
 
@@ -357,6 +372,7 @@ export default {
   color: #adb5bd;
   pointer-events: none;
   height: 0;
+  z-index: 999;
 }
 
 /* Give a remote user a caret */
@@ -368,13 +384,14 @@ export default {
   border-right: 1px solid #0d0d0d;
   word-break: normal;
   pointer-events: none;
+  z-index: 999;
 }
 
 /* Render the username above the caret */
 .collaboration-cursor__label {
   position: absolute;
-  top: -1.4em;
-  left: -1px;
+  top: 1.4em;
+  left: 1px;
   font-size: 12px;
   font-style: normal;
   font-weight: 600;
@@ -384,6 +401,7 @@ export default {
   padding: 0.1rem 0.3rem;
   border-radius: 3px 3px 3px 0;
   white-space: nowrap;
+  z-index: 999;
 }
 .el-button {
   display: inline-flex;
@@ -404,4 +422,5 @@ export default {
   align-items: center;
   justify-content: space-between;
 }
+
 </style>

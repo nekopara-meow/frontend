@@ -103,6 +103,12 @@ const routes = [
     name: 'search',
     component: () => import(/* webpackChunkName: "about" */ '../views/search.vue')
   },
+
+  {
+    path: '/testEditor',
+    name: 'testEditor',
+    component: () => import(/* webpackChunkName: "about" */ '../components/file_componets/testEditor')
+  },
   {
     path: '/editor',
     name: 'editor',
