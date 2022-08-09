@@ -311,13 +311,19 @@ export default {
           })
           break
         case 2:
-          //还没写完
+          console.log('create_axure',{
+            username:this.username,
+            project_id:this.project_id,
+            axure_name:this.fileInitial.name,
+          })
             create_axure({
               username:this.username,
               project_id:this.project_id,
               axure_name:this.fileInitial.name,
             }).then(res=>{
+              console.log(res.data)
               if(res.data.axure_id){
+                console.log('create_axure',res.data)
                 this.$router.push({
                   name:'axure',
                   params:{
