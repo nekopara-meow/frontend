@@ -231,8 +231,8 @@
                             
                         </div>
                         <div class="line"></div>
-                        <el-collapse>
-                            <el-collapse-item title="外观">
+                        <el-collapse v-model="SettingActiveName" accordion>
+                            <el-collapse-item title="外观" name="1">
                                 <!--
                                 <div style="width: 100%; height: 10px"></div>
                                 <span class="right-setting-title">外观</span>
@@ -259,6 +259,35 @@
                                         style = "width: 70%; height: 10px" size = "small"
                                     />
                                 </div>
+
+                                <div v-if="isRectCircle(lastnow)" class="right-setting-border">
+                                    <!--
+                                    <color-picker
+                                        v-model:pureColor = "pureColor"
+                                        v-model:gradientColor = "gradientColor"
+                                        shape="circle"
+                                        useType = "both"
+                                        :zIndex = 20
+                                    />-->
+                                    <span>边框颜色</span>
+                                    <span style="width: 20px"></span>
+                                    <el-color-picker
+                                        @change="changeBorderColor"
+                                        v-model="pages[nowpage][lastnow].border_color">
+                                    </el-color-picker>
+                                    
+                                    <span style="width: 20px"></span>
+                                    
+                                    <span>填充颜色</span>
+                                    <span style="width: 20px"></span>
+                                    <el-color-picker show-alpha
+                                        @change="changeFillColor"
+                                        v-model="pages[nowpage][lastnow].fill_color">
+                                    </el-color-picker>
+                                </div>
+                            </el-collapse-item>
+                            <el-collapse-item title="事件" name="2">
+                                <span>事件 气死我了</span>
                             </el-collapse-item>
                         </el-collapse>
                         
@@ -869,6 +898,12 @@ import OSS from "ali-oss"
 
 import { save_axure } from "@/utils/api"
 
+import { ColorPicker } from "vue3-colorpicker"
+import "vue3-colorpicker/style.css"
+
+import { ref } from "vue"
+import { ColorInputWithoutInstance } from "tinycolor2"
+
 export default{
     components: { 
         ElDropdown, ElMenu, ElCollapse, ElButton, ElRadio, ElMessage, 
@@ -881,6 +916,8 @@ export default{
         DraggableContainer,
 
         html2canvas, ImagePreview,
+
+        ColorPicker,
     },
     data() {
         return {
@@ -889,6 +926,9 @@ export default{
             axure_id: "",
 
             textNumx: 0,
+            pureColor: "#d0e0f7",
+
+            SettingActiveName: "1",
 
             AxureName: "Meow Meow",
             changingName: false,
@@ -906,9 +946,10 @@ export default{
                         style: { "width": "100%", "height": "100%",
                             "border-color": "black", "border-style": "solid",
                             "border-width": "2px", "padding": "0",
-                            "opacity": "1"
+                            "opacity": "1", "background-color": "transparent"
                         },
-                        border: 2, opacity: 1
+                        border: 2, opacity: 1,
+                        border_color: "#000000", fill_color: 'rgba(0, 0, 0, 0)'
                     },
 
                     
@@ -962,6 +1003,7 @@ export default{
                 "border-width": "2px",
                 "padding": "0",
                 "opacity": "1",
+                "background-color": "transparent"
             },
 
             circle: {
@@ -974,6 +1016,7 @@ export default{
                 "border-width": "2px",
                 "padding": "0",
                 "opacity": "1",
+                "background-color": "transparent"
             },
 
             Lable: {
@@ -987,10 +1030,24 @@ export default{
         
     },
     methods: {
+        changeBorderColor(value){
+            this.setActive(this.lastnow)
+            console.log('changeBorderColor', value)
+
+            let index = this.lastnow
+            this.pages[this.nowpage][index].style['border-color'] = value
+        },
+        changeFillColor(value){
+            this.setActive(this.lastnow)
+            console.log('changeFillColor', value)
+
+            let index = this.lastnow
+            this.pages[this.nowpage][index].style['background-color'] = value
+        },
         isRectCircle(index){
-            console.log('isRectCircle', this.lastnow, index)
+            //console.log('isRectCircle', this.lastnow, index)
             let strtype = this.pages[this.nowpage][index].type
-            console.log(this.pages[this.nowpage][index].style['border-width'])
+            //console.log(this.pages[this.nowpage][index].style['border-width'])
             return strtype === "figure-rect" || strtype === "figure-circle"
         },
         changeBorder(value){
@@ -1094,7 +1151,8 @@ export default{
                 type: "figure-rect", active: true,
                 transform: { x: 0, y: 0, width: 100, height: 100 },
                 style: this.redRect,
-                border: 2, opacity: 1
+                border: 2, opacity: 1,
+                border_color: "#000000", fill_color: 'rgba(0, 0, 0, 0)'
             }
             this.now = Cnt
             this.lastnow = Cnt
@@ -1106,7 +1164,8 @@ export default{
                 type: "figure-circle", active: true,
                 transform: { x: 0, y: 0, width: 100, height: 100 },
                 style: this.circle,
-                border: 2, opacity: 1
+                border: 2, opacity: 1,
+                border_color: "#000000", fill_color: 'rgba(0, 0, 0, 0)'
             }
             this.now = Cnt
             this.lastnow = Cnt
