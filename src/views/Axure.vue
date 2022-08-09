@@ -746,7 +746,7 @@
 </style>
 
 <script>
-import { ElDropdown, ElMenu, ElCollapse, ElButton, ElRadio} from 'element-plus'
+import { ElDropdown, ElMenu, ElCollapse, ElButton, ElRadio, ElMessage} from 'element-plus'
 import { Plus, MoreFilled, ArrowDown, Document } from '@element-plus/icons-vue'
 import { Picture, PieChart, Stopwatch, Star, Setting } from '@element-plus/icons-vue'
 import { CircleClose, Delete, ArrowUp, Search } from '@element-plus/icons-vue'
@@ -765,7 +765,7 @@ import OSS from "ali-oss"
 
 export default{
     components: { 
-        ElDropdown, ElMenu, ElCollapse, ElButton, ElRadio,
+        ElDropdown, ElMenu, ElCollapse, ElButton, ElRadio, ElMessage, 
         ArrowDown, MoreFilled, Plus, Document,
         Picture, PieChart, Stopwatch, Star, Setting,
         CircleClose, Delete, ArrowUp, Search,
@@ -1141,7 +1141,26 @@ export default{
             var fileName2 = "Axure/" + this.getFileNameUUID() + ".json"
             client2.put(fileName2, data2)
 
-
+            Axios.post(
+                "http://127.0.0.1:8000/api/projects/save/axure",
+                {
+                    axure_id: this.axure_id,
+                    axure_url: "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName,
+                    name_url: "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName2
+                },
+                {
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" }, //加上这个
+                }
+            ).then((response) => {
+                let ret = response.data.status_code
+                if(ret == -1)
+                    ElMessage.error("请求方式错误")
+                else
+                    ElMessage({
+                        message: "保存成功",
+                        type: "success",
+                    })
+            })
         },
         download(){
 
@@ -1199,8 +1218,15 @@ export default{
         }
 
         that.URLpage = this.$route.params.URLpage
-        that.URLpageName= this.$route.params.URLpageName
+        that.URLpageName = this.$route.params.URLpageName
         that.axure_id = this.$route.params.axure_id
+
+        if(that.URLpage == null){
+            let fileName = "Axure/" + this.getFileNameUUID() + ".json"
+            that.URLpage = "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName
+            let fileName2 = "Axure/" + this.getFileNameUUID() + ".json"
+            that.URLpageName = "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName2
+        }
     },
     created() {
         
