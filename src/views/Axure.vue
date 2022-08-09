@@ -23,6 +23,7 @@
                         <el-dropdown-item @click="bePic">导出</el-dropdown-item>
                         <el-dropdown-item>重命名</el-dropdown-item>
                         <el-dropdown-item @click="download">加载</el-dropdown-item>
+                        <el-dropdown-item @click="preview">预览</el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
             </el-dropdown>
@@ -875,6 +876,9 @@ export default{
     },
     methods: {
         // pretend: "", append: ""
+        preview(){
+
+        },
         havePretend(index){
             let item = this.pages[this.nowpage][index]
             return item.pretend != undefined && item.pretend != null
@@ -1147,11 +1151,11 @@ export default{
             console.log(fileName2)
 
             console.log(this.axure_id)
-            console.log('save_axure',{
+            /*console.log('save_axure',{
                 axure_id: this.axure_id,
                 axure_url: "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName,
                 name_url: "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName2
-            })
+            })*/
 
             save_axure({
                 axure_id: this.axure_id,
