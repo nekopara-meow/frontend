@@ -30,7 +30,7 @@
       </div>
       <div id="down">
         <el-button
-          v-if="editing == 0"
+          v-if="editing == 0&&author==1"
           type="primary"
           id="editbutton"
           @click="edit"
@@ -124,18 +124,20 @@ import { client, getFileNameUUID } from "../assets/alioss.js";
 import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
 import { Edit, Upload, Plus } from "@element-plus/icons-vue";
 import { edituserinfo, getuserinfo } from "@/utils/api";
+import Base64 from "@/utils/Base64";
 export default {
   name: "Register",
   components: { Edit, Upload, Plus },
   created() {
   },
   mounted() {
-    getuserinfo({ username: this.$store.state.username }).then((response) => {
+    console.log("名字",JSON.parse(Base64.decode(this.$route.query.info)).username,this.author,this.$store.state.username,thisediting == 0&&this.author==1)
+    getuserinfo({ username: JSON.parse(Base64.decode(this.$route.query.info)).username }).then((response) => {
       console.log(response.data);
       if (response.data.status_code == 1) {
         this.data.nickname = response.data.nickname;
         this.data.tel = response.data.tel;
-        this.data.username = this.$store.state.username;
+        this.data.username = JSON.parse(Base64.decode(this.$route.query.info)).username,
         this.data.avatar = response.data.avatar;
         this.data.gender = response.data.gender;
         if (response.data.gender == 0)
@@ -153,6 +155,7 @@ export default {
   },
   data() {
     return {
+      author:JSON.parse(Base64.decode(this.$route.query.info)).author,
       email: "",
       genderimg: require("../assets/img/猫.png"),
       editing: 0,

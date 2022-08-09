@@ -139,6 +139,7 @@ import { ElMessage } from "element-plus";
 import { Check } from "@element-plus/icons-vue";
 import qs from "qs";
 import store from "@/store";
+import Base64 from "@/utils/Base64";
 export default {
   name: "FrNav",
   components: {
@@ -222,7 +223,20 @@ export default {
       localStorage.clear();
     },
     checkInfo() {
-      this.$router.push("/personalspace");
+      this.$router.push({
+        path: "/personalspace",
+        query: {
+          info: Base64.encode(
+              JSON.stringify({
+                username:this.$store.state.username,
+                author:0,
+              })
+          ),
+        },
+      });
+      //this.$router.push("/personalspace");
+
+
     },
     changePassword() {
       this.$router.push("/changepassword");

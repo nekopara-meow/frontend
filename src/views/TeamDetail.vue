@@ -51,7 +51,7 @@
             </h2>
             <el-input
               v-else
-              v-model="form.name"
+              v-model="form.team_name"
               placeholder="团队名称"
               style="display: line; width: 200px; font-size: 30px"
             />
@@ -126,10 +126,10 @@
               :on-success="handleAvatarSuccess"
               :before-upload="handleBeforeUpload"
               :http-request="uploadURL"
-              v-model="form.avatar"
+              v-model="form.team_avatar"
               :style="
                 'background-image: url(' +
-                form.avatar +
+                form.team_avatar +
                 ');background-size:cover;background-position:center'
               "
               style="
@@ -436,9 +436,10 @@ export default {
   data() {
     return {
       form: {
-        avatar: "",
-        intro: "",
-        name: "",
+        team_avatar: "",
+        brief_intro: "",
+        team_name: "",
+        team_id:JSON.parse(Base64.decode(this.$route.query.info)).team_id,
       },
       team_id: JSON.parse(Base64.decode(this.$route.query.info)).team_id,
       tab: "tab-0",
@@ -515,6 +516,7 @@ export default {
         this.editing = 1;
       } else {
         this.editing = 0;
+        //修改信息api
         ElMessage({
           message: this.form,
           type: "success",
