@@ -3,8 +3,16 @@
     <el-dialog v-model="dialogFormVisible1" title="邀请成员" width="30%" center>
       <el-form :model="invite">
         <el-form-item label="用户名称">
-          <el-input v-model="invite.invitee" autocomplete="off" />
+          <el-input v-model="invite.name" autocomplete="off" />
         </el-form-item>
+        <!-- <el-form-item label="团队介绍">
+          <el-input
+            type="textarea"
+            :rows="3"
+            v-model="createteamform.intro"
+            autocomplete="off"
+          />
+        </el-form-item> -->
       </el-form>
       <template #footer>
         <span class="dialog-footer">
@@ -13,20 +21,22 @@
             style="background-color: white"
             >Cancel</el-button
           >
-          <el-button type="primary" @click="invitenewmember">Confirm</el-button>
+          <el-button type="primary" @click="this.dialogFormVisible1 = false"
+            >Confirm</el-button
+          >
         </span>
       </template>
     </el-dialog>
     <el-dialog v-model="dialogFormVisible2" title="新建项目" width="30%" center>
       <el-form :model="newproject">
         <el-form-item label="项目名称">
-          <el-input v-model="newproject.project_name" autocomplete="off" />
+          <el-input v-model="newproject.name" autocomplete="off" />
         </el-form-item>
         <el-form-item label="项目简介">
           <el-input
             type="textarea"
             :rows="3"
-            v-model="newproject.brief_intro"
+            v-model="newproject.intro"
             autocomplete="off"
           />
         </el-form-item>
@@ -38,23 +48,17 @@
             style="background-color: white"
             >Cancel</el-button
           >
-          <el-button type="primary" @click="creatproject">Confirm</el-button>
+          <el-button type="primary" @click="this.dialogFormVisible2 = false"
+            >Confirm</el-button
+          >
         </span>
       </template>
     </el-dialog>
     <div id="content">
       <div id="left">
         <div id="leftup">
-          <div style="display: flex; width: 100%; height: 80px">
-            <h2 class="title" v-if="editing == 0">
-              {{ teammsg.team_name }}
-            </h2>
-            <el-input
-              v-else
-              v-model="form.name"
-              placeholder="团队名称"
-              style="display: line; width: 200px; font-size: 30px"
-            />
+          <div style="display: flex; width: 100%">
+            <h2 class="title gradient">猫娘乐园</h2>
             <nav>
               <a
                 @click="
@@ -83,42 +87,41 @@
               <div class="animation" :class="tab"></div>
             </nav>
           </div>
-          <div class="buttons">
-            <el-button
-              type="primary"
-              @click="edit"
-              v-if="tab == 'tab-0' && editing == 0"
-              ><el-icon><Edit /></el-icon
-            ></el-button>
-            <el-button
-              type="primary"
-              @click="edit"
-              v-if="tab == 'tab-0' && editing == 1"
-              ><el-icon><Upload /></el-icon
-            ></el-button>
-            <el-button
-              type="primary"
-              @click="this.dialogFormVisible1 = true"
-              v-if="tab == 'tab-1'"
-              ><el-icon><Plus /></el-icon
-            ></el-button>
-            <el-button
-              type="primary"
-              @click="this.dialogFormVisible2 = true"
-              v-if="tab == 'tab-2'"
-              ><el-icon><Plus /></el-icon
-            ></el-button>
-          </div>
+          <el-button
+            type="primary"
+            style="margin-right: 30px"
+            v-if="tab == 'tab-0' && editing == 0"
+            @click="edit"
+            ><el-icon><Edit /></el-icon
+          ></el-button>
+          <el-button
+            type="primary"
+            style="margin-right: 30px"
+            @click="edit"
+            v-if="tab == 'tab-0' && editing == 1"
+            ><el-icon><Upload /></el-icon
+          ></el-button>
+          <el-button
+            type="primary"
+            style="margin-right: 30px"
+            @click="this.dialogFormVisible1 = true"
+            v-if="tab == 'tab-1'"
+            ><el-icon><Plus /></el-icon
+          ></el-button>
+          <el-button
+            type="primary"
+            style="margin-right: 30px"
+            @click="this.dialogFormVisible2 = true"
+            v-if="tab == 'tab-2'"
+            ><el-icon><Plus /></el-icon
+          ></el-button>
         </div>
 
         <hr style="margin: 5px; margin-bottom: 20px" />
         <div id="leftdown1" v-if="tab == 'tab-0'">
           <div id="leftdown1left">
-            <img
-              id="teamavatar"
-              :src="teammsg.avatar"
-              v-if="editing == 0"
-            /><el-upload
+            <img id="teamavatar" :src="data.avatar" v-if="editing == 0" />
+            <el-upload
               v-else
               class="avatar-uploader"
               action=""
@@ -126,10 +129,10 @@
               :on-success="handleAvatarSuccess"
               :before-upload="handleBeforeUpload"
               :http-request="uploadURL"
-              v-model="form.avatar"
+              v-model="data.avatar"
               :style="
                 'background-image: url(' +
-                form.avatar +
+                data.avatar +
                 ');background-size:cover;background-position:center'
               "
               style="
@@ -143,9 +146,9 @@
               <!-- <img v-if="flag == 1" class="upper" :src="url" /> -->
               <el-icon class="avatar-uploader-icon"><Plus /></el-icon>
             </el-upload>
-            <span class="bluelight">{{ teammsg.creator }}</span
+            <span class="bluelight">{{ data.creator }}</span
             ><span style="font-size: 13px" class="bluelight"
-              >创建于{{ teammsg.create_time }}</span
+              >创建于{{ data.createtime }}</span
             >
             <div class="text-wrap" style="margin: 10px 0">
               <div class="example">
@@ -185,11 +188,11 @@
               </div>
             </div>
             <div class="intro bluelight" v-if="editing == 0">
-              {{ teammsg.brief_intro }}
+              {{ data.intro }}
             </div>
             <el-input
               v-else
-              v-model="form.brief_intro"
+              v-model="data.brief_intro"
               placeholder="简介"
               type="textarea"
               :rows="4"
@@ -199,14 +202,14 @@
           <div id="leftdown1right">
             <div style="display: flex; justify-content: space-between">
               <h2 class="bluelight">团队动态</h2>
-              <!-- <el-button type="primary" style="margin-right: 30px"
+              <el-button type="primary" style="margin-right: 30px"
                 ><el-icon><Filter /></el-icon
-              ></el-button> -->
+              ></el-button>
             </div>
 
             <hr style="margin: 5px; margin-bottom: 20px" />
             <div class="dongtaicontainer">
-              <div class="dongtai" v-for="i in [1, 2, 3, 4, 5, 6]">
+              <div class="dongtai" v-for="i in [1, 2]">
                 <img
                   src="https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg"
                 />
@@ -255,25 +258,20 @@
                 <div class="oneteam">
                   <div
                     class="teamimage"
-                    :style="{
-                      backgroundImage: `url(` + teamcreator.avatar + ')',
-                    }"
+                    style="
+                      background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
+                    "
                   ></div>
                   <div class="oneteamdown">
-                    <div style="font-size: 18px">
-                      {{ teamcreator.nickname }}
-                    </div>
-                    <div>用户名：{{ teamcreator.creator }}</div>
-                    <div>{{ teamcreator.email }}</div>
-                    <div>简介：{{ teamcreator.brief_intro }}</div>
+                    <div style="font-size: 18px">小秋月</div>
+                    <div>真实姓名：贠启豪</div>
+                    <div>Email：3499475017@qq.com</div>
+                    <div>简介：我将无我，不负人民</div>
                   </div>
                 </div>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item
-                      @click.natice="checkuserinfo(teamcreator.creator)"
-                      >查看个人资料</el-dropdown-item
-                    >
+                    <el-dropdown-item>查看个人资料</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
@@ -285,39 +283,26 @@
               name="2"
               style="font-size: 20px; font-weight: lighter"
             >
-              <el-dropdown
-                trigger="contextmenu"
-                v-for="(teamadmin, index) in teamadmins"
-                :key="index"
-              >
+              <el-dropdown trigger="contextmenu" v-for="i in [1, 2, 3, 4]">
                 <div class="oneteam">
                   <div
                     class="teamimage"
-                    :style="{
-                      backgroundImage: `url(` + teamadmin.avatar + ')',
-                    }"
+                    style="
+                      background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
+                    "
                   ></div>
                   <div class="oneteamdown">
-                    <div style="font-size: 18px">{{ teamadmin.nickname }}</div>
-                    <div>用户名：{{ teamadmin.username }}</div>
-                    <div>{{ teamadmin.email }}</div>
-                    <div>简介：{{ teamadmin.brief_intro }}</div>
+                    <div style="font-size: 18px">小秋月</div>
+                    <div>真实姓名：贠启豪</div>
+                    <div>Email：3499475017@qq.com</div>
+                    <div>简介：我将无我，不负人民</div>
                   </div>
                 </div>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item
-                      @click.native="checkuserinfo(teamadmin.username)"
-                      >查看个人资料</el-dropdown-item
-                    >
-                    <el-dropdown-item
-                      @click.native="deleteadmin(teamadmin.username)"
-                      >移出管理员</el-dropdown-item
-                    >
-                    <el-dropdown-item
-                      @click.native="deletemember(teamadmin.username)"
-                      >移出团队</el-dropdown-item
-                    >
+                    <el-dropdown-item>查看个人资料</el-dropdown-item>
+                    <el-dropdown-item>移出管理员</el-dropdown-item>
+                    <el-dropdown-item>移出团队</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
@@ -330,37 +315,27 @@
             >
               <el-dropdown
                 trigger="contextmenu"
-                v-for="(teammember, index) in teammembers"
-                :key="index"
+                v-for="i in [1, 2, 3, 4, 5, 6]"
               >
                 <div class="oneteam">
                   <div
                     class="teamimage"
-                    :style="{
-                      backgroundImage: `url(` + teammember.avatar + ')',
-                    }"
+                    style="
+                      background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
+                    "
                   ></div>
                   <div class="oneteamdown">
-                    <div style="font-size: 18px">{{ teammember.nickname }}</div>
-                    <div>用户名：{{ teammember.username }}</div>
-                    <div>{{ teammember.email }}</div>
-                    <div>简介：{{ teammember.brief_intro }}</div>
+                    <div style="font-size: 18px">小秋月</div>
+                    <div>真实姓名：贠启豪</div>
+                    <div>Email：3499475017@qq.com</div>
+                    <div>简介：我将无我，不负人民</div>
                   </div>
                 </div>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item
-                      @click.natice="checkuserinfo(teammember.username)"
-                      >查看个人资料</el-dropdown-item
-                    >
-                    <el-dropdown-item
-                      @click.natice="setadmin(teammember.username)"
-                      >设为管理员</el-dropdown-item
-                    >
-                    <el-dropdown-item
-                      @click.natice="deletemember(teammember.username)"
-                      >移出团队</el-dropdown-item
-                    >
+                    <el-dropdown-item>查看个人资料</el-dropdown-item>
+                    <el-dropdown-item>设为管理员</el-dropdown-item>
+                    <el-dropdown-item>移出团队</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
@@ -372,17 +347,13 @@
           <div
             class="oneteam"
             style="height: 120px; margin-bottom: 20px"
-            v-for="(teamproject, index) in teamprojects"
-            :key="index"
-            @click="gotoproject(teamproject.project_id)"
+            v-for="i in [1, 2, 3, 4, 5, 6, 7]"
           >
             <div class="oneteamdown">
-              <div style="font-size: 18px">{{ teamproject.project_name }}</div>
-              <div>{{ teamproject.project_brief_intro }}</div>
-              <div style="margin-bottom: 0">
-                创建日期：{{ teamproject.project_create_time }}
-              </div>
-              <div>更新日期：2022/8/5</div>
+              <div style="font-size: 18px">小猫猫</div>
+              <div>我是傻逼，我是傻逼，我真的是傻逼</div>
+              <div style="margin-bottom: 0">创建日期：2022/8/5</div>
+              <div>更新日期：2022/8/6</div>
             </div>
           </div>
         </div>
@@ -401,244 +372,44 @@ import {
   Edit,
   Upload,
 } from "@element-plus/icons-vue";
-import {
-  deleteteammem,
-  establishproject,
-  getteamadmin,
-  getteamcreator,
-  getteammember,
-  getteammsgbyid,
-  getteamprojectbyid,
-  invitemember,
-  setteamadmin,
-} from "@/utils/api";
-import Base64 from "@/utils/Base64";
 export default {
   name: "workspace",
-  components: { Filter, Sort, Plus, CaretBottom, Edit, Upload },
-  created() {
-    console.log("invitee", this.invite.invitee);
-    console.log("team_idhhh", this.team_id);
-    getteamcreator({ team_id: this.team_id }).then((response) => {
-      console.log(response.data);
-      if (response.data.status_code == 1) {
-        (this.teamcreator.creator = response.data.creator),
-          (this.teamcreator.nickname = response.data.nickname),
-          (this.teamcreator.email = response.data.email),
-          (this.teamcreator.avatar = response.data.avatar),
-          (this.teamcreator.brief_intro = response.data.brief_intro);
-        console.log("creator", response.data);
-        this.teamuserin = response.data.ans_list;
-      } else ElMessage.error(response.data.message);
-    });
-    this.initializationdata();
-  },
+  components: { Filter, Edit, Sort, Plus, CaretBottom, Upload },
   data() {
     return {
-      form: {
-        avatar: "",
-        intro: "",
-        name: "",
-      },
-      team_id: JSON.parse(Base64.decode(this.$route.query.info)).team_id,
-      tab: "tab-0",
       dialogFormVisible1: false,
       dialogFormVisible2: false,
-      teamcreator: {
-        creator: "",
-        nickname: "",
-        email: "",
-        avatar: "",
-        brief_intro: " ",
-      },
+      tab: "tab-0",
       editing: 0,
+      data: {
+        creator: "刘华阳",
+        createtime: "2022/8/5",
+        avatar:
+          "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg",
+        intro:
+          "你若去往「绝云间」，便替我采来一束[清心」吧。一束就好。此行的旅费.啊，差些忘了，「契约」生效期间，旅费由你代为垫付。那就有劳了你说，归离原的少年仙人.啊.直至今日，他仍在履行他的职责.哦，这副「连理镇心散」，请替我带给他。对了，可千万不能让小派蒙偷吃了去，这里的药力.绝非常人所能承受。",
+      },
       invite: {
-        inviter: this.$store.state.username,
-        invitee: "",
-        team_id: JSON.parse(Base64.decode(this.$route.query.info)).team_id,
+        name: "",
       },
       newproject: {
-        team_id: JSON.parse(Base64.decode(this.$route.query.info)).team_id,
-        username: this.$store.state.username,
-        project_name: "",
-        brief_intro: "",
+        name: "",
+        intro: "",
       },
-      teamadmins: [],
-      teammembers: [],
-      teamprojects: [],
-      teammsg: {
-        brief_intro: "",
-        create_time: "",
-        creator: "",
-        team_name: "",
-        avatar: "",
-      },
-      username: this.$store.state.username,
-      formLabelWidth: "140px",
     };
   },
   methods: {
-    gotoproject(a) {
-      console.log("pp", a),
-        this.$router.push({
-          name: "projectInfo",
-          params: {
-            project_id: a,
-          },
-        });
-    },
-    invitenewmember() {
-      invitemember(this.invite).then((response) => {
-        if (response.data.status_code == 1) {
-          ElMessage({
-            message: "邀请成功",
-            type: "success",
-          });
-          this.initializationmember();
-        } else ElMessage.error(response.data.msg);
-      });
-      this.invite.invitee = "";
-      this.dialogFormVisible1 = false;
-    },
-
-    creatproject() {
-      console.log(111);
-      establishproject(this.newproject).then((response) => {
-        if (response.data.status_code === 1) {
-          this.initializationdata();
-        } else ElMessage.error(response.data.msg);
-      });
-      this.dialogFormVisible2 = false;
-    },
     edit() {
       if (this.editing == 0) {
         this.editing = 1;
       } else {
         this.editing = 0;
         ElMessage({
-          message: this.form,
+          message: "修改成功",
           type: "success",
         });
       }
     },
-    handleBeforeUpload(file) {
-      const isJPEG = file.name.split(".")[1] === "jpeg";
-      const isJPG = file.name.split(".")[1] === "jpg";
-      const isPNG = file.name.split(".")[1] === "png";
-      const isWEBP = file.name.split(".")[1] === "webp";
-      const isGIF = file.name.split(".")[1] === "gif";
-      const isLt500K = file.size / 1024 / 1024 / 1024 / 1024 < 4;
-      if (!isJPG && !isJPEG && !isPNG && !isWEBP && !isGIF) {
-        this.$message.error("上传图片只能是 JPEG/JPG/PNG 格式!");
-      }
-      if (!isLt500K) {
-        this.$message.error("单张图片大小不能超过 4mb!");
-      }
-      return (isJPEG || isJPG || isPNG || isWEBP || isGIF) && isLt500K;
-    },
-    uploadURL(file) {
-      console.log(file.file);
-      //注意哦，这里指定文件夹'image/'，尝试过写在配置文件，但是各种不行，写在这里就可以
-      var fileName = "tuanduitouxiang/" + getFileNameUUID() + ".jpg";
-      //定义唯一的文件名，打印出来的uid其实就是时间戳
-      client()
-        .multipartUpload(fileName, file.file, {
-          progress: function (percentage, cpt) {
-            console.log("打印进度", percentage);
-          },
-        })
-        .then((res) => {
-          ElMessage({
-            message: "图片上传成功",
-            type: "success",
-          });
-          //此处赋值，是相当于上传成功之后，手动拼接服务器地址和文件名
-          this.formavatar =
-            "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName;
-        });
-    },
-    checkuserinfo() {},
-    initializationdata() {
-      getteammsgbyid({ team_id: this.team_id }).then((response) => {
-        if (response.data.status_code == 1) {
-          (this.teammsg.brief_intro = response.data.brief_intro),
-            (this.teammsg.create_time = response.data.create_time),
-            (this.teammsg.creator = response.data.creator),
-            (this.teammsg.team_name = response.data.team_name),
-            (this.teammsg.avatar = response.data.avatar);
-          this.form.avatar = response.data.avatar;
-          this.form.intro = response.data.brief_intro;
-          this.form.name = response.data.team_name;
-        } else ElMessage.error(response.data.message);
-      });
-      getteamadmin({ team_id: this.team_id }).then((response) => {
-        if (response.data.status_code == 1) {
-          this.teamadmins = response.data.ans_list;
-        } else ElMessage.error(response.data.message);
-      });
-      getteammember({ team_id: this.team_id }).then((response) => {
-        if (response.data.status_code == 1) {
-          this.teammembers = response.data.ans_list;
-        } else ElMessage.error(response.data.message);
-      });
-      getteamprojectbyid({ team_id: this.team_id }).then((response) => {
-        if (response.data.status_code == 1) {
-          this.teamprojects = response.data.ans_list;
-        } else ElMessage.error(response.data.message);
-      });
-    },
-    //成员操作
-    initializationmember() {
-      getteamadmin({ team_id: this.team_id }).then((response) => {
-        if (response.data.status_code == 1) {
-          this.teamadmins = response.data.ans_list;
-        } else ElMessage.error(response.data.message);
-      });
-      getteammember({ team_id: this.team_id }).then((response) => {
-        if (response.data.status_code == 1) {
-          this.teammembers = response.data.ans_list;
-        } else ElMessage.error(response.data.message);
-      });
-    },
-    setadmin(membername) {
-      setteamadmin({
-        setter: this.$store.state.username,
-        settee: membername,
-        team_id: this.team_id,
-      }).then((response) => {
-        if (response.data.status_code == 1) {
-          this.initializationmember();
-          console.log(response.data);
-          ElMessage({
-            message: "设置成功",
-            type: "success",
-          });
-        } else ElMessage.error(response.data.msg);
-      });
-    },
-    deletemember(membername) {
-      console.log({
-        deleter_username: this.$store.state.username,
-        deletee_username: membername,
-        team_id: this.team_id,
-      });
-      deleteteammem({
-        deleter_username: this.$store.state.username,
-        deletee_username: membername,
-        team_id: this.team_id,
-      }).then((response) => {
-        if (response.data.status_code == 1) {
-          this.initializationmember(),
-            ElMessage({
-              message: "移出成功",
-              type: "success",
-            });
-        } else ElMessage.error(response.data.msg);
-      });
-    },
-    deleteadmin() {},
-    checkinfo() {},
-    //项目操作
   },
 };
 </script>
@@ -771,12 +542,11 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 80px;
 }
 #leftdown {
   display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: start;
   flex-wrap: wrap;
 }
 
@@ -817,7 +587,7 @@ export default {
 }
 #leftdown {
   overflow-y: scroll;
-  height: 60vh;
+  height: 63vh;
   padding: 0 5px;
 }
 #leftdown1 {
@@ -825,7 +595,7 @@ export default {
   align-items: center;
   justify-content: start;
   overflow-y: scroll;
-  height: 60vh;
+  height: 63vh;
   padding: 0 5px;
   flex-direction: row;
 }
@@ -846,7 +616,7 @@ export default {
 #leftdown1right {
   flex: 0 1 70%;
   height: 100%;
-  box-sizing: border-box;
+
   padding: 20px;
 }
 .dongtaicontainer {
@@ -1035,7 +805,7 @@ nav a:nth-child(3):hover ~ .animation {
 }
 #leftdown2 {
   overflow-y: scroll;
-  height: 60vh;
+  height: 63vh;
   padding: 0 5px;
 }
 ::v-deep .el-collapse-item__header {
