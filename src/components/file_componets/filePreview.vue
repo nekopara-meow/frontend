@@ -152,7 +152,6 @@ export default {
       // let date = new Date(this.update_time);
       // return date.toLocaleDateString();
       if (this.update_time != undefined) {
-        console.log(this.update_time);
         return (
           "修改于:" +
           this.timestampFormat(new Date(this.update_time).valueOf() / 1000)
@@ -224,7 +223,6 @@ export default {
   },
   methods: {
     timestampFormat(timestamp) {
-      console.log(timestamp);
       function zeroize(num) {
         return (String(num).length == 1 ? "0" : "") + num;
       }

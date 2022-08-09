@@ -36,7 +36,6 @@
         <template #dropdown style="">
           <el-dropdown-menu style="width: 300px; margin: 0; padding: 0">
             <div
-              v-infinite-scroll="load"
               class="infinite-list"
               infinite-scroll-distance="1"
               style="overflow: auto; overflow-x: hidden"
@@ -72,7 +71,7 @@
           <i class="bi-caret-down-fill" />
           <el-avatar :size="40">
             <!-- <img src="@/assets/img/head.jpg"> -->
-            <img :src="head?head:''"/>
+            <img :src="head ? head : ''" />
             <!-- YL -->
           </el-avatar>
         </div>
@@ -202,7 +201,7 @@ export default {
     indentSignal() {
       this.$emit("indent");
     },
-   /* gotoListFollow() {
+    /* gotoListFollow() {
       this.$router.push({ name: "List" });
     },
     gotoListLike() {
