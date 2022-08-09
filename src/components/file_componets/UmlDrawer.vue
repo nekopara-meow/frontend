@@ -31,7 +31,9 @@ export default {
       project_id: "",
       team_id: "",
       uml_id: "",
-      uml_name:null
+      uml_name:null,
+      fromParams:'',
+      fromRoute:'',
     };
   },
   methods: {
@@ -170,7 +172,7 @@ export default {
      * @date: 2022/8/4
      */
     close() {
-
+      console.log('close')
       window.removeEventListener("message", this.receive);
       this.iframe_class = "iframe_close";
       let url = upload("testUML", this.imgData);
@@ -184,13 +186,11 @@ export default {
         console.log("uml已上传");
         console.log(res.data);
       })
-      document.getElementById("app").removeChild(iframe);
-      console.log(this.project_id)
-      this.$router.replace({
-        name:'projectFileInfo',
-        params:{
-          project_id:this.project_id
-        }
+      document.getElementById("app").removeChild(this.iframe);
+      console.log('proid',this.project_id)
+      this.$router.push({
+        name:this.fromRoute,
+        params:this.fromParams
       })
     },
     /**
@@ -219,6 +219,45 @@ export default {
     this.username=this.$store.state.username
     window.addEventListener("hashchange", this.start);
     this.edit()
+  },
+  /**
+   * @description: 路由进入监听
+   * @author: 罗亚硕
+   * @date: 2022/8/9
+   */
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      // 通过 `vm` 访问组件实例
+      console.log('to',to)
+      console.log('from',from)
+      vm.fromParams=from.params
+      vm.fromRoute=from.name
+    })
+  },
+  /**
+   * @description: 监听路由信息
+   * @author: 罗亚硕
+   * @date: 2022/8/9
+   */
+  beforeRouteLeave(to, from) {
+    //离开前 删除iframe
+    function isParent (obj, parentObj){
+      while (obj != undefined && obj != null && obj.tagName.toUpperCase() != 'BODY'){
+        if (obj == parentObj){
+          return true;
+        }
+        obj = obj.parentNode;
+      }
+      return false;
+    }
+    let app=document.getElementById("app")
+    if(isParent(this.iframe,app)){
+      console.log('find parant')
+      document.getElementById("app").removeChild(this.iframe);
+    }
+    // if(this.iframe){
+    //   document.getElementById("app").removeChild(this.iframe);
+    // }
   },
 };
 </script>

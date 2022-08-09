@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     go() {
-      this.$router.push("/workspace");
+      this.$router.push("/documentCenter");
     },
   },
 };
@@ -115,7 +115,7 @@ img {
   background-image: linear-gradient(90deg, #4facfe, #7bd4fe, #6acaf7, #4facfe);
   background-size: 200%;
   animation: streamer 5s linear infinite;
-  background-clip: text;
+  -webkit-background-clip: text;
   color: transparent;
 }
 #smallintro {

@@ -223,7 +223,7 @@ export default {
       window.removeEventListener("message", this.receive);
       this.iframe_class = "iframe_close";
       this.saveUML();
-      document.getElementById("app").removeChild(iframe);
+      document.getElementById("app").removeChild(this.iframe);
     },
     /**
      * @description: 从服务器获取初始化内容

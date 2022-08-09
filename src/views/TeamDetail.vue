@@ -121,7 +121,41 @@
 
         <hr style="margin: 5px; margin-bottom: 20px" />
         <div id="leftdown1" v-if="tab == 'tab-0'">
-          <div id="leftdown1left">
+          <el-skeleton
+            animated
+            style="
+              width: 240px;
+              box-sizing: border-box;
+              padding: 20px;
+              border-right: 1px solid lightgray;
+              height: 100%;
+            "
+            v-if="got == 0"
+          >
+            <template #template>
+              <el-skeleton-item
+                variant="image"
+                style="width: 200px; height: 200px"
+              />
+
+              <div style="padding: 14px">
+                <el-skeleton-item variant="p" style="width: 50%" />
+                <el-skeleton-item variant="p" style="width: 50%" />
+                <el-skeleton-item variant="p" style="width: 50%" />
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    justify-items: space-between;
+                  "
+                >
+                  <el-skeleton-item variant="text" style="margin-right: 16px" />
+                  <el-skeleton-item variant="text" style="width: 30%" />
+                </div>
+              </div>
+            </template>
+          </el-skeleton>
+          <div id="leftdown1left" v-else>
             <img
               id="teamavatar"
               :src="teammsg.avatar"
@@ -486,6 +520,7 @@ export default {
     console.log("invitee", this.invite.invitee);
     console.log("team_idhhh", this.team_id);
     getteamcreator({ team_id: this.team_id }).then((response) => {
+      // this.got+=1;
       console.log(response.data);
       if (response.data.status_code == 1) {
         (this.teamcreator.creator = response.data.creator),
@@ -501,6 +536,7 @@ export default {
   },
   data() {
     return {
+      got: 0,
       form: {
         avatar: "",
         intro: "",
@@ -626,6 +662,7 @@ export default {
     checkuserinfo() {},
     initializationdata() {
       getteammsgbyid({ team_id: this.team_id }).then((response) => {
+        this.got += 1;
         if (response.data.status_code == 1) {
           (this.teammsg.brief_intro = response.data.brief_intro),
             (this.teammsg.create_time = response.data.create_time),
@@ -901,9 +938,9 @@ export default {
   color: #26476d;
 }
 #leftdown1left {
-  flex: 0 1 30%;
+  // flex: 0 0 30%;
   height: 100%;
-  min-width: 230px;
+  width: 240px;
   padding: 20px;
   display: flex;
   flex-direction: column;

@@ -88,8 +88,7 @@ export default {
             router.push({
               path: "/",
             });
-          } else
-            ElMessage.error(response.data.message);
+          } else ElMessage.error(response.data.message);
         })
         .catch((error) => {
           // 请求失败处理
@@ -151,7 +150,7 @@ export default {
   padding: 50px;
   border-radius: 10px;
   box-shadow: 0px 15px 10px -15px lightgray;
-  height: 60%;
+  height: 70%;
   width: 400px;
 }
 #submitcontain {

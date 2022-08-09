@@ -9,6 +9,8 @@ export default createStore({
     ydoc:'',
     provider:'',
     sharedDoc:Array,
+    fromParams:'',
+    fromName:'',
   },
   mutations: {
     // set
@@ -42,6 +44,12 @@ export default createStore({
         state.ydoc.getXmlFragment(doc_id)
         state.sharedDoc.push(doc_id)
       }
+    },
+    setFromParams(state,val){
+      state.fromParams=val
+    },
+    setFromName(state,val){
+      state.fromName=val
     }
   },
   getters: {
