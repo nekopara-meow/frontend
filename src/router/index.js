@@ -59,9 +59,9 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../components/file_componets/DocEditor.vue')
   },
   {
-    path: '/workspace',
-    name: 'workspace',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Workspace.vue')
+    path: '/documentCenter',
+    name: 'documentCenter',
+    component: () => import(/* webpackChunkName: "about" */ '../views/documentCenter')
   },
   {
     path: '/axure',

@@ -239,6 +239,15 @@ export async function deleteteammem(data) {
         data,
     })
 }
+
+export function getProsByUser(data){
+    return request({
+        url: 'api/projects/getprojects/byuser',
+        method: 'post',
+        data,
+    })
+}
+
 /*export const loginApi=data=>{
     return post({
         url: "api/users/login",

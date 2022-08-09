@@ -78,9 +78,20 @@ export default {
   methods:{
 
   },
+  watch:{
+    $route(val){
+      console.log('route is watched',val)
+      if(val.name==='projectInfo'){
+        this.tab='tab-0'
+      }
+      if(val,name==='projectFileInfo'){
+        this.tab='tab-1'
+      }
+    }
+  },
   created() {
-    console.log('route')
-    console.log(this.$route.params)
+    console.log('route in projectDetail')
+    console.log(this.$route)
     if(this.$route.params.project_id){
       this.project_id=this.$route.params.project_id
       this.username=this.$store.state.username
