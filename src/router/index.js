@@ -1,7 +1,7 @@
 import {createRouter, createWebHashHistory} from 'vue-router'
 import { stringifyQuery, parseQuery } from "../utils/query";
 import HomeView from '../views/HomeView.vue'
-
+import store from "@/store";
 const routes = [
   {
     path: '/',
@@ -59,9 +59,9 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../components/file_componets/DocEditor.vue')
   },
   {
-    path: '/workspace',
-    name: 'workspace',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Workspace.vue')
+    path: '/documentCenter',
+    name: 'documentCenter',
+    component: () => import(/* webpackChunkName: "about" */ '../views/documentCenter')
   },
   {
     path: '/axure',
@@ -108,6 +108,12 @@ const routes = [
     name: 'search',
     component: () => import(/* webpackChunkName: "about" */ '../views/search.vue')
   },
+
+  {
+    path: '/testEditor',
+    name: 'testEditor',
+    component: () => import(/* webpackChunkName: "about" */ '../components/file_componets/testEditor')
+  },
   {
     path: '/editor',
     name: 'editor',
@@ -127,6 +133,18 @@ const router = createRouter({
   history: createWebHashHistory(),
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  //下个路由和上个路由相同，是后退
+  console.log('in guard','from:',from,'to',to,'fromName',store.state.fromName,'fromName',store.state.fromParams)
+  // if(to.name=== store.state.fromName && Object.keys(to.params).length===0){
+  if(to.name=== store.state.fromName){
+    to.params=store.state.fromParams
+  }
+  store.commit('setFromParams',from.params)
+  store.commit('setFromName',from.name)
+  next()
 })
 /*router.beforeEach((to, from, next) => {
   if (to.path === '/login'||'/register') {
