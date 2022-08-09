@@ -98,8 +98,11 @@ article {
   border: 1px solid transparent;
   height: calc(100vh - 4rem);
   width: calc(100vw - 200px);
+  transition: 0.3s;
+  right: 0;
   &.indent {
     width: calc(100vw - 75px);
+    transition: 0.3s;
   }
   > * {
     height: 100%;

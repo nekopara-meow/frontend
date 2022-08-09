@@ -60,14 +60,14 @@
             :update_time="tmp.update_time"
             :file_content="tmp.file_content"
             :project_id="tmp.project_id"
-            :name_url="tmp.name_url"
             :key="index"
           ></file-preview>
           <file-preview
             :file_type="2"
-            :creator="this.username"
-            :file_id="this.project_id"
-            :project_id="this.project_id"
+            creator="lalala"
+            :file_id="1"
+            username="蔡徐坤"
+            :project_id="1"
             :is-new="true"
           ></file-preview>
         </div>
@@ -79,8 +79,7 @@
 <script>
 import AxureEditor from "@/components/rubbish/axureEditor";
 import FilePreview from "@/components/file_componets/filePreview";
-
-import { get_docfile, get_umlfile, get_axurefile } from "@/utils/api";
+import { get_docfile, get_umlfile } from "@/utils/api";
 export default {
   name: "projectFileInfo",
   components: { FilePreview, AxureEditor },
@@ -116,15 +115,6 @@ export default {
       } else console.log("请求doc文件失败");
     });
     //请求axure
-    get_axurefile({
-      username: this.username,
-      project_id: this.project_id,
-    }).then((res) => {
-      if (res.data.ans_list) {
-        this.axure_file = res.data.ans_list;
-        console.log("axure_files", this.axure_file);
-      } else console.log("请求axure文件失败");
-    });
   },
 };
 </script>
@@ -148,7 +138,6 @@ export default {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  overflow-y: visible;
 }
 ::v-deep .el-tabs--card > .el-tabs__header {
   border: none !important;
@@ -161,11 +150,6 @@ export default {
   }
 }
 $color-black: #26476d;
-::v-deep .el-tabs__content {
-  height: 100%;
-
-  overflow-y: auto;
-}
 ::v-deep .el-tabs__item {
   height: 60px;
   line-height: 60px;
