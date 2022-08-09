@@ -1,11 +1,15 @@
 <template>
 <div class="file-pre-container"  >
-  <img :src="imgData" @click="openFile" @contextmenu.prevent.native="openMenu($event)"/>
+  <el-tooltip
+      :content="tip"
+      raw-content
+      placement="left-end"
+  >  <img :src="imgData" @click="openFile" @contextmenu.prevent.native="openMenu($event)"/>
+  </el-tooltip>
+
   <div class="file-info">
     <div>{{ author }}</div>
     <div>{{ fileName }}</div>
-    <div>{{modTime}}</div>
-    <div>{{modDate}}</div>
   </div>
   <ul v-show="visible" :style="{left:left+'px',top:top+'px'}" class="contextmenu">
     <li @click="deleteFile">删除</li>
@@ -91,6 +95,10 @@ export default {
       type:Boolean,
       default:false,
     },
+    isDel:{
+      type:Boolean,
+      default:false,
+    },
     file_id:'',
     project_id:'',
     creator:'',
@@ -102,25 +110,14 @@ export default {
     name_url:'',
   },
   computed:{
-    modDate(){
-      if(this.isNew) return ''
-      let date=new Date(this.update_time)
-      return date.toLocaleDateString()
-    },
-    modTime(){
-      if(this.isNew) return ''
-      let date=new Date(this.update_time)
-      return date.toLocaleTimeString()
-    },
-    author(){
-      if(!this.isNew){
-        return '作者：'+this.creator
-      }
-      return '新建文件'
+    tip(){
+      if(this.isNew) return '点击图标，新建文件'
+      return this.file_name+'<br/>'+'上次修改时间：'+new Date(this.update_time).toLocaleDateString()+' '+new Date(this.update_time).toLocaleTimeString()
+      +'<br/>'+'创建人:'+this.creator
     },
     fileName(){
-      if(this.isNew) return ''
-      return '文件名:'+this.file_name
+      if(this.isNew) return '新建文件'
+      return this.file_name
     },
     /**
      * @description: 出现错误就返回新建图片的标签
@@ -207,6 +204,10 @@ export default {
       }).then(res=> console.log(res.data))
     },
     openFile(){
+      //废弃文件不能打开
+      if(this.isDel){
+        return;
+      }
       //打开老文件
       if(!this.isNew) {
         switch (this.file_type) {
@@ -218,7 +219,7 @@ export default {
             },'打开已有uml')
             this.$router.push({
               name: 'UmlDrawer',
-              params: {
+              query: {
                 uml_url: this.file_content,
                 uml_id: this.file_id,
                 project_id:this.project_id
@@ -228,7 +229,7 @@ export default {
           case 1:
             this.$router.push({
               name: 'DocEditor',
-              params: {
+              query: {
                 doc_url: this.file_content,
                 doc_id: this.file_id,
                 project_id:this.project_id
@@ -244,7 +245,7 @@ export default {
             })
             this.$router.push({
               name: 'axure',
-              params: {
+              query: {
                 project_id:this.project_id,
                 axure_id:this.file_id,
                 URLpage:this.file_content,
@@ -278,7 +279,7 @@ export default {
             if(res.data.uml_id){
               this.$router.push({
                 name:'UmlDrawer',
-                params: {
+                query: {
                   uml_url: null,
                   uml_id: res.data.uml_id,
                   project_id:this.project_id,
@@ -304,7 +305,7 @@ export default {
             if(res.data.doc_id){
               this.$router.push({
                 name:'DocEditor',
-                params: {
+                query: {
                   doc_url: null,
                   doc_id: res.data.doc_id,
                   username:this.username,
@@ -332,7 +333,7 @@ export default {
                 console.log('create_axure',res.data)
                 this.$router.push({
                   name:'axure',
-                  params:{
+                  query:{
                     axure_id:res.data.axure_id,
                     project_id:this.project_id,
                     URLpage:null,
@@ -358,6 +359,7 @@ export default {
       }
     }
   },
+
   mounted() {
     this.username=this.$store.state.username
   }
@@ -380,12 +382,13 @@ export default {
   }
 }
 .file-info{
-  position: relative;
-  left: 0.5rem;
+  //position: relative;
+  //left: 0.5rem;
+  max-width: 80px;
   div{
-    font-size: 10px;
+    font-size: 15px;
     font-family: 黑体;
-    text-align: start;
+    text-align: center;
   }
 }
 .contextmenu {

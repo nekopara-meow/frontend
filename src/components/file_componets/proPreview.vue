@@ -32,7 +32,7 @@ export default {
           info+='...'
         }
       }
-      return '团队名:'+this.team_name+'<br/>'+'团队简介:'+info
+      return '所属团队:'+this.team_name+'<br/>'+'项目简介:'+info
     },
     getClass(){
       console.log(this.project_id,this.focus_project_id)
@@ -41,7 +41,8 @@ export default {
        }
        return 'pro-name'
     }
-  }
+  },
+
 }
 </script>
 

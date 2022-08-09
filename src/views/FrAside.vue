@@ -1,7 +1,7 @@
 <template>
   <div id="fr-aside" :class="{ indent: collapse }">
     <header class="fr-back-color" :class="$store.getters.themeClass">
-      <figure>
+      <figure @click="$router.push({name:'home'})">
         <img src="@/assets/img/logo-w.png" class="h-100" alt="" />
       </figure>
       <span style="margin: 0; padding: 0">NEKOPARA</span>

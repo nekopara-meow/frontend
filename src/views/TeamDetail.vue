@@ -547,7 +547,7 @@ export default {
       console.log("pp", a),
         this.$router.push({
           name: "projectInfo",
-          params: {
+          query: {
             project_id: a,
           },
         });

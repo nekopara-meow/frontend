@@ -11,10 +11,10 @@
               ></el-button>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item>按时间升序</el-dropdown-item>
-                  <el-dropdown-item>按时间降序</el-dropdown-item>
-                  <el-dropdown-item>按文件名升序</el-dropdown-item>
-                  <el-dropdown-item>按文件名降序</el-dropdown-item>
+                  <el-dropdown-item @click="sortByTime(1)">按修改时间升序</el-dropdown-item>
+                  <el-dropdown-item @click="sortByTime(-1)">按修改时间降序</el-dropdown-item>
+                  <el-dropdown-item @click="sortByFileName(1)">按文件名升序</el-dropdown-item>
+                  <el-dropdown-item @click="sortByFileName(-1)">按文件名降序</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -24,26 +24,36 @@
         <hr style="margin: 5px" />
 
         <div id="leftdown">
-          <el-tabs tab-position="top">
-            <el-tab-pane label="UML" :name="tab_name">
+          <el-tabs tab-position="top" v-model="active_tab">
+            <el-tab-pane label="UML" name='0'>
               <div class="fileDisplayer">
                 <file-preview v-for="(tmp,index) in uml_file" :file_id="tmp.file_id" :update_time="tmp.update_time"
                               :file_type="tmp.file_type" :creator="tmp.creator" :file_name="tmp.file_name"
                               :file_content="tmp.file_content" :project_id="tmp.project_id" :key="index"></file-preview>
               </div>
             </el-tab-pane>
-            <el-tab-pane label="文档" :name="tab_name">
+            <el-tab-pane label="文档" name='1'>
               <div class="fileDisplayer">
                 <file-preview v-for="(tmp,index) in doc_file" :file_id="tmp.file_id"
                               :file_type="tmp.file_type" :creator="tmp.creator" :file_name="tmp.file_name" :update_time="tmp.update_time"
                               :file_content="tmp.file_content" :project_id="tmp.project_id" :key="index"></file-preview>
               </div>
             </el-tab-pane>
-            <el-tab-pane label="设计原型">
+            <el-tab-pane label="设计原型" name='2'>
               <div class="fileDisplayer">
-                <file-preview v-for="(tmp,index) in axure_file" :file_id="tmp.file_id"
-                              :file_type="tmp.file_type" :creator="tmp.creator" :file_name="tmp.file_name" :update_time="tmp.update_time"
-                              :file_content="tmp.file_content" :project_id="tmp.project_id" :key="index"></file-preview>
+                <!--          <file-preview :file_type="2" creator="lalala" :file_id="1" username="蔡徐坤" :project_id="1"></file-preview>-->
+                <file-preview
+                    v-for="(tmp, index) in axure_file"
+                    :file_id="tmp.file_id"
+                    :file_type="tmp.file_type"
+                    :creator="tmp.creator"
+                    :file_name="tmp.file_name"
+                    :update_time="tmp.update_time"
+                    :file_content="tmp.file_content"
+                    :project_id="tmp.project_id"
+                    :name_url="tmp.name_url"
+                    :key="index"
+                ></file-preview>
               </div>
             </el-tab-pane>
           </el-tabs>
@@ -59,9 +69,15 @@
               ></el-button>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item>按项目分组</el-dropdown-item>
-                  <el-dropdown-item>按格式分组</el-dropdown-item>
-                  <el-dropdown-item>按时间分组</el-dropdown-item>
+                  <el-dropdown-item @click="userProjects.sort(function(a,b){return a.project_name.localeCompare(b.project_name)})"
+                  >按项目名升序</el-dropdown-item>
+                  <el-dropdown-item @click="userProjects.sort(function(a,b){return -1*a.project_name.localeCompare(b.project_name)})"
+                  >按项目名降序
+                  </el-dropdown-item>
+                  <el-dropdown-item @click="userProjects.sort(function(a,b){return a.team_name.localeCompare(b.team_name)})"
+                  >按团队名升序</el-dropdown-item>
+                  <el-dropdown-item @click="userProjects.sort(function(a,b){return -1*a.team_name.localeCompare(b.team_name)})"
+                  >按团队名降序</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -85,7 +101,7 @@ import {reactive, toRefs} from "vue";
 import router from "@/router";
 import store from "@/store";
 import ProPreview from "@/components/file_componets/proPreview";
-import {get_docfile, get_umlfile,getProsByUser} from "@/utils/api";
+import {get_axurefile, get_docfile, get_umlfile, getProsByUser} from "@/utils/api";
 import filePreview from "@/components/file_componets/filePreview";
 export default {
   name: "documentCenter",
@@ -111,12 +127,58 @@ export default {
       doc_file:[],
       axure_file:[],
       focus_project_id:'',
-      tab_name:'UML',
+      active_tab:'0',
     }
   },
   methods:{
-    sortByTime(){
+    /**
+     * @description: 按时间排序，asc=1:升序,asc=-1,降序
+     * @author: 罗亚硕
+     * @date: 2022/8/9
+     */
+    sortByTime(asc){
+      switch (this.active_tab){
+        case '0':
+          this.uml_file.sort(function(a, b) {
+            return b.update_time < a.update_time ? asc : (asc*-1)
+          })
+          break
+        case '1':
+          this.doc_file.sort(function(a, b) {
+            return b.update_time < a.update_time ? asc : (asc*-1)
+          })
+          break
+        case '2':
+          this.axure_file.sort(function(a, b) {
+            return b.update_time < a.update_time ? asc : (asc*-1)
+          })
+          break
 
+        default:
+          console.log('tab error')
+      }
+    },
+    sortByFileName(asc){
+      switch (this.active_tab){
+        case '0':
+          this.uml_file.sort(function(a, b) {
+            return b.file_name < a.file_name ? asc : (asc*-1)
+          })
+          break
+        case '1':
+          this.doc_file.sort(function(a, b) {
+            return b.file_name < a.file_name ? asc : (asc*-1)
+          })
+          break
+        case '2':
+          this.axure_file.sort(function(a, b) {
+            return b.file_name < a.file_name ? asc : (asc*-1)
+          })
+          break
+
+        default:
+          console.log('tab error')
+      }
     },
     loadFiles(project_id){
       this.focus_project_id=project_id
@@ -151,7 +213,26 @@ export default {
         }
         else console.log('请求doc文件失败')
       })
+      //请求axure
+      get_axurefile({
+        username:this.username,
+        project_id:project_id
+      }).then(res=>{
+        if(res.data.ans_list){
+          this.axure_file = res.data.ans_list
+          console.log('axure_files',this.axure_file)
+        }else console.log("请求axure文件失败")
+      })
     }
+  },
+  mounted() {
+    console.log('检查query',this.$route)
+    if(this.$route.query.active_tab!=null){
+      this.active_tab=''+this.$route.query.active_tab
+    }else{
+      this.active_tab='0'
+    }
+    console.log('active_tab',this.active_tab)
   },
   created() {
     this.username=this.$store.state.username
@@ -172,11 +253,15 @@ export default {
         if(this.userProjects[0].project_id!==null){
           this.loadFiles(this.userProjects[0].project_id)
         }
+
       }else console.log('fail!!')
+
+
     })
-
-
-  }
+  },
+  beforeRouteLeave(to,from){
+    from.query.active_tab=this.active_tab
+  },
 };
 </script>
 

@@ -246,22 +246,23 @@ export default {
       json: "",
       model_id:-1,//-1表示没有使用模板，模板id从0开始
       docModel:docModel,
-      fromParams:'',
+      fromPath:'',
+      fromQuery:'',
+
     };
   },
   emits: ["update"],
   created() {
     //接受参数
-    console.log(this.$route.params);
-    this.doc_id = this.$route.params.doc_id;
-    if(this.$route.params.model_id!=null){
-      this.model_id=this.$route.params.model_id
+    this.doc_id = this.$route.query.doc_id;
+    if(this.$route.query.model_id!=null){
+      this.model_id=this.$route.query.model_id
     }
-    this.project_id = this.$route.params.project_id;
+    this.project_id = this.$route.query.project_id;
     this.username = this.$store.state.username;
     this.$store.commit("addNewArticle", this.doc_id);
-    if (this.$route.params.doc_url) {
-      let url = this.$route.params.doc_url;
+    if (this.$route.query.doc_url) {
+      let url = this.$route.query.doc_url;
       console.log(url);
       readURL(url, (htmlData) => {
         this.html = htmlData;
@@ -332,41 +333,24 @@ export default {
     exit() {
       //退出前先保存
       this.save();
-      //不做更改，返回页面
-      console.log('exit',{
-        name: this.backRoute,
-        params:this.fromParams,
+      this.$router.push({
+        path:this.fromPath,
+        query:this.fromQuery
       })
-      this.$router.go(-1)
     },
   },
   beforeUnmount() {
     this.editor.destroy();
   },
-  /**
-   * @description: 路由进入监听
-   * @author: 罗亚硕
-   * @date: 2022/8/9
-   */
   beforeRouteEnter (to, from, next) {
-    next(vm => {
-      // 通过 `vm` 访问组件实例
-      console.log('to',to)
-      console.log('from',from)
-      vm.fromParams=from.params
+    console.log('in uml from',from)
+    next(vm=>{
+      vm.fromPath=from.fullPath
+      vm.fromQuery=from.query
     })
   },
-  /**
-   * @description: 监听路由信息
-   * @author: 罗亚硕
-   * @date: 2022/8/9
-   */
   beforeRouteLeave(to, from) {
-    //设置返回参数
-    console.log('beforeLeave',{
-      params:this.fromParams,
-    })
-    to.params=this.fromParams
+    this.save()
   },
 };
 </script>

@@ -138,8 +138,8 @@ const router = createRouter({
 // router.beforeEach((to, from, next) => {
 //   //下个路由和上个路由相同，是后退
 //   console.log('in guard','from:',from,'to',to,'fromName',store.state.fromName,'fromName',store.state.fromParams)
-//   // if(to.name=== store.state.fromName && Object.keys(to.params).length===0){
-//   if(to.name=== store.state.fromName){
+//   if(to.name=== store.state.fromName && Object.keys(to.params).length===0){
+//   // if(to.name=== store.state.fromName){
 //     to.params=store.state.fromParams
 //   }
 //   store.commit('setFromParams',from.params)
