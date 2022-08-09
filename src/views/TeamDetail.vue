@@ -457,6 +457,7 @@
 </template>
 
 <script>
+import { client, getFileNameUUID } from "../assets/alioss.js";
 import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
 import {
   Filter,
@@ -618,7 +619,7 @@ export default {
             type: "success",
           });
           //此处赋值，是相当于上传成功之后，手动拼接服务器地址和文件名
-          this.formavatar =
+          this.form.avatar =
             "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName;
         });
     },

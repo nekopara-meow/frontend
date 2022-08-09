@@ -45,6 +45,10 @@ const routes = [
         path:'projectFileInfo',
         name:'projectFileInfo',
         component:()=>import('../views/projectFileInfo')
+      },{
+        path:'projectFileBin',
+        name:'projectFileBin',
+        component:()=>import('../views/projectFileBin')
       },
     ],
   },
