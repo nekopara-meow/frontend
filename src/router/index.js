@@ -136,16 +136,15 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-
-  store.commit('setFromParams',from.params)
-  store.commit('setFromName',from.name)
-  next()
-})
-router.beforeResolve(async to => {
-  //如果是返回路由，则要替换参数
+  //下个路由和上个路由相同，是后退
+  console.log('in guard','from:',from,'to',to,'fromName',store.state.fromName,'fromName',store.state.fromParams)
+  // if(to.name=== store.state.fromName && Object.keys(to.params).length===0){
   if(to.name=== store.state.fromName){
     to.params=store.state.fromParams
   }
+  store.commit('setFromParams',from.params)
+  store.commit('setFromName',from.name)
+  next()
 })
 /*router.beforeEach((to, from, next) => {
   if (to.path === '/login'||'/register') {

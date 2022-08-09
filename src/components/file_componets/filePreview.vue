@@ -57,7 +57,7 @@
 
 <script>
 import {readURL} from "@/utils/ali_oss";
-import {create_doc, create_uml, deleteFileById, renameFileById} from "@/utils/api";
+import {create_axure, create_doc, create_uml, deleteFileById, renameFileById} from "@/utils/api";
 import docModel from "@/assets/fileModels/docModel";
 export default {
   name: "filePreview",
@@ -99,6 +99,7 @@ export default {
     //0-UML,1-axure,2-doc
     file_name:'',
     update_time:Date,
+    name_url:'',
   },
   computed:{
     modDate(){
@@ -239,6 +240,9 @@ export default {
               name: 'axure',
               params: {
                 project_id:this.project_id,
+                axure_id:this.file_id,
+                URLpage:this.file_content,
+                URLpageName:this.name_url,
               }
             })
             break
@@ -308,13 +312,24 @@ export default {
           break
         case 2:
           //还没写完
-          this.$router.push({
-            name:'axure',
-            params:{
-              doc_url:this.file_content,
-              doc_id:this.file_id,
-            }
-          })
+            create_axure({
+              username:this.username,
+              project_id:this.project_id,
+              axure_name:this.fileInitial.name,
+            }).then(res=>{
+              if(res.data.axure_id){
+                this.$router.push({
+                  name:'axure',
+                  params:{
+                    axure_id:this.axure_id,
+                    project_id:this.project_id,
+                    URLpage:null,
+                    URLpageName:null,
+                  }
+                })
+              }
+            })
+
           break
         default:
           console.log('文件类型错误')

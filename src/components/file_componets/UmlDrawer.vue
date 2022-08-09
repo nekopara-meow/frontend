@@ -33,6 +33,7 @@ export default {
       uml_id: "",
       uml_name:null,
       fromParams:'',
+      fromRoute:'',
     };
   },
   methods: {
@@ -171,7 +172,7 @@ export default {
      * @date: 2022/8/4
      */
     close() {
-
+      console.log('close')
       window.removeEventListener("message", this.receive);
       this.iframe_class = "iframe_close";
       let url = upload("testUML", this.imgData);
@@ -186,8 +187,11 @@ export default {
         console.log(res.data);
       })
       document.getElementById("app").removeChild(this.iframe);
-      console.log(this.project_id)
-      this.$router.go(-1)
+      console.log('proid',this.project_id)
+      this.$router.push({
+        name:this.fromRoute,
+        params:this.fromParams
+      })
     },
     /**
      * @description: 将uml图的信息存在后端
@@ -227,6 +231,7 @@ export default {
       console.log('to',to)
       console.log('from',from)
       vm.fromParams=from.params
+      vm.fromRoute=from.name
     })
   },
   /**
@@ -235,13 +240,24 @@ export default {
    * @date: 2022/8/9
    */
   beforeRouteLeave(to, from) {
-    console.log('beforeLeave',{
-      params:this.fromParams,
-    })
-    to.params=this.fromParams
-    if(this.iframe){
+    //离开前 删除iframe
+    function isParent (obj, parentObj){
+      while (obj != undefined && obj != null && obj.tagName.toUpperCase() != 'BODY'){
+        if (obj == parentObj){
+          return true;
+        }
+        obj = obj.parentNode;
+      }
+      return false;
+    }
+    let app=document.getElementById("app")
+    if(isParent(this.iframe,app)){
+      console.log('find parant')
       document.getElementById("app").removeChild(this.iframe);
     }
+    // if(this.iframe){
+    //   document.getElementById("app").removeChild(this.iframe);
+    // }
   },
 };
 </script>

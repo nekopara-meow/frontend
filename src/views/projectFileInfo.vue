@@ -60,13 +60,12 @@
             :update_time="tmp.update_time"
             :file_content="tmp.file_content"
             :project_id="tmp.project_id"
+            :name_url="tmp.name_url"
             :key="index"
           ></file-preview>
           <file-preview
             :file_type="2"
-            creator="lalala"
             :file_id="1"
-            username="蔡徐坤"
             :project_id="1"
             :is-new="true"
           ></file-preview>
@@ -115,6 +114,15 @@ export default {
       } else console.log("请求doc文件失败");
     });
     //请求axure
+    get_axurefile({
+      username:this.username,
+      project_id:this.project_id
+    }).then(res=>{
+      if(res.data.ans_list){
+        this.axure_file = res.data.ans_list
+        console.log('axure_files',this.axure_file)
+      }else console.log("请求axure文件失败")
+    })
   },
 };
 </script>

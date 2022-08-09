@@ -16,6 +16,46 @@ export async function register(data) {
     })
 }
 
+export function save_axure(data){
+    return request({
+        url: 'api/projects/save/axure',
+        method: 'post',
+        data,
+    })
+}
+
+export function create_axure(data){
+    return request({
+        url: 'api/projects/new/axure',
+        method: 'post',
+        data,
+    })
+}
+
+// export function load_axure(data){
+//     return request({
+//         url: 'api/projects/load/axure',
+//         method: 'post',
+//         data,
+//     })
+// }
+//
+// export function del_axure(data){
+//     return request({
+//         url: 'api/projects/delete/axure',
+//         method: 'post',
+//         data,
+//     })
+// }
+
+export function get_axurefile(data){
+    return request({
+        url: 'api/projects/viewDesignsInProject',
+        method: 'post',
+        data,
+    })
+}
+
 export function save_uml(data){
     return request({
         url: 'api/projects/save/xml',
@@ -247,6 +287,8 @@ export function getProsByUser(data){
         data,
     })
 }
+
+
 
 /*export const loginApi=data=>{
     return post({
