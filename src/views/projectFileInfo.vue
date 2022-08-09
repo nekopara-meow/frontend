@@ -65,8 +65,9 @@
           ></file-preview>
           <file-preview
             :file_type="2"
-            :file_id="1"
-            :project_id="1"
+            :creator="this.username"
+            :file_id="this.project_id"
+            :project_id="this.project_id"
             :is-new="true"
           ></file-preview>
         </div>
@@ -78,6 +79,7 @@
 <script>
 import AxureEditor from "@/components/rubbish/axureEditor";
 import FilePreview from "@/components/file_componets/filePreview";
+
 import { get_docfile, get_umlfile, get_axurefile } from "@/utils/api";
 export default {
   name: "projectFileInfo",
