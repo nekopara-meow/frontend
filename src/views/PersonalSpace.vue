@@ -83,36 +83,51 @@
         </div>
 
         <hr style="margin: 5px; width: 100%" />
-        <div class="tel">
-          <span style="">Tel</span>
-          <span style="font-size: 20px" v-if="editing == 0">{{
-            data.tel
-          }}</span>
-          <el-input
-            v-else
-            v-model="data.tel"
-            placeholder="电话"
-            style="display: line; width: 200px; font-size: 15px"
-          />
-        </div>
-        <div class="tel">
-          <span>Email</span>
-          <span style="font-size: 20px">{{ email }}</span>
-        </div>
-        <div class="tel" style="margin-bottom: 0px">Intro</div>
+        <el-skeleton
+          :rows="5"
+          animated
+          v-if="email == undefined || email == ''"
+        />
         <div
-          class="tel brief_introdetail"
-          style="font-size: 15px; margin-top: 0px"
+          v-else
+          style="
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          "
         >
-          <span v-if="editing == 0">{{ data.brief_intro }}</span>
-          <el-input
-            v-else
-            v-model="data.brief_intro"
-            placeholder="简介"
-            type="textarea"
-            :rows="4"
-            style="display: line; width: 100%; font-size: 10px"
-          />
+          <div class="tel">
+            <span style="">Tel</span>
+            <span style="font-size: 20px" v-if="editing == 0">{{
+              data.tel
+            }}</span>
+            <el-input
+              v-else
+              v-model="data.tel"
+              placeholder="电话"
+              style="display: line; width: 200px; font-size: 15px"
+            />
+          </div>
+          <div class="tel">
+            <span>Email</span>
+            <span style="font-size: 20px">{{ email }}</span>
+          </div>
+          <div class="tel" style="margin-bottom: 0px">Intro</div>
+          <div
+            class="tel brief_introdetail"
+            style="font-size: 15px; margin-top: 0px"
+          >
+            <span v-if="editing == 0">{{ data.brief_intro }}</span>
+            <el-input
+              v-else
+              v-model="data.brief_intro"
+              placeholder="简介"
+              type="textarea"
+              :rows="4"
+              style="display: line; width: 100%; font-size: 10px"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -128,8 +143,7 @@ import Base64 from "@/utils/Base64";
 export default {
   name: "Register",
   components: { Edit, Upload, Plus },
-  created() {
-  },
+  created() {},
   mounted() {
     getuserinfo({ username: JSON.parse(Base64.decode(this.$route.query.info)).username }).then((response) => {
       if (response.data.status_code == 1) {
@@ -182,14 +196,14 @@ export default {
         this.editing = 1;
       } else {
         this.editing = 0;
-          edituserinfo(this.data).then((response) => {
-            if (response.data.status_code == 1) {
-              ElMessage({
-                message: "修改成功",
-                type: "success",
-              });
-            } else ElMessage.error(response.data.message);
-          });
+        edituserinfo(this.data).then((response) => {
+          if (response.data.status_code == 1) {
+            ElMessage({
+              message: "修改成功",
+              type: "success",
+            });
+          } else ElMessage.error(response.data.message);
+        });
       }
     },
     handleBeforeUpload(file) {
@@ -310,7 +324,7 @@ export default {
 }
 .brief_introdetail {
   height: 80px;
-  overflow-y: scroll;
+  overflow-y: auto;
   text-indent: 2em;
 }
 ::-webkit-scrollbar {
