@@ -11,9 +11,10 @@
               ></el-button>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item>按项目分组</el-dropdown-item>
-                  <el-dropdown-item>按格式分组</el-dropdown-item>
-                  <el-dropdown-item>按时间分组</el-dropdown-item>
+                  <el-dropdown-item>按时间升序</el-dropdown-item>
+                  <el-dropdown-item>按时间降序</el-dropdown-item>
+                  <el-dropdown-item>按文件名升序</el-dropdown-item>
+                  <el-dropdown-item>按文件名降序</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -24,14 +25,14 @@
 
         <div id="leftdown">
           <el-tabs tab-position="top">
-            <el-tab-pane label="UML">
+            <el-tab-pane label="UML" :name="tab_name">
               <div class="fileDisplayer">
                 <file-preview v-for="(tmp,index) in uml_file" :file_id="tmp.file_id" :update_time="tmp.update_time"
                               :file_type="tmp.file_type" :creator="tmp.creator" :file_name="tmp.file_name"
                               :file_content="tmp.file_content" :project_id="tmp.project_id" :key="index"></file-preview>
               </div>
             </el-tab-pane>
-            <el-tab-pane label="文档">
+            <el-tab-pane label="文档" :name="tab_name">
               <div class="fileDisplayer">
                 <file-preview v-for="(tmp,index) in doc_file" :file_id="tmp.file_id"
                               :file_type="tmp.file_type" :creator="tmp.creator" :file_name="tmp.file_name" :update_time="tmp.update_time"
@@ -109,10 +110,14 @@ export default {
       uml_file:[],
       doc_file:[],
       axure_file:[],
-      focus_project_id:''
+      focus_project_id:'',
+      tab_name:'UML',
     }
   },
   methods:{
+    sortByTime(){
+
+    },
     loadFiles(project_id){
       this.focus_project_id=project_id
       get_umlfile({

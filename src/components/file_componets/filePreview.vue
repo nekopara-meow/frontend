@@ -236,6 +236,12 @@ export default {
             })
             break
           case 2:
+            console.log("打开已有的axure",{
+              project_id:this.project_id,
+              axure_id:this.file_id,
+              URLpage:this.file_content,
+              URLpageName:this.name_url,
+            })
             this.$router.push({
               name: 'axure',
               params: {
