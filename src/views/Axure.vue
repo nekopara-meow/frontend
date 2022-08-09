@@ -3,14 +3,26 @@
         <div class="line"></div>
         <div class="head">
             <el-dropdown split-button type="primary">
-                <span class="el-dropdown-link">
-                    Meow Meow
-                </span>
+                <div @dblclick="startChangeName">
+                    <input v-if="changingName"
+                        :value = AxureName
+                        @change="changeName"
+                        style="border:none; 
+                            background-color: transparent;
+                            color: white;">
+                    <span v-else class="el-dropdown-link">
+                        {{ AxureName }}
+                    </span>
+                </div>
+                    
                 <template #dropdown>
                     <el-dropdown-menu>
-                        <el-dropdown-item>保存</el-dropdown-item>
+                        <el-dropdown-item @click="upload">
+                            保存
+                        </el-dropdown-item>
                         <el-dropdown-item @click="bePic">导出</el-dropdown-item>
                         <el-dropdown-item>重命名</el-dropdown-item>
+                        <el-dropdown-item @click="download">加载</el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
             </el-dropdown>
@@ -35,9 +47,17 @@
                             <el-menu-item v-for="(item, Index) in pagesname"
                                 :index="Index.toString()" @click="setPage(Index)">
                                 <div class="menu-item">
-                                    <div class="menu-item-left">
+                                    <div class="menu-item-left" @dblclick="startChangePageName">
                                         <el-icon><Document /></el-icon>
-                                        <span>{{ item }}</span>
+                                        <input v-if=ChangingThisPage(Index)
+                                            :value = pagesname[Index]
+                                            @change="changePageName($event, Index)"
+                                            style="border:none; width: 100%;
+                                                background-color: transparent;
+                                                color: white;">
+                                        <span v-else>
+                                            {{ item }}
+                                        </span>
                                     </div>
                                     <el-icon><MoreFilled /></el-icon>
                                 </div>
@@ -82,8 +102,43 @@
                                 v-model:active = item.active
                                 
                                 @activated = "setActive(index)"
-                                @deactivated = "setDeActive(index)">
-                                <div :class="item.style" :id="item.id">
+                                @deactivated = "setDeActive(index)"
+                                @resizing = "resizingHandle">
+                                <div v-if = "isLable(item.type)" :style="item.style" :id="item.id">
+                                    <div v-if="changingLable">
+                                        <input :value="item.content"
+                                            @change="changeLable($event, index)"
+                                            type="text" :style="item.style">
+                                    </div>
+                                    <span v-else @dblclick="editLable">
+                                        {{ item.content }}
+                                    </span>
+                                </div>
+                                <div v-else-if="isBtn(item.type)" :style="item.style" :id="item.id">
+                                    <el-button :type="item.btnType" @dblclick="editLable" padding = 0>
+                                        <input v-if="changingLable" :value="item.content"
+                                            @change="changeLable($event, index)"
+                                            style="border: none; 
+                                                background-color: transparent;
+                                                font-size: 15px;
+                                                width: 100%">
+                                        <span v-else>
+                                            {{ item.content }}
+                                        </span>
+                                    </el-button>
+                                </div>
+                                <div v-else-if="isInput(item.type)" :style="item.style" :id="item.id">
+                                    <el-input :placeholder="item.content" 
+                                        prefix-icon="Search">
+                                        <template v-if=havePretend(index) #prepend>
+                                            {{ item.pretend }}
+                                        </template>
+                                        <template v-if="haveAppend(index)" #append>
+                                            {{ item.append }}
+                                        </template>
+                                    </el-input>
+                                </div>
+                                <div v-else :style="item.style" :id="item.id">
                                 </div>
                             </Vue3DraggableResizable>
                         </DraggableContainer>
@@ -127,6 +182,36 @@
                         <div class="rect-button" @click="addRedRect"></div>
                         <div class="split"></div>
                         <div class="circle-button" @click="addCircle"></div>
+                        <div class="split"></div>
+                        <div class="mykangle" @click="addKangle"></div>
+                    </div>
+                </el-collapse-item>
+                <el-collapse-item title="常用" name="2">
+                    <div class="figure-button">
+                        <div class="label-button" @click="addLable">T</div>
+                        <div class="split"></div>
+                        <div class="button-button-white" @click="addBtnWhite">按钮</div>
+                        <div class="split"></div>
+                        <div class="button-button-grey" @click="addBtnGrey">按钮</div>
+                    </div>
+                    <div class="figure-button">
+                        <div class="split-up"></div>
+                    </div>
+                    <div class="figure-button">
+                        <div class="input-button" @click="addInput">input</div>
+                        <div class="split"></div>
+                        <div class="search-button">
+                            <span>search</span>
+                            <el-icon><Search /></el-icon>
+                        </div>
+                    </div>
+                    <div class="figure-button">
+                        <div class="split-up"></div>
+                    </div>
+                    <div class="figure-button">
+                        <el-radio disabled margin="0"></el-radio>
+                        <span>单选框</span>
+                        
                     </div>
                 </el-collapse-item>
             </el-collapse>
@@ -171,6 +256,19 @@
 </template>
 
 <style lang="scss" scoped>
+
+.el-button{
+    width: 100%;
+    height: 100%;
+}
+
+.el-input{
+    width: 100%;
+    height: 100%;
+    .icons{
+        height: 90%;
+    }
+}
 
 .myitem{
     width: 100%;
@@ -241,6 +339,19 @@
             border-style: solid;
             border-width: 1.5px;
         }
+        .label-button{
+            width: 30px;
+            height: 30px;
+            border-color: black;
+            border-style: solid;
+            border-width: 1.5px;
+
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+        }
         .circle-button{
             width: 30px;
             height: 30px;
@@ -249,16 +360,96 @@
             border-width: 1.5px;
             border-radius: 50%;
         }
+        .button-button-white{
+            width: 40px;
+            height: 28px;
+            border-color: black;
+            border-style: solid;
+            border-width: 1.5px;
+            border-radius: 5px;
+
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .button-button-grey{
+            width: 40px;
+            height: 28px;
+            border-color: transparent;
+            border-style: solid;
+            border-width: 1.5px;
+            border-radius: 5px;
+
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+
+            background-color: rgb(158, 158, 158);
+            color: white;
+        }
+
+        .input-button{
+            width: 65px;
+            height: 25px;
+            border-color: grey;
+            color: grey;
+            border-style: solid;
+            border-width: 1.5px;
+            border-radius: 5px;
+            opacity: 0.65;
+
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding-left: 3px;
+        }
+
+        .search-button{
+            width: 80px;
+            height: 25px;
+            border-color: grey;
+            color: grey;
+            border-style: solid;
+            border-width: 1.5px;
+            border-radius: 5px;
+            opacity: 0.65;
+
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            padding-left: 3px;
+            padding-right: 3px;
+        }
+
+        .radio-button{
+            width: 60px;
+            height: 30px;
+            border-color: transparent;
+
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
         .split{
             width: 15px;
             height: 30px;
+        }
+        .split-up{
+            width: 150px;
+            height: 15px;
         }
     }
 }
 
 .my-table{
     width: 700px;
-    height: 500px;
+    height: 450px;
     background-color: white;
 }
 
@@ -378,6 +569,11 @@
             display: flex;
             flex-direction: row;
             align-items: center;
+            .input{
+                height: 50%;
+                background-color: transparent;
+                border: none;
+            }
         }
     }
 
@@ -457,13 +653,38 @@
     }
 }
 
+.mykangle{ /*三角形*/
+	width: 0;
+	height: 0;
+	border-bottom: solid 30px black;
+    border-left: solid 15px transparent;
+    border-right: solid 15px transparent;
+    position: relative;
+}
+.mykangle::before{ /*小三角形*/
+	content: "";
+	display: block;
+	width: 0;
+	height: 0;
+	border-bottom: solid 29px white;
+    border-left: solid 14px transparent;
+    border-right: solid 13px transparent;
+    position: absolute;
+    top: 0px;
+    left: -13.5px;
+}
+
+.input{
+    border: none
+}
+
 </style>
 
 <script>
-import { ElDropdown, ElMenu, ElCollapse} from 'element-plus'
+import { ElDropdown, ElMenu, ElCollapse, ElButton, ElRadio} from 'element-plus'
 import { Plus, MoreFilled, ArrowDown, Document } from '@element-plus/icons-vue'
 import { Picture, PieChart, Stopwatch, Star, Setting } from '@element-plus/icons-vue'
-import { CircleClose, Delete, ArrowUp } from '@element-plus/icons-vue'
+import { CircleClose, Delete, ArrowUp, Search } from '@element-plus/icons-vue'
 
 import Vue3DraggableResizable from 'vue3-draggable-resizable'
 import { DraggableContainer } from 'vue3-draggable-resizable'
@@ -472,12 +693,16 @@ import 'vue3-draggable-resizable/dist/Vue3DraggableResizable.css'
 import html2canvas from "html2canvas"
 import {ImagePreview} from 'vant'
 
+import Axios from "axios"
+
+import OSS from "ali-oss"
+
 export default{
     components: { 
-        ElDropdown, ElMenu, ElCollapse,
+        ElDropdown, ElMenu, ElCollapse, ElButton, ElRadio,
         ArrowDown, MoreFilled, Plus, Document,
         Picture, PieChart, Stopwatch, Star, Setting,
-        CircleClose, Delete, ArrowUp,
+        CircleClose, Delete, ArrowUp, Search,
 
         Vue3DraggableResizable, 
         DraggableContainer,
@@ -486,6 +711,10 @@ export default{
     },
     data() {
         return {
+
+            AxureName: "Meow Meow",
+            changingName: false,
+
             tool: [
                 false, false, false, false, false
             ],
@@ -493,36 +722,136 @@ export default{
 
             pages: [
                 [
-                    { id: "el0", style: "redRect", type: "figure", active: false,
-                        transform: { x: 100, y: 100, width: 100, height: 100 } },
-                    { id: "el1", style: "redRect", type: "figure", active: false,
-                        transform: { x: 200, y: 100, width: 100, height: 100 } },
-                    { id: "el2", style: "redRect", type: "figure", active: false,
-                        transform: { x: 300, y: 100, width: 100, height: 100 } },
-                    { id: "el3", style: "redRect",  type: "figure", active: false,
-                        transform: { x: 400, y: 100, width: 100, height: 100 } },
+                    /*{ id: "el0", type: "figure-kangle", active: false,
+                        transform: { x: 100, y: 100, width: 100, height: 100 }, 
+                        style: { "width": "0", "height": "0",
+	                        "border-bottom": "solid 100px red",
+                            "border-left": "solid 50px transparent",
+                            "border-right": "solid 50px transparent",
+                            "position": "relative",} },*/
+                    
+                    /*{   
+                        id: "el0", type: "btn", active: false,
+                        transform: { x: 100, y: 100, width: 62, height: 32 },
+                        style: { "width": "100%", "height": "100%"},
+                        btnType: "primary", content: "按钮"
+                    }*/
+
+                    {   
+                        id: "el0", type: "input", active: false,
+                        transform: { x: 100, y: 100, width: 230, height: 40 },
+                        style: { "width": "100%", "height": "100%"},
+                        content: "Please Input",
+                        pretend: "", append: "",
+                        prefix_icon: "Search", suffix_icon:"Calendar"
+                    }
                 ]
             ],
             pagesname: [
                 "page-1"
             ],
-            cnt: [4],
             now: null,
             nowpage: 0,
             
             dialogVisible: false,
             imgUrl: null,
+
+            changingLable: false,
+            changingPageName: false,
+
+            kangle: {
+	            "width": "0",
+	            "height": "0",
+	            "border-bottom": "solid 100px red",
+                "border-left": "solid 50px transparent",
+                "border-right": "solid 50px transparent",
+                "position": "relative",
+            },
+
+            redRect: {
+                /*background: red;*/
+                "width": "100%",
+	            "height": "100%",
+
+                "border-color": "black",
+                "border-style": "solid",
+                "border-width": "2px",
+                "padding": "0"
+            },
+
+            circle: {
+                "width": "100%",
+	            "height": "100%",
+
+                "border-color": "black",
+                "border-style": "solid",
+                "border-radius": "50%",
+                "border-width": "2px",
+                "padding": "0"
+            },
+
+            Lable: {
+                "width": "100%",
+                "color": "black",
+                "border": "none",
+            },
+            
         }
         
     },
     methods: {
+        // pretend: "", append: ""
+        havePretend(index){
+            let item = this.pages[this.nowpage][index]
+            return item.pretend != undefined && item.pretend != null
+                && item.pretend.length > 0
+        },
+        haveAppend(index){
+            let item = this.pages[this.nowpage][index]
+            
+            return item.append != undefined && item.append != null
+                && item.append.length > 0
+        },
+        ChangingThisPage(index){
+            return this.changingPageName && (index == this.nowpage)
+        },
+        startChangePageName(){
+            console.log('startChangePageName')
+            this.changingPageName = true
+        },
+        startChangeName(){
+            this.changingName = true
+        },
+        changePageName(e, index){
+            let that = this
+            that.changingPageName = false
+            that.pagesname[index] = e.target.value
+        },
+        changeName(e){
+            this.changingName = false
+            this.AxureName = e.target.value
+        },
+        changeLable(e, index){
+            let that = this
+            console.log(e.target.value)
+            console.log(index)
+            that.changingLable = false
+            that.pages[this.nowpage][index].content = e.target.value
+        },
+        isLable(strtype){
+            return strtype === "lable"
+        },
+        isBtn(strtype){
+            return strtype === "btn"
+        },
+        isInput(strtype){
+            return strtype === "input"
+        },
         bePic(){
-            console.log("bePic")
             html2canvas(this.$refs.imgDom).then(canvas => {
                 // 转成图片，生成图片地址
                 this.imgUrl = canvas.toDataURL("image/png");
                 //赋值给vant组件直接显示
-                console.log(this.imgUrl)
                 //ImagePreview({images: [imgUrl], closeable: true});
                 //window.open(imgUrl.toString(), '_self')
 
@@ -540,9 +869,6 @@ export default{
                 return null
             return num.toString()
         },
-        TEST(){
-            console.log('delete')
-        },
         setTool(index){
             this.nowtool = index
             this.tool = [ false, false, false, false, false ]
@@ -554,32 +880,87 @@ export default{
         },
         addRedRect(){
             //console.log('Add')
-            let newItem = {"id": 'el' + this.cnt[this.nowpage], 
-                style: "redRect", type: "figure", active: true,
-                transform: { x: 0, y: 0, width: 100, height: 100 } }
-            this.now = this.cnt[this.nowpage]
-            this.cnt[this.nowpage] = this.cnt[this.nowpage] + 1
+            let Cnt = this.pages[this.nowpage].length
+            let newItem = {"id": 'el' + Cnt, 
+                type: "figure-rect", active: true,
+                transform: { x: 0, y: 0, width: 100, height: 100 },
+                style: this.redRect
+            }
+            this.now = Cnt
             this.pages[this.nowpage].push(newItem)
         },
         addCircle(){
-            let newItem = {"id": 'el' + this.cnt[this.nowpage], 
-                style: "circle", type: "figure", active: true,
-                transform: { x: 0, y: 0, width: 100, height: 100 } }
-            this.now = this.cnt[this.nowpage]
-            this.cnt[this.nowpage] = this.cnt[this.nowpage] + 1
+            let Cnt = this.pages[this.nowpage].length
+            let newItem = {"id": 'el' + Cnt, 
+                type: "figure-circle", active: true,
+                transform: { x: 0, y: 0, width: 100, height: 100 },
+                style: this.circle }
+            this.now = Cnt
+            this.pages[this.nowpage].push(newItem)
+        },
+        addKangle(){
+            let Cnt = this.pages[this.nowpage].length
+            let newItem = {"id": 'el' + Cnt, 
+                type: "figure-kangle", active: true,
+                transform: { x: 0, y: 0, width: 100, height: 100 },
+                style: this.kangle }
+            this.now = Cnt
+            this.pages[this.nowpage].push(newItem)
+        },
+        addLable(){
+            let Cnt = this.pages[this.nowpage].length
+            let newItem = {"id": 'el' + Cnt, 
+                type: "lable", active: true,
+                transform: { x: 0, y: 0, width: 130, height: 40},
+                style: this.Lable, content: "这是一段文字"}
+            this.now = Cnt
+            this.pages[this.nowpage].push(newItem)
+        },
+        addBtnWhite(){
+            let Cnt = this.pages[this.nowpage].length
+            let newItem = { "id": 'el' + Cnt, 
+                type: "btn", active: true,
+                transform: { x: 0, y: 0, width: 62, height: 32 },
+                style: { "width": "100%", "height": "100%"},
+                btnType: "", content: "按钮"
+            }
+            this.now = Cnt
+            this.pages[this.nowpage].push(newItem)
+        },
+        addBtnGrey(){
+            let Cnt = this.pages[this.nowpage].length
+            let newItem = { "id": 'el' + Cnt, 
+                type: "btn", active: true,
+                transform: { x: 0, y: 0, width: 62, height: 32 },
+                style: { "width": "100%", "height": "100%"},
+                btnType: "primary", content: "按钮"
+            }
+            this.now = Cnt
+            this.pages[this.nowpage].push(newItem)
+        },
+        addInput(){
+            let Cnt = this.pages[this.nowpage].length
+            let newItem = { "id": 'el' + Cnt, 
+                type: "input", active: true,
+                transform: { x: 0, y: 0, width: 230, height: 40 },
+                style: { "width": "100%", "height": "100%"},
+                content: "Please Input",
+                pretend: "", append: ""
+            }
+            this.now = Cnt
             this.pages[this.nowpage].push(newItem)
         },
         printList(){
             console.log(JSON.stringify(this.pages))
         },
         setActive(id){
-            console.log(id)
             if(this.now != null)
                 this.pages[this.nowpage][this.now].active = false
             this.now = id
             this.pages[this.nowpage][this.now].active = true
         },
         setDeActive(id){
+            this.changingLable = false
             this.pages[this.nowpage][id].active = false
             if(this.now == id)
                 this.now = null
@@ -588,6 +969,8 @@ export default{
             this.pages[this.nowpage] = []
         },
         Delete(){
+            if(this.changingLable)
+                return ;
             if(this.now == null){
                 this.deletePage()
                 return ;
@@ -598,15 +981,14 @@ export default{
         AddPage(){
             this.pages.push([])
             this.pagesname.push("new-page")
-            this.cnt.push(0)
             this.now = null
             this.nowpage = this.pages.length - 1
+            //this.changingPageName = false
         },
         setPage(index){
-            console.log(index)
             this.now = null
             this.nowpage = index
-            console.log(this.nowpage)
+            //this.changingPageName = false
         },
         deletePage(){
             if(this.pagesname.length == 1)
@@ -614,7 +996,6 @@ export default{
 
             this.pages.splice(this.nowpage, 1)
             this.pagesname.splice(this.nowpage, 1)
-            this.cnt.splice(this.nowpage, 1)
             this.now = null
             this.nowpage = 0
         },
@@ -639,14 +1020,104 @@ export default{
         moveDown(index){
 
         },
+        resizingHandle(){
+            if(this.now == null)
+                return ;
+            let ob = this.pages[this.nowpage][this.now]
+            if(ob.type === "figure-kangle"){
+                let w = ob.transform.width
+                let h = ob.transform.height
+                
+                this.pages[this.nowpage][this.now].style["border-bottom"] = "solid " + h + "px red"
+                this.pages[this.nowpage][this.now].style["border-left"] = "solid " + (w/2) + "px transparent"
+                this.pages[this.nowpage][this.now].style["border-right"] = "solid " + (w/2) + "px transparent"
+            }
+        },
+        editLable(){
+            console.log('editLable')
+            this.changingLable = true
+            console.log(this.changingLable)
+        },
+        upload() {
+            let text = JSON.stringify(this.pages)
+            const data = new Blob([text])
+            var client = new OSS({
+                endpoint: "oss-cn-hangzhou.aliyuncs.com", //填写Bucket所在地域
+                accessKeyId: "LTAI5tNTp64pvj7ZyM9GBBrB",
+                accessKeySecret: "uraarRMA75smURHejuKbVw6IhMgxWM",
+                bucket: "miaotu-headers", // 填写Bucket名称。
+            })
+            var fileName = "exampledir/exampleobject.json"
+            client.put(fileName, data)
+            //url="https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName;
+        
+            let text2 = JSON.stringify(this.pagesname)
+            const data2 = new Blob([text2])
+            var client2 = new OSS({
+                endpoint: "oss-cn-hangzhou.aliyuncs.com", //填写Bucket所在地域
+                accessKeyId: "LTAI5tNTp64pvj7ZyM9GBBrB",
+                accessKeySecret: "uraarRMA75smURHejuKbVw6IhMgxWM",
+                bucket: "miaotu-headers", // 填写Bucket名称。
+            })
+            var fileName2 = "exampledir/exampleobject_name.json"
+            client2.put(fileName2, data2)
+        },
+        download(){
+            let url = "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/exampledir/exampleobject.json"
+            let that = this
+            Axios({
+                method: 'get',
+                url, responseType: 'blob',
+                transformResponse: [function (data) {
+                    let reader = new FileReader()
+                    reader.readAsText(data, 'UTF-8')
+                    reader.onload = function () {
+                        //此处便是返回值
+                        let text = reader.result
+                        that.pages = JSON.parse(text)
+                    }
+                    return data;
+                }]
+            })
+            .then(res => {
+                console.log('res')
+            })
+
+            url = "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/exampledir/exampleobject_name.json"
+            Axios({
+                method: 'get',
+                url, responseType: 'blob',
+                transformResponse: [function (data) {
+                    let reader = new FileReader()
+                    reader.readAsText(data, 'UTF-8')
+                    reader.onload = function () {
+                        //此处便是返回值
+                        console.log('reader')
+                        console.log(reader.result)
+                        let text = reader.result
+                        that.pagesname = JSON.parse(text)
+                        console.log(that.pagesname)
+                    }
+                    return data;
+                }]
+            })
+            .then(res => {
+                console.log('res')
+                console.log(res.data)
+            })
+        },
     },
     mounted() {
         let that = this
         document.onkeydown = function(e) {
-            console.log(e.which)
+            if(that.changingLable || that.changingName || that.changingPageName)
+                return
             if(e.which == 8 || e.which == 46)
                 that.Delete()
         }
     },
+    created() {
+        
+    }
 }
 </script>

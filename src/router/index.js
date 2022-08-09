@@ -69,6 +69,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Axure.vue')
   },
   {
+    path: '/axurepreview',
+    name: 'axurepreview',
+    component: () => import(/* webpackChunkName: "about" */ '../views/AxurePreview.vue')
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import(/* webpackChunkName: "about" */ '../views/Login.vue')

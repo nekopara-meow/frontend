@@ -1,6 +1,6 @@
 <template>
   <div id="App" class="row">
-    <fr-aside @click="collapse = !collapse" :collapse="collapse" />
+    <fr-aside :collapse="collapse" />
     <main>
       <fr-nav :collapse="collapse" @indent="collapse = !collapse" />
       <article :style="background" :class="{ indent: collapse }">
