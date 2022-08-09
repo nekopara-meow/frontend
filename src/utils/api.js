@@ -333,6 +333,27 @@ export async function deletepersonalmsg(data) {
         data,
     })
 }
+export async function getteammessage(data) {
+    return request({
+        url: 'api/interact/getTeamMessage',
+        method: 'post',
+        data,
+    })
+}
+export async function getprojectmessage(data) {
+    return request({
+        url: 'api/interact/getProjectMessage',
+        method: 'post',
+        data,
+    })
+}
+export async function updateprojectinfo(data) {
+    return request({
+        url: 'api/projects/updateprojectinfo',
+        method: 'post',
+        data,
+    })
+}
 /*export const loginApi=data=>{
     return post({
         url: "api/users/login",

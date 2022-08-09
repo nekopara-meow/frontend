@@ -7,13 +7,13 @@
   >
     <el-form :model="form">
       <el-form-item label="项目名称">
-        <el-input v-model="form.name" autocomplete="off" />
+        <el-input v-model="form.project_name" autocomplete="off" />
       </el-form-item>
       <el-form-item label="项目介绍">
         <el-input
           type="textarea"
           :rows="3"
-          v-model="form.intro"
+          v-model="form.brief_intro"
           autocomplete="off"
         />
       </el-form-item>
@@ -131,7 +131,7 @@ import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
 import { Filter, Sort, Edit, Plus, CaretBottom } from "@element-plus/icons-vue";
 import UMLEditor from "@/components/rubbish/UMLEditor";
 import CoEditor from "@/components/rubbish/CoEditor";
-import { get_docfile, get_umlfile, del_uml, del_doc } from "@/utils/api";
+import {get_docfile, get_umlfile, del_uml, del_doc, updateprojectinfo, editteaminfo} from "@/utils/api";
 import AxureEditor from "@/components/rubbish/axureEditor";
 
 export default {
@@ -140,6 +140,13 @@ export default {
   props: {},
   data() {
     return {
+      projectinfo:{
+        brief_intro: "",
+        create_time: "",
+        creator: "",
+        project_name:"",
+        team_name: "",
+      },
       dialogFormVisible: false,
       project_id: "",
       tab: "tab-0",
@@ -147,12 +154,25 @@ export default {
       editing: 0,
       username: "",
       form: {
-        name: "",
-        intro: "",
+        project_name: "",
+        brief_intro: "",
+        project_id:this.project_id,
       },
     };
   },
-  methods: {},
+  methods: {
+    submit(){
+      updateprojectinfo(this.form).then((response) => {
+        if (response.data.status_code == 1) {
+          ElMessage({
+            message: "修改成功",
+            type: "success",
+          });
+          this.dialogFormVisible=false;
+        } else ElMessage.error(response.data.message);
+      });
+    }
+  },
   watch: {
     $route(val) {
       console.log("route is watched", val);

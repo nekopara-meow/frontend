@@ -42,9 +42,7 @@
               style="overflow: auto; overflow-x: hidden"
             >
               <div class="dongtai" v-for="(message, index) in personnalmsg" :key="index">
-                <img
-                  :src="message.avatar"
-                />
+                <img :src="message.avatar"/>
                 <div class="dongtairight bluelight">
                   <div>{{message.sender}}</div>
                   <div style="font-size: 15px">{{message.msg}}</div>
@@ -110,7 +108,6 @@
 </template>
 
 <script setup>
-import Axios from "axios";
 import {
   ElDropdown,
   ElDropdownMenu,
@@ -142,10 +139,7 @@ import {
 } from "@/utils/api";
 import { ElMessage } from "element-plus";
 import {Check, Close} from "@element-plus/icons-vue";
-import qs from "qs";
-import store from "@/store";
 import Base64 from "@/utils/Base64";
-import {de} from "element-plus/es/locale";
 export default {
   name: "FrNav",
   components: {
@@ -160,7 +154,8 @@ export default {
   },
   data() {
     return {
-      personnalmsg:[{message_id:1,msg:"邀请您",sender:"luanbu",message_type:1,avatar:"",team_id:13,send_time:""}],
+      personnalmsg:[],
+      //{message_id:1,msg:"邀请您",sender:"luanbu",message_type:2,avatar:"",team_id:13,send_time:""}
       query: "",
       token: "",
       name: "",
@@ -219,7 +214,7 @@ export default {
       getpersonalmsg({username:this.$store.state.username}).then((response) => {
         if (response.data.status_code == 1) {
           console.log("xiaoxi",response.data)
-          // this.personnalmsg=response.data.ans_list;
+          this.personnalmsg=response.data.ans_list;
         }
       });
     },

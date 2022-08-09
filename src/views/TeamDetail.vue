@@ -248,33 +248,13 @@
 
             <hr style="margin: 5px; margin-bottom: 20px" />
             <div class="dongtaicontainer">
-              <div class="dongtai" v-for="(message, index) in teammsg" :key="index">
+              <div class="dongtai" v-for="(message, index) in teamdongtai" :key="index">
                 <img
                   :src="message.avatar"
                 />
                 <div class="dongtairight bluelight">
                   <div>{{ message.sender }}</div>
                   <div style="font-size: 15px">创建了项目：NEKOPARA</div>
-                  <div style="font-size: 13px">2022/8/5</div>
-                </div>
-              </div>
-              <div class="dongtai" v-for="i in [1, 2]">
-                <img
-                  src="https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg"
-                />
-                <div class="dongtairight bluelight">
-                  <div>小七</div>
-                  <div style="font-size: 15px">邀请了成员：吕双羽</div>
-                  <div style="font-size: 13px">2022/8/5</div>
-                </div>
-              </div>
-              <div class="dongtai" v-for="i in [1, 2]">
-                <img
-                  src="https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg"
-                />
-                <div class="dongtairight bluelight">
-                  <div>徐凡</div>
-                  <div style="font-size: 15px">成为了管理员</div>
                   <div style="font-size: 13px">2022/8/5</div>
                 </div>
               </div>
@@ -492,7 +472,6 @@
 </template>
 
 <script>
-import { client, getFileNameUUID } from "../assets/alioss.js";
 import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
 import {
   Filter,
@@ -514,7 +493,7 @@ import {
   getteamprojectbyid,
   invitemember, renameproject,
   setteamadmin,
-    editteaminfo,
+  editteaminfo, getteammessage,
 } from "@/utils/api";
 import Base64 from "@/utils/Base64";
 import {client, getFileNameUUID} from "@/assets/alioss";
@@ -535,6 +514,7 @@ export default {
       } else ElMessage.error(response.data.message);
     });
     this.initializationdata();
+    this.getteammsg();
   },
   data() {
     return {
@@ -578,6 +558,7 @@ export default {
         team_name: "",
         avatar: "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/Transparent_Akkarin.jpg",
       },
+      teamdongtai:[],
       username: this.$store.state.username,
       formLabelWidth: "140px",
     };
@@ -710,6 +691,14 @@ export default {
         if (response.data.status_code == 1) {
           this.teamprojects = response.data.ans_list;
         } else ElMessage.error(response.data.message);
+      });
+    },
+    //动态
+    getteammsg(){
+      getteammessage({ team_id: this.team_id }).then((response) => {
+        if (response.data.status_code == 1) {
+         this.teamdongtai=response.data.ans_list;
+        }
       });
     },
     //成员操作
