@@ -117,7 +117,7 @@ export default {
       this.focus_project_id=project_id
       get_umlfile({
         username:this.username,
-        project_id:this.project_id
+        project_id:project_id
       }).then(res=>{
         if(res.data.ans_list){
           this.uml_file.splice(0)
@@ -132,9 +132,10 @@ export default {
       })
       get_docfile({
         username:this.username,
-        project_id:this.project_id
+        project_id:project_id
       }).then(res=>{
         if(res.data.ans_list){
+          console.log('res',res.data)
           this.doc_file.splice(0)
           let tmp
           for(tmp in res.data.ans_list){
@@ -147,19 +148,28 @@ export default {
       })
     }
   },
-  mounted() {
+  created() {
     this.username=this.$store.state.username
     getProsByUser({
       username:this.username
     }).then(res=>{
-      console.log('getProsByUser',res.data)
       if(res.data.projects){
-        this.userProjects.concat(res.data.projects)
+        let l=this.userProjects.length
+        for(let i=0;i<l;i++){
+          this.userProjects.pop()
+        }
+        console.log('pros',res.data.projects[0])
+        l=res.data.projects.length
+        for(let i=0;i<l;i++){
+          this.userProjects.push(res.data.projects[i])
+        }
+        console.log('userPro',this.userProjects)
+        if(this.userProjects[0].project_id!==null){
+          this.loadFiles(this.userProjects[0].project_id)
+        }
       }else console.log('fail!!')
     })
-    if(this.userProjects[0].project_id!==null){
-      this.loadFiles(this.userProjects[0].project_id)
-    }
+
 
   }
 };

@@ -1,7 +1,7 @@
 import {createRouter, createWebHashHistory} from 'vue-router'
 import { stringifyQuery, parseQuery } from "../utils/query";
 import HomeView from '../views/HomeView.vue'
-
+import store from "@/store";
 const routes = [
   {
     path: '/',
@@ -128,6 +128,19 @@ const router = createRouter({
   history: createWebHashHistory(),
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+
+  store.commit('setFromParams',from.params)
+  store.commit('setFromName',from.name)
+  next()
+})
+router.beforeResolve(async to => {
+  //如果是返回路由，则要替换参数
+  if(to.name=== store.state.fromName){
+    to.params=store.state.fromParams
+  }
 })
 /*router.beforeEach((to, from, next) => {
   if (to.path === '/login'||'/register') {

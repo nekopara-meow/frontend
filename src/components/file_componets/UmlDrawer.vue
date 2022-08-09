@@ -31,7 +31,8 @@ export default {
       project_id: "",
       team_id: "",
       uml_id: "",
-      uml_name:null
+      uml_name:null,
+      fromParams:'',
     };
   },
   methods: {
@@ -184,14 +185,9 @@ export default {
         console.log("uml已上传");
         console.log(res.data);
       })
-      document.getElementById("app").removeChild(iframe);
+      document.getElementById("app").removeChild(this.iframe);
       console.log(this.project_id)
-      this.$router.replace({
-        name:'projectFileInfo',
-        params:{
-          project_id:this.project_id
-        }
-      })
+      this.$router.go(-1)
     },
     /**
      * @description: 将uml图的信息存在后端
@@ -219,6 +215,33 @@ export default {
     this.username=this.$store.state.username
     window.addEventListener("hashchange", this.start);
     this.edit()
+  },
+  /**
+   * @description: 路由进入监听
+   * @author: 罗亚硕
+   * @date: 2022/8/9
+   */
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      // 通过 `vm` 访问组件实例
+      console.log('to',to)
+      console.log('from',from)
+      vm.fromParams=from.params
+    })
+  },
+  /**
+   * @description: 监听路由信息
+   * @author: 罗亚硕
+   * @date: 2022/8/9
+   */
+  beforeRouteLeave(to, from) {
+    console.log('beforeLeave',{
+      params:this.fromParams,
+    })
+    to.params=this.fromParams
+    if(this.iframe){
+      document.getElementById("app").removeChild(this.iframe);
+    }
   },
 };
 </script>

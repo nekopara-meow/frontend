@@ -26,9 +26,11 @@ export default {
   computed:{
     tip(){
       let info=this.brief_intro
-      if(info.length>15){
-        info=info.slice(0,14)
-        info+='...'
+      if(info!=null){
+        if(info.length>15){
+          info=info.slice(0,14)
+          info+='...'
+        }
       }
       return '团队名:'+this.team_name+'<br/>'+'团队简介:'+info
     },

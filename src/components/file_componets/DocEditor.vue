@@ -246,6 +246,7 @@ export default {
       json: "",
       model_id:-1,//-1表示没有使用模板，模板id从0开始
       docModel:docModel,
+      fromParams:'',
     };
   },
   emits: ["update"],
@@ -332,16 +333,40 @@ export default {
       //退出前先保存
       this.save();
       //不做更改，返回页面
-      this.$router.replace({
-        name: "projectFileInfo",
-        params: {
-          project_id: this.project_id,
-        },
-      });
+      console.log('exit',{
+        name: this.backRoute,
+        params:this.fromParams,
+      })
+      this.$router.go(-1)
     },
   },
   beforeUnmount() {
     this.editor.destroy();
+  },
+  /**
+   * @description: 路由进入监听
+   * @author: 罗亚硕
+   * @date: 2022/8/9
+   */
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      // 通过 `vm` 访问组件实例
+      console.log('to',to)
+      console.log('from',from)
+      vm.fromParams=from.params
+    })
+  },
+  /**
+   * @description: 监听路由信息
+   * @author: 罗亚硕
+   * @date: 2022/8/9
+   */
+  beforeRouteLeave(to, from) {
+    //设置返回参数
+    console.log('beforeLeave',{
+      params:this.fromParams,
+    })
+    to.params=this.fromParams
   },
 };
 </script>
