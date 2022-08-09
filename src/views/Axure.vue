@@ -1141,8 +1141,10 @@ export default{
             var fileName2 = "Axure/" + this.getFileNameUUID() + ".json"
             client2.put(fileName2, data2)
 
+            console.log(fileName)
+            console.log(fileName2)
             Axios.post(
-                "http://127.0.0.1:8000/api/projects/save/axure",
+                "http://43.138.50.211:8000/api/projects/save/axure",
                 {
                     axure_id: this.axure_id,
                     axure_url: "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName,
@@ -1175,6 +1177,7 @@ export default{
                     reader.onload = function () {
                         //此处便是返回值
                         let text = reader.result
+                        console.log(text)
                         that.pages = JSON.parse(text)
                     }
                     return data;
@@ -1217,11 +1220,14 @@ export default{
                 that.Delete()
         }
 
+        console.log('params')
+        console.log(this.$route.params)
         that.URLpage = this.$route.params.URLpage
         that.URLpageName = this.$route.params.URLpageName
         that.axure_id = this.$route.params.axure_id
 
-        if(that.URLpage == null){
+        if(that.URLpage == null || that.URLpage.length < 1
+            || that.URLpage == '') {
             let fileName = "Axure/" + this.getFileNameUUID() + ".json"
             that.URLpage = "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName
             let fileName2 = "Axure/" + this.getFileNameUUID() + ".json"
