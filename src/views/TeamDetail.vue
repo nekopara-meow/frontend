@@ -80,6 +80,14 @@
                 "
                 >团队项目</a
               >
+              <a
+                @click="
+                  () => {
+                    this.tab = 'tab-3';
+                  }
+                "
+                >项目回收站</a
+              >
               <div class="animation" :class="tab"></div>
             </nav>
           </div>
@@ -369,22 +377,79 @@
           </el-collapse>
         </div>
         <div id="leftdown" v-if="tab == 'tab-2'">
-          <div
-            class="oneteam"
-            style="height: 120px; margin-bottom: 20px"
+          <el-dropdown
+            trigger="contextmenu"
             v-for="(teamproject, index) in teamprojects"
             :key="index"
-            @click="gotoproject(teamproject.project_id)"
           >
-            <div class="oneteamdown">
-              <div style="font-size: 18px">{{ teamproject.project_name }}</div>
-              <div>{{ teamproject.project_brief_intro }}</div>
-              <div style="margin-bottom: 0">
-                创建日期：{{ teamproject.project_create_time }}
+            <div
+              class="oneteam"
+              @click="gotoproject(teamproject.project_id)"
+              style="height: 120px; margin-bottom: 20px"
+            >
+              <div
+                class="oneteamdown"
+                style="
+                  height: 100%;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: space-between;
+                "
+              >
+                <div style="font-size: 18px">
+                  {{ teamproject.project_name }}
+                </div>
+                <div>
+                  {{ teamproject.project_brief_intro }}
+                </div>
+                <div style="margin-bottom: 0">
+                  创建日期：{{ teamproject.project_create_time }}
+                </div>
+                <div>更新日期：2022/8/5</div>
               </div>
-              <div>更新日期：2022/8/5</div>
             </div>
-          </div>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item @click.native="">删除</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </div>
+        <div id="leftdown" v-if="tab == 'tab-3'">
+          <el-dropdown
+            trigger="contextmenu"
+            v-for="(teamproject, index) in teamprojects"
+            :key="index"
+          >
+            <div class="oneteam" style="height: 120px; margin-bottom: 20px">
+              <div
+                class="oneteamdown"
+                style="
+                  height: 100%;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: space-between;
+                "
+              >
+                <div style="font-size: 18px">
+                  {{ teamproject.project_name }}
+                </div>
+                <div>
+                  {{ teamproject.project_brief_intro }}
+                </div>
+                <div style="margin-bottom: 0">
+                  创建日期：{{ teamproject.project_create_time }}
+                </div>
+                <div>更新日期：2022/8/5</div>
+              </div>
+            </div>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item @click.native="">还原</el-dropdown-item>
+                <el-dropdown-item @click.native="">彻底删除</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
         </div>
       </div>
     </div>
@@ -875,7 +940,7 @@ export default {
 
 nav {
   position: relative;
-  width: 300px;
+  width: 400px;
   height: 50px;
 
   border-radius: 8px;
@@ -926,7 +991,11 @@ nav a:nth-child(3):hover ~ .animation {
   width: 100px;
   left: 200px;
 }
-
+.tab-3,
+nav a:nth-child(4):hover ~ .animation {
+  width: 100px;
+  left: 300px;
+}
 .avatar {
   width: 2rem;
   height: 2rem;
