@@ -326,8 +326,8 @@ export default {
                 console.log('create_axure',res.data)
                 this.$router.push({
                   name:'axure',
-                  params:{
-                    axure_id:this.axure_id,
+                  params: {
+                    axure_id:res.data.axure_id,
                     project_id:this.project_id,
                     URLpage:null,
                     URLpageName:null,
