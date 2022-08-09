@@ -763,6 +763,8 @@ import Axios from "axios"
 
 import OSS from "ali-oss"
 
+import { save_axure } from "@/utils/api"
+
 export default{
     components: { 
         ElDropdown, ElMenu, ElCollapse, ElButton, ElRadio, ElMessage, 
@@ -1143,17 +1145,19 @@ export default{
 
             console.log(fileName)
             console.log(fileName2)
-            Axios.post(
-                "http://43.138.50.211:8000/api/projects/save/axure",
-                {
-                    axure_id: this.axure_id,
-                    axure_url: "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName,
-                    name_url: "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName2
-                },
-                {
-                    headers: { "Content-Type": "application/x-www-form-urlencoded" }, //加上这个
-                }
-            ).then((response) => {
+
+            console.log(this.axure_id)
+            console.log('save_axure',{
+                axure_id: this.axure_id,
+                axure_url: "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName,
+                name_url: "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName2
+            })
+
+            save_axure({
+                axure_id: this.axure_id,
+                axure_url: "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName,
+                name_url: "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName2
+            }).then((response) => {
                 let ret = response.data.status_code
                 if(ret == -1)
                     ElMessage.error("请求方式错误")
