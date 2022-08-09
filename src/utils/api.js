@@ -239,6 +239,48 @@ export async function deleteteammem(data) {
         data,
     })
 }
+export async function deleteproject(data) {
+    return request({
+        url: 'api/projects/delete/project',
+        method: 'post',
+        data,
+    })
+}
+export async function copyproject(data) {
+    return request({
+        url: 'api/team/copyproject',
+        method: 'post',
+        data,
+    })
+}
+export async function editteaminfo(data) {
+    return request({
+        url: 'api/team/updateteaminfo',
+        method: 'post',
+        data,
+    })
+}
+export async function getpersonalmsg(data) {
+    return request({
+        url: 'api/interact/getPersonalMessage',
+        method: 'post',
+        data,
+    })
+}
+export async function agreeinvitation(data) {
+    return request({
+        url: 'api/interact/agreeInvitation',
+        method: 'post',
+        data,
+    })
+}
+export async function deletepersonalmsg(data) {
+    return request({
+        url: 'api/interact/disagreeInvitation',
+        method: 'post',
+        data,
+    })
+}
 /*export const loginApi=data=>{
     return post({
         url: "api/users/login",

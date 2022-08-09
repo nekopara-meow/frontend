@@ -30,13 +30,13 @@
       </div>
       <div id="down">
         <el-button
-          v-if="editing == 0&&author==1"
+          v-if="editing === 0&&author===1"
           type="primary"
           id="editbutton"
           @click="edit"
           ><el-icon><Edit /></el-icon
         ></el-button>
-        <el-button v-else type="primary" id="editbutton" @click="edit"
+        <el-button v-else-if="editing===1" type="primary" id="editbutton" @click="edit"
           ><el-icon><Upload /></el-icon
         ></el-button>
         <div>
@@ -131,9 +131,7 @@ export default {
   created() {
   },
   mounted() {
-    console.log("名字",JSON.parse(Base64.decode(this.$route.query.info)).username,this.author,this.$store.state.username,thisediting == 0&&this.author==1)
     getuserinfo({ username: JSON.parse(Base64.decode(this.$route.query.info)).username }).then((response) => {
-      console.log(response.data);
       if (response.data.status_code == 1) {
         this.data.nickname = response.data.nickname;
         this.data.tel = response.data.tel;
@@ -152,7 +150,15 @@ export default {
   },
 
   watch: {
-  },
+    '$route': {
+      handler(newVal, oldVal) {
+        if(newVal.path==oldVal.path)
+          this.$router.go(0)
+      }
+      },
+      deep: true,
+      immediate: true,
+    },
   data() {
     return {
       author:JSON.parse(Base64.decode(this.$route.query.info)).author,

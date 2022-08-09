@@ -153,7 +153,7 @@
             </el-upload>
             <span class="bluelight">{{ teammsg.creator }}</span
             ><span style="font-size: 13px" class="bluelight"
-              >创建于{{ teammsg.create_time }}</span
+              >创建于{{teammsg.create_time|formatDate}}</span
             >
             <div class="text-wrap" style="margin: 10px 0">
               <div class="example">
@@ -214,12 +214,12 @@
 
             <hr style="margin: 5px; margin-bottom: 20px" />
             <div class="dongtaicontainer">
-              <div class="dongtai" v-for="i in [1, 2, 3, 4, 5, 6]">
+              <div class="dongtai" v-for="(message, index) in teammsg" :key="index">
                 <img
-                  src="https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg"
+                  :src="message.avatar"
                 />
                 <div class="dongtairight bluelight">
-                  <div>刘华阳</div>
+                  <div>{{ message.sender }}</div>
                   <div style="font-size: 15px">创建了项目：NEKOPARA</div>
                   <div style="font-size: 13px">2022/8/5</div>
                 </div>
@@ -410,7 +410,8 @@
             </div>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item @click.native="">删除</el-dropdown-item>
+                <el-dropdown-item @click.native="copyteamproject(teamproject.project_id)">复制项目</el-dropdown-item>
+                <el-dropdown-item @click.native="deleteteamproject(teamproject.project_id)">删除</el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -467,6 +468,8 @@ import {
   Upload,
 } from "@element-plus/icons-vue";
 import {
+  copyproject,
+  deleteproject,
   deleteteammem,
   establishproject,
   getteamadmin,
@@ -474,16 +477,16 @@ import {
   getteammember,
   getteammsgbyid,
   getteamprojectbyid,
-  invitemember,
+  invitemember, renameproject,
   setteamadmin,
+    editteaminfo,
 } from "@/utils/api";
 import Base64 from "@/utils/Base64";
+import {client, getFileNameUUID} from "@/assets/alioss";
 export default {
   name: "workspace",
   components: { Filter, Sort, Plus, CaretBottom, Edit, Upload },
   created() {
-    console.log("invitee", this.invite.invitee);
-    console.log("team_idhhh", this.team_id);
     getteamcreator({ team_id: this.team_id }).then((response) => {
       console.log(response.data);
       if (response.data.status_code == 1) {
@@ -537,11 +540,24 @@ export default {
         create_time: "",
         creator: "",
         team_name: "",
-        avatar: "",
+        avatar: "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/Transparent_Akkarin.jpg",
       },
       username: this.$store.state.username,
       formLabelWidth: "140px",
     };
+  },
+  filters:{
+    formatDate(value){
+      const dt = new Date(value);
+      console.log(dt);
+      let year = dt.getFullYear();
+      let month = dt.getMonth() + 1;
+      let date = dt.getDate();
+      let hour = dt.getHours();
+      let minute = dt.getMinutes();
+      let second = dt.getSeconds();
+      return `${year}-${month}-${date} ${hour}:${minute}:${second}`
+    }
   },
   methods: {
     gotoproject(a) {
@@ -568,9 +584,10 @@ export default {
     },
 
     creatproject() {
-      console.log(111);
+      console.log("111",this.newproject);
       establishproject(this.newproject).then((response) => {
-        if (response.data.status_code === 1) {
+        console.log(response.data);
+        if (response.data.status_code == 1) {
           this.initializationdata();
         } else ElMessage.error(response.data.msg);
       });
@@ -581,10 +598,15 @@ export default {
         this.editing = 1;
       } else {
         this.editing = 0;
-        //修改信息api
-        ElMessage({
-          message: this.form,
-          type: "success",
+        console.log(this.form);
+        editteaminfo(this.form).then((response) => {
+          if (response.data.status_code == 1) {
+            this.initializationdata();
+            ElMessage({
+              message: "修改成功",
+              type: "success",
+            });
+          } else ElMessage.error(response.data.message);
         });
       }
     },
@@ -620,11 +642,23 @@ export default {
             type: "success",
           });
           //此处赋值，是相当于上传成功之后，手动拼接服务器地址和文件名
-          this.formavatar =
+          this.form.team_avatar =
             "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName;
         });
     },
-    checkuserinfo() {},
+    checkuserinfo(a) {
+      this.$router.push({
+        path: "/personalspace",
+        query: {
+          info: Base64.encode(
+              JSON.stringify({
+                username:a,
+                author:0,
+              })
+          ),
+        },
+      });
+    },
     initializationdata() {
       getteammsgbyid({ team_id: this.team_id }).then((response) => {
         if (response.data.status_code == 1) {
@@ -633,9 +667,10 @@ export default {
             (this.teammsg.creator = response.data.creator),
             (this.teammsg.team_name = response.data.team_name),
             (this.teammsg.avatar = response.data.avatar);
+          console.log("duiwuxinxi",this.teammsg);
           this.form.avatar = response.data.avatar;
-          this.form.intro = response.data.brief_intro;
-          this.form.name = response.data.team_name;
+          this.form.brief_intro = response.data.brief_intro;
+          this.form.team_name = response.data.team_name;
         } else ElMessage.error(response.data.message);
       });
       getteamadmin({ team_id: this.team_id }).then((response) => {
@@ -703,9 +738,30 @@ export default {
         } else ElMessage.error(response.data.msg);
       });
     },
-    deleteadmin() {},
-    checkinfo() {},
+    deleteadmin(){},
     //项目操作
+    deleteteamproject(project_id){
+      deleteproject({username:this.$store.state.username,project_id:project_id}).then((response)=>{
+        if (response.data.status_code == 1) {
+          this.initializationdata();
+          ElMessage({
+            message: "删除成功",
+            type: "success",
+          });
+        } else ElMessage.error(response.data.msg);
+      })
+    },
+    copyteamproject(project_id){
+      copyproject({team_id:this.team_id,project_id:project_id}).then((response)=>{
+        if (response.data.status_code == 1) {
+          this.initializationdata();
+          ElMessage({
+            message: "复制成功",
+            type: "success",
+          });
+        } else ElMessage.error(response.data.msg);
+      })
+    },
   },
 };
 </script>
