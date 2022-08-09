@@ -16,10 +16,10 @@
         <el-icon :size="30">
           <Menu />
         </el-icon>
-        <span class="Sp">工作</span>
+        <span class="Sp">文档</span>
       </div>
-      <router-link to="/workspace" v-show="!collapse">
-        <span>工作台</span>
+      <router-link to="/documentCenter" v-show="!collapse">
+        <span>文档中心</span>
       </router-link>
     </div>
     <div class="openBtn-open" :class="{ 'Btn-fold': collapse }">
@@ -75,7 +75,7 @@ export default {
   },
   methods: {
     gotoWorkspace() {
-      this.$router.push({ name: "workspace" });
+      this.$router.push({ name: "documentCenter" });
     },
     gotoRecent() {
       this.$router.push({ name: "recent" });

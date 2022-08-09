@@ -17,13 +17,22 @@
       <el-form-item label="创建的文件名" label-width="140px">
         <el-input v-model="fileInitial.name" autocomplete="off" />
       </el-form-item>
+      <el-form-item label="选择文件模板" v-if="this.file_type===1" label-width="140px">
+        <el-select  v-model="doc_model_id" class="m-1" placeholder="不选择模板" size="large">
+          <el-option
+              v-for="item in docModel"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+          />
+        </el-select>
+      </el-form-item>
     </el-form>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogFormVisible = false;this.fileInitial.name=null">Cancel</el-button>
         <el-button type="primary" @click="dialogFormVisible = false;this.openFile()"
-        >Confirm</el-button
-        >
+        >Confirm</el-button>
       </span>
     </template>
   </el-dialog>
@@ -48,8 +57,8 @@
 
 <script>
 import {readURL} from "@/utils/ali_oss";
-import {create_doc, create_uml, deleteFileById, renameFileById} from "@/utils/api";
-
+import {create_axure, create_doc, create_uml, deleteFileById, renameFileById} from "@/utils/api";
+import docModel from "@/assets/fileModels/docModel";
 export default {
   name: "filePreview",
   data(){
@@ -73,6 +82,8 @@ export default {
       left:0,
       top:-50,
       dialogFormVisible1:false,
+      doc_model_id:'',
+      docModel:docModel,
     }
   },
   props:{
@@ -88,6 +99,7 @@ export default {
     //0-UML,1-axure,2-doc
     file_name:'',
     update_time:Date,
+    name_url:'',
   },
   computed:{
     modDate(){
@@ -228,6 +240,9 @@ export default {
               name: 'axure',
               params: {
                 project_id:this.project_id,
+                axure_id:this.file_id,
+                URLpage:this.file_content,
+                URLpageName:this.name_url,
               }
             })
             break
@@ -287,7 +302,8 @@ export default {
                   doc_url: null,
                   doc_id: res.data.doc_id,
                   username:this.username,
-                  project_id:this.project_id
+                  project_id:this.project_id,
+                  model_id:this.doc_model_id,
                 }
               })
             }
@@ -295,14 +311,31 @@ export default {
           })
           break
         case 2:
-          //还没写完
-          this.$router.push({
-            name:'axure',
-            params:{
-              doc_url:this.file_content,
-              doc_id:this.file_id,
-            }
+          console.log('create_axure',{
+            username:this.username,
+            project_id:this.project_id,
+            axure_name:this.fileInitial.name,
           })
+            create_axure({
+              username:this.username,
+              project_id:this.project_id,
+              axure_name:this.fileInitial.name,
+            }).then(res=>{
+              console.log(res.data)
+              if(res.data.axure_id){
+                console.log('create_axure',res.data)
+                this.$router.push({
+                  name:'axure',
+                  params:{
+                    axure_id:res.data.axure_id,
+                    project_id:this.project_id,
+                    URLpage:null,
+                    URLpageName:null,
+                  }
+                })
+              }
+            })
+
           break
         default:
           console.log('文件类型错误')

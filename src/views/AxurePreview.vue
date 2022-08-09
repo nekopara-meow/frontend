@@ -77,6 +77,8 @@ import Axios from "axios"
 import Vue3DraggableResizable from 'vue3-draggable-resizable'
 import { DraggableContainer } from 'vue3-draggable-resizable'
 
+import { load_axure } from "@/utils/api"
+
 export default{
     components: { 
         Vue3DraggableResizable,
@@ -85,7 +87,8 @@ export default{
     data() {
         return {
             pages: [],
-            nowpage: 0
+            nowpage: 0,
+            axure_id: 12,
         }
     },
     methods: {
@@ -110,27 +113,51 @@ export default{
             return strtype === "input"
         },
     },
-    created() {
-        let url = "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/exampledir/exampleobject.json"
+    mounted() {
+        let url = ""
         let that = this
-        Axios({
-            method: 'get',
-            url, responseType: 'blob',
-            transformResponse: [function (data) {
-                let reader = new FileReader()
-                reader.readAsText(data, 'UTF-8')
-                reader.onload = function () {
+
+        /*console.log('load_axure',{
+            axure_id: that.axure_id,
+        })*/
+
+        load_axure({
+            axure_id: that.axure_id
+        }).then((response) => {
+            //console.log('response QAQ')
+            //console.log(response.data)
+
+            let ret = response.data.status_code
+            if(ret == -1)
+                ElMessage.error("请求方式错误")
+            else{
+                //console.log('response')
+                //console.log(response.data.axure_url)
+                url = response.data.axure_url
+            }
+            Axios({
+                method: 'get',
+                url, responseType: 'blob',
+                transformResponse: [function (data) {
+                    let reader = new FileReader()
+                    reader.readAsText(data, 'UTF-8')
+                    reader.onload = function () {
                         //此处便是返回值
-                    let text = reader.result
-                    that.pages = JSON.parse(text)
-                    console.log(that.pages)
-                }
-                return data;
-            }]
+                        let text = reader.result
+                        //console.log(text)
+                        that.pages = JSON.parse(text)
+                        //console.log(that.pages)
+                    }
+                    return data
+                }]
+            }).then(res => {
+                console.log('res')
+            })
         })
-        .then(res => {
-            console.log('res')
-        })
+        //console.log('pageURL', url)
+    },
+    created(){
+        this.axure_id = this.$route.query.axure_id
     },
 }
 </script>

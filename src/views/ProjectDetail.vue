@@ -4,31 +4,17 @@
       <div id="left">
         <div id="leftup">
           <div style="display: flex">
-            <h2 class="title">NEKOPARA</h2>
+            <h2 class="title gradient">NEKOPARA</h2>
             <nav class="nav-link">
-              <router-link
-                :to="{
-                  name: 'projectInfo',
-                  params: {
-                    project_id: this.project_id,
-                  },
-                }"
-                @click="tab = 'tab-0'"
-                >概览</router-link
-              >
-              <router-link
-                :to="{
-                  name: 'projectFileInfo',
-                  params: {
-                    project_id: this.project_id,
-                  },
-                }"
-                @click="tab = 'tab-1'"
-                >文件</router-link
-              >
-              <router-link to="" @click="tab = 'tab-2'">需求</router-link>
-              <router-link to="" @click="tab = 'tab-3'">迭代</router-link>
-              <router-link to="" @click="tab = 'tab-4'">统计</router-link>
+              <router-link :to="{name:'projectInfo',params:{
+                project_id:this.project_id
+              }}" @click="tab='tab-0'">概览</router-link>
+              <router-link :to="{name:'projectFileInfo',params:{
+                project_id:this.project_id
+              }}" @click="tab='tab-1'">文件</router-link>
+              <router-link to="" @click="tab='tab-2'">需求</router-link>
+              <router-link to="" @click="tab='tab-3'">迭代</router-link>
+              <router-link to="" @click="tab='tab-4'">统计</router-link>
               <div class="animation" :class="tab"></div>
             </nav>
           </div>
@@ -86,15 +72,28 @@ export default {
       username: "",
     };
   },
-  methods: {},
-  created() {
-    console.log("route");
-    console.log(this.$route.params);
-    if (this.$route.params.project_id) {
-      this.project_id = this.$route.params.project_id;
-      this.username = this.$store.state.username;
+  methods:{
+
+  },
+  watch:{
+    $route(val){
+      console.log('route is watched',val)
+      if(val.name==='projectInfo'){
+        this.tab='tab-0'
+      }
+      if(val,name==='projectFileInfo'){
+        this.tab='tab-1'
+      }
     }
-    console.log(this.project_id);
+  },
+  created() {
+    console.log('route in projectDetail')
+    console.log(this.$route)
+    if(this.$route.params.project_id){
+      this.project_id=this.$route.params.project_id
+      this.username=this.$store.state.username
+    }
+    console.log(this.project_id)
   },
   computed: {},
 };

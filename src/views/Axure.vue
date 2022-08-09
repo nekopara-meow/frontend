@@ -23,6 +23,7 @@
                         <el-dropdown-item @click="bePic">导出</el-dropdown-item>
                         <el-dropdown-item>重命名</el-dropdown-item>
                         <el-dropdown-item @click="download">加载</el-dropdown-item>
+                        <el-dropdown-item @click="preview">预览</el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
             </el-dropdown>
@@ -166,6 +167,31 @@
                     </div>
                 </div>
                 <div class="right-setting">
+                    <div class="right-setting-head">
+                        <span>input el0</span>
+                        <div class="right-setting-head-icon">
+                            <el-icon><View /></el-icon>
+                            <el-icon><Unlock /></el-icon>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+
+                    <div class="right-setting-position">
+                        
+                        <span>X</span>
+                        <el-input-number 
+                            v-model = textNumx
+                            :min="1" :max="100"
+                            controls-position="right">
+                        </el-input-number> 
+                        <span>Y</span>
+                        <el-input-number
+                            v-model = textNumx
+                            :min="1" :max="100"
+                            controls-position="right">
+                        </el-input-number>               
+                        
+                    </div>
                 </div>
             </div>
         </div>
@@ -650,6 +676,46 @@
         width: 15%;
         height: 100%;
         background: white;
+        
+        display: flex;
+        flex-direction: column;
+        .right-setting-head {
+            width: 100%;
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-top: 8px;
+            padding-bottom: 7px;
+            font-size: 16px;
+            font-weight: 200;
+            color: grey;
+
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            
+            .right-setting-head-icon {
+                width: 20%;
+                height: 100%;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 10px;
+                .el-input-number{
+                    width: 20px;
+                }
+            }
+
+            .right-setting-position{
+                width: 100%;
+                padding: 10px;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
     }
 }
 
@@ -681,10 +747,11 @@
 </style>
 
 <script>
-import { ElDropdown, ElMenu, ElCollapse, ElButton, ElRadio} from 'element-plus'
+import { ElDropdown, ElMenu, ElCollapse, ElButton, ElRadio, ElMessage} from 'element-plus'
 import { Plus, MoreFilled, ArrowDown, Document } from '@element-plus/icons-vue'
 import { Picture, PieChart, Stopwatch, Star, Setting } from '@element-plus/icons-vue'
 import { CircleClose, Delete, ArrowUp, Search } from '@element-plus/icons-vue'
+import { View, Unlock } from '@element-plus/icons-vue'
 
 import Vue3DraggableResizable from 'vue3-draggable-resizable'
 import { DraggableContainer } from 'vue3-draggable-resizable'
@@ -697,20 +764,28 @@ import Axios from "axios"
 
 import OSS from "ali-oss"
 
+import { save_axure } from "@/utils/api"
+
 export default{
     components: { 
-        ElDropdown, ElMenu, ElCollapse, ElButton, ElRadio,
+        ElDropdown, ElMenu, ElCollapse, ElButton, ElRadio, ElMessage, 
         ArrowDown, MoreFilled, Plus, Document,
         Picture, PieChart, Stopwatch, Star, Setting,
         CircleClose, Delete, ArrowUp, Search,
+        View, Unlock,
 
         Vue3DraggableResizable, 
         DraggableContainer,
 
-        html2canvas, ImagePreview
+        html2canvas, ImagePreview,
     },
     data() {
         return {
+            URLpage: "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/exampledir/exampleobject.json",
+            URLpageName: "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/exampledir/exampleobject_name.json",
+            axure_id: "",
+
+            textNumx: 1,
 
             AxureName: "Meow Meow",
             changingName: false,
@@ -801,6 +876,9 @@ export default{
     },
     methods: {
         // pretend: "", append: ""
+        preview(){
+
+        },
         havePretend(index){
             let item = this.pages[this.nowpage][index]
             return item.pretend != undefined && item.pretend != null
@@ -1038,6 +1116,12 @@ export default{
             this.changingLable = true
             console.log(this.changingLable)
         },
+        getFileNameUUID(){
+            function rx() {
+                return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
+            }
+            return `${+new Date()}_${rx()}${rx()}`
+        },
         upload() {
             let text = JSON.stringify(this.pages)
             const data = new Blob([text])
@@ -1047,7 +1131,8 @@ export default{
                 accessKeySecret: "uraarRMA75smURHejuKbVw6IhMgxWM",
                 bucket: "miaotu-headers", // 填写Bucket名称。
             })
-            var fileName = "exampledir/exampleobject.json"
+            //var fileName = "exampledir/exampleobject.json"
+            var fileName = "Axure/" + this.getFileNameUUID() + ".json"
             client.put(fileName, data)
             //url="https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName;
         
@@ -1059,12 +1144,38 @@ export default{
                 accessKeySecret: "uraarRMA75smURHejuKbVw6IhMgxWM",
                 bucket: "miaotu-headers", // 填写Bucket名称。
             })
-            var fileName2 = "exampledir/exampleobject_name.json"
+            var fileName2 = "Axure/" + this.getFileNameUUID() + ".json"
             client2.put(fileName2, data2)
+
+            console.log(fileName)
+            console.log(fileName2)
+
+            console.log(this.axure_id)
+            /*console.log('save_axure',{
+                axure_id: this.axure_id,
+                axure_url: "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName,
+                name_url: "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName2
+            })*/
+
+            save_axure({
+                axure_id: this.axure_id,
+                axure_url: "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName,
+                name_url: "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName2
+            }).then((response) => {
+                let ret = response.data.status_code
+                if(ret == -1)
+                    ElMessage.error("请求方式错误")
+                else
+                    ElMessage({
+                        message: "保存成功",
+                        type: "success",
+                    })
+            })
         },
         download(){
-            let url = "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/exampledir/exampleobject.json"
+
             let that = this
+            let url = that.URLpage
             Axios({
                 method: 'get',
                 url, responseType: 'blob',
@@ -1074,6 +1185,7 @@ export default{
                     reader.onload = function () {
                         //此处便是返回值
                         let text = reader.result
+                        console.log(text)
                         that.pages = JSON.parse(text)
                     }
                     return data;
@@ -1083,7 +1195,7 @@ export default{
                 console.log('res')
             })
 
-            url = "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/exampledir/exampleobject_name.json"
+            url = that.URLpageName
             Axios({
                 method: 'get',
                 url, responseType: 'blob',
@@ -1115,6 +1227,24 @@ export default{
             if(e.which == 8 || e.which == 46)
                 that.Delete()
         }
+
+        console.log('params')
+        console.log(this.$route.params)
+        that.URLpage = this.$route.params.URLpage
+        that.URLpageName = this.$route.params.URLpageName
+        that.axure_id = this.$route.params.axure_id
+
+        if(that.URLpage == null || that.URLpage.length < 1
+            || that.URLpage == '') {
+            let fileName = "Axure/" + this.getFileNameUUID() + ".json"
+            that.URLpage = "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName
+            let fileName2 = "Axure/" + this.getFileNameUUID() + ".json"
+            that.URLpageName = "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName2
+        }
+
+        console.log(that.URLpage)
+        console.log(that.URLpageName)
+        console.log(that.axure_id)
     },
     created() {
         
