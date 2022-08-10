@@ -111,12 +111,35 @@
                                             @change="changeLable($event, index)"
                                             type="text" :style="item.style">
                                     </div>
-                                    <span v-else @dblclick="editLable">
+                                    <div v-else @dblclick="editLable">
                                         {{ item.content }}
-                                    </span>
+                                    </div>
                                 </div>
                                 <div v-else-if="isBtn(item.type)" :style="item.style" :id="item.id">
-                                    <el-button :type="item.btnType" @dblclick="editLable" padding = 0>
+                                    <el-button v-if="haveColor(item.btnColor)" :type="item.btnType"
+                                        :round = "isBtnRound(item.shape)"
+                                        :circle = "isBtnCircle(item.shape)"
+                                        :plain = "item.plain"
+                                        :text = "item.text"
+                                        :color = "item.btnColor"
+                                        @dblclick="editLable" padding = 0>
+                                        <input v-if="changingLable" :value="item.content"
+                                            @change="changeLable($event, index)"
+                                            style="border: none; 
+                                                background-color: transparent;
+                                                font-size: 15px;
+                                                width: 100%">
+                                        <span v-else>
+                                            {{ item.content }}
+                                        </span>
+                                    </el-button>
+
+                                    <el-button v-else :type="item.btnType"
+                                        :round = "isBtnRound(item.shape)"
+                                        :circle = "isBtnCircle(item.shape)"
+                                        :plain = "item.plain"
+                                        :text = "item.text"
+                                        @dblclick="editLable" padding = 0>
                                         <input v-if="changingLable" :value="item.content"
                                             @change="changeLable($event, index)"
                                             style="border: none; 
@@ -129,8 +152,7 @@
                                     </el-button>
                                 </div>
                                 <div v-else-if="isInput(item.type)" :style="item.style" :id="item.id">
-                                    <el-input :placeholder="item.content" 
-                                        prefix-icon="Search">
+                                    <el-input :placeholder="item.content">
                                         <template v-if=havePretend(index) #prepend>
                                             {{ item.pretend }}
                                         </template>
@@ -231,7 +253,7 @@
                             
                         </div>
                         <div class="line"></div>
-                        <el-collapse v-model="SettingActiveName" accordion>
+                        <el-collapse v-model="SettingActiveName">
                             <el-collapse-item title="外观" name="1">
                                 <!--
                                 <div style="width: 100%; height: 10px"></div>
@@ -285,7 +307,202 @@
                                         v-model="pages[nowpage][lastnow].fill_color">
                                     </el-color-picker>
                                 </div>
+
+                                <!-- v-if="isLable(pages[nowpage][lastnow].type)" -->
+                                <div v-if="isLable(pages[nowpage][lastnow].type)"
+                                    class="right-setting-border">
+                                    <span>字体颜色</span>
+                                    <span style="width: 20px"></span>
+                                    <el-color-picker
+                                        @change="changeFontColor"
+                                        v-model="pages[nowpage][lastnow].border_color">
+                                    </el-color-picker>
+                                    
+                                    <span style="width: 20px"></span>
+                                    
+                                    <span>背景颜色</span>
+                                    <span style="width: 20px"></span>
+                                    <el-color-picker show-alpha
+                                        @change="changeBackGroundColor"
+                                        v-model="pages[nowpage][lastnow].fill_color">
+                                    </el-color-picker>
+                                </div>
+
+                                <div v-if="isLable(pages[nowpage][lastnow].type)"
+                                    class="right-setting-border">
+                                    <span>字体大小</span>
+                                    <span style="width: 8px"></span>
+                                    <el-input-number
+                                        @change="changeFontSize"
+                                        style = "width: 100px;"
+                                        size = "small"
+                                        controls-position = "right"
+                                        v-model = "pages[nowpage][lastnow].font_size">
+                                    </el-input-number>
+                                </div>
+
+                                <div v-if="isBtn(pages[nowpage][lastnow].type)"
+                                    class="right-setting-border">
+                                    <span>按钮样式</span>
+                                </div>
+
+                                <div v-if="isBtn(pages[nowpage][lastnow].type)"
+                                    class="right-setting-border">
+                                    <div style="width: 46px; height: 23px;">
+                                        <el-button style="font-size: 5px" @click="setBtnType('', false)">
+                                            btn
+                                        </el-button>
+                                    </div>
+                                    <div style="width: 10px; height: 20px"></div>
+                                    <div style="width: 46px; height: 23px;">
+                                        <el-button type="primary"
+                                            style="font-size: 5px"
+                                            @click="setBtnType('primary', false)">
+                                            btn
+                                        </el-button>
+                                    </div>
+                                    <div style="width: 10px; height: 20px"></div>
+                                    <div style="width: 46px; height: 23px;">
+                                        <el-button type="success"
+                                            style="font-size: 5px"
+                                            @click="setBtnType('success', false)">
+                                            btn
+                                        </el-button>
+                                    </div>
+                                    <div style="width: 10px; height: 20px"></div>
+                                    <div style="width: 46px; height: 23px;">
+                                        <el-button type="warning"
+                                            style="font-size: 5px"
+                                            @click="setBtnType('warning', false)">
+                                            btn
+                                        </el-button>
+                                    </div>
+                                    <div style="width: 10px; height: 20px"></div>
+                                    <div style="width: 46px; height: 23px;">
+                                        <el-button type="danger"
+                                            style="font-size: 5px"
+                                            @click="setBtnType('danger', false)">
+                                            btn
+                                        </el-button>
+                                    </div>
+                                </div>
+
+                                <div style="width: 100px; height: 5px"></div>
+                                <div v-if="isBtn(pages[nowpage][lastnow].type)"
+                                    class="right-setting-border">
+                                    <div style="width: 46px; height: 23px;">
+                                        <el-button
+                                            style="font-size: 5px"
+                                            @click="setBtnType('', true)">
+                                            btn
+                                        </el-button>
+                                    </div>
+                                    <div style="width: 10px; height: 20px"></div>
+                                    <div style="width: 46px; height: 23px;">
+                                        <el-button type="primary" plain
+                                            style="font-size: 5px"
+                                            @click="setBtnType('primary', true)">
+                                            btn
+                                        </el-button>
+                                    </div>
+                                    <div style="width: 10px; height: 20px"></div>
+                                    <div style="width: 46px; height: 23px;">
+                                        <el-button type="success" plain
+                                            style="font-size: 5px"
+                                            @click="setBtnType('success', true)">
+                                            btn
+                                        </el-button>
+                                    </div>
+                                    <div style="width: 10px; height: 20px"></div>
+                                    <div style="width: 46px; height: 23px;">
+                                        <el-button type="warning" plain
+                                            style="font-size: 5px"
+                                            @click="setBtnType('warning', true)">
+                                            btn
+                                        </el-button>
+                                    </div>
+                                    <div style="width: 10px; height: 20px"></div>
+                                    <div style="width: 46px; height: 23px;">
+                                        <el-button type="danger" plain
+                                            style="font-size: 5px"
+                                            @click="setBtnType('danger', true)">
+                                            btn
+                                        </el-button>
+                                    </div>
+                                </div>
+
+                                <div style="width: 100px; height: 10px"></div>
+                                <div v-if="isBtn(pages[nowpage][lastnow].type)"
+                                    class="right-setting-border">
+                                    <span>隐藏边框与背景色</span>
+                                    <div style="width: 10px; height: 10px"></div>
+                                    <el-checkbox
+                                        @click = "changeText"
+                                        v-model = "pages[nowpage][lastnow].text">
+                                    </el-checkbox>
+                                </div>
+
+                                <div v-if="isBtn(pages[nowpage][lastnow].type)"
+                                    class="right-setting-border">
+                                    <span>形状</span>
+                                    <div style="width: 30px; height: 10px"></div>
+                                    <el-radio-group
+                                        v-model = "pages[nowpage][lastnow].shape"
+                                        @change = "changeShape"
+                                    >
+                                        <el-radio :label = "0" size = "small">
+                                            方形
+                                        </el-radio>
+                                        <el-radio :label = "1" size = "small">
+                                            圆角
+                                        </el-radio>
+                                        <el-radio :label = "2" size = "small">
+                                            圆形
+                                        </el-radio>
+                                    </el-radio-group>
+                                </div>
+
+                                <div v-if="isBtn(pages[nowpage][lastnow].type)"
+                                    class="right-setting-border">
+                                    <span>自定义按钮颜色</span>
+                                    <div style="width: 10px; height: 10px"></div>
+                                    <el-color-picker
+                                        @change = "changeBtnColor"
+                                        v-model = "pages[nowpage][lastnow].btnColor">
+                                    </el-color-picker>
+                                </div>
+
+                                <div v-if="isBtn(pages[nowpage][lastnow].type)"
+                                    class="right-setting-border">
+                                    <span>文本</span>
+                                    <span style="width: 15px;"></span>
+                                    <el-input
+                                        v-model="pages[nowpage][lastnow].content"
+                                        style="width: 70%; height: 25px; font-size: 13px"
+                                    >
+                                    </el-input>
+                                </div>
+
+                                <div v-if="isInput(pages[nowpage][lastnow].type)"
+                                    class="right-setting-border">
+                                    <span>前置元素</span>
+                                    <span style="width: 10px"></span>
+                                    <el-checkbox></el-checkbox>
+                                    <span style="width: 20px"></span>
+                                    <el-input style="width: 50%; height: 26px"></el-input>
+                                </div>
+
+                                <div v-if="isInput(pages[nowpage][lastnow].type)"
+                                    class="right-setting-border">
+                                    <span>后置元素</span>
+                                    <span style="width: 10px"></span>
+                                    <el-checkbox></el-checkbox>
+                                    <span style="width: 20px"></span>
+                                    <el-input style="width: 50%; height: 26px"></el-input>
+                                </div>
+
                             </el-collapse-item>
+
                             <el-collapse-item title="事件" name="2">
                                 <span>事件 气死我了</span>
                             </el-collapse-item>
@@ -302,7 +519,7 @@
                 <el-icon @click="cancelTool"><CircleClose /></el-icon>
             </div>
             <div class="line"></div>
-            <el-collapse v-model="activeNames">
+            <el-collapse v-model="activeNames" >
                 <el-collapse-item title="图形" name="1">
                     <div class="figure-button">
                         <div class="rect-button" @click="addRedRect"></div>
@@ -340,6 +557,36 @@
                         
                     </div>
                 </el-collapse-item>
+
+                <el-collapse-item title="图标" name="3">
+                    <!--
+                    <div v-for = "(name,index) in icons"
+                        style="padding: 10px; 
+                            display: flex; 
+                            flex-direction: row;">
+                        <component 
+                            :is="icons[index]"
+                            style="width: 20px; height: 20px; color: grey">
+                        </component>
+                    </div>-->
+                    <el-scrollbar height="150">
+                        <div v-for = "index0 in 47"
+                            style="display: flex; 
+                            flex-direction: row;"
+                        >
+                            <div v-for = "index in 6"
+                                style="width: 30px; height: 30px; padding: 5;">
+                                <component
+                                    :is="icons[(index0 - 1) * 6 + index - 1]"
+                                    style="width: 20px; height: 20px;
+                                        color: grey;">
+                                </component>
+                            </div>
+                        </div>
+                        
+                    </el-scrollbar>
+                    
+                </el-collapse-item>
             </el-collapse>
         </div>
         
@@ -349,6 +596,27 @@
                 <el-icon @click="cancelTool"><CircleClose /></el-icon>
             </div>
             <div class="line"></div>
+            <div
+                style =
+                    "width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    padding: 10px;"
+            >
+                <div style="width: 80%;">
+                    <el-upload
+                        class="upload-demo"
+                        drag
+                        action="https://jsonplaceholder.typicode.com/posts/"
+                        disabled = true>
+                        <el-icon><Upload /></el-icon>
+                        <div class="el-upload__text">将文件拖到此处</div>
+                        <div class="el-upload__text">或<em>点击上传</em></div>
+                    </el-upload>
+                </div>
+            </div>
+            
         </div>
 
         <div v-if="tool[2]" class="tool-1">
@@ -361,7 +629,7 @@
 
         <div v-if="tool[3]" class="tool-1">
             <div class="tool-title">
-                <span>图标</span>
+                <span>模板</span>
                 <el-icon @click="cancelTool"><CircleClose /></el-icon>
             </div>
             <div class="line"></div>
@@ -383,7 +651,34 @@
 
 <style lang="scss" scoped>
 
+::-webkit-scrollbar {
+    width: 3px;
+    background-color: transparent;
+}
+// 滚动条轨道
+::-webkit-scrollbar-track {
+    width: 5px;
+    border-radius: 40px;
+    background-color: white;
+}
+// 滚动条滑块
+::-webkit-scrollbar-thumb {
+    border: 0;
+    border-radius: 10px;
+    background-color: rgb(205, 205, 205);
+}
 
+.scrollbar-demo-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    margin: 10px;
+    text-align: center;
+    border-radius: 4px;
+    background: var(--el-color-primary-light-9);
+    color: var(--el-color-primary);
+}
 .el-input-number .el-input__wrapper {
     width: 50px;
     height: 20px;
@@ -459,7 +754,7 @@
     border-radius: 10px;
     opacity: 1 !important;
     background-color: white;
-
+    overflow: auto;
     .figure-button{
         display: flex;
         flex-direction: row;
@@ -786,6 +1081,8 @@
         display: flex;
         flex-direction: column;
 
+        overflow: auto;
+
         :deep(.el-collapse-item__header){
             font-size: 15px;
             font-weight: 200;
@@ -879,11 +1176,13 @@
 </style>
 
 <script>
-import { ElDropdown, ElMenu, ElCollapse, ElButton, ElRadio, ElMessage} from 'element-plus'
+import { ElDropdown, ElMenu, ElCollapse, 
+    ElButton, ElRadio, ElMessage, ElScrollbar} from 'element-plus'
 import { Plus, MoreFilled, ArrowDown, Document } from '@element-plus/icons-vue'
 import { Picture, PieChart, Stopwatch, Star, Setting } from '@element-plus/icons-vue'
 import { CircleClose, Delete, ArrowUp, Search } from '@element-plus/icons-vue'
 import { View, Unlock } from '@element-plus/icons-vue'
+import * as ElIcons from '@element-plus/icons-vue'
 
 import Vue3DraggableResizable from 'vue3-draggable-resizable'
 import { DraggableContainer } from 'vue3-draggable-resizable'
@@ -906,7 +1205,9 @@ import { ColorInputWithoutInstance } from "tinycolor2"
 
 export default{
     components: { 
-        ElDropdown, ElMenu, ElCollapse, ElButton, ElRadio, ElMessage, 
+        ElDropdown, ElMenu, ElCollapse, 
+        ElButton, ElRadio, ElMessage, ElScrollbar, 
+        
         ArrowDown, MoreFilled, Plus, Document,
         Picture, PieChart, Stopwatch, Star, Setting,
         CircleClose, Delete, ArrowUp, Search,
@@ -918,6 +1219,8 @@ export default{
         html2canvas, ImagePreview,
 
         ColorPicker,
+
+        ...ElIcons, 
     },
     data() {
         return {
@@ -932,6 +1235,8 @@ export default{
 
             AxureName: "Meow Meow",
             changingName: false,
+
+            icons: [],
 
             tool: [
                 false, false, false, false, false
@@ -1021,25 +1326,79 @@ export default{
 
             Lable: {
                 "width": "100%",
+                "height": "100%",
                 "color": "black",
                 "border": "none",
                 "opacity": "1",
+                "background-color": "transparent",
+                "font-size": "18px",
             },
             
         }
         
     },
     methods: {
+        haveColor(color){
+            if(color == "" || color.length < 0)
+                return false
+            return true
+        },
+        changeBtnColor(value){
+            console.log(value)
+            this.setActive(this.lastnow)
+            let index = this.lastnow
+            this.pages[this.nowpage][index].btnColor = value.toString()
+        },
+        changeShape(value){
+            this.setActive(this.lastnow)
+        },
+        isBtnRound(shape){
+            return shape == 1
+        },
+        isBtnCircle(shape){
+            return shape == 2
+        },
+        changeText(value){
+            this.setActive(this.lastnow)
+        },
+        setBtnType(BtnType, Plain){
+            //console.log('setBtnType', BtnType, Plain)
+            this.setActive(this.lastnow)
+            let index = this.lastnow
+            this.pages[this.nowpage][index].btnType = BtnType
+            this.pages[this.nowpage][index].plain = Plain
+            this.pages[this.nowpage][index].btnColor = ""
+            //console.log(this.pages[this.nowpage][index].plain)
+        },
+        changeFontSize(value){
+            this.setActive(this.lastnow)
+            let index = this.lastnow
+            this.pages[this.nowpage][index].style['font-size'] = value + "px"
+        },
+        changeFontColor(value){
+            this.setActive(this.lastnow)
+            //console.log('changeFontColor', value)
+
+            let index = this.lastnow
+            this.pages[this.nowpage][index].style['color'] = value
+        },
+        changeBackGroundColor(value){
+            this.setActive(this.lastnow)
+            //console.log('changeBackGroundColor', value)
+
+            let index = this.lastnow
+            this.pages[this.nowpage][index].style['background-color'] = value
+        },
         changeBorderColor(value){
             this.setActive(this.lastnow)
-            console.log('changeBorderColor', value)
+            //console.log('changeBorderColor', value)
 
             let index = this.lastnow
             this.pages[this.nowpage][index].style['border-color'] = value
         },
         changeFillColor(value){
             this.setActive(this.lastnow)
-            console.log('changeFillColor', value)
+            //console.log('changeFillColor', value)
 
             let index = this.lastnow
             this.pages[this.nowpage][index].style['background-color'] = value
@@ -1187,7 +1546,9 @@ export default{
             let newItem = {"id": 'el' + Cnt, 
                 type: "lable", active: true,
                 transform: { x: 0, y: 0, width: 130, height: 40},
-                style: this.Lable, content: "这是一段文字", opacity: 1
+                style: this.Lable, content: "这是一段文字", opacity: 1,
+                border_color: "#000000", fill_color: 'rgba(0, 0, 0, 0)',
+                font_size: 18,
             }
             this.now = Cnt
             this.lastnow = Cnt
@@ -1199,7 +1560,9 @@ export default{
                 type: "btn", active: true,
                 transform: { x: 0, y: 0, width: 62, height: 32 },
                 style: { "width": "100%", "height": "100%"},
-                btnType: "", content: "按钮", opacity: 1
+                btnType: "", content: "按钮", opacity: 1,
+                shape: ref(0), plain: false, text: ref(false),
+                btnColor: "",
             }
             this.now = Cnt
             this.lastnow = Cnt
@@ -1211,7 +1574,9 @@ export default{
                 type: "btn", active: true,
                 transform: { x: 0, y: 0, width: 62, height: 32 },
                 style: { "width": "100%", "height": "100%"},
-                btnType: "primary", content: "按钮", opacity: 1
+                btnType: "primary", content: "按钮", opacity: 1,
+                shape: ref(0), plain: false, text: ref(false),
+                btnColor: "",
             }
             this.now = Cnt
             this.lastnow = Cnt
@@ -1454,7 +1819,10 @@ export default{
         console.log(that.axure_id)
     },
     created() {
-        
+        let that = this
+        for (const name in ElIcons)
+            that.icons.push(name)
+        console.log('icons', that.icons.length)     
     }
 }
 </script>

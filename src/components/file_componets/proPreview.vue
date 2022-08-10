@@ -23,6 +23,7 @@ export default {
     focus_project_id:'',
     project_id:'',
   },
+  emits:['updateData',],
   computed:{
     tip(){
       let info=this.brief_intro

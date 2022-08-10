@@ -34,6 +34,7 @@
                   style="margin: 0 auto"
                 />
                 <file-preview
+                    @updateData="reloadData"
                   v-if="got == 3 && uml_file.length != 0"
                   v-for="(tmp, index) in uml_file"
                   :file_id="tmp.file_id"
@@ -45,6 +46,12 @@
                   :project_id="tmp.project_id"
                   :key="index"
                 ></file-preview>
+<!--                <file-preview-->
+<!--                    :file_type="0"-->
+<!--                    :creator="this.username"-->
+<!--                    :is-new="true"-->
+<!--                    :project_id="this.focus_project_id"-->
+<!--                ></file-preview>-->
               </div>
             </el-tab-pane>
             <el-tab-pane label="文档" name='1'>
@@ -56,6 +63,7 @@
                   style="margin: 0 auto"
                 />
                 <file-preview
+                    @updateData="reloadData"
                   v-if="got == 3 && doc_file.length != 0"
                   v-for="(tmp, index) in doc_file"
                   :file_id="tmp.file_id"
@@ -67,6 +75,12 @@
                   :project_id="tmp.project_id"
                   :key="index"
                 ></file-preview>
+<!--                <file-preview-->
+<!--                    :file_type="1"-->
+<!--                    :creator="this.username"-->
+<!--                    :is-new="true"-->
+<!--                    :project_id="this.focus_project_id"-->
+<!--                ></file-preview>-->
               </div>
             </el-tab-pane>
             <el-tab-pane label="设计原型" name='2'>
@@ -78,6 +92,7 @@
                   style="margin: 0 auto"
                 />
                 <file-preview
+                    @updateData="reloadData"
                   v-if="got == 3 && axure_file.length != 0"
                   v-for="(tmp, index) in axure_file"
                   :file_id="tmp.file_id"
@@ -90,6 +105,12 @@
                   :name_url="tmp.name_url"
                   :key="index"
                 ></file-preview>
+<!--                <file-preview-->
+<!--                    :file_type="2"-->
+<!--                    :creator="this.username"-->
+<!--                    :is-new="true"-->
+<!--                    :project_id="this.focus_project_id"-->
+<!--                ></file-preview>-->
               </div>
             </el-tab-pane>
           </el-tabs>
@@ -244,7 +265,7 @@ export default {
       doc_file:[],
       axure_file:[],
       focus_project_id:'',
-      active_tab:'0',
+      active_tab:'-1',
     }
   },
   computed: {
@@ -262,6 +283,33 @@ export default {
     },
   },
   methods:{
+    reloadData(){
+      this.got=0
+      this.got1=0
+      this.initializationdata();
+      console.log('检查query',this.$route)
+      console.log('active_tab',this.active_tab)
+      this.username=this.$store.state.username
+      getProsByUser({
+        username:this.username
+      }).then(res=>{
+        if(res.data.projects){
+          let l=this.userProjects.length
+          for(let i=0;i<l;i++){
+            this.userProjects.pop()
+          }
+          console.log('pros',res.data.projects[0])
+          l=res.data.projects.length
+          for(let i=0;i<l;i++){
+            this.userProjects.push(res.data.projects[i])
+          }
+          console.log('userPro',this.userProjects)
+          if(this.userProjects[0].project_id!==null){
+            this.loadFiles(this.userProjects[0].project_id)
+          }
+        }else console.log('fail!!')
+      })
+    },
     /**
      * @description: 按时间排序，asc=1:升序,asc=-1,降序
      * @author: 罗亚硕
@@ -481,8 +529,6 @@ export default {
         }
       }else console.log('fail!!')
     })
-
-
   }
 };
 </script>

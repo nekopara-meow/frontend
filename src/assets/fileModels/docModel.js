@@ -1,12 +1,133 @@
 export default [
     {
-        name:'模板1',
-        html:'<p><em>模板1</em></p><h1><em>模板1</em></h1><h2><em>模板1</em></h2><h3><em>模板1</em></h3>',
+        name:'README',
+        html:'<h1><strong>Project</strong></h1><h2><strong>Project setup</strong></h2><pre><code>npm install\n' +
+            '</code></pre><h3><strong>Compiles and hot-reloads for development</strong></h3><pre><code>npm run serve\n' +
+            '</code></pre><h3><strong>Compiles and minifies for production</strong></h3><pre><code>npm run build\n' +
+            '</code></pre><h3><strong>Customize configuration</strong></h3>',
         id:'0',
     },
     {
-        name:'模板2',
-        html:'<p><em>模板2</em></p><h1><em>模板2</em></h1><h2><em>模板2</em></h2><h3><em>模板2</em></h3>',
+        name:'软件介绍模板',
+        html:'一. 简介\n' +
+            'GitBlog是一个简单易用的Markdown博客系统，它不需要数据库，没有管理后台功能，更新博客只需要添加你写好的Markdown文件即可。它摆脱了在线编辑器排版困难，无法实时预览的缺点，一切都交给Markdown来完成，一篇博客就是一个Markdown文件。同时也支持评论，代码高亮，数学公式，页面PV统计等常用功能。GitBlog提供了不同的主题样式，你可以根据自己的喜好配置，如果你想自己制作博客主题，也是非常容易的。GitBlog还支持整站静态导出，你完全可以导出整站静态网页部署到Github Pages。\n' +
+            '\n' +
+            '二. 功能特点\n' +
+            '使用Markdown\n' +
+            '评论框\n' +
+            '代码高亮\n' +
+            'PV统计\n' +
+            'Latex数学公式\n' +
+            '自制主题\n' +
+            '响应式\n' +
+            '全站静态导出\n' +
+            '良好的SEO\n' +
+            '三. GitBlog优势\n' +
+            '无需数据库，系统更轻量，移植更方便\n' +
+            '使用Markdown编写，摆脱后台编辑排版困难，无法实时预览的缺点\n' +
+            '可全站静态导出\n' +
+            '配置灵活，可自由开关某些功能\n' +
+            '多主题支持，可自制主题\n' +
+            '博客，分类，标签，归档\n' +
+            '四. 环境要求\n' +
+            'PHP 5.2.4+\n' +
+            '\n' +
+            '五. 安装步骤\n' +
+            '下载GitBlog源代码\n' +
+            '解压上传到你的PHP网站根目录\n' +
+            '打开浏览器，访问网站首页\n' +
+            '上传Markdown文件到posts文件夹\n' +
+            '六. 详细说明\n' +
+            '1. 安装\n' +
+            '2. 目录结构\n' +
+            '3. 配置说明\n' +
+            '4. 编写博客\n' +
+            '5. 评论，订阅，统计等\n' +
+            '6. 缓存机制\n' +
+            '7. 全站静态导出\n' +
+            '8. 主题制作\n' +
+            '9. 在Nginx上运行GitBlog\n' +
+            '10. 在Apache上运行GitBlog\n' +
+            '11. 在SAE上运行GitBlog\n' +
+            '12. 使用GitBlog和Github Pages搭建博客\n' +
+            '13. Gitblog升级\n' +
+            '14. 从wordpress导入\n' +
+            '\n' +
+            '七. 问题及bug反馈\n' +
+            '如果在实际使用过程中对GitBlog有新的功能需求，或者在使用GitBlog的过程中发现了Bug，欢迎反馈给我。可以直接在Github上提交，也可以发邮件至164068300[AT]qq.com与我取得联系，我将及时回复。如果你自己制作了漂亮好用的主题，也非常欢迎你提交给我，我会在这里展示你的主题链接。如果你正在使用GitBlog，也可以告诉我，我将也会在这里列出使用者名单。如果你想和其他GitBlog使用者讨论交流，欢迎加入QQ群84692078。\n' +
+            '\n' +
+            '八. 使用者列表\n' +
+            'Weeds\n' +
+            '橙子\n' +
+            'jockchou\n' +
+            'GitBlog Doc\n' +
+            'zxy\n' +
+            '九. 感谢\n' +
+            'GitBlog的成长需要喜欢Markdown，喜欢写博客的各位亲们支持！感谢你们使用GitBlog，感激你们对Gitblog的良好建议与Bug反馈。\n' +
+            '\n' +
+            'QQ群：84692078\n' +
+            '作者邮箱：164068300[AT]qq.com',
         id:'1',
     },
+    {
+        name:'开发者模板',
+        html:'<h1>English | <a target="_blank" rel="noopener noreferrer nofollow" href="https://github.com/turkyden/geek-resume/blob/main/README_cn-zh.md">简体中文</a></h1><h1><strong>Geek Resume</strong></h1><p>💼 Pure Markdown, an online resume editor for developer.</p><p></p><p><a target="_blank" rel="noopener noreferrer nofollow" href="https://geek-resume.vercel.app/">: : : Live Demo : : :</a></p><blockquote><p><strong>Less is more</strong>, the simple things often bring people more enjoyment.</p><p><strong>大道至简</strong>，简单的东西往往带给人们的是更多的享受。</p><p>___ Ludwig Mies van der Rohe. Bauhaus 包豪斯</p></blockquote><p>Inspired by <a target="_blank" rel="noopener noreferrer nofollow" href="https://visiky.github.io/resume/">https://visiky.github.io/resume/</a></p><h2><strong>Feather</strong></h2><ul><li><p>Grid Layout System</p></li><li><p>PDF Print</p></li><li><p>Github Theme</p></li><li><p>Monaco Editor</p></li><li><p>Avatar Filter</p></li><li><p>Social Icon List</p></li><li><p>Mult Template</p></li><li><p>Translate Helper</p></li><li><p>Mobile Preview</p></li><li><p>Export HTML</p></li></ul><h2><strong>Contribution</strong></h2><p>Install the dependencies</p><pre><code>$ yarn</code></pre><p>Start the dev server</p><pre><code>$ yarn start</code></pre><h2><strong>Refference</strong></h2><p>Thanks for the following project.</p><ul><li><p><a target="_blank" rel="noopener noreferrer nofollow" href="https://www.tailwindcss.cn/">TailwindCSS</a></p></li><li><p><a target="_blank" rel="noopener noreferrer nofollow" href="https://ant.design/">Ant Design</a></p></li><li><p><a target="_blank" rel="noopener noreferrer nofollow" href="https://umijs.org/">Umijs</a></p></li><li><p><a target="_blank" rel="noopener noreferrer nofollow" href="https://ahooks.js.org/">Ahooks</a></p></li><li><p><a target="_blank" rel="noopener noreferrer nofollow" href="https://github.com/suren-atoyan/monaco-react">Monaco React</a></p></li><li><p><a target="_blank" rel="noopener noreferrer nofollow" href="https://bansal.io/pattern-css">PatternCSS</a></p></li></ul><h2><strong>Recommendation</strong></h2><p>There are some nice works should be recommended here.</p><ul><li><p><a target="_blank" rel="noopener noreferrer nofollow" href="https://github.com/visiky/resume">https://github.com/visiky/resume</a></p></li><li><p><a target="_blank" rel="noopener noreferrer nofollow" href="https://github.com/Ovilia/cv">https://github.com/Ovilia/cv</a></p></li><li><p><a target="_blank" rel="noopener noreferrer nofollow" href="https://resume.mdedit.online/">https://resume.mdedit.online/</a></p></li><li><p><a target="_blank" rel="noopener noreferrer nofollow" href="https://github.com/geekcompany/ResumeSample">https://github.com/geekcompany/ResumeSample</a></p></li><li><p><a target="_blank" rel="noopener noreferrer nofollow" href="https://github.com/billryan/resume">https://github.com/billryan/resume</a></p></li><li><p><a target="_blank" rel="noopener noreferrer nofollow" href="https://github.com/jirengu-inc/animating-resume">https://github.com/jirengu-inc/animating-resume</a></p></li><li><p><a target="_blank" rel="noopener noreferrer nofollow" href="https://github.com/liangjingkanji/DrakeTyporaTheme">https://github.com/liangjingkanji/DrakeTyporaTheme</a></p></li></ul><h2><strong>Contributors</strong></h2><p>Thanks goes to these people:</p><p></p><p>Please Feel free to enjoy and participate in open source!</p><h2><strong>Stargazers</strong></h2><p>Thanks for your star!</p><p></p><h2><strong>CDN</strong></h2><p><a target="_blank" rel="noopener noreferrer nofollow" href="https://purge.jsdelivr.net/gh/turkyden/geek-resume@gh-pages/">Click me to refresh cdn cache →</a></p><h2><strong>License</strong></h2><p><a target="_blank" rel="noopener noreferrer nofollow" href="https://github.com/turkyden/geek-resume/blob/main/LICENSE">MIT</a></p>',
+        id:'2',
+    },
+    {
+        name:'前后端交接文档模板',
+        html:'<h1><strong>1. 通则</strong></h1><blockquote><h5><strong>baseUrl:</strong></h5></blockquote><ul><li><p>测试环境：<code>https://xxx.xx:888/xx</code></p></li><li><p>生产环境：<code>https://yyy.yy/yy</code></p></li></ul><blockquote><h5><strong>接口url说明</strong></h5></blockquote><ul><li><p>url中的 <code>{xx}</code> 表示路径参数，参数名为xx</p></li></ul><blockquote><h5><strong>返回数据说明</strong></h5></blockquote><ul><li><p>2XX<br>成功，返回的数据格式见具体接口描述</p></li><li><p>401<br>授权失败，通常情况下，这意味着需要提醒用户重新登录</p></li><li><p>其他&gt;=400<br>请求失败，具体含义可以<a target="_blank" rel="noopener noreferrer nofollow" href="https://baike.baidu.com/item/HTTP%E7%8A%B6%E6%80%81%E7%A0%81">参考这里</a>，通常情况下，同时返回如下数据：</p><pre><code>{ \n' +
+            '    "code": -1, // 错误码 \n' +
+            '    "message": " 数据不存在！ ", // 错误信息 \n' +
+            '    "data": {...} // 附加数据 \n' +
+            '}\n' +
+            '</code></pre><p><br></p></li></ul><hr><p><br></p><h1><strong>2. 接口列表</strong></h1><h2><strong>2.1. 获取产品信息</strong></h2><h3><code>GET</code> <strong>/product/{id}</strong></h3><blockquote><p>Path Parameters:</p></blockquote><table><tbody><tr><th colspan="1" rowspan="1"><p><strong>参数名</strong></p></th><th colspan="1" rowspan="1"><p><strong>必须</strong></p></th><th colspan="1" rowspan="1"><p><strong>说明</strong></p></th></tr><tr><td colspan="1" rowspan="1"><p>id</p></td><td colspan="1" rowspan="1"><p>y</p></td><td colspan="1" rowspan="1"><p>产品id</p></td></tr></tbody></table><blockquote><p>Headers:</p></blockquote><table><tbody><tr><th colspan="1" rowspan="1"><p><strong>名称</strong></p></th><th colspan="1" rowspan="1"><p><strong>必须</strong></p></th><th colspan="1" rowspan="1"><p><strong>说明</strong></p></th></tr></tbody></table><blockquote><p>Query Parameters:</p></blockquote><table><tbody><tr><th colspan="1" rowspan="1"><p><strong>参数名</strong></p></th><th colspan="1" rowspan="1"><p><strong>必须</strong></p></th><th colspan="1" rowspan="1"><p><strong>说明</strong></p></th></tr></tbody></table><blockquote><p>Response:</p></blockquote><ul><li><p>200:Ok</p><pre><code>样例：\n' +
+            '{\n' +
+            '    "name": "Matrix VR",\n' +
+            '    "description": "Awesome!",\n' +
+            '    "produceDate": "2018/6/21"\n' +
+            '}\n' +
+            '</code></pre></li><li><p>404:Not Found</p></li></ul><h2><strong>2.2. 提交产品</strong></h2><h3><code>POST</code> <strong>/product/</strong></h3><blockquote><p>Post Body:</p></blockquote><pre><code>样例：\n' +
+            '{\n' +
+            '    "name": "Matrix VR",\n' +
+            '    "description": "Awesome!",\n' +
+            '    "produceDate": "2018/6/21"\n' +
+            '}\n' +
+            '</code></pre><blockquote><p>Response:</p></blockquote><ul><li><p>200:Ok</p></li></ul>',
+        id:'3',
+    },
+    {
+        name:'中文简历',
+        html:'<h1><strong>小明</strong></h1><p>男 1993年 现居上海 求职意向：XXX</p><p>139 xxxx xxxx WechatAccount <a target="_blank" rel="noopener noreferrer nofollow" href="mailto:example@example.com">example@example.com</a> <a target="_blank" rel="noopener noreferrer nofollow" href="http://www.paincker.com">www.paincker.com</a></p><h2><strong>教育经历</strong></h2><h3><strong>西安电子科技大学，西安2011.9 ~ 2015.7</strong></h3><ul><li><p>本科，通信工程</p></li><li><p>英语 CET4 / CET6 通过</p></li></ul><h2><strong>工作和项目经历</strong></h2><h3><strong>美团外卖C端，北京，Android高级工程师 2015.7 ~ 2018.10</strong></h3><p>参与美团外卖App、美团App外卖频道的研发。期间见证了外卖项目的高速发展，Android C端团队从4人扩展到40+，外卖日订单量超过<strong>2000w</strong>，公司规模逐步扩大并最终上市。个人在<strong>技术广度、深度上均有进步</strong>。</p><ol><li><p>业务<strong>主力开发、小组组长</strong>……</p></li><li><p>开源Android路由框架 <a target="_blank" rel="noopener noreferrer nofollow" href="https://github.com/meituan/WMRouter">WMRouter</a> 主要作者，<strong>在GitHub已有1.6k Star</strong>……</p></li><li><p>性能优化。冷启动提升约<strong>30%</strong>……</p></li><li><p>……</p></li></ol><h3><strong>XXX，上海，全栈开发2018.10 ~ 至今</strong></h3><ol><li><p>……</p></li></ol><h3><strong>个人项目</strong></h3><ul><li><p><a target="_blank" rel="noopener noreferrer nofollow" href="https://github.com/jzj1993/PublishMarkdown">PublishMarkdown</a>：发布Markdown文件到WordPress等博客的<strong>开源、跨平台桌面工具</strong>，支持<strong>中英文</strong>。提供简易编辑预览功能，支持代码高亮、MathJax；一键发布，批量传图，设置文章属性。实现：Electron / Vue.js。</p></li><li><p><strong>更多项目</strong>：可查看 <a target="_blank" rel="noopener noreferrer nofollow" href="https://www.paincker.com/about">个人博客</a>。</p></li></ul><h2><strong>自我评价</strong></h2><ol><li><p><strong>擅长整理总结，乐于分享</strong>（<a target="_blank" rel="noopener noreferrer nofollow" href="https://www.paincker.com/">个人独立博客</a>累计访问量 / PV 136w+）。</p></li><li><p>……</p></li></ol><h2><strong>技能</strong></h2><p>★★★ Android (Java)</p><p>★★☆ Node.js</p><p>★☆☆ 前端 (Vue.js / ES6 / Sass / Bootstrap / Gulp / Webpack 3)，Electron，微信小程序，Python，Groovy，PHP，WordPress，C，嵌入式，电路设计</p>',
+        id:'4',
+    },
+    {
+        name:'英文简历',
+        html:'<h1><strong>Xiao Ming</strong></h1><p>Male Age: 27 Shanghai Objective: Android Engineer</p><p>139 xxxx xxxx WechatAccount <a target="_blank" rel="noopener noreferrer nofollow" href="mailto:example@example.com">example@example.com</a> <a target="_blank" rel="noopener noreferrer nofollow" href="http://www.paincker.com">www.paincker.com</a></p><h2><strong>Education</strong></h2><h3><strong>Xidian University, Shaanxi, China 2011.9 ~ 2015.7</strong></h3><ul><li><p>B.S. in Telecommunications Engineering</p></li><li><p>CET4 / CET6 passed</p></li></ul><h2><strong>Professional Experience</strong></h2><h3><strong>Meituan Waimai Customer App, Beijing, Android Engineer 2015.7 ~ 2018.10</strong></h3><p>……</p><ol><li><p><strong>Main developer</strong> and group leader of core business module……</p></li><li><p>First author of <a target="_blank" rel="noopener noreferrer nofollow" href="https://github.com/meituan/WMRouter">WMRouter</a>, an <strong>open source</strong> Android routing framework with <strong>1.6k Star</strong> on GitHub…….</p></li><li><p>……</p></li><li><p>……</p></li></ol><h3><strong>XXX, Shanghai, Fullstack Engineer2018.10 ~ Now</strong></h3><ol><li><p>……</p></li><li><p>……</p></li></ol><h3><strong>Personal Projects</strong></h3><ul><li><p><a target="_blank" rel="noopener noreferrer nofollow" href="https://github.com/jzj1993/PublishMarkdown">PublishMarkdown</a>：An open source, cross-platform tools for publishing markdown files to WordPress and other blogs, supporting Chinese and English. It provides simple edit and preview functions, and supports code highlighting, MathJax rendering. One-click to publish, images batch upload, and set article attributes automatically. Implemented with Electron and Vue.js.</p></li><li><p><strong>More Projects:</strong> Please visit <a target="_blank" rel="noopener noreferrer nofollow" href="https://www.paincker.com/about">my blog</a>.</p></li></ul><h2><strong>Self Assessment</strong></h2><ol><li><p><strong>Passionate on solving problems with technical skills, strong learning ability, self motivated.</strong> E.g. ……</p></li><li><p>……</p></li></ol><h2><strong>Skills</strong></h2><p>★★★ Android (Java)</p><p>★★☆ Node.js</p><p>★☆☆ Frontend (Vue.js / ES6 / Sass / Bootstrap / Gulp / Webpack 3), Electron, Wechat mini-program, Python, Groovy, PHP, WordPress, C, Embedded development, Circuit design.</p>',
+        id:'5',
+    },
+    {
+        name:'物理实验报告模板',
+        html:'<h1><strong>报告标题</strong></h1><p>太上曰。祸福无门。惟人自召。善恶之报。如影随形。</p><p>是以天地有司过之神。依人所犯轻重。以夺人算。算减则贫耗。多逢忧患。人皆恶之。刑祸随之。吉庆避之。恶星灾之。算尽则死。</p><p>又有三台北斗神君。在人头上。录人罪恶。夺其纪算。又有三尸神。在人身中。每到庚申日。辄上诣天曹。言人罪过。月晦之日。灶神亦然。</p><table><tbody><tr><th colspan="1" rowspan="1"><p><strong>表头</strong></p></th><th colspan="1" rowspan="1"><p><strong>表头</strong></p></th><th colspan="1" rowspan="1"><p><strong>表头</strong></p></th></tr><tr><td colspan="1" rowspan="1"><p>表内容</p></td><td colspan="1" rowspan="1"><p>表内容</p></td><td colspan="1" rowspan="1"><p>表内容</p></td></tr><tr><td colspan="1" rowspan="1"><p>表内容</p></td><td colspan="1" rowspan="1"><p>表内容</p></td><td colspan="1" rowspan="1"><p>表内容</p></td></tr><tr><td colspan="1" rowspan="1"><p>表内容</p></td><td colspan="1" rowspan="1"><p>表内容</p></td><td colspan="1" rowspan="1"><p>表内容</p></td></tr></tbody></table><h2><strong>一、报告第一部分</strong></h2><p>凡人有过。大则夺纪。小则夺算。其过大小。有数百事。欲求长生者。先须避之。</p><p>是道则进。非道则退。不履邪径。不欺暗室。积德累功。慈心于物。忠孝友悌。正己化人。矜孤恤寡。敬老怀幼。昆虫草木。犹不可伤。宜悯人之凶。乐人之善。济人之急。救人之危。见人之得。如己之得。见人之失。如己之失。不彰人短。不炫己长。遏恶扬善。推多取少。受辱不怨。受宠若惊。施恩不求报。与人不追悔。</p><h3><strong>小标题</strong></h3><p>所谓善人。人皆敬之。天道佑之。福禄随之。众邪远之。神灵卫之。所作必成。神仙可冀。欲求天仙者。当立1300善。欲求地仙者。当立300善。</p><p>苟或非义而动。背理而行。以恶为能。忍作残害。阴贼良善。暗侮君亲。慢其先生。叛其所事。诳诸无识。谤诸同学。虚诬诈伪。攻讦宗亲。刚强不仁。狠戾自用。</p><p>是非不当。向背乖宜。虐下取功。谄上希旨。受恩不感。念怨不休。轻蔑天民。扰乱国政。赏及非义。刑及无辜。杀人取财。倾人取位。诛降戮服。贬正排贤。凌孤逼寡。弃法受赂。以直为曲。以曲为直。入轻为重。见杀加怒。知过不改。见善不为。自罪引他。壅塞方术。讪谤圣贤。侵凌道德。 $$ e^{ix}=1 $$</p><h3><strong>小标题</strong></h3><p>射飞逐走。发蛰惊栖。填穴覆巢。伤胎破卵。愿人有失。毁人成功。危人自安。减人自益。以恶易好。以私废公。窃人之能。蔽人之善。形人之丑。讦人之私。<code>sleep(5000)</code>耗人货财。离人骨肉。侵人所爱。助人为非。逞志作威。辱人求胜。败人苗稼。破人婚姻。</p><p>苟富而骄。苟免无耻。认恩推过。嫁祸卖恶。沽买虚誉。包贮险心。挫人所长。护己所短。乘威迫胁。纵暴杀伤。无故剪裁。非礼烹宰。散弃五谷。劳扰众生。破人之家。取其财宝。决水放火。以害民居。紊乱规模。以败人功。损人器物。以穷人用。</p><pre><code>public class foo{\n' +
+            '    public foo(){\n' +
+            '        System.out.println("foo");\n' +
+            '    }\n' +
+            '    /*\n' +
+            '    见他荣贵。愿他流贬。见他富有。愿他破散。见他色美。起心私之。负他货财。愿他身死。干求不遂。便生咒恨。见他失便。便说他过。见他体相不具而笑之。见他才能可称而抑之。\n' +
+            '    */\n' +
+            '}</code></pre><p>埋蛊厌人。用药杀树。恚怒师傅。抵触父兄。强取强求。好侵好夺。掳掠致富。巧诈求迁。赏罚不平。逸乐过节。苛虐其下。恐吓于他。怨天尤人。呵风骂雨。斗合争讼。妄逐朋党。用妻妾语。违父母训。得新忘故。口是心非。贪冒于财。欺罔其上。造作恶语。谗毁平人。毁人称直。骂神称正。弃顺效逆。背亲向疏。指天地以证鄙怀。引神明而鉴猥事。</p><p>![Cookie Monster](Cookie Monster.jpg)</p><h2><strong>报告第二部分</strong></h2><ol><li><p>施与后悔。</p></li><li><p>假借不还。</p><ol><li><p>分外营求。</p></li><li><p>力上施设。</p><ol><li><p>淫欲过度。</p></li><li><p>心毒貌慈。</p></li></ol></li></ol></li></ol><ul><li><p>秽食餧人。</p></li><li><p>左道惑众。</p><ul><li><p>短尺狭度。</p></li><li><p>轻称小升。</p><ul><li><p>以伪杂真。</p></li><li><p>采取奸利。</p></li></ul></li></ul></li></ul><p>压良为贱。谩蓦愚人。贪婪无厌。咒诅求直。</p><p>嗜酒悖乱。骨肉忿争。男不忠良。女不柔顺。不和其室。不敬其夫。每好矜夸。常行妒忌。无行于妻子。失礼于舅姑。轻慢先灵。违逆上命。作为无益。怀挟外心。自咒咒他。偏憎偏爱。</p><p>越井越灶。跳食跳人。损子堕胎。行多隐僻。晦腊歌舞。朔旦号怒。对北涕唾及溺。对灶吟咏及哭。又以灶火烧香。秽柴作食。夜起裸露。八节行刑。唾流星。指虹霓。辄指三光。久视日月。春月燎猎。对北恶骂。无故杀龟打蛇。</p><p>如是等罪。司命随其轻重。夺其纪算。算尽则死。死有余责。乃殃及子孙。又诸横取人财者。乃计其妻子家口以当之。渐至死丧。若不死丧。则有水火盗贼。遗亡器物。疾病口舌诸事。以当妄取之值。又枉杀人者。是易刀兵而相杀也。取非义之财者。譬如漏脯救饥。鸩酒止渴。非不暂饱。死亦及之。</p>',
+        id:'6',
+    },
+
+    {
+        name:'上机实验报告模板',
+        html:'<h1><strong>本科实验报告</strong></h1><h2><strong>实验名称：windows系统安全与加固技术实验</strong></h2><table><tbody><tr><th colspan="1" rowspan="1"><p><strong>课程名称</strong></p></th><th colspan="1" rowspan="1"><p><strong>信息安全与对抗实践基础</strong></p></th><th colspan="1" rowspan="1"><p><strong>实验时间</strong></p></th><th colspan="1" rowspan="1"><p><strong>2018年4月9日</strong></p></th></tr><tr><td colspan="1" rowspan="1"><p>任课教师</p></td><td colspan="1" rowspan="1"><p></p></td><td colspan="1" rowspan="1"><p>实验地点</p></td><td colspan="1" rowspan="1"><p>理学楼B座2层机房</p></td></tr><tr><td colspan="1" rowspan="1"><p>实验教室</p></td><td colspan="1" rowspan="1"><p></p></td><td colspan="1" rowspan="1"><p></p></td><td colspan="1" rowspan="1"><p>√ 原理验证</p></td></tr><tr><td colspan="1" rowspan="1"><p>学生姓名</p></td><td colspan="1" rowspan="1"><p></p></td><td colspan="1" rowspan="1"><p>实验类型</p></td><td colspan="1" rowspan="1"><p>□ 综合设计</p></td></tr><tr><td colspan="1" rowspan="1"><p>学号/班级</p></td><td colspan="1" rowspan="1"><p></p></td><td colspan="1" rowspan="1"><p></p></td><td colspan="1" rowspan="1"><p>□ 自主设计</p></td></tr><tr><td colspan="1" rowspan="1"><p>学院</p></td><td colspan="1" rowspan="1"><p></p></td><td colspan="1" rowspan="1"><p>组号/同组搭档</p></td><td colspan="1" rowspan="1"><p></p></td></tr><tr><td colspan="1" rowspan="1"><p>专业</p></td><td colspan="1" rowspan="1"><p></p></td><td colspan="1" rowspan="1"><p>成绩</p></td><td colspan="1" rowspan="1"><p></p></td></tr></tbody></table><p></p><p>[TOC]</p><h2><strong>I. 实验简介</strong></h2><p>​ 使用Windows系统下的安全策略和安全审核，提出典型网络安全的解决方案。</p><h2><strong>II. 实验设备与环境</strong></h2><p>​ 在本次实验中，实验设备为我的电脑，Lenovo Yoga 2，系统为Windows 10 专业版；实验网络为理学楼B座2层机房的BIT-Web无线网。</p><h2><strong>III. 实验目的</strong></h2><p>​ 为计算机设置完善的安全策略，维护计算机系统的安全。</p><h2><strong>IV. 实验基本原理</strong></h2><ol><li><p>“审核登录事件”设置用于确定是否对用户在记录审核事件的计算机上登录、注销或建立网络连接的每个实例进行审核。帐户登录事件是在帐户所在的位置生成的，而登录事件是在登录尝试发生的位置生成的。</p></li><li><p>“审核帐户登录事件”设置用于确定是否对用户在另一台计算机上登录或注销的每个实例进行审核，该计算机记录了审核事件，并用来验证帐户。如果定义了该策略设置，则可指定是否审核成功、失败或根本不审核此事件类型。</p></li><li><p>“不显示上次登录的用户名”安全设置确定是否在 Windows 登录屏幕中显示最后登录到计算机的用户的名称。如果启用该策略，则不会在“登录到 Windows”对话框中显示最后成功登录的用户的名称。如果禁用该策略，则会显示最后登录的用户的名称。目的保护个人隐私，不显示上次登录的用户名，维护用户权益。</p></li><li><p>IP安全策略是一个设置通讯分析的策略，它将通讯内容与设定好的规则进行比较以判断通讯是否与预期相吻合，然后决定是允许还是拒绝通讯的传输，它弥补了传统TCP/IP设计上的"随意信任"重大安全漏洞，可以实现更仔细更精确的TCP/IP安全。</p></li></ol><h2><strong>V. 实验方法概述</strong></h2><ol><li><p>【开始】-【控制面板】-【管理工具】-【本地安全策略】-【本地策略】-【策略审核】-【审核登录事件】-【审核登录事件】，选项上单击右键，选择【属性】</p></li><li><p>审核过程跟踪：【运行】-【打开】窗口输入“secpol.msc”，出现审核登录事件窗口。</p></li><li><p>禁止在登录前关机：【开始】-【运行】-输入“secpol.msc”-打开-【本地安全设置】</p></li><li><p>不显示上次登录的用户名：【本地安全设置】-【安全设置】-【本地策略】-【安全选项】</p></li><li><p>创建一个IP安全策略：单击【开始】菜单，然后选择【设置】-【控制面板】，在弹出的【控制面板】中，双击【管理工具】图标，进入到【管理工具】中，再次双击其中的【本地安全策略】图标并进入到"本地安全策略"对话框中。</p></li><li><p>用鼠标右击“IP安全策略”，选择“创建IP安全策略”命令，在弹出的“IP安全策略向导”对话框中，单击“下一步”按钮，输入IP安全策略的名称，如“屏蔽135端口”，再次单击“下一步”按钮，保持默认参数设置不变，直至完成位置，这样就创建出来了一个“屏蔽135端口”的安全策略。</p></li><li><p>设置IP筛选器：鼠标右击"IP安全策略"-"管理IP筛选器和筛选器操作"-"添加"按钮-在弹出的"IP筛选器列表"中输入名称"屏蔽135端口"-"添加"按钮-"下一步"按钮-在目标地址中选择"我的IP地址"-"下一步"按钮-在协议中选择"TCP"(一般选择此项，根据具体的端口设定，如关闭ICMP协议时，这里选择ICMP)-在设置IP协议端口中选择从任意端口到此端口（在此端口中输入135），即可完成屏蔽135端口的设置。</p><p>•鼠标右击"IP安全策略"-"管理IP筛选器和筛选器操作"-"添加"按钮-在弹出的"IP筛选器列表"中输入名称"屏蔽135端口"-"添加"按钮-"下一步"按钮-在目标地址中选择"我的IP地址"-"下一步"按钮-在协议中选择"TCP"(一般选择此项，根据具体的端口设定，如关闭ICMP协议时，这里选择ICMP)-在设置IP协议端口中选择从任意端口到此端口（在此端口中输入135），即可完成屏蔽135端口的设置。</p></li></ol><h2><strong>VI. 实验主体 —— 流程与记录</strong></h2><ul><li><p>设置审核登录事件、审核过程跟踪、审核账户登录事件。</p><p></p><p></p><p></p></li><li><p>通过计算机管理，设置禁止在登录前关机、不显示上次登录的用户名的功能。</p><p></p><p></p></li><li><p>掌握创建一个IP安全策略，设置IP筛选器、筛选器和指派，要求对tcp的137、138端口屏蔽。</p><p></p><p></p><p></p><p></p></li><li><p>设置系统日志、安全日志的功能，通过查看这些信息、警告或错误，我们分析实验室主机的状态。</p><p></p><p></p></li></ul><h2><strong>VII. 思考</strong></h2><h3><strong>审核登录事件、审核过程跟踪、审核账户登录事件用途？</strong></h3><ul><li><p>“审核登录事件”设置用于确定是否对用户在记录审核事件的计算机上登录、注销或建立网络连接的每个实例进行审核。如果正在域控制器上记录成功的帐户登录审核事件，工作站登录尝试将不生成登录审核。只有域控制器自身的交互式登录和网络登录尝试才生成登录事件。总而言之，帐户登录事件是在帐户所在的位置生成的，而登录事件是在登录尝试发生的位置生成的。</p><p>成功审核会在登录尝试成功时生成一个审核项。该审核项的信息对于记帐以及事件发生后的辩论十分有用，可用来确定哪个人成功登录到哪台计算机。失败审核会在登录尝试失败时生成一个审核项，该审核项对于入侵检测十分有用，但此设置可能会导致进入 DoS 状态，因为攻击者可以生成数百万次登录失败，并将安全事件日志填满。</p></li><li><p>“审核过程跟踪”设置用于确定是否审核事件的详细跟踪信息，如程序激活、进程退出、句柄复制和间接对象访问等。成功审核会在成功跟踪过程时生成一个审核项。失败审核会在跟踪过程失败时生成一个审核项。</p><p>启用“审核过程跟踪”将生成大量事件，因此通常都将其设置为“无审核”。但是，在事件响应期间，即过程详细日志开始记录和这些过程被启动的时间，这些设置会发挥很大的作用。</p></li><li><p>“审核账户登录事件”确定是否审核用户登录或注销另一台计算机(用于验证账户)的每个实例。在域控制器上对域用户账户进行身份验证时会生成账户登录事件。该事件记录在域控制器的安全日志中。在本地计算机上对本地用户进行身份验证时会生成登录事件。该事件记录在本地安全日志中。不生成账户注销事件。</p><p>此安全设置确定是否审核用户登录或注销另一台计算机(用于验证账户)的每个实例。在域控制器上对域用户账户进行身份验证时会生成账户登录事件。该事件记录在域控制器的安全日志中。在本地计算机上对本地用户进行身份验证时会生成登录事件。该事件记录在本地安全日志中。不生成账户注销事件。</p><p>如果在域控制器上为账户登录事件启用成功审核，则为该域服务器验证的每位用户记录审核项，即使该用户事实上已登录到加入该域的工作站上。</p></li></ul>',
+        id:'7',
+    },
+    {
+        name:'单词本模板',
+        html:'<table><tbody><tr><th colspan="1" rowspan="1"><p><strong>Abbr.</strong></p></th><th colspan="1" rowspan="1"><p><strong>含义</strong></p></th></tr><tr><td colspan="1" rowspan="1"><p>ADVP</p></td><td colspan="1" rowspan="1"><p>副词短语</p></td></tr><tr><td colspan="1" rowspan="1"><p>ADJP</p></td><td colspan="1" rowspan="1"><p>形容词短语</p></td></tr><tr><td colspan="1" rowspan="1"><p>AS</p></td><td colspan="1" rowspan="1"><p>内容标记（如</p></td></tr><tr><td colspan="1" rowspan="1"><p>CC</p></td><td colspan="1" rowspan="1"><p>表示连词</p></td></tr><tr><td colspan="1" rowspan="1"><p>CD</p></td><td colspan="1" rowspan="1"><p>表示基数词</p></td></tr><tr><td colspan="1" rowspan="1"><p>CP</p></td><td colspan="1" rowspan="1"><p>由‘的’构成的表示修饰性关系的短语</p></td></tr><tr><td colspan="1" rowspan="1"><p>DNP</p></td><td colspan="1" rowspan="1"><p>由‘的’构成的表示所属关系的短语</p></td></tr><tr><td colspan="1" rowspan="1"><p>DP</p></td><td colspan="1" rowspan="1"><p>限定词短语</p></td></tr><tr><td colspan="1" rowspan="1"><p>DT</p></td><td colspan="1" rowspan="1"><p>determiner 表示限定词</p></td></tr><tr><td colspan="1" rowspan="1"><p>EX</p></td><td colspan="1" rowspan="1"><p>existential there 存在句</p></td></tr><tr><td colspan="1" rowspan="1"><p>FW</p></td><td colspan="1" rowspan="1"><p>foreign word 外来词</p></td></tr><tr><td colspan="1" rowspan="1"><p>IN</p></td><td colspan="1" rowspan="1"><p>preposition or conjunction, subordinating 介词或从属连词</p></td></tr><tr><td colspan="1" rowspan="1"><p>IP</p></td><td colspan="1" rowspan="1"><p>简单从句</p></td></tr><tr><td colspan="1" rowspan="1"><p>JJ</p></td><td colspan="1" rowspan="1"><p>adjective or numeral, ordinal 形容词或序数词</p></td></tr><tr><td colspan="1" rowspan="1"><p>JJR</p></td><td colspan="1" rowspan="1"><p>adjective, comparative 形容词比较级</p></td></tr><tr><td colspan="1" rowspan="1"><p>JJS</p></td><td colspan="1" rowspan="1"><p>adjective, superlative 形容词最高级</p></td></tr><tr><td colspan="1" rowspan="1"><p>LCP</p></td><td colspan="1" rowspan="1"><p>方位词短语</p></td></tr><tr><td colspan="1" rowspan="1"><p>LS</p></td><td colspan="1" rowspan="1"><p>list item marker 列表标识</p></td></tr><tr><td colspan="1" rowspan="1"><p>MD</p></td><td colspan="1" rowspan="1"><p>modal auxiliary 情态助动词</p></td></tr><tr><td colspan="1" rowspan="1"><p>NN</p></td><td colspan="1" rowspan="1"><p>常用名词</p></td></tr><tr><td colspan="1" rowspan="1"><p>NP</p></td><td colspan="1" rowspan="1"><p>名词短语</p></td></tr><tr><td colspan="1" rowspan="1"><p>NR</p></td><td colspan="1" rowspan="1"><p>固有名词</p></td></tr><tr><td colspan="1" rowspan="1"><p>NT</p></td><td colspan="1" rowspan="1"><p>时间名词</p></td></tr><tr><td colspan="1" rowspan="1"><p>PDT</p></td><td colspan="1" rowspan="1"><p>pre-determiner 前位限定词</p></td></tr><tr><td colspan="1" rowspan="1"><p>PN</p></td><td colspan="1" rowspan="1"><p>代词</p></td></tr><tr><td colspan="1" rowspan="1"><p>POS</p></td><td colspan="1" rowspan="1"><p>genitive marker 所有格标记</p></td></tr><tr><td colspan="1" rowspan="1"><p>PP</p></td><td colspan="1" rowspan="1"><p>介词短语</p></td></tr><tr><td colspan="1" rowspan="1"><p>PRP</p></td><td colspan="1" rowspan="1"><p>pronoun, personal 人称代词</p></td></tr><tr><td colspan="1" rowspan="1"><p>PU</p></td><td colspan="1" rowspan="1"><p>断句符，通常是句号、问号、感叹号等标点符号</p></td></tr><tr><td colspan="1" rowspan="1"><p>QP</p></td><td colspan="1" rowspan="1"><p>量词短语</p></td></tr><tr><td colspan="1" rowspan="1"><p>RB</p></td><td colspan="1" rowspan="1"><p>adverb 副词</p></td></tr><tr><td colspan="1" rowspan="1"><p>RBR</p></td><td colspan="1" rowspan="1"><p>adverb, comparative 副词比较级</p></td></tr><tr><td colspan="1" rowspan="1"><p>RBS</p></td><td colspan="1" rowspan="1"><p>adverb, superlative 副词最高级</p></td></tr><tr><td colspan="1" rowspan="1"><p>ROOT</p></td><td colspan="1" rowspan="1"><p>要处理文本的语句</p></td></tr><tr><td colspan="1" rowspan="1"><p>RP</p></td><td colspan="1" rowspan="1"><p>particle 小品词</p></td></tr><tr><td colspan="1" rowspan="1"><p>SYM</p></td><td colspan="1" rowspan="1"><p>symbol 符号</p></td></tr><tr><td colspan="1" rowspan="1"><p>TO</p></td><td colspan="1" rowspan="1"><p>”to” as preposition or infinitive marker 作为介词或不定式标记</p></td></tr><tr><td colspan="1" rowspan="1"><p>VA</p></td><td colspan="1" rowspan="1"><p>表语形容词</p></td></tr><tr><td colspan="1" rowspan="1"><p>VC</p></td><td colspan="1" rowspan="1"><p>是</p></td></tr><tr><td colspan="1" rowspan="1"><p>VE</p></td><td colspan="1" rowspan="1"><p>有</p></td></tr><tr><td colspan="1" rowspan="1"><p>VP</p></td><td colspan="1" rowspan="1"><p>动词短语</p></td></tr><tr><td colspan="1" rowspan="1"><p>VRD</p></td><td colspan="1" rowspan="1"><p>动补复合词</p></td></tr><tr><td colspan="1" rowspan="1"><p>VV</p></td><td colspan="1" rowspan="1"><p>动词</p></td></tr><tr><td colspan="1" rowspan="1"><p>WDT</p></td><td colspan="1" rowspan="1"><p>WH-determiner WH限定词</p></td></tr><tr><td colspan="1" rowspan="1"><p>WP</p></td><td colspan="1" rowspan="1"><p>WH-pronoun WH代词</p></td></tr><tr><td colspan="1" rowspan="1"><p>WP$</p></td><td colspan="1" rowspan="1"><p>WH-pronoun, possessive WH所有格代词</p></td></tr><tr><td colspan="1" rowspan="1"><p>WRB</p></td><td colspan="1" rowspan="1"><p>Wh-adverb WH副词</p></td></tr></tbody></table>',
+        id:'8',
+    },
+
 ]
