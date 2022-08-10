@@ -290,6 +290,13 @@ export function getProsByUser(data){
 }
 
 
+export function getavatarchain(data){
+    return request({
+        url: 'api/team/getAllAvatarsOfTeam',
+        method: 'post',
+        data,
+    })
+}
 
 export async function deleteproject(data) {
     return request({

@@ -1,39 +1,31 @@
 <template>
-  <div class="about">
-    <transition appear @before-enter="beforeEnter"
-                @enter="enter" @after-enter="afterEnter">
-      <h1>This is an about page</h1>
-    </transition>
-  </div>
+    <a-form ref="musicFormRef" size="large" :model="musicForm" :style="{ width: '600px' }">
+        <a-form-item label="音乐封面">
+            <a-upload list-type="picture" draggable accept="image/*" :onSuccess="coverUpload"
+                @before-upload="beforeUpload" :action="filesUploadUrl" :default-file-list="fileList" image-preview />
+        </a-form-item>
+        <a-form-item label="主题色">
+            <color-picker v-model:pureColor="pureColor" format="hex6" shape="circle" useType="both"
+                v-model:gradientColor="gradientColor" />
+            <br><br>
+            <a-input v-model="pureColor" allow-clear placeholder="主题色HEX"></a-input>
+        </a-form-item>
+    </a-form>
 </template>
-<style scoped>
-.about {
-  color: red;
-}
-</style>
-
-<script>
-import gsap from 'gsap'
-
-export default {
-  setup() {
-    const beforeEnter = (el) => {
-      console.log('before-enter set initial state', el);
-      el.style.transform = 'translateY(-60px)';
-      el.style.opacity = 0;
+<script scoped>
+import { ColorPicker } from "vue3-colorpicker"
+import "vue3-colorpicker/style.css"
+import { ref } from "vue"
+export default{
+    components: { 
+        ColorPicker
+    },
+    data(){
+        return {
+            pureColor: ref("#71afe5"),
+            gradientColor: ref("linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%)")
+        }
     }
-    const enter = (el, done) => {
-      console.log('enter', el);
-      gsap.to(el, {y: 0,
-        opacity: 1,
-        duration: 3,
-        ease: 'bounce.out',
-        onComplete: done});
-    }
-    const afterEnter = (el) => {
-      console.log('after-enter', el);
-    }
-    return {beforeEnter, enter, afterEnter}
-  }
 }
 </script>
+ 

@@ -36,7 +36,6 @@
         <template #dropdown style="">
           <el-dropdown-menu style="width: 300px; margin: 0; padding: 0">
             <div
-              v-infinite-scroll="load"
               class="infinite-list"
               infinite-scroll-distance="1"
               style="overflow: auto; overflow-x: hidden"
@@ -108,6 +107,7 @@
 </template>
 
 <script setup>
+import Axios from "axios";
 import {
   ElDropdown,
   ElDropdownMenu,

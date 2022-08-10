@@ -365,6 +365,7 @@ import {
   getteamusercreat,
   getteamuserin,
   getuserinfo,
+  getavatarchain,
 } from "@/utils/api";
 import Base64 from "@/utils/Base64";
 export default {
@@ -417,6 +418,18 @@ export default {
           this.got += 1;
           if (response.data.status_code == 1) {
             this.teamuserin = response.data.Dict.team_info;
+            console.log(this.teamuserin);
+            let len = this.teamuserin.length;
+            let i = 0;
+            for (i = 0; i < len; i++) {
+              getavatarchain({ team_id: this.teamuserin[i].team_id }).then(
+                (response) => {
+                  if (response.data.status_code == 1) {
+                    console.log(response.data);
+                  } else ElMessage.error(response.data.message);
+                }
+              );
+            }
           }
         }
       );
