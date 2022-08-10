@@ -124,65 +124,59 @@
             v-if="got == 3 && teamusercreat.length == 0"
             style="margin: 0 auto"
           />
-          <div
-            class="oneteam"
-            v-if="got == 3 && teamusercreat.length != 0"
+          <el-dropdown
+            trigger="contextmenu"
             v-for="(teamcreat, index) in teamusercreat"
-            :key="index"
-            @click="go(teamcreat.team_id)"
-            @contextmenu.prevent.native="openMenu($event)"
           >
-            <el-popover
-
-                placement="bottom"
-                :width="150"
-                trigger="hover"
-
-            >
-              <template #reference>
-            <div
-              class="teamimage"
-              :style="{ backgroundImage: `url(` + teamcreat.team_avatar + ')' }"
-            ></div>
-</template>
-<el-button @click="deleteTeam(teamcreat.team_id,teamcreat.team_name)" size="large">解散团队</el-button>
-</el-popover>
-            <div class="oneteamdown">
-              <div style="font-size: 18px">{{ teamcreat.team_name }}</div>
-              <div>{{ teamcreat.brief_intro }}</div>
-
-
-              <el-popover
-
-                  placement="bottom"
-                  :width="150"
-                  trigger="hover"
-
+            <div class="oneteam">
+              <div
+                class="teamimage"
+                :style="{
+                  backgroundImage: `url(` + teamcreat.team_avatar + ')',
+                }"
+              ></div>
+              <div
+                class="oneteamdown"
+                style="
+                  height: 110px;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: space-around;
+                "
               >
-                <template #reference>
-                  <div class="text-wrap">
-                    <div class="example">
-                      <div class="avatar-list avatar-list-stacked">
-                    <span
+                <div style="font-size: 18px">{{ teamcreat.team_name }}</div>
+                <div>{{ teamcreat.brief_intro }}</div>
+
+                <div class="text-wrap">
+                  <div class="example">
+                    <div class="avatar-list avatar-list-stacked">
+                      <span
                         v-for="i in teamcreat.avatars.slice(0, 4)"
                         class="avatar cover-image brround"
                         :style="{ backgroundImage: `url(` + i + ')' }"
-                    >
-                    </span>
-                        <span
-                            v-if="teamcreat.avatars.length > 4"
-                            class="avatar cover-image brround"
+                      >
+                      </span>
+                      <span
+                        v-if="teamcreat.avatars.length > 4"
+                        class="avatar cover-image brround"
                         >+{{ teamcreat.avatars.length - 4 }}</span
-                        >
-                      </div>
+                      >
                     </div>
                   </div>
-                </template>
-                <el-button @click="deleteTeam(teamcreat.team_id,teamcreat.team_name)" size="large">解散团队</el-button>
-              </el-popover>
+                </div>
+              </div>
             </div>
-          </div>
-
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item
+                  @click.natice="
+                    deleteTeam(teamcreat.team_id, teamcreat.team_name)
+                  "
+                  >解散团队</el-dropdown-item
+                >
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
         </div>
         <div id="leftdown" v-if="tab == 'tab-1'">
           <el-skeleton
@@ -228,39 +222,59 @@
             style="margin: 0 auto"
             v-if="got == 3 && teamuseradmin.length == 0"
           />
-          <div
-            v-if="got == 3 && teamusercreat.length != 0"
-            class="oneteam"
-            v-for="(teamadmin, index) in teamuseradmin"
-            :key="index"
-            @click="go(teamadmin.team_id)"
+          <el-dropdown
+            trigger="contextmenu"
+            v-for="(teamcreat, index) in teamuseradmin"
           >
-            <div
-              class="teamimage"
-              :style="{ backgroundImage: `url(` + teamadmin.team_avatar + ')' }"
-            ></div>
-            <div class="oneteamdown">
-              <div style="font-size: 18px">{{ teamadmin.team_name }}</div>
-              <div>{{ teamadmin.brief_intro }}</div>
-              <div class="text-wrap" style="margin: 10px 0">
-                <div class="example">
-                  <div class="avatar-list avatar-list-stacked">
-                    <span
-                      v-for="i in teamadmin.avatars.slice(0, 4)"
-                      class="avatar cover-image brround"
-                      :style="{ backgroundImage: `url(` + i + ')' }"
-                    >
-                    </span>
-                    <span
-                      v-if="teamadmin.avatars.length > 4"
-                      class="avatar cover-image brround"
-                      >+{{ teamadmin.avatars.length - 4 }}</span
-                    >
+            <div class="oneteam">
+              <div
+                class="teamimage"
+                :style="{
+                  backgroundImage: `url(` + teamcreat.team_avatar + ')',
+                }"
+              ></div>
+              <div
+                class="oneteamdown"
+                style="
+                  height: 110px;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: space-around;
+                "
+              >
+                <div style="font-size: 18px">{{ teamcreat.team_name }}</div>
+                <div>{{ teamcreat.brief_intro }}</div>
+
+                <div class="text-wrap">
+                  <div class="example">
+                    <div class="avatar-list avatar-list-stacked">
+                      <span
+                        v-for="i in teamcreat.avatars.slice(0, 4)"
+                        class="avatar cover-image brround"
+                        :style="{ backgroundImage: `url(` + i + ')' }"
+                      >
+                      </span>
+                      <span
+                        v-if="teamcreat.avatars.length > 4"
+                        class="avatar cover-image brround"
+                        >+{{ teamcreat.avatars.length - 4 }}</span
+                      >
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item
+                  @click.natice="
+                    deleteTeam(teamcreat.team_id, teamcreat.team_name)
+                  "
+                  >解散团队</el-dropdown-item
+                >
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
         </div>
         <div id="leftdown" v-if="tab == 'tab-2'">
           <el-skeleton
@@ -317,7 +331,15 @@
               class="teamimage"
               :style="{ backgroundImage: `url(` + teamin.team_avatar + ')' }"
             ></div>
-            <div class="oneteamdown">
+            <div
+              class="oneteamdown"
+              style="
+                height: 110px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+              "
+            >
               <div style="font-size: 18px">{{ teamin.team_name }}</div>
               <div>{{ teamin.brief_intro }}</div>
               <div class="text-wrap">
@@ -346,7 +368,14 @@
 </template>
 
 <script>
-import {ElForm, ElFormItem, ElInput, ElButton, ElMessage, ElMessageBox} from "element-plus";
+import {
+  ElForm,
+  ElFormItem,
+  ElInput,
+  ElButton,
+  ElMessage,
+  ElMessageBox,
+} from "element-plus";
 import { Filter, Sort, Plus, CaretBottom } from "@element-plus/icons-vue";
 import {
   establishteam,
@@ -355,7 +384,8 @@ import {
   getteamusercreat,
   getteamuserin,
   getuserinfo,
-  getavatarchain, del_team,
+  getavatarchain,
+  del_team,
 } from "@/utils/api";
 import Base64 from "@/utils/Base64";
 export default {
@@ -367,7 +397,7 @@ export default {
   },
   data() {
     return {
-      menu_visible:false,
+      menu_visible: false,
       got: 0,
       tab: "tab-0",
       dialogFormVisible: false,
@@ -383,29 +413,24 @@ export default {
     };
   },
   methods: {
-    deleteTeam(team_id,team_name){
-      let username=this.$store.state.username
-      ElMessageBox.confirm(
-          '确认解散团队：'+team_name,
-          '解散团队警告',
-          {
-            confirmButtonText: '确认',
-            cancelButtonText: '取消',
-            type: 'warning',
-          }
-      ).then(() => {
+    deleteTeam(team_id, team_name) {
+      let username = this.$store.state.username;
+      ElMessageBox.confirm("确认解散团队：" + team_name, "解散团队警告", {
+        confirmButtonText: "确认",
+        cancelButtonText: "取消",
+        type: "warning",
+      }).then(() => {
         del_team({
-          username:username,
-          team_id:team_id,
-        }).then((res=>{
-          console.log(res.data)
-          if(res.data.status_code==1){
-            ElMessage.success('成功解散团队：'+team_name)
-            this.$router.go(0)
+          username: username,
+          team_id: team_id,
+        }).then((res) => {
+          console.log(res.data);
+          if (res.data.status_code == 1) {
+            ElMessage.success("成功解散团队：" + team_name);
+            this.$router.go(0);
           }
-        }))
-      })
-
+        });
+      });
     },
 
     go(tid) {
