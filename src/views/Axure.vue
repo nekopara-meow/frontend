@@ -21,10 +21,9 @@
                             保存
                         </el-dropdown-item>
                         <el-dropdown-item @click="bePic">导出</el-dropdown-item>
-                        <el-dropdown-item>重命名</el-dropdown-item>
-                        <el-dropdown-item @click="download">加载</el-dropdown-item>
                         <el-dropdown-item @click="openPreview">开启预览</el-dropdown-item>
                         <el-dropdown-item @click="closePreview">关闭预览</el-dropdown-item>
+                        <el-dropdown-item @click="printList">输出</el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
             </el-dropdown>
@@ -835,6 +834,20 @@
                 <el-icon @click="cancelTool"><CircleClose /></el-icon>
             </div>
             <div class="line"></div>
+            <div style="width: 20px; height: 15px"></div>
+            <div style="display:flex; flex-direction: row;">
+                <div style="width: 10px; height: 30px"></div>
+                <el-button style="height: 30px; width: 60px"
+                    @click="load(1)">
+                    注册
+                </el-button>
+                <div style="width: 10px; height: 30px"></div>
+                <el-button style="height: 30px; width: 60px"
+                    @click="load(2)">
+                    问卷
+                </el-button>
+            </div>
+            
         </div>
 
         <!--
@@ -1516,6 +1529,30 @@ export default{
         }
     },
     methods: {
+        load(index){
+            let that = this
+            let url = "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/Axure/muban/" + index + ".json"
+            Axios({
+                method: 'get',
+                url, responseType: 'blob',
+                transformResponse: [function (data) {
+                    let reader = new FileReader()
+                    reader.readAsText(data, 'UTF-8')
+                    reader.onload = function () {
+                        //此处便是返回值
+                        let text = reader.result
+                        that.pages = JSON.parse(text)
+                        //console.log('load1', this.pages)
+                        that.pagesname = ['page-1']
+                        that.nowpage = 0
+                    }
+                    return data
+                }]
+            })
+            .then(res => {
+                console.log('res')
+            })
+        },
         setjumpPage(id, index){
             this.setActive(id)
             this.pages[this.nowpage][id].jumpPage = index            
