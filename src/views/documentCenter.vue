@@ -11,9 +11,10 @@
               ></el-button>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item>按项目分组</el-dropdown-item>
-                  <el-dropdown-item>按格式分组</el-dropdown-item>
-                  <el-dropdown-item>按时间分组</el-dropdown-item>
+                  <el-dropdown-item @click="sortByTime(1)">按修改时间升序</el-dropdown-item>
+                  <el-dropdown-item @click="sortByTime(-1)">按修改时间降序</el-dropdown-item>
+                  <el-dropdown-item @click="sortByFileName(1)">按文件名升序</el-dropdown-item>
+                  <el-dropdown-item @click="sortByFileName(-1)">按文件名降序</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -23,17 +24,17 @@
         <hr style="margin: 5px" />
 
         <div id="leftdown">
-          <el-tabs tab-position="top">
-            <el-tab-pane label="UML">
+          <el-tabs tab-position="top" v-model="active_tab">
+            <el-tab-pane label="UML" name='0'>
               <div class="fileDisplayer">
-                <el-skeleton :rows="5" animated v-if="got != 2" />
+                <el-skeleton :rows="5" animated v-if="got != 3" />
                 <el-empty
                   description="空空如也"
-                  v-if="got == 2 && uml_file.length == 0"
+                  v-if="got == 3 && uml_file.length == 0"
                   style="margin: 0 auto"
                 />
                 <file-preview
-                  v-if="got == 2 && uml_file.length != 0"
+                  v-if="got == 3 && uml_file.length != 0"
                   v-for="(tmp, index) in uml_file"
                   :file_id="tmp.file_id"
                   :update_time="tmp.update_time"
@@ -46,16 +47,16 @@
                 ></file-preview>
               </div>
             </el-tab-pane>
-            <el-tab-pane label="文档">
+            <el-tab-pane label="文档" name='1'>
               <div class="fileDisplayer">
-                <el-skeleton :rows="5" animated v-if="got != 2" />
+                <el-skeleton :rows="5" animated v-if="got != 3" />
                 <el-empty
                   description="空空如也"
-                  v-if="got == 2 && doc_file.length == 0"
+                  v-if="got == 3 && doc_file.length == 0"
                   style="margin: 0 auto"
                 />
                 <file-preview
-                  v-if="got == 2 && doc_file.length != 0"
+                  v-if="got == 3 && doc_file.length != 0"
                   v-for="(tmp, index) in doc_file"
                   :file_id="tmp.file_id"
                   :file_type="tmp.file_type"
@@ -68,15 +69,16 @@
                 ></file-preview>
               </div>
             </el-tab-pane>
-            <el-tab-pane label="设计原型">
+            <el-tab-pane label="设计原型" name='2'>
               <div class="fileDisplayer">
+                <el-skeleton :rows="5" animated v-if="got != 3" />
                 <el-empty
                   description="空空如也"
-                  v-if="got == 2 && axure_file.length == 0"
+                  v-if="got == 3 && axure_file.length == 0"
                   style="margin: 0 auto"
                 />
                 <file-preview
-                  v-if="got == 2 && axure_file.length != 0"
+                  v-if="got == 3 && axure_file.length != 0"
                   v-for="(tmp, index) in axure_file"
                   :file_id="tmp.file_id"
                   :file_type="tmp.file_type"
@@ -85,6 +87,7 @@
                   :update_time="tmp.update_time"
                   :file_content="tmp.file_content"
                   :project_id="tmp.project_id"
+                  :name_url="tmp.name_url"
                   :key="index"
                 ></file-preview>
               </div>
@@ -102,9 +105,15 @@
               ></el-button>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item>按项目分组</el-dropdown-item>
-                  <el-dropdown-item>按格式分组</el-dropdown-item>
-                  <el-dropdown-item>按时间分组</el-dropdown-item>
+<!--                  <el-dropdown-item @click="userProjects.sort(function(a,b){return a.project_name.localeCompare(b.project_name)})"-->
+<!--                  >按项目名升序</el-dropdown-item>-->
+<!--                  <el-dropdown-item @click="userProjects.sort(function(a,b){return -1*a.project_name.localeCompare(b.project_name)})"-->
+<!--                  >按项目名降序-->
+<!--                  </el-dropdown-item>-->
+                  <el-dropdown-item @click="teamusercreat.sort(function(a,b){return a.team_name.localeCompare(b.team_name)})"
+                  >按团队名升序</el-dropdown-item>
+                  <el-dropdown-item @click="teamusercreat.sort(function(a,b){return -1*a.team_name.localeCompare(b.team_name)})"
+                  >按团队名降序</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -112,7 +121,10 @@
         </div>
         <hr style="margin: 5px" />
         <div id="rightdown">
-          <el-skeleton :rows="5" animated v-if="got1 != 3" />
+<!--          <pro-preview v-for="(tmp,index) in userProjects" :key="index" :focus_project_id="this.focus_project_id"-->
+<!--                       :team_name="tmp.team_name" :project_name="tmp.project_name" :project_id="tmp.project_id"-->
+<!--                       :brief_intro="tmp.brief_intro" @click="loadFiles(tmp.project_id)"></pro-preview>-->
+          <el-skeleton :rows="5" animated v-if="got1 !== 3" />
           <el-menu class="el-menu-vertical-demo" v-else>
             <el-sub-menu
               v-for="value in teamusercreat"
@@ -193,10 +205,8 @@ import { reactive, toRefs } from "vue";
 import router from "@/router";
 import store from "@/store";
 import ProPreview from "@/components/file_componets/proPreview";
+import {get_axurefile, get_docfile, get_umlfile, getProsByUser} from "@/utils/api";
 import {
-  get_docfile,
-  get_umlfile,
-  getProsByUser,
   getteamuseradmin,
   getteamusercreat,
   getteamuserin,
@@ -229,12 +239,13 @@ export default {
           team_name: "团队名",
         },
       ],
-      username: "",
-      uml_file: [],
-      doc_file: [],
-      axure_file: [],
-      focus_project_id: "",
-    };
+      username:'',
+      uml_file:[],
+      doc_file:[],
+      axure_file:[],
+      focus_project_id:'',
+      active_tab:'0',
+    }
   },
   computed: {
     modDate() {
@@ -244,13 +255,62 @@ export default {
       if (this.update_time != undefined) {
         console.log(this.update_time);
         return (
-          "修改于:" +
-          this.timestampFormat(new Date(this.update_time).valueOf() / 1000)
+            "修改于:" +
+            this.timestampFormat(new Date(this.update_time).valueOf() / 1000)
         );
       }
     },
   },
-  methods: {
+  methods:{
+    /**
+     * @description: 按时间排序，asc=1:升序,asc=-1,降序
+     * @author: 罗亚硕
+     * @date: 2022/8/9
+     */
+    sortByTime(asc){
+      switch (this.active_tab){
+        case '0':
+          this.uml_file.sort(function(a, b) {
+            return b.update_time < a.update_time ? asc : (asc*-1)
+          })
+          break
+        case '1':
+          this.doc_file.sort(function(a, b) {
+            return b.update_time < a.update_time ? asc : (asc*-1)
+          })
+          break
+        case '2':
+          this.axure_file.sort(function(a, b) {
+            return b.update_time < a.update_time ? asc : (asc*-1)
+          })
+          break
+
+        default:
+          console.log('tab error')
+      }
+    },
+    sortByFileName(asc){
+      switch (this.active_tab){
+        case '0':
+          this.uml_file.sort(function(a, b) {
+            return b.file_name < a.file_name ? asc : (asc*-1)
+          })
+          break
+        case '1':
+          this.doc_file.sort(function(a, b) {
+            return b.file_name < a.file_name ? asc : (asc*-1)
+          })
+          break
+        case '2':
+          this.axure_file.sort(function(a, b) {
+            return b.file_name < a.file_name ? asc : (asc*-1)
+          })
+          break
+
+        default:
+          console.log('tab error')
+      }
+    },
     sb(id) {
       console.log("我是傻逼");
       console.log(id);
@@ -260,69 +320,69 @@ export default {
     initializationdata() {
       let teamid = 0;
       let len = 0,
-        len1 = 0;
+          len1 = 0;
       let i = 0,
-        j = 0;
+          j = 0;
       var that;
       getteamusercreat({ username: this.$store.state.username }).then(
-        (response) => {
-          if (response.data.status_code == 1) {
-            this.teamusercreat = response.data.Dict.team_info;
-            len = this.teamusercreat.length;
-            for (let i = 0; i < len; i++) {
-              teamid = this.teamusercreat[i].team_id;
-              getteamprojectbyid({
-                team_id: this.teamusercreat[i].team_id,
-              }).then((response) => {
-                if (response.data.status_code == 1) {
-                  this.teamusercreat[i].projectids = response.data.ans_list;
-                } else ElMessage.error(response.data.message);
-              });
-            }
-            this.got1 += 1;
-          } else ElMessage.error(response.data.message);
-        }
+          (response) => {
+            if (response.data.status_code == 1) {
+              this.teamusercreat = response.data.Dict.team_info;
+              len = this.teamusercreat.length;
+              for (let i = 0; i < len; i++) {
+                teamid = this.teamusercreat[i].team_id;
+                getteamprojectbyid({
+                  team_id: this.teamusercreat[i].team_id,
+                }).then((response) => {
+                  if (response.data.status_code == 1) {
+                    this.teamusercreat[i].projectids = response.data.ans_list;
+                  } else ElMessage.error(response.data.message);
+                });
+              }
+              this.got1 += 1;
+            } else ElMessage.error(response.data.message);
+          }
       );
       getteamuseradmin({ username: this.$store.state.username }).then(
-        (response) => {
-          if (response.data.status_code == 1) {
-            this.teamuseradmin = response.data.Dict.team_info;
-            len = this.teamuseradmin.length;
-            for (let i = 0; i < len; i++) {
-              teamid = this.teamuseradmin[i].team_id;
-              getteamprojectbyid({
-                team_id: this.teamuseradmin[i].team_id,
-              }).then((response) => {
-                if (response.data.status_code == 1) {
-                  this.teamuseradmin[i].projectids = response.data.ans_list;
-                } else ElMessage.error(response.data.message);
-              });
-            }
-            this.got1 += 1;
-          } else ElMessage.error(response.data.message);
-        }
+          (response) => {
+            if (response.data.status_code == 1) {
+              this.teamuseradmin = response.data.Dict.team_info;
+              len = this.teamuseradmin.length;
+              for (let i = 0; i < len; i++) {
+                teamid = this.teamuseradmin[i].team_id;
+                getteamprojectbyid({
+                  team_id: this.teamuseradmin[i].team_id,
+                }).then((response) => {
+                  if (response.data.status_code == 1) {
+                    this.teamuseradmin[i].projectids = response.data.ans_list;
+                  } else ElMessage.error(response.data.message);
+                });
+              }
+              this.got1 += 1;
+            } else ElMessage.error(response.data.message);
+          }
       );
       getteamuserin({ username: this.$store.state.username }).then(
-        (response) => {
-          if (response.data.status_code == 1) {
-            this.teamuserin = response.data.Dict.team_info;
-            len = this.teamuserin.length;
-            for (let i = 0; i < len; i++) {
-              teamid = this.teamuserin[i].team_id;
-              getteamprojectbyid({
-                team_id: this.teamuserin[i].team_id,
-              }).then((response) => {
-                if (response.data.status_code == 1) {
-                  this.teamuserin[i].projectids = response.data.ans_list;
-                  console.log(this.teamuserin);
-                  console.log(this.teamuseradmin);
-                  console.log(this.teamusercreat);
-                } else ElMessage.error(response.data.message);
-              });
-            }
-            this.got1 += 1;
-          } else ElMessage.error(response.data.message);
-        }
+          (response) => {
+            if (response.data.status_code == 1) {
+              this.teamuserin = response.data.Dict.team_info;
+              len = this.teamuserin.length;
+              for (let i = 0; i < len; i++) {
+                teamid = this.teamuserin[i].team_id;
+                getteamprojectbyid({
+                  team_id: this.teamuserin[i].team_id,
+                }).then((response) => {
+                  if (response.data.status_code == 1) {
+                    this.teamuserin[i].projectids = response.data.ans_list;
+                    console.log(this.teamuserin);
+                    console.log(this.teamuseradmin);
+                    console.log(this.teamusercreat);
+                  } else ElMessage.error(response.data.message);
+                });
+              }
+              this.got1 += 1;
+            } else ElMessage.error(response.data.message);
+          }
       );
       // getteamuseradmin({ username: this.$store.state.username }).then(
       //   (response) => {
@@ -339,66 +399,91 @@ export default {
       //   }
       // );
     },
-    loadFiles(project_id) {
-      this.focus_project_id = project_id;
+    loadFiles(project_id){
+      this.focus_project_id=project_id
       get_umlfile({
-        username: this.username,
-        project_id: project_id,
-      }).then((res) => {
-        if (res.data.ans_list) {
-          this.uml_file.splice(0);
-          let tmp;
-          for (tmp in res.data.ans_list) {
-            this.uml_file.push(tmp);
+        username:this.username,
+        project_id:project_id
+      }).then(res=>{
+        if(res.data.ans_list){
+          this.uml_file.splice(0)
+          let l=res.data.ans_list.length
+          for(let i=0;i<l;i++){
+            this.uml_file.push(res.data.ans_list[i])
           }
-          this.uml_file = res.data.ans_list;
           this.got += 1;
-          console.log("uml_files", this.uml_file);
-        } else console.log("请求uml文件失败");
-      });
+          console.log('uml_files',this.uml_file)
+        }
+        else console.log('请求uml文件失败')
+      })
       get_docfile({
-        username: this.username,
-        project_id: project_id,
-      }).then((res) => {
-        if (res.data.ans_list) {
-          console.log("res", res.data);
-          this.doc_file.splice(0);
-          let tmp;
-          for (tmp in res.data.ans_list) {
-            this.doc_file.push(tmp);
+        username:this.username,
+        project_id:project_id
+      }).then(res=>{
+        if(res.data.ans_list){
+          console.log('res',res.data)
+          this.doc_file.splice(0)
+          let l=res.data.ans_list.length
+          for(let i=0 ;i<l;i++){
+            this.doc_file.push(res.data.ans_list[i])
           }
           this.got += 1;
-          this.doc_file = res.data.ans_list;
-          console.log("doc_files", this.doc_file);
-        } else console.log("请求doc文件失败");
-      });
-    },
-  },
-  created() {
-    this.username = this.$store.state.username;
-    getProsByUser({
-      username: this.username,
-    }).then((res) => {
-      if (res.data.projects) {
-        let l = this.userProjects.length;
-        for (let i = 0; i < l; i++) {
-          this.userProjects.pop();
+          console.log('doc_files',this.doc_file)
         }
-        console.log("pros", res.data.projects);
-        l = res.data.projects.length;
-        for (let i = 0; i < l; i++) {
-          this.userProjects.push(res.data.projects[i]);
-        }
-        console.log("userPro", this.userProjects);
-        if (this.userProjects[0].project_id !== null) {
-          this.loadFiles(this.userProjects[0].project_id);
-        }
-      } else console.log("fail!!");
-    });
+        else console.log('请求doc文件失败')
+      })
+      //请求axure
+      get_axurefile({
+        username:this.username,
+        project_id:project_id
+      }).then(res=>{
+        if(res.data.ans_list){
+          this.axure_file.splice(0)
+          let l=res.data.ans_list.length
+          for(let i=0;i<l;i++){
+            this.axure_file.push(res.data.ans_list[i])
+          }
+          this.got += 1;
+          console.log('axure_files',this.axure_file)
+        }else console.log("请求axure文件失败")
+      })
+    }
   },
   mounted() {
     this.initializationdata();
+    console.log('检查query',this.$route)
+    if(this.$route.query.active_tab!=null){
+      this.active_tab=''+this.$route.query.active_tab
+    }else{
+      this.active_tab='0'
+    }
+    console.log('active_tab',this.active_tab)
+
   },
+  created() {
+    this.username=this.$store.state.username
+    getProsByUser({
+      username:this.username
+    }).then(res=>{
+      if(res.data.projects){
+        let l=this.userProjects.length
+        for(let i=0;i<l;i++){
+          this.userProjects.pop()
+        }
+        console.log('pros',res.data.projects[0])
+        l=res.data.projects.length
+        for(let i=0;i<l;i++){
+          this.userProjects.push(res.data.projects[i])
+        }
+        console.log('userPro',this.userProjects)
+        if(this.userProjects[0].project_id!==null){
+          this.loadFiles(this.userProjects[0].project_id)
+        }
+      }else console.log('fail!!')
+    })
+
+
+  }
 };
 </script>
 
@@ -415,9 +500,9 @@ export default {
   align-items: center;
   justify-content: center;
   background: linear-gradient(
-    to right bottom,
-    rgba(255, 255, 255, 0.4),
-    rgba(255, 255, 255, 0.2)
+          to right bottom,
+          rgba(255, 255, 255, 0.4),
+          rgba(255, 255, 255, 0.2)
   );
   backdrop-filter: blur(1rem);
   padding: 25px;
@@ -504,12 +589,6 @@ export default {
   overflow-y: auto;
   height: 60vh;
   padding: 0 5px;
-  // background: linear-gradient(
-  //   to right bottom,
-  //   rgba(255, 255, 255, 0.4),
-  //   rgba(255, 255, 255, 0.2)
-  // );
-  // backdrop-filter: blur(1rem);
 }
 #rightdown {
   overflow-y: auto;
@@ -558,9 +637,9 @@ export default {
 }
 .onediedai {
   background: linear-gradient(
-    to right bottom,
-    rgba(255, 255, 255, 0.4),
-    rgba(255, 255, 255, 0.2)
+          to right bottom,
+          rgba(255, 255, 255, 0.4),
+          rgba(255, 255, 255, 0.2)
   );
   width: 90%;
   height: 80px;
@@ -580,7 +659,7 @@ export default {
 .busy {
   border-left: 10px solid rgba(233, 233, 133, 0.377);
 }
-.fileDisplayer {
+.fileDisplayer{
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;

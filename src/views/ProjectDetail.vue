@@ -198,12 +198,11 @@ export default {
     },
   },
   created() {
-    console.log("route in projectDetail");
-    console.log(this.$route);
-    if (this.$route.params.project_id) {
-      this.project_id = this.$route.params.project_id;
-      this.username = this.$store.state.username;
-      this.getprojectinfos();
+    console.log('route in projectDetail')
+    console.log(this.$route)
+    if(this.$route.query.project_id){
+      this.project_id=this.$route.query.project_id
+      this.username=this.$store.state.username
     }
     console.log(this.project_id);
   },

@@ -1,44 +1,48 @@
 <template>
-  <div class="container">
-    <el-tooltip :content="tip" raw-content placement="left-start">
-      <div>
-        <div :class="getClass">{{ project_name }}</div>
-        <!-- <hr style="margin: 5px" /> -->
-      </div>
-    </el-tooltip>
-  </div>
+<div>
+  <el-tooltip
+      :content="tip"
+      raw-content
+      placement="left-start"
+  >
+    <div>
+      <div :class="getClass" > 项目名：{{project_name}} </div>
+<!--      <hr style="margin: 5px" />-->
+    </div>
+  </el-tooltip>
+</div>
 </template>
 
 <script>
 export default {
   name: "proPreview",
-  props: {
-    project_name: "",
-    brief_intro: "",
-    team_name: "",
-    focus_project_id: "",
-    project_id: "",
+  props:{
+    project_name:'',
+    brief_intro:'',
+    team_name:'',
+    focus_project_id:'',
+    project_id:'',
   },
-  computed: {
-    tip() {
-      let info = this.brief_intro;
-      if (info != null) {
-        if (info.length > 15) {
-          info = info.slice(0, 14);
-          info += "...";
+  computed:{
+    tip(){
+      let info=this.brief_intro
+      if(info!=null){
+        if(info.length>15){
+          info=info.slice(0,14)
+          info+='...'
         }
       }
-      return "团队名:" + this.team_name + "<br/>" + "团队简介:" + info;
+      return '所属团队:'+this.team_name+'<br/>'+'项目简介:'+info
     },
-    getClass() {
-      console.log(this.project_id, this.focus_project_id);
-      if (this.project_id === this.focus_project_id) {
-        return "is-focused";
-      }
-      return "pro-name";
-    },
-  },
-};
+    getClass(){
+      console.log(this.project_id,this.focus_project_id)
+       if(this.project_id===this.focus_project_id){
+         return 'is-focused'
+       }
+       return 'pro-name'
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

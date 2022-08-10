@@ -1,8 +1,8 @@
 <template>
   <div class="file-container">
-    <el-tabs tab-position="left" class="file-tabs" type="card">
+    <el-tabs tab-position="left" class="file-tabs" type="card" v-model="focusTabName">
       <el-tab-pane label="UML文件">
-        <div class="fileDisplayer">
+        <div class="fileDisplayer" name="0">
           <!--          <file-preview :file_type="0" creator="罗亚硕" :file_id="1" ></file-preview>-->
           <file-preview
             v-for="(tmp, index) in uml_file"
@@ -24,7 +24,7 @@
           ></file-preview>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="文档">
+      <el-tab-pane label="文档" name="1">
         <div class="fileDisplayer">
           <!--          <file-preview :file_type="1" creator="罗亚硕" :file_id="1"  :project_id="this.project_id"></file-preview>-->
           <!--          <file-preview :file_type="1" creator="罗亚硕" :file_id="1"  :project_id="this.project_id"></file-preview>-->
@@ -48,7 +48,7 @@
           ></file-preview>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="原型设计">
+      <el-tab-pane label="原型设计" name="2">
         <div class="fileDisplayer">
           <!--          <file-preview :file_type="2" creator="lalala" :file_id="1" username="蔡徐坤" :project_id="1"></file-preview>-->
           <file-preview
@@ -91,12 +91,15 @@ export default {
       axure_file: [],
       project_id: "",
       username: "",
+      focusTabName:'0',
     };
   },
   mounted() {
-    console.log("检查router", this.$route.params);
+    if(this.$route.query.focusTabName!=null){
+      this.focusTabName=this.$route.query.focusTabName
+    }
     this.username = this.$store.state.username;
-    this.project_id = this.$route.params.project_id;
+    this.project_id = this.$route.query.project_id;
     get_umlfile({
       username: this.username,
       project_id: this.project_id,
@@ -125,6 +128,9 @@ export default {
         console.log("axure_files", this.axure_file);
       } else console.log("请求axure文件失败");
     });
+  },
+  beforeRouteLeave(to, from) {
+    from.query.focusTabName=this.focusTabName
   },
 };
 </script>
