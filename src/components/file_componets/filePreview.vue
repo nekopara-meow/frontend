@@ -492,7 +492,7 @@ export default {
                 doc_url: this.file_content,
                 doc_id: this.file_id,
                 project_id:this.project_id,
-                file_name:this.fileInitial.file_name,
+                file_name:this.file_name,
                 creator:this.creator
               }
             })

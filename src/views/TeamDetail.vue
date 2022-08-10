@@ -821,8 +821,7 @@ export default {
           } else ElMessage.error(response.data.message);
         });
       getteammsgbyid({ team_id: this.team_id }).then((response) => {
-        this.got += 1;
-        if (response.data.status_code == 1) {
+        if (response.data.status_code == 1) {this.got = 1;
           (this.teammsg.brief_intro = response.data.brief_intro),
             (this.teammsg.create_time = response.data.create_time),
             (this.teammsg.creator = response.data.creator),
