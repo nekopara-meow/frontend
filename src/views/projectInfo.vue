@@ -6,14 +6,14 @@
       </div>
 
       <hr style="margin: 5px; margin-bottom: 20px" />
-      <span class="bluelight">团队：{{data.team_name}}</span>
+      <span class="bluelight">团队：{{ data.team_name}}</span>
       <span class="bluelight">创建人：{{ data.creator }}</span
       ><span style="font-size: 13px" class="bluelight"
         >创建于{{ data.createtime }}</span
       >
 
       <div class="intro bluelight" style="margin-top: 10px">
-        简介:{{ data.intro }}
+        简介:{{ data.intro}}
       </div>
 
       <div
@@ -80,7 +80,7 @@ export default {
   data() {
     return {
       projectdongtai:[],
-      project_id:this.$route.params.project_id,
+      project_id:this.$route.query.project_id,
       editing: 0,
       data: {
         creator: "刘华阳",
@@ -91,10 +91,12 @@ export default {
     };
   },
   created() {this.getprojectinfos();
+    console.log(this.$route);
     this.getprojectdongtai();
+    console.log("msg",this.projectinfo)
   },
   methods:{
-    getprojectinfos(){
+   getprojectinfos(){
       getprojectinfo({project_id:this.project_id}).then((response) => {
         if (response.data.status_code == 1) {
           console.log("xinxi2",response.data);

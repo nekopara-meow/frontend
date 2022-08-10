@@ -455,7 +455,7 @@
                 <div style="margin-bottom: 0">
                   创建日期：{{ teamproject.project_create_time }}
                 </div>
-                <div>更新日期：2022/8/5</div>
+                <div>更新日期：{{ teamproject.project }}</div>
               </div>
             </div>
             <template #dropdown>
@@ -569,7 +569,8 @@ export default {
         this.$router.push({
           name: "projectInfo",
           query: {
-            project_id: a,
+            project_id:a,
+
           },
         });
     },

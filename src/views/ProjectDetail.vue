@@ -40,7 +40,7 @@
               <router-link
                 :to="{
                   name: 'projectInfo',
-                  params: {
+                 query: {
                     project_id: this.project_id,
                   },
                 }"
@@ -133,6 +133,7 @@ import UMLEditor from "@/components/rubbish/UMLEditor";
 import CoEditor from "@/components/rubbish/CoEditor";
 import {get_docfile, get_umlfile, del_uml, del_doc, updateprojectinfo, editteaminfo, getprojectinfo} from "@/utils/api";
 import AxureEditor from "@/components/rubbish/axureEditor";
+import Base64 from "@/utils/Base64";
 
 export default {
   name: "projectDetail",
@@ -156,13 +157,13 @@ export default {
       form: {
         project_name: "",
         brief_intro: "",
-        project_id:this.project_id,
+        project_id:"",
       },
     };
   },
   methods: {
     getprojectinfos(){
-      console
+      console.log("getmsg",this.project_id)
         getprojectinfo({project_id:this.project_id}).then((response) => {
           if (response.data.status_code == 1) {
             console.log("xinxi1",response.data);
@@ -175,8 +176,10 @@ export default {
         });
     },
     submit(){
+      this.form.project_id=this.project_id;
       updateprojectinfo(this.form).then((response) => {
         if (response.data.status_code == 1) {
+
           ElMessage({
             message: "修改成功",
             type: "success",
@@ -199,10 +202,11 @@ export default {
   },
   created() {
     console.log('route in projectDetail')
-    console.log(this.$route)
+    //JSON.parse(Base64.decode(this.$route.query.project_id))
     if(this.$route.query.project_id){
       this.project_id=this.$route.query.project_id
       this.username=this.$store.state.username
+      this.getprojectinfos();
     }
     console.log(this.project_id);
   },
