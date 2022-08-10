@@ -145,22 +145,7 @@ export default {
   components: { Edit, Upload, Plus },
   created() {},
   mounted() {
-    getuserinfo({ username: JSON.parse(Base64.decode(this.$route.query.info)).username }).then((response) => {
-      if (response.data.status_code == 1) {
-        this.data.nickname = response.data.nickname;
-        this.data.tel = response.data.tel;
-        this.data.username = JSON.parse(Base64.decode(this.$route.query.info)).username,
-        this.data.avatar = response.data.avatar;
-        this.data.gender = response.data.gender;
-        if (response.data.gender == 0)
-          this.genderimg = require("../assets/img/xingbienv.png");
-        else if (response.data.gender == 1)
-          this.genderimg = require("../assets/img/xingbienan.png");
-        else this.genderimg = require("../assets/img/猫.png");
-        this.data.brief_intro = response.data.brief_intro;
-        this.email = response.data.email;
-      } else ElMessage.error(response.data.message);
-    });
+    this.getuserinfos();
   },
 
   watch: {
@@ -170,6 +155,10 @@ export default {
           this.$router.go(0)
       }
       },
+    "data.gender"() {
+      // console.log("changed!");
+      this.updategender();
+    },
       deep: true,
       immediate: true,
     },
@@ -191,6 +180,24 @@ export default {
     };
   },
   methods: {
+    getuserinfos(){
+      getuserinfo({ username: JSON.parse(Base64.decode(this.$route.query.info)).username }).then((response) => {
+        if (response.data.status_code == 1) {
+          this.data.nickname = response.data.nickname;
+          this.data.tel = response.data.tel;
+          this.data.username = JSON.parse(Base64.decode(this.$route.query.info)).username,
+              this.data.avatar = response.data.avatar;
+          this.data.gender = response.data.gender;
+          if (response.data.gender == 0)
+            this.genderimg = require("../assets/img/xingbienv.png");
+          else if (response.data.gender == 1)
+            this.genderimg = require("../assets/img/xingbienan.png");
+          else this.genderimg = require("../assets/img/猫.png");
+          this.data.brief_intro = response.data.brief_intro;
+          this.email = response.data.email;
+        } else ElMessage.error(response.data.message);
+      });
+    },
     edit() {
       if (this.editing == 0) {
         this.editing = 1;
@@ -198,6 +205,7 @@ export default {
         this.editing = 0;
         edituserinfo(this.data).then((response) => {
           if (response.data.status_code == 1) {
+            this.getuserinfos();
             ElMessage({
               message: "修改成功",
               type: "success",
@@ -222,9 +230,9 @@ export default {
       return (isJPEG || isJPG || isPNG || isWEBP || isGIF) && isLt500K;
     },
     updategender() {
-      if (response.data.gender == 0)
+      if (this.data.gender == 0)
         this.genderimg = require("../assets/img/xingbienv.png");
-      else if (response.data.gender == 1)
+      else if (this.data.gender == 1)
         this.genderimg = require("../assets/img/xingbienan.png");
       else this.genderimg = require("../assets/img/猫.png");
     },

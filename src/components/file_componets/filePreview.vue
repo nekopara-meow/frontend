@@ -185,7 +185,7 @@ export default {
         case 2:typestr+='设计原型'
           break
       }
-      return '文件名：'+this.file_name+'<br/>'+typestr+'<br/>上次修改时间：'+timestr
+      return '文件名：'+this.file_name+'<br/>'+typestr+'<br/>'+timestr
       +'<br/>'+'创建人:'+this.creator
     },
     fileName(){
