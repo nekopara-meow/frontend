@@ -108,6 +108,7 @@ import {
   renameFileById
 } from "@/utils/api";
 import docModel from "@/assets/fileModels/docModel";
+import {ElMessage, ElMessageBox} from "element-plus";
 export default {
   name: "filePreview",
   data(){
@@ -252,14 +253,31 @@ export default {
   },
   methods:{
     completeDelFile(){
-      completelyDelFileByIn({
+      ElMessageBox.confirm(
+          '确认彻底删除文件：'+this.file_name,
+          '彻底删除',
+          {
+            confirmButtonText: '确认',
+            cancelButtonText: '取消',
+            type: 'warning',
+          }
+      ).then(()=>{
+        completelyDelFileByIn({
         username:this.username,
         file_id:this.file_id
-      }).then(res=>{
-        console.log(res.data)
-        //删除后父组件要更新数据
-        this.$emit('updateData')
+        }).then(res=>{
+          console.log(res.data)
+          //删除后父组件要更新数据
+          this.$emit('updateData')
+          if(res.data.status_code==1){
+            ElMessage.success('彻底删除文件：'+this.file_name)
+          }else {
+            ElMessage.warning('彻底删除文件错误：'+this.file_name)
+          }
+        })
       })
+
+
     },
     createUML(){
       console.log({

@@ -478,7 +478,7 @@
 </template>
 
 <script>
-import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
+import {ElForm, ElFormItem, ElInput, ElButton, ElMessage, ElMessageBox} from "element-plus";
 import {
   Filter,
   Sort,
@@ -597,20 +597,31 @@ export default {
       });
     },
     completelyDelPro(project_id) {
-      let username = this.$store.state.username;
-      completelyDelProById({
-        username: username,
-        project_id: project_id,
-      }).then((res) => {
-        console.log("completelyDelPro", res.data);
-        if (res.data.status_code == 1) {
-          ElMessage({
-            message: "彻底删除成功",
-            type: "success",
-          });
-          this.initializationdata();
-        }
-      });
+      ElMessageBox.confirm(
+          '确认删除项目',
+          '删除项目警告',
+          {
+            confirmButtonText: '确认',
+            cancelButtonText: '取消',
+            type: 'warning',
+          }
+      ).then(()=>{
+        let username = this.$store.state.username;
+        completelyDelProById({
+          username: username,
+          project_id: project_id,
+        }).then((res) => {
+          console.log("completelyDelPro", res.data);
+          if (res.data.status_code == 1) {
+            ElMessage({
+              message: "彻底删除成功",
+              type: "success",
+            });
+            this.initializationdata();
+          }
+        });
+      })
+
     },
     gotoproject(a) {
       console.log("pp", a),
@@ -936,6 +947,27 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.contextmenu {
+  margin: 0;
+  background: #fff;
+  z-index: 3000;
+  position: relative;
+  list-style-type: none;
+  padding: 5px 0;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #333;
+  box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.3);
+  li {
+    margin: 0;
+    padding: 7px 16px;
+    cursor: pointer;
+    &:hover {
+      background: #eee;
+    }
+  }
 }
 #content {
   margin: 0 auto;
