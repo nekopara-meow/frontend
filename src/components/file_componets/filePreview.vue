@@ -20,7 +20,10 @@
   <el-dialog v-model="dialogFormVisible" :title="createFileTitle">
     <el-form :model="fileInitial">
       <el-form-item label="创建的文件名" label-width="140px">
-        <el-input v-model="fileInitial.name" autocomplete="off" />
+        <el-input v-model="fileInitial.name" autocomplete="off"
+                  type="text"
+                  placeholder="请输入文件名"
+        />
       </el-form-item>
       <el-form-item label="选择文件模板" v-if="this.file_type===1" label-width="140px">
         <el-select  v-model="doc_model_id" class="m-1" placeholder="不选择模板" size="large">
@@ -328,6 +331,8 @@ export default {
               project_id:this.project_id,
               URLpage:null,
               URLpageName:null,
+              height:this.newAxure.height,
+              width:this.newAxure.width
             }
           })
         }
