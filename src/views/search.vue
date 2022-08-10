@@ -22,16 +22,17 @@
           </el-select>
           <el-select
             v-model="value1"
+            v-if="this.tab != 'tab-3'"
             multiple
             placeholder="请选择所属团队"
             style="width: 240px"
             size="large"
           >
             <el-option
-              v-for="item in options1"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              v-for="item in teams"
+              :key="item.team_id"
+              :label="item.team_name"
+              :value="item.team_id"
             />
           </el-select>
         </div>
@@ -47,7 +48,7 @@
         <div id="leftup">
           <div style="display: flex">
             <h2 class="title gradient" style="font-size: 20px">
-              "猫猫"的搜索结果
+              "{{ $route.query.keyword }}"的搜索结果
             </h2>
             <nav>
               <a
@@ -56,7 +57,7 @@
                     this.tab = 'tab-1';
                   }
                 "
-                >搜项目</a
+                >搜项目({{ project_infos.length }})</a
               >
               <a
                 @click="
@@ -64,7 +65,7 @@
                     this.tab = 'tab-2';
                   }
                 "
-                >搜文件</a
+                >搜文件({{ file_infos.length }})</a
               >
               <a
                 @click="
@@ -72,7 +73,7 @@
                     this.tab = 'tab-3';
                   }
                 "
-                >搜队友</a
+                >搜队友({{ user_infos.length }})</a
               >
               <div class="animation" :class="tab"></div>
             </nav>
@@ -83,6 +84,7 @@
               ><el-icon><Sort /></el-icon
             ></el-button> -->
             <el-button
+              :disabled="checkdisabled"
               type="primary"
               @click="
                 () => {
@@ -97,61 +99,84 @@
         <hr style="margin: 5px; margin-bottom: 20px" />
 
         <div id="leftdown" v-if="tab == 'tab-1'">
+          <el-skeleton :rows="5" animated v-if="got1 == 0" />
+          <el-empty
+            description="空空如也"
+            v-if="got1 != 0 && project_infos.length == 0"
+            style="margin: 0 auto"
+          />
           <div
+            v-if="got1 != 0"
             class="oneteam"
             style="height: 120px; margin-bottom: 20px"
-            v-for="i in [1, 2, 3, 4, 5]"
+            v-for="(v, i) in project_infos"
+            @click="gotoproject(v.project_id)"
           >
             <div class="oneteamdown">
-              <div style="font-size: 18px">我是一个小项目</div>
-              <div>我是一个小猫猫我天天喵喵叫</div>
-              <div style="margin-bottom: 0">创建日期：2022/8/8</div>
-              <div>所属团队：nekopara</div>
+              <div style="font-size: 18px">{{ v.project_name }}</div>
+              <div>{{ v.brief_intro }}</div>
+              <div style="margin-bottom: 0">
+                创建日期:{{ v.create_time.slice(0, 10) }}
+              </div>
+              <div>所属团队:{{ v.team_name }}</div>
             </div>
           </div>
         </div>
         <div id="leftdown" v-if="tab == 'tab-2'">
+          <el-skeleton :rows="5" animated v-if="got1 == 0" />
+          <el-empty
+            description="空空如也"
+            v-if="got1 != 0 && file_infos.length == 0"
+            style="margin: 0 auto"
+          />
+          <file-preview
+            v-if="got1 != 0"
+            v-for="(v, i) in file_infos"
+            :file_id="v.file_id"
+            :update_time="v.update_time"
+            :file_type="v.file_type"
+            :creator="v.creator"
+            :file_name="v.file_name"
+            :file_content="v.file_content"
+            :project_id="v.project_id"
+            :key="index"
+          ></file-preview>
+        </div>
+        <div id="leftdown" v-if="tab == 'tab-3'">
+          <el-skeleton :rows="5" animated v-if="got1 == 0" />
+          <el-empty
+            description="空空如也"
+            v-if="got1 != 0 && user_infos.length == 0"
+            style="margin: 0 auto"
+          />
           <el-dropdown
             trigger="contextmenu"
-            v-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8]"
+            v-for="(v, i) in user_infos"
+            v-if="got1 != 0"
+            :key="index"
           >
-            <div class="oneitem">
-              <img src="..\assets\img\fileicons\Word.png" />
-              <div>少年阿宾.vue</div>
-              <div style="font-size: smaller; margin-top: 2px">2022/8/3</div>
+            <div class="oneteam">
+              <div
+                class="teamimage"
+                :style="{
+                  backgroundImage: `url(` + v.avatar + ')',
+                }"
+              ></div>
+              <div class="oneteamdown">
+                <div style="font-size: 18px">{{ v.username }}</div>
+                <div>用户名：{{ v.nickname }}</div>
+                <div>{{ v.email }}</div>
+                <div>{{ v.brief_intro }}</div>
+              </div>
             </div>
-
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item @click.native="go(file.fid)"
-                  >打开</el-dropdown-item
+                <el-dropdown-item @click.natice="checkuserinfo(v.username)"
+                  >查看个人资料</el-dropdown-item
                 >
-                <el-dropdown-item>在新标签页中打开</el-dropdown-item>
-                <el-dropdown-item>移出工作台</el-dropdown-item>
-                <el-dropdown-item>历史版本</el-dropdown-item>
-                <el-dropdown-item>属性</el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
-        </div>
-        <div id="leftdown" v-if="tab == 'tab-3'">
-          <div class="oneteam" v-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9]">
-            <div
-              class="teamimage"
-              :style="{
-                backgroundImage:
-                  `url(` +
-                  'https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg' +
-                  ')',
-              }"
-            ></div>
-            <div class="oneteamdown">
-              <div style="font-size: 18px">小七</div>
-              <div>用户名：小猫</div>
-              <div>3499475017@qq.com</div>
-              <div>简介：啊啊哈啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊</div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -168,17 +193,29 @@ import {
   getteamusercreat,
   getteamuserin,
   getuserinfo,
+  searchall,
 } from "@/utils/api";
+import filePreview from "@/components/file_componets/filePreview";
 export default {
   name: "teamview",
-  components: { Filter, Sort, Plus, CaretBottom },
+  components: { Filter, Sort, Plus, CaretBottom, filePreview },
   created() {
     this.initializationdata();
   },
+  watch: {
+    "$route.query"() {
+      this.search();
+    },
+  },
+  mounted() {
+    this.search();
+  },
   data() {
     return {
+      got: 0,
+      got1: 0,
       value: "",
-      value1: "",
+      value1: [],
       options1: [
         {
           value: "Option1",
@@ -223,12 +260,16 @@ export default {
           label: "Option5",
         },
       ],
+      file_infos: [],
+      project_infos: [],
+      user_infos: [],
       drawer: false,
       tab: "tab-1",
       dialogFormVisible: false,
       teamuserin: [],
       teamuseradmin: [],
       teamusercreat: [],
+      teams: [],
       createteamform: {
         team_name: "",
         brief_intro: "",
@@ -237,14 +278,67 @@ export default {
       formLabelWidth: "140px",
     };
   },
+
   methods: {
-    go(tid) {
+    checkuserinfo(a) {
       this.$router.push({
-        path: "/teamdetail",
+        path: "/personalspace",
         query: {
-          team_id: tid,
+          info: Base64.encode(
+            JSON.stringify({
+              username: a,
+              author: 0,
+            })
+          ),
         },
       });
+    },
+    gotoproject(a) {
+      this.$router.push({
+        name: "projectInfo",
+        query: {
+          project_id: a,
+        },
+      });
+    },
+    checkdiasbled() {
+      if (this.got == 3) return true;
+      return false;
+    },
+    search() {
+      this.got1 = 0;
+      console.log("路由变化，搜索中");
+      if (this.$route.query.teams == undefined) {
+        searchall({
+          username: this.$store.state.username,
+          keyword: this.$route.query.keyword,
+        }).then((response) => {
+          if (response.data.status_code == 1) {
+            console.log("searchans", response.data);
+            this.file_infos = response.data.file_infos;
+            this.user_infos = response.data.user_infos;
+            this.project_infos = response.data.project_infos;
+            this.got1 = 1;
+          } else ElMessage.error(response.data.message);
+        });
+      } else {
+        console.log(
+          this.$route.query.teams.slice(1, -1).split(",").map(Number)
+        );
+        searchall({
+          username: this.$store.state.username,
+          keyword: this.$route.query.keyword,
+          team_ids: this.$route.query.teams.slice(1, -1).split(","),
+        }).then((response) => {
+          if (response.data.status_code == 1) {
+            console.log("searchans", response.data);
+            this.file_infos = response.data.file_infos;
+            this.user_infos = response.data.user_infos;
+            this.project_infos = response.data.project_infos;
+            this.got1 = 1;
+          } else ElMessage.error(response.data.message);
+        });
+      }
     },
     submit() {
       this.dialogFormVisible = false;
@@ -256,12 +350,45 @@ export default {
         } else ElMessage.error(response.data.message);
       });
     },
+    confirmClick() {
+      this.drawer = false;
+      let form = [];
+      let len = this.value1.length;
+      let len1 = this.teams.length;
+      if (len != 0) {
+        //有筛选
+
+        for (let i = 0; i < len; i++) {
+          form.push(this.value1[i]);
+        }
+
+        let json = JSON.stringify(form);
+        this.$router.push({
+          path: "search",
+          query: {
+            keyword: this.$route.query.keyword,
+            teams: json,
+          },
+        });
+      } else
+        for (let i = 0; i < len1; i++) {
+          form.push(this.teams[i].team_id);
+        }
+
+      console.log(form);
+    },
     initializationdata() {
       getteamuserin({ username: this.$store.state.username }).then(
         (response) => {
           if (response.data.status_code == 1) {
             console.log("in", response.data);
+
             this.teamuserin = response.data.Dict.team_info;
+            let len = this.teamuserin.length;
+            for (let i = 0; i < len; i++) {
+              this.teams.push(this.teamuserin[i]);
+            }
+            this.got += 1;
           } else ElMessage.error(response.data.message);
         }
       );
@@ -270,6 +397,11 @@ export default {
           if (response.data.status_code == 1) {
             console.log("admin", response.data);
             this.teamuseradmin = response.data.Dict.team_info;
+            let len = this.teamuseradmin.length;
+            for (let i = 0; i < len; i++) {
+              this.teams.push(this.teamuseradmin[i]);
+            }
+            this.got += 1;
           } else ElMessage.error(response.data.message);
         }
       );
@@ -278,6 +410,11 @@ export default {
           if (response.data.status_code == 1) {
             console.log("creat", response.data);
             this.teamusercreat = response.data.Dict.team_info;
+            let len = this.teamusercreat.length;
+            for (let i = 0; i < len; i++) {
+              this.teams.push(this.teamusercreat[i]);
+            }
+            this.got += 1;
           } else ElMessage.error(response.data.message);
         }
       );

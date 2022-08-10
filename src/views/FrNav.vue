@@ -40,16 +40,33 @@
               infinite-scroll-distance="1"
               style="overflow: auto; overflow-x: hidden"
             >
-              <div class="dongtai" v-for="(message, index) in personnalmsg" :key="index">
-                <img :src="message.avatar"/>
+              <div
+                class="dongtai"
+                v-for="(message, index) in personnalmsg"
+                :key="index"
+              >
+                <img :src="message.avatar" />
                 <div class="dongtairight bluelight">
-                  <div>{{message.sender}}</div>
-                  <div style="font-size: 15px">{{message.msg}}</div>
+                  <div>{{ message.sender }}</div>
+                  <div style="font-size: 15px">{{ message.msg }}</div>
                   <div style="font-size: 13px">{{ message.send_time }}</div>
                 </div>
                 <div class="dongtairightright">
-                  <el-button v-if="message.message_type==1" type="success" :icon="Check" size="small" circle @click="accept(message.message_id)"/>
-                  <el-button type="info" :icon="Close" size="small" circle @click="deletemsg(message.message_id)" />
+                  <el-button
+                    v-if="message.message_type == 1"
+                    type="success"
+                    :icon="Check"
+                    size="small"
+                    circle
+                    @click="accept(message.message_id)"
+                  />
+                  <el-button
+                    type="info"
+                    :icon="Close"
+                    size="small"
+                    circle
+                    @click="deletemsg(message.message_id)"
+                  />
                 </div>
               </div>
             </div>
@@ -67,12 +84,12 @@
           <i class="bi-caret-down-fill" />
           <el-avatar :size="40">
             <!-- <img src="@/assets/img/head.jpg"> -->
-            <img :src="head?head:''"/>
+            <img :src="head ? head : ''" />
             <!-- YL -->
           </el-avatar>
         </div>
         <template #dropdown>
-          <el-dropdown-menu  style="width: 160px">
+          <el-dropdown-menu style="width: 160px">
             <el-dropdown-item
               :icon="User"
               v-if="$store.state.token"
@@ -135,10 +152,10 @@ import {
   deletepersonalmsg,
   edituserinfo,
   getpersonalmsg,
-  getuserinfo
+  getuserinfo,
 } from "@/utils/api";
 import { ElMessage } from "element-plus";
-import {Check, Close} from "@element-plus/icons-vue";
+import { Check, Close } from "@element-plus/icons-vue";
 import Base64 from "@/utils/Base64";
 export default {
   name: "FrNav",
@@ -154,7 +171,7 @@ export default {
   },
   data() {
     return {
-      personnalmsg:[],
+      personnalmsg: [],
       //{message_id:1,msg:"邀请您",sender:"luanbu",message_type:2,avatar:"",team_id:13,send_time:""}
       query: "",
       token: "",
@@ -174,14 +191,13 @@ export default {
   },
   methods: {
     browse() {
-      /*this.$router.push({
+      this.$router.push({
         path: "search",
         query: {
-          q: this.query,
-          mode: 1,
+          keyword: this.query,
         },
-      });*/
-      // ???
+      });
+      this.query = "";
     },
     updateinfo() {
       this.token = this.$store.state.token;
@@ -190,12 +206,14 @@ export default {
           "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/Transparent_Akkarin.jpg";
         this.name = "请登录";
       } else {
-        getpersonalmsg({username:this.$store.state.username}).then((response) => {
-          if (response.data.status_code == 1) {
-            console.log("xiaoxi",response.data)
-              this.personnalmsg=response.data.ans_list;
+        getpersonalmsg({ username: this.$store.state.username }).then(
+          (response) => {
+            if (response.data.status_code == 1) {
+              console.log("xiaoxi", response.data);
+              this.personnalmsg = response.data.ans_list;
+            }
           }
-        });
+        );
         getuserinfo({ username: this.$store.state.username }).then(
           (response) => {
             if (response.data.status_code == 1) {
@@ -210,15 +228,17 @@ export default {
     indentSignal() {
       this.$emit("indent");
     },
-    updatepersonalmsg(){
-      getpersonalmsg({username:this.$store.state.username}).then((response) => {
-        if (response.data.status_code == 1) {
-          console.log("xiaoxi",response.data)
-          this.personnalmsg=response.data.ans_list;
+    updatepersonalmsg() {
+      getpersonalmsg({ username: this.$store.state.username }).then(
+        (response) => {
+          if (response.data.status_code == 1) {
+            console.log("xiaoxi", response.data);
+            this.personnalmsg = response.data.ans_list;
+          }
         }
-      });
+      );
     },
-   /* gotoListFollow() {
+    /* gotoListFollow() {
       this.$router.push({ name: "List" });
     },
     gotoListLike() {
@@ -242,10 +262,10 @@ export default {
         path: "/personalspace",
         query: {
           info: Base64.encode(
-              JSON.stringify({
-                username:this.$store.state.username,
-                author:1,
-              })
+            JSON.stringify({
+              username: this.$store.state.username,
+              author: 1,
+            })
           ),
         },
       });
@@ -254,28 +274,23 @@ export default {
     changePassword() {
       this.$router.push("/changepassword");
     },
-    accept(message_id){
+    accept(message_id) {
       //同意请求
-      agreeinvitation({ message_id:message_id }).then(
-          (response) => {
-            console.log("tongyi",response.data);
-            if (response.data.status_code == 1) {
-              console.log("tongyi")
-              this.updatepersonalmsg()
-            } else ElMessage.error(response.data.msg);
-          }
-      );
-
+      agreeinvitation({ message_id: message_id }).then((response) => {
+        console.log("tongyi", response.data);
+        if (response.data.status_code == 1) {
+          console.log("tongyi");
+          this.updatepersonalmsg();
+        } else ElMessage.error(response.data.msg);
+      });
     },
-    deletemsg(message_id){
+    deletemsg(message_id) {
       //删除信息
-      deletepersonalmsg({message_id:message_id }).then(
-          (response) => {
-            if (response.data.status_code == 1) {
-              this.updatepersonalmsg()
-            }
-          }
-      );
+      deletepersonalmsg({ message_id: message_id }).then((response) => {
+        if (response.data.status_code == 1) {
+          this.updatepersonalmsg();
+        }
+      });
     },
   },
 };

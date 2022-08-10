@@ -187,7 +187,7 @@
             </el-upload>
             <span class="bluelight">{{ teammsg.creator }}</span
             ><span style="font-size: 13px" class="bluelight"
-              >创建于{{teammsg.create_time}}</span
+              >创建于{{ teammsg.create_time }}</span
             >
             <div class="text-wrap" style="margin: 10px 0">
               <div class="example">
@@ -247,14 +247,27 @@
             </div>
 
             <hr style="margin: 5px; margin-bottom: 20px" />
-            <div class="dongtaicontainer">
-              <div class="dongtai" v-for="(message, index) in teamdongtai" :key="index">
-                <img
-                  :src="message.avatar"
-                />
+            <el-skeleton
+              :rows="5"
+              style="height: 63vh"
+              animated
+              v-if="gott == 0"
+            />
+            <el-empty
+              description="空空如也"
+              v-if="gott != 0 && teamdongtai.length == 0"
+              style="margin: 0 auto"
+            />
+            <div class="dongtaicontainer" v-if="gott != 0">
+              <div
+                class="dongtai"
+                v-for="(message, index) in teamdongtai"
+                :key="index"
+              >
+                <img :src="message.avatar" />
                 <div class="dongtairight bluelight">
                   <div>{{ message.sender }}</div>
-                  <div style="font-size: 15px">{{message.msg}}</div>
+                  <div style="font-size: 15px">{{ message.msg }}</div>
                   <div style="font-size: 13px">{{ message.send_time }}</div>
                 </div>
               </div>
@@ -303,7 +316,7 @@
 
             <hr style="margin: 5px" />
             <el-collapse-item
-              title="管理员"
+              :title="'管理员(' + teamadmins.length + ')'"
               name="2"
               style="font-size: 20px; font-weight: lighter"
             >
@@ -346,7 +359,7 @@
             </el-collapse-item>
             <hr style="margin: 5px" />
             <el-collapse-item
-              title="成员"
+              :title="'成员(' + teammembers.length + ')'"
               name="3"
               style="font-size: 20px; font-weight: lighter"
             >
@@ -424,8 +437,14 @@
             </div>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item @click.native="copyteamproject(teamproject.project_id)">复制项目</el-dropdown-item>
-                <el-dropdown-item @click.native="deleteteamproject(teamproject.project_id)">删除</el-dropdown-item>
+                <el-dropdown-item
+                  @click.native="copyteamproject(teamproject.project_id)"
+                  >复制项目</el-dropdown-item
+                >
+                <el-dropdown-item
+                  @click.native="deleteteamproject(teamproject.project_id)"
+                  >删除</el-dropdown-item
+                >
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -491,12 +510,15 @@ import {
   getteammember,
   getteammsgbyid,
   getteamprojectbyid,
-  invitemember, renameproject,
+  invitemember,
+  renameproject,
   setteamadmin,
-  editteaminfo, getteammessage, deleteamadmin,
+  editteaminfo,
+  getteammessage,
+  deleteamadmin,
 } from "@/utils/api";
 import Base64 from "@/utils/Base64";
-import {client, getFileNameUUID} from "@/assets/alioss";
+import { client, getFileNameUUID } from "@/assets/alioss";
 export default {
   name: "workspace",
   components: { Filter, Sort, Plus, CaretBottom, Edit, Upload },
@@ -519,11 +541,12 @@ export default {
   data() {
     return {
       got: 0,
+      gott: 0,
       form: {
         team_avatar: "",
         brief_intro: "",
         team_name: "",
-        team_id:JSON.parse(Base64.decode(this.$route.query.info)).team_id,
+        team_id: JSON.parse(Base64.decode(this.$route.query.info)).team_id,
       },
       team_id: JSON.parse(Base64.decode(this.$route.query.info)).team_id,
       tab: "tab-0",
@@ -556,9 +579,10 @@ export default {
         create_time: "",
         creator: "",
         team_name: "",
-        avatar: "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/Transparent_Akkarin.jpg",
+        avatar:
+          "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/Transparent_Akkarin.jpg",
       },
-      teamdongtai:[],
+      teamdongtai: [],
       username: this.$store.state.username,
       formLabelWidth: "140px",
     };
@@ -569,8 +593,7 @@ export default {
         this.$router.push({
           name: "projectInfo",
           query: {
-            project_id:a,
-
+            project_id: a,
           },
         });
     },
@@ -589,7 +612,7 @@ export default {
     },
 
     creatproject() {
-      console.log("111",this.newproject);
+      console.log("111", this.newproject);
       establishproject(this.newproject).then((response) => {
         console.log(response.data);
         if (response.data.status_code == 1) {
@@ -656,10 +679,10 @@ export default {
         path: "/personalspace",
         query: {
           info: Base64.encode(
-              JSON.stringify({
-                username:a,
-                author:0,
-              })
+            JSON.stringify({
+              username: a,
+              author: 0,
+            })
           ),
         },
       });
@@ -695,10 +718,11 @@ export default {
       });
     },
     //动态
-    getteammsg(){
+    getteammsg() {
       getteammessage({ team_id: this.team_id }).then((response) => {
         if (response.data.status_code == 1) {
-         this.teamdongtai=response.data.ans_list;
+          this.teamdongtai = response.data.ans_list;
+          this.gott = 1;
         }
       });
     },
@@ -748,7 +772,7 @@ export default {
         } else ElMessage.error(response.data.msg);
       });
     },
-    deleteadmin(membername){
+    deleteadmin(membername) {
       deleteamadmin({
         canceler: this.$store.state.username,
         cancelee: membername,
@@ -757,16 +781,19 @@ export default {
         if (response.data.status_code == 1) {
           this.getteammsg();
           this.initializationmember(),
-              ElMessage({
-                message: "移出成功",
-                type: "success",
-              });
+            ElMessage({
+              message: "移出成功",
+              type: "success",
+            });
         } else ElMessage.error(response.data.msg);
       });
     },
     //项目操作
-    deleteteamproject(project_id){
-      deleteproject({username:this.$store.state.username,project_id:project_id}).then((response)=>{
+    deleteteamproject(project_id) {
+      deleteproject({
+        username: this.$store.state.username,
+        project_id: project_id,
+      }).then((response) => {
         if (response.data.status_code == 1) {
           this.getteammsg();
           this.initializationdata();
@@ -775,18 +802,20 @@ export default {
             type: "success",
           });
         } else ElMessage.error(response.data.msg);
-      })
+      });
     },
-    copyteamproject(project_id){
-      copyproject({team_id:this.team_id,project_id:project_id}).then((response)=>{
-        if (response.data.status_code == 1) {
-          this.initializationdata();
-          ElMessage({
-            message: "复制成功",
-            type: "success",
-          });
-        } else ElMessage.error(response.data.msg);
-      })
+    copyteamproject(project_id) {
+      copyproject({ team_id: this.team_id, project_id: project_id }).then(
+        (response) => {
+          if (response.data.status_code == 1) {
+            this.initializationdata();
+            ElMessage({
+              message: "复制成功",
+              type: "success",
+            });
+          } else ElMessage.error(response.data.msg);
+        }
+      );
     },
   },
 };
