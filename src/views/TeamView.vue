@@ -130,6 +130,7 @@
             v-for="(teamcreat, index) in teamusercreat"
             :key="index"
             @click="go(teamcreat.team_id)"
+            @contextmenu.prevent.native="openMenu($event)"
           >
             <div
               class="teamimage"
@@ -157,6 +158,9 @@
               </div>
             </div>
           </div>
+          <ul v-show="menu_visible" style="left: 0;top: -50px" class="contextmenu">
+            <li @click="deleteTeam">删除团队</li>
+          </ul>
         </div>
         <div id="leftdown" v-if="tab == 'tab-1'">
           <el-skeleton
@@ -341,6 +345,7 @@ export default {
   },
   data() {
     return {
+      menu_visible:false,
       got: 0,
       tab: "tab-0",
       dialogFormVisible: false,
@@ -355,7 +360,26 @@ export default {
       formLabelWidth: "140px",
     };
   },
+  watch:{
+    menu_visible(value) {
+      if (value) {
+        document.body.addEventListener('click', this.closeMenu)
+      } else {
+        document.body.removeEventListener('click', this.closeMenu)
+      }
+    }
+  },
   methods: {
+    deleteTeam(){
+
+    },
+    closeMenu() {
+      this.menu_visible = false
+    },
+    openMenu(e) {
+      alert(1)
+      this.menu_visible = true
+    },
     go(tid) {
       this.$router.push({
         path: "/teamdetail",
