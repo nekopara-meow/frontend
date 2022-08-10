@@ -45,7 +45,7 @@
     </template>
   </el-dialog>
   <!--修改文件名对话框-->
-  <el-dialog v-model="dialogFormVisible1" :title="renameFileTitle">
+  <el-dialog v-model="dialogFormVisible1" title="文件重命名">
     <el-form :model="fileRename">
       <el-form-item label="重命名文件" label-width="140px">
         <el-input v-model="fileRename.rename" autocomplete="off" :placeholder="this.file_name" />
@@ -61,7 +61,7 @@
     </template>
   </el-dialog>
   <!--新建axure对话框-->
-  <el-dialog v-model="dialogFormVisible2" :title="renameFileTitle">
+  <el-dialog v-model="dialogFormVisible2" :title=createFileTitle>
     <el-form :model="newAxure">
       <el-form-item label="创建的文件名" label-width="140px">
         <el-input v-model="newAxure.name" autocomplete="off" />
@@ -124,7 +124,7 @@ export default {
         model:null,
       },
       fileRename:{
-        rename:null,
+        rename:'新文件',
       },
       newAxure:{
         height:null,
@@ -495,6 +495,8 @@ export default {
                 file_name:this.file_name,
                 URLpage:this.file_content,
                 URLpageName:this.name_url,
+                height:this.height,
+                width:this.width
               }
             })
             break
@@ -520,7 +522,7 @@ export default {
       }else if(this.file_type==1){
         this.createDoc()
       }
-    }
+    },
 
   },
   watch:{
