@@ -53,7 +53,7 @@
               v-else
               v-model="form.team_name"
               placeholder="团队名称"
-              style="display: line; width: 200px; font-size: 30px"
+              style="display: inline; width: 200px; font-size: 30px"
             />
             <nav>
               <a
@@ -146,7 +146,7 @@
                   style="
                     display: flex;
                     align-items: center;
-                    justify-items: space-between;
+                    justify-items: stretch;
                   "
                 >
                   <el-skeleton-item variant="text" style="margin-right: 16px" />
@@ -235,7 +235,7 @@
               placeholder="简介"
               type="textarea"
               :rows="4"
-              style="display: line; width: 200px; font-size: 10px"
+              style="display: inline; width: 200px; font-size: 10px"
             />
           </div>
           <div id="leftdown1right">
@@ -403,7 +403,7 @@
             <hr style="margin: 5px" />
           </el-collapse>
         </div>
-        <div id="leftdown" v-if="tab == 'tab-2'">
+        <div id="leftdown3" v-if="tab == 'tab-2'">
           <el-dropdown
             trigger="contextmenu"
             v-for="(teamproject, index) in teamprojects"
@@ -449,10 +449,10 @@
             </template>
           </el-dropdown>
         </div>
-        <div id="leftdown" v-if="tab == 'tab-3'">
+        <div id="leftdown4" v-if="tab == 'tab-3'">
           <el-dropdown
             trigger="contextmenu"
-            v-for="(teamproject, index) in teamprojects"
+            v-for="(teamproject, index) in teamprojectsInBin"
             :key="index"
           >
             <div class="oneteam" style="height: 120px; margin-bottom: 20px">
@@ -479,8 +479,14 @@
             </div>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item @click.native="">还原</el-dropdown-item>
-                <el-dropdown-item @click.native="">彻底删除</el-dropdown-item>
+                <el-dropdown-item
+                  @click.native="recoverPro(teamproject.project_id)"
+                  >还原</el-dropdown-item
+                >
+                <el-dropdown-item
+                  @click.native="completelyDelPro(teamproject.project_id)"
+                  >彻底删除</el-dropdown-item
+                >
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -516,6 +522,8 @@ import {
   editteaminfo,
   getteammessage,
   deleteamadmin,
+  recoverProById,
+  completelyDelProById,
 } from "@/utils/api";
 import Base64 from "@/utils/Base64";
 import { client, getFileNameUUID } from "@/assets/alioss";
@@ -574,6 +582,7 @@ export default {
       teamadmins: [],
       teammembers: [],
       teamprojects: [],
+      teamprojectsInBin: [],
       teammsg: {
         brief_intro: "",
         create_time: "",
@@ -588,6 +597,38 @@ export default {
     };
   },
   methods: {
+    recoverPro(project_id) {
+      let username = this.$store.state.username;
+      recoverProById({
+        username: username,
+        project_id: project_id,
+      }).then((res) => {
+        console.log("recoverProById", res.data);
+        if (res.data.status_code == 1) {
+          ElMessage({
+            message: "恢复成功",
+            type: "success",
+          });
+          this.initializationdata();
+        }
+      });
+    },
+    completelyDelPro(project_id) {
+      let username = this.$store.state.username;
+      completelyDelProById({
+        username: username,
+        project_id: project_id,
+      }).then((res) => {
+        console.log("completelyDelPro", res.data);
+        if (res.data.status_code == 1) {
+          ElMessage({
+            message: "彻底删除成功",
+            type: "success",
+          });
+          this.initializationdata();
+        }
+      });
+    },
     gotoproject(a) {
       console.log("pp", a),
         this.$router.push({
@@ -626,7 +667,7 @@ export default {
         this.editing = 1;
       } else {
         this.editing = 0;
-        console.log(this.form);
+        this.form.team_avatar = this.teammsg.avatar;
         editteaminfo(this.form).then((response) => {
           if (response.data.status_code == 1) {
             this.initializationdata();
@@ -716,6 +757,13 @@ export default {
           this.teamprojects = response.data.ans_list;
         } else ElMessage.error(response.data.message);
       });
+      getteamprojectbyid({ team_id: this.team_id, deleted: 1 }).then(
+        (response) => {
+          if (response.data.status_code == 1) {
+            this.teamprojectsInBin = response.data.ans_list;
+          } else ElMessage.error(response.data.message);
+        }
+      );
     },
     //动态
     getteammsg() {
@@ -927,7 +975,7 @@ export default {
   background-image: linear-gradient(90deg, #4facfe, #7bd4fe, #6acaf7, #4facfe);
   background-size: 200%;
   animation: streamer 5s linear infinite;
-  background-clip: text;
+  -webkit-background-clip: text;
   color: transparent;
 }
 @keyframes streamer {

@@ -383,6 +383,37 @@ export async function getprojectinfo(data) {
     })
 }
 
+export function completelyDelFileByIn(data){
+    return request({
+        url: 'api/projects/bindelete/file',
+        method: 'post',
+        data,
+    })
+}
+
+export function recoverFileById(data){
+    return request({
+        url: 'api/projects/recover/file',
+        method: 'post',
+        data,
+    })
+}
+
+export function completelyDelProById(data){
+    return request({
+        url: 'api/projects/bindelete/project',
+        method: 'post',
+        data,
+    })
+}
+
+export function recoverProById(data){
+    return request({
+        url: 'api/projects/recover/project',
+        method: 'post',
+        data,
+    })
+}
 
 /*export const loginApi=data=>{
     return post({

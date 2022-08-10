@@ -8,12 +8,13 @@
   </el-tooltip>
 
   <div class="file-info bluelight">
-    <div>{{ author }}</div>
     <div>{{ fileName }}</div>
   </div>
   <ul v-show="visible" :style="{left:left+'px',top:top+'px'}" class="contextmenu">
-    <li @click="deleteFile">删除</li>
-    <li @click="renameFile">重命名</li>
+    <li @click="deleteFile" v-if="!this.isDel">删除</li>
+    <li @click="renameFile" v-if="!this.isDel">重命名</li>
+    <li @click="recoverFile" v-if="this.isDel">恢复</li>
+    <li @click="completeDelFile" v-if="this.isDel">彻底删除</li>
   </ul>
   <!--新文件对话框-->
   <el-dialog v-model="dialogFormVisible" :title="createFileTitle">
@@ -61,7 +62,15 @@
 
 <script>
 import {readURL} from "@/utils/ali_oss";
-import {create_axure, create_doc, create_uml, deleteFileById, renameFileById} from "@/utils/api";
+import {
+  completelyDelFileByIn,
+  create_axure,
+  create_doc,
+  create_uml,
+  deleteFileById,
+  recoverFileById,
+  renameFileById
+} from "@/utils/api";
 import docModel from "@/assets/fileModels/docModel";
 export default {
   name: "filePreview",
@@ -110,9 +119,18 @@ export default {
     name_url:'',
   },
   computed:{
+
     tip(){
       if(this.isNew) return '点击图标，新建文件'
-      return this.file_name+'<br/>'+'上次修改时间：'+new Date(this.update_time).toLocaleDateString()+' '+new Date(this.update_time).toLocaleTimeString()
+      let timestr=new Date(this.update_time).toLocaleDateString()+' '+new Date(this.update_time).toLocaleTimeString()
+      console.log('timestr',timestr)
+      if (this.update_time != undefined) {
+        timestr= (
+            "修改于:" +
+            this.timestampFormat(new Date(this.update_time).valueOf() / 1000)
+        );
+      }
+      return '文件名：'+this.file_name+'<br/>'+'上次修改时间：'+timestr
       +'<br/>'+'创建人:'+this.creator
     },
     fileName(){
@@ -172,6 +190,24 @@ export default {
     }
   },
   methods:{
+    completeDelFile(){
+      completelyDelFileByIn({
+        username:this.username,
+        file_id:this.file_id
+      }).then(res=>{
+        console.log(res.data)
+        //删除后父组件要更新数据
+        this.$emit('updateData')
+      })
+    },
+    recoverFile(){
+      recoverFileById({
+        username:this.username,
+        file_id:this.file_id
+      }).then(res=>{
+        this.$emit('updateData')
+        console.log(res.data)})
+    },
     timestampFormat(timestamp) {
       function zeroize(num) {
         return (String(num).length == 1 ? "0" : "") + num;
@@ -250,7 +286,11 @@ export default {
       }).then(() => {
         deleteFileById({
           file_id:this.file_id,
-        }).then(res=> console.log(res.data))
+          username:this.username
+        }).then(res=> {
+          console.log(res.data)
+          this.$emit('updateData')
+        })
       }).catch(() => {
         console.log('删除')
       });

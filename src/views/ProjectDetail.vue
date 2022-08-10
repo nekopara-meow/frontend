@@ -57,10 +57,11 @@
                 @click="tab = 'tab-1'"
                 >文件</router-link
               >
+
               <router-link
                 :to="{
                   name: 'projectFileBin',
-                  params: {
+                  query: {
                     project_id: this.project_id,
                   },
                 }"
@@ -141,7 +142,6 @@ import {
   getprojectinfo,
 } from "@/utils/api";
 import AxureEditor from "@/components/rubbish/axureEditor";
-import Base64 from "@/utils/Base64";
 
 export default {
   name: "projectDetail",
@@ -165,16 +165,15 @@ export default {
       form: {
         project_name: "",
         brief_intro: "",
-        project_id: "",
+
+        project_id: this.project_id,
       },
     };
   },
   methods: {
     getprojectinfos() {
-      console.log("getmsg", this.project_id);
       getprojectinfo({ project_id: this.project_id }).then((response) => {
         if (response.data.status_code == 1) {
-          console.log("xinxi1", response.data);
           this.projectinfo.brief_intro = response.data.brief_intro;
           this.projectinfo.create_time = response.data.create_time;
           this.projectinfo.creator = response.data.creator;
@@ -183,6 +182,7 @@ export default {
         } else ElMessage.error(response.data.message);
       });
     },
+
     submit() {
       this.form.project_id = this.project_id;
       updateprojectinfo(this.form).then((response) => {
@@ -191,7 +191,9 @@ export default {
             message: "修改成功",
             type: "success",
           });
+
           this.dialogFormVisible = false;
+          this.$router.go(0);
         } else ElMessage.error(response.data.message);
       });
     },
@@ -213,11 +215,15 @@ export default {
     if (this.$route.query.project_id) {
       this.project_id = this.$route.query.project_id;
       this.username = this.$store.state.username;
+      this.form.project_id = this.project_id;
       this.getprojectinfos();
     }
     console.log(this.project_id);
   },
   computed: {},
+  mounted() {
+    this.getprojectinfos();
+  },
 };
 </script>
 

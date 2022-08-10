@@ -1,74 +1,59 @@
 <template>
   <div class="file-container">
-    <el-tabs tab-position="left" class="file-tabs" type="card">
-      <el-tab-pane label="UML文件">
-        <div class="fileDisplayer">
+    <el-tabs tab-position="left" class="file-tabs" type="card" v-model="focusTabName">
+      <el-tab-pane label="UML文件" name="0">
+        <div class="fileDisplayer" >
           <!--          <file-preview :file_type="0" creator="罗亚硕" :file_id="1" ></file-preview>-->
           <file-preview
-            v-for="(tmp, index) in uml_file"
-            :file_id="tmp.file_id"
-            :update_time="tmp.update_time"
-            :file_type="tmp.file_type"
-            :creator="tmp.creator"
-            :file_name="tmp.file_name"
-            :file_content="tmp.file_content"
-            :project_id="tmp.project_id"
-            :key="index"
-          ></file-preview>
-          <file-preview
-            :file_type="0"
-            :creator="this.username"
-            :file_id="1"
-            :is-new="true"
-            :project_id="this.project_id"
+              @updateData="reloadData"
+              v-for="(tmp, index) in uml_file"
+              :file_id="tmp.file_id"
+              :update_time="tmp.update_time"
+              :file_type="tmp.file_type"
+              :creator="tmp.creator"
+              :file_name="tmp.file_name"
+              :file_content="tmp.file_content"
+              :project_id="tmp.project_id"
+              :key="index"
+              :is-del="true"
           ></file-preview>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="文档">
+      <el-tab-pane label="文档" name="1">
         <div class="fileDisplayer">
           <!--          <file-preview :file_type="1" creator="罗亚硕" :file_id="1"  :project_id="this.project_id"></file-preview>-->
           <!--          <file-preview :file_type="1" creator="罗亚硕" :file_id="1"  :project_id="this.project_id"></file-preview>-->
           <file-preview
-            v-for="(tmp, index) in doc_file"
-            :file_id="tmp.file_id"
-            :file_type="tmp.file_type"
-            :creator="tmp.creator"
-            :file_name="tmp.file_name"
-            :update_time="tmp.update_time"
-            :file_content="tmp.file_content"
-            :project_id="tmp.project_id"
-            :key="index"
-          ></file-preview>
-          <file-preview
-            :file_type="1"
-            :creator="this.username"
-            :file_id="this.project_id"
-            :project_id="this.project_id"
-            :is-new="true"
+              @updateData="reloadData"
+              v-for="(tmp, index) in doc_file"
+              :file_id="tmp.file_id"
+              :file_type="tmp.file_type"
+              :creator="tmp.creator"
+              :file_name="tmp.file_name"
+              :update_time="tmp.update_time"
+              :file_content="tmp.file_content"
+              :project_id="tmp.project_id"
+              :key="index"
+              :is-del="true"
           ></file-preview>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="原型设计">
+      <el-tab-pane label="原型设计" name="2">
         <div class="fileDisplayer">
           <!--          <file-preview :file_type="2" creator="lalala" :file_id="1" username="蔡徐坤" :project_id="1"></file-preview>-->
           <file-preview
-            v-for="(tmp, index) in axure_file"
-            :file_id="tmp.file_id"
-            :file_type="tmp.file_type"
-            :creator="tmp.creator"
-            :file_name="tmp.file_name"
-            :update_time="tmp.update_time"
-            :file_content="tmp.file_content"
-            :project_id="tmp.project_id"
-            :key="index"
-          ></file-preview>
-          <file-preview
-            :file_type="2"
-            creator="lalala"
-            :file_id="1"
-            username="蔡徐坤"
-            :project_id="1"
-            :is-new="true"
+              @updateData="reloadData"
+              v-for="(tmp, index) in axure_file"
+              :file_id="tmp.file_id"
+              :file_type="tmp.file_type"
+              :creator="tmp.creator"
+              :file_name="tmp.file_name"
+              :update_time="tmp.update_time"
+              :file_content="tmp.file_content"
+              :project_id="tmp.project_id"
+              :name_url="tmp.name_url"
+              :key="index"
+              :is-del="true"
           ></file-preview>
         </div>
       </el-tab-pane>
@@ -79,7 +64,7 @@
 <script>
 import AxureEditor from "@/components/rubbish/axureEditor";
 import FilePreview from "@/components/file_componets/filePreview";
-import { get_docfile, get_umlfile } from "@/utils/api";
+import {get_axurefile, get_docfile, get_umlfile} from "@/utils/api";
 export default {
   name: "projectFileInfo",
   components: { FilePreview, AxureEditor },
@@ -90,15 +75,17 @@ export default {
       axure_file: [],
       project_id: "",
       username: "",
+      focusTabName:'0',
     };
   },
   mounted() {
-    console.log("检查router", this.$route.params);
+    console.log("检查router", this.$route.query);
     this.username = this.$store.state.username;
-    this.project_id = this.$route.params.project_id;
+    this.project_id = this.$route.query.project_id;
     get_umlfile({
       username: this.username,
       project_id: this.project_id,
+      deleted:1,
     }).then((res) => {
       if (res.data.ans_list) {
         this.uml_file = res.data.ans_list;
@@ -108,6 +95,7 @@ export default {
     get_docfile({
       username: this.username,
       project_id: this.project_id,
+      deleted:1,
     }).then((res) => {
       if (res.data.ans_list) {
         this.doc_file = res.data.ans_list;
@@ -115,6 +103,57 @@ export default {
       } else console.log("请求doc文件失败");
     });
     //请求axure
+    get_axurefile({
+      username: this.username,
+      project_id: this.project_id,
+      deleted:1,
+    }).then((res) => {
+      if (res.data.ans_list) {
+        this.axure_file = res.data.ans_list;
+        console.log("axure_files", this.axure_file);
+      } else console.log("请求axure文件失败");
+    });
+  },
+  methods:{
+    reloadData(){
+      console.log("检查router", this.$route.query);
+      this.username = this.$store.state.username;
+      this.project_id = this.$route.query.project_id;
+      get_umlfile({
+        username: this.username,
+        project_id: this.project_id,
+        deleted:1,
+      }).then((res) => {
+        if (res.data.ans_list) {
+          this.uml_file = res.data.ans_list;
+          console.log("uml_files", this.uml_file);
+        } else console.log("请求uml文件失败");
+      });
+      get_docfile({
+        username: this.username,
+        project_id: this.project_id,
+        deleted:1,
+      }).then((res) => {
+        if (res.data.ans_list) {
+          this.doc_file = res.data.ans_list;
+          console.log("doc_files", this.doc_file);
+        } else console.log("请求doc文件失败");
+      });
+      //请求axure
+      get_axurefile({
+        username: this.username,
+        project_id: this.project_id,
+        deleted:1,
+      }).then((res) => {
+        if (res.data.ans_list) {
+          this.axure_file = res.data.ans_list;
+          console.log("axure_files", this.axure_file);
+        } else console.log("请求axure文件失败");
+      });
+    }
+  },
+  beforeRouteLeave(to, from) {
+    from.query.focusTabName=this.focusTabName
   },
 };
 </script>
