@@ -13,7 +13,7 @@
       >
 
       <div class="intro bluelight" style="margin-top: 10px">
-        {{ data.intro }}
+        简介:{{ data.intro }}
       </div>
 
       <div
@@ -97,6 +97,7 @@ export default {
     getprojectinfos(){
       getprojectinfo({project_id:this.project_id}).then((response) => {
         if (response.data.status_code == 1) {
+          console.log("xinxi2",response.data);
           this.data.intro=response.data.brief_intro;
           this.data.create_time=response.data.create_time;
           this.data.creator=response.data.creator;
@@ -107,6 +108,7 @@ export default {
     getprojectdongtai(){
       getprojectmessage({ project_id:this.project_id }).then((response) => {
         if (response.data.status_code == 1) {
+          console.log(response.data)
           this.projectdongtai=response.data.ans_list;
         }
       });

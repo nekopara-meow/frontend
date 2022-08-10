@@ -162,8 +162,10 @@ export default {
   },
   methods: {
     getprojectinfos(){
+      console
         getprojectinfo({project_id:this.project_id}).then((response) => {
           if (response.data.status_code == 1) {
+            console.log("xinxi1",response.data);
             this.projectinfo.brief_intro=response.data.brief_intro;
             this.projectinfo.create_time=response.data.create_time;
             this.projectinfo.creator=response.data.creator;
