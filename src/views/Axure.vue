@@ -153,13 +153,21 @@
                                 </div>
                                 <div v-else-if="isInput(item.type)" :style="item.style" :id="item.id">
                                     <el-input :placeholder="item.content">
-                                        <template v-if=havePretend(index) #prepend>
+                                        <template v-if="item.havePretend" #prepend>
                                             {{ item.pretend }}
                                         </template>
-                                        <template v-if="haveAppend(index)" #append>
+                                        <template v-if="item.haveAppend" #append>
                                             {{ item.append }}
                                         </template>
                                     </el-input>
+                                </div>
+                                <div v-else-if="isRadio(item.type)" :id="item.id">
+                                    <el-radio-group v-model="item.state">
+                                        <el-radio>
+                                            {{ item.content }}
+                                        </el-radio>
+                                    </el-radio-group>
+                                    
                                 </div>
                                 <div v-else :style="item.style" :id="item.id">
                                 </div>
@@ -340,6 +348,22 @@
                                         v-model = "pages[nowpage][lastnow].font_size">
                                     </el-input-number>
                                 </div>
+                                
+                                <div style="width: 10px; height: 10px"></div>
+                                <div v-if="isLable(pages[nowpage][lastnow].type)"
+                                    class="right-setting-border"
+                                    style="align-items: flex-start !important">
+
+                                    <span>文本</span>
+                                    <span style="width: 15px;"></span>
+                                    <el-input
+                                        v-model="pages[nowpage][lastnow].content"
+                                        style="width: 80%; height: 45px; font-size: 13px"
+                                        :rows="3" type="textarea"
+                                        
+                                    >
+                                    </el-input>
+                                </div>
 
                                 <div v-if="isBtn(pages[nowpage][lastnow].type)"
                                     class="right-setting-border">
@@ -479,6 +503,7 @@
                                     <el-input
                                         v-model="pages[nowpage][lastnow].content"
                                         style="width: 70%; height: 25px; font-size: 13px"
+                                        
                                     >
                                     </el-input>
                                 </div>
@@ -487,18 +512,48 @@
                                     class="right-setting-border">
                                     <span>前置元素</span>
                                     <span style="width: 10px"></span>
-                                    <el-checkbox></el-checkbox>
+
+                                    <el-checkbox @click="changeText"
+                                        v-model="pages[nowpage][lastnow].havePretend">
+                                    </el-checkbox>
+
                                     <span style="width: 20px"></span>
-                                    <el-input style="width: 50%; height: 26px"></el-input>
+                                    <el-input
+                                        @click="changeText"
+                                        style="width: 50%; height: 26px"
+                                        v-model="pages[nowpage][lastnow].pretend">
+                                    </el-input>
                                 </div>
 
                                 <div v-if="isInput(pages[nowpage][lastnow].type)"
                                     class="right-setting-border">
                                     <span>后置元素</span>
                                     <span style="width: 10px"></span>
-                                    <el-checkbox></el-checkbox>
+
+                                    <el-checkbox @click="changeText"
+                                        v-model="pages[nowpage][lastnow].haveAppend">
+                                    </el-checkbox>
+
                                     <span style="width: 20px"></span>
-                                    <el-input style="width: 50%; height: 26px"></el-input>
+                                    <el-input
+                                        @click="changeText"
+                                        v-model="pages[nowpage][lastnow].append"
+                                        style="width: 50%; height: 26px">
+                                    </el-input>
+                                </div>
+
+                                <div v-if="isRadio(pages[nowpage][lastnow].type)"
+                                    class="right-setting-border"
+                                    style="align-items: flex-start !important">
+
+                                    <span>文本</span>
+                                    <span style="width: 15px;"></span>
+                                    <el-input
+                                        v-model="pages[nowpage][lastnow].content"
+                                        style="width: 35%; height: 30px; font-size: 13px"
+                                    >
+                                    </el-input>
+                                    
                                 </div>
 
                             </el-collapse-item>
@@ -542,20 +597,40 @@
                     </div>
                     <div class="figure-button">
                         <div class="input-button" @click="addInput">input</div>
+                        <!--
                         <div class="split"></div>
                         <div class="search-button">
                             <span>search</span>
                             <el-icon><Search /></el-icon>
                         </div>
+                        -->
                     </div>
                     <div class="figure-button">
                         <div class="split-up"></div>
                     </div>
                     <div class="figure-button">
-                        <el-radio disabled margin="0"></el-radio>
-                        <span>单选框</span>
-                        
+                        <div style="
+                            width: 10px; height: 10px;
+                            border-radius: 50%;
+                            background-color: grey;"
+                            @click="addRadio"
+                        ></div>
+                        <div style="width: 7px; height: 10px;"></div>
+                        <span style="font-size: 13px; color: grey;"
+                            @click="addRadio"
+                        >
+                            单选框
+                        </span>
+
+                        <div style="width: 20px; height: 10px;"></div>
+                        <div style="
+                            width: 10px; height: 10px;
+                            background-color: grey;
+                        "></div>
+                        <div style="width: 7px; height: 10px;"></div>
+                        <span style="font-size: 13px; color: grey;">复选框</span>
                     </div>
+
                 </el-collapse-item>
 
                 <el-collapse-item title="图标" name="3">
@@ -819,8 +894,8 @@
         }
 
         .input-button{
-            width: 65px;
-            height: 25px;
+            width: 130px;
+            height: 30px;
             border-color: grey;
             color: grey;
             border-style: solid;
@@ -1291,7 +1366,7 @@ export default{
             kangle: {
 	            "width": "0",
 	            "height": "0",
-	            "border-bottom": "solid 100px red",
+	            "border-bottom": "solid 100px black",
                 "border-left": "solid 50px transparent",
                 "border-right": "solid 50px transparent",
                 "position": "relative",
@@ -1338,6 +1413,9 @@ export default{
         
     },
     methods: {
+        changeContent(value){
+            this.setActive(this.lastnow)
+        },
         haveColor(color){
             if(color == "" || color.length < 0)
                 return false
@@ -1426,7 +1504,7 @@ export default{
         preview(){
 
         },
-        havePretend(index){
+        /*havePretend(index){
             let item = this.pages[this.nowpage][index]
             return item.pretend != undefined && item.pretend != null
                 && item.pretend.length > 0
@@ -1436,7 +1514,7 @@ export default{
             
             return item.append != undefined && item.append != null
                 && item.append.length > 0
-        },
+        },*/
         ChangingThisPage(index){
             return this.changingPageName && (index == this.nowpage)
         },
@@ -1471,6 +1549,9 @@ export default{
         },
         isInput(strtype){
             return strtype === "input"
+        },
+        isRadio(strtype){
+            return strtype === "radio"
         },
         bePic(){
             html2canvas(this.$refs.imgDom).then(canvas => {
@@ -1509,10 +1590,11 @@ export default{
             let newItem = {"id": 'el' + Cnt, 
                 type: "figure-rect", active: true,
                 transform: { x: 0, y: 0, width: 100, height: 100 },
-                style: this.redRect,
+                style: {},
                 border: 2, opacity: 1,
                 border_color: "#000000", fill_color: 'rgba(0, 0, 0, 0)'
             }
+            newItem.style = this.redRect
             this.now = Cnt
             this.lastnow = Cnt
             this.pages[this.nowpage].push(newItem)
@@ -1522,10 +1604,11 @@ export default{
             let newItem = {"id": 'el' + Cnt, 
                 type: "figure-circle", active: true,
                 transform: { x: 0, y: 0, width: 100, height: 100 },
-                style: this.circle,
+                style: {},
                 border: 2, opacity: 1,
                 border_color: "#000000", fill_color: 'rgba(0, 0, 0, 0)'
             }
+            newItem.style = this.circle
             this.now = Cnt
             this.lastnow = Cnt
             this.pages[this.nowpage].push(newItem)
@@ -1535,8 +1618,9 @@ export default{
             let newItem = {"id": 'el' + Cnt, 
                 type: "figure-kangle", active: true,
                 transform: { x: 0, y: 0, width: 100, height: 100 },
-                style: this.kangle, opacity: 1
+                style: {}, opacity: 1
             }
+            newItem.style = this.kangle
             this.now = Cnt
             this.lastnow = Cnt
             this.pages[this.nowpage].push(newItem)
@@ -1546,10 +1630,11 @@ export default{
             let newItem = {"id": 'el' + Cnt, 
                 type: "lable", active: true,
                 transform: { x: 0, y: 0, width: 130, height: 40},
-                style: this.Lable, content: "这是一段文字", opacity: 1,
+                style: {}, content: "这是一段文字", opacity: 1,
                 border_color: "#000000", fill_color: 'rgba(0, 0, 0, 0)',
                 font_size: 18,
             }
+            newItem.style = this.Lable
             this.now = Cnt
             this.lastnow = Cnt
             this.pages[this.nowpage].push(newItem)
@@ -1589,7 +1674,19 @@ export default{
                 transform: { x: 0, y: 0, width: 230, height: 40 },
                 style: { "width": "100%", "height": "100%"},
                 content: "Please Input",
-                pretend: "", append: "", opacity: 1
+                pretend: "", append: "", opacity: 1,
+                havePretend: false, haveAppend: false,
+            }
+            this.now = Cnt
+            this.lastnow = Cnt
+            this.pages[this.nowpage].push(newItem)
+        },
+        addRadio(){
+            let Cnt = this.pages[this.nowpage].length
+            let newItem = { "id": 'el' + Cnt, 
+                type: "radio", active: true,
+                transform: { x: 0, y: 0, width: 70, height: 38 },
+                state: ref(1), content: '单选', opacity: 1
             }
             this.now = Cnt
             this.lastnow = Cnt
@@ -1678,7 +1775,7 @@ export default{
                 let w = ob.transform.width
                 let h = ob.transform.height
                 
-                this.pages[this.nowpage][this.now].style["border-bottom"] = "solid " + h + "px red"
+                this.pages[this.nowpage][this.now].style["border-bottom"] = "solid " + h + "px black"
                 this.pages[this.nowpage][this.now].style["border-left"] = "solid " + (w/2) + "px transparent"
                 this.pages[this.nowpage][this.now].style["border-right"] = "solid " + (w/2) + "px transparent"
             }
