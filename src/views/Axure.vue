@@ -23,7 +23,8 @@
                         <el-dropdown-item @click="bePic">导出</el-dropdown-item>
                         <el-dropdown-item>重命名</el-dropdown-item>
                         <el-dropdown-item @click="download">加载</el-dropdown-item>
-                        <el-dropdown-item @click="preview">预览</el-dropdown-item>
+                        <el-dropdown-item @click="openPreview">开启预览</el-dropdown-item>
+                        <el-dropdown-item @click="closePreview">关闭预览</el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
             </el-dropdown>
@@ -90,8 +91,10 @@
             </div>
             <div class="right">
                 <div class="canvas">
-                    <div class="my-table" ref="imgDom">
-                        <DraggableContainer referenceLineColor="#acbbdc">
+                    <div :style="my_table" ref="imgDom"
+                        width = "700px" height = "450px">
+                        <DraggableContainer 
+                            referenceLineColor="#acbbdc">
                             <Vue3DraggableResizable v-for="(item, index) in pages[nowpage]"
                                 :initW = item.transform.width
                                 :initH = item.transform.height
@@ -101,6 +104,7 @@
                                 v-model:h = item.transform.height
                                 :parent = true
                                 v-model:active = item.active
+                                :lockAspectRatio = "true"
                                 
                                 @activated = "setActive(index)"
                                 @deactivated = "setDeActive(index)"
@@ -167,8 +171,19 @@
                                             {{ item.content }}
                                         </el-radio>
                                     </el-radio-group>
-                                    
                                 </div>
+
+                                <div v-else-if="isCheckbox(item.type)" :id="item.id">
+                                    <el-checkbox>{{ item.content }}</el-checkbox>
+                                </div>
+
+                                <div v-else-if="isIcon(item.type)" :id="item.id">
+                                    <component
+                                        :is="icons[item.icon_index]"
+                                        :style="item.style">
+                                    </component>
+                                </div>
+
                                 <div v-else :style="item.style" :id="item.id">
                                 </div>
                             </Vue3DraggableResizable>
@@ -542,7 +557,7 @@
                                     </el-input>
                                 </div>
 
-                                <div v-if="isRadio(pages[nowpage][lastnow].type)"
+                                <div v-if="isRadio(pages[nowpage][lastnow].type) || isCheckbox(pages[nowpage][lastnow].type)"
                                     class="right-setting-border"
                                     style="align-items: flex-start !important">
 
@@ -554,6 +569,14 @@
                                     >
                                     </el-input>
                                     
+                                </div>
+
+                                <div v-if="isIcon(pages[nowpage][lastnow].type)"
+                                    class="right-setting-border">
+                                    <span>图标颜色</span>
+                                    <span style="width: 20px"></span>
+                                    <el-color-picker>
+                                    </el-color-picker>
                                 </div>
 
                             </el-collapse-item>
@@ -628,7 +651,11 @@
                             background-color: grey;
                         "></div>
                         <div style="width: 7px; height: 10px;"></div>
-                        <span style="font-size: 13px; color: grey;">复选框</span>
+                        <span style="font-size: 13px; color: grey;"
+                            @click="addCheckbox"
+                        >
+                            复选框
+                        </span>
                     </div>
 
                 </el-collapse-item>
@@ -653,8 +680,9 @@
                                 style="width: 30px; height: 30px; padding: 5;">
                                 <component
                                     :is="icons[(index0 - 1) * 6 + index - 1]"
-                                    style="width: 20px; height: 20px;
-                                        color: grey;">
+                                    style="width: 20px; height: 20px; color: grey;"
+                                    @click="addIcon((index0 - 1) * 6 + index - 1)"
+                                >
                                 </component>
                             </div>
                         </div>
@@ -947,12 +975,6 @@
             height: 15px;
         }
     }
-}
-
-.my-table{
-    width: 700px;
-    height: 450px;
-    background-color: white;
 }
 
 .container {
@@ -1270,7 +1292,7 @@ import Axios from "axios"
 
 import OSS from "ali-oss"
 
-import { save_axure } from "@/utils/api"
+import { save_axure, openAxure, closeAxure } from "@/utils/api"
 
 import { ColorPicker } from "vue3-colorpicker"
 import "vue3-colorpicker/style.css"
@@ -1299,6 +1321,12 @@ export default{
     },
     data() {
         return {
+            my_table: {
+                "width": "700px",
+                "height": "450px",
+                "background-color": "white"
+            },
+
             URLpage: "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/exampledir/exampleobject.json",
             URLpageName: "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/exampledir/exampleobject_name.json",
             axure_id: "",
@@ -1408,11 +1436,53 @@ export default{
                 "background-color": "transparent",
                 "font-size": "18px",
             },
-            
         }
-        
     },
     methods: {
+        openPreview(){
+            openAxure({
+                axure_id: this.axure_id,
+                username: this.$store.state.username
+            }).then((response) => {
+                let ret = response.data.status_code
+                if(ret == -1){
+                    ElMessage.error("请求方式错误")
+                    return 
+                }
+                else if(ret == 2){
+                    ElMessage.error("原型设计已开放，请勿重复开放")
+                    return 
+                }
+                else if(ret == 1){
+                    ElMessage({
+                        message: "原型设计已开放",
+                        type: "success",
+                    })
+                }
+            })
+        },
+        closePreview(){
+            closeAxure({
+                axure_id: this.axure_id,
+                username: this.$store.state.username
+            }).then((response) => {
+                let ret = response.data.status_code
+                if(ret == -1){
+                    ElMessage.error("请求方式错误")
+                    return 
+                }
+                else if(ret == 2){
+                    ElMessage.error("原型设计已关闭")
+                    return 
+                }
+                else if(ret == 1){
+                    ElMessage({
+                        message: "原型设计已关闭",
+                        type: "success",
+                    })
+                }
+            })
+        },
         changeContent(value){
             this.setActive(this.lastnow)
         },
@@ -1553,6 +1623,12 @@ export default{
         isRadio(strtype){
             return strtype === "radio"
         },
+        isCheckbox(strtype){
+            return strtype === "checkbox"
+        },
+        isIcon(strtype){
+            return strtype === "icon"
+        },
         bePic(){
             html2canvas(this.$refs.imgDom).then(canvas => {
                 // 转成图片，生成图片地址
@@ -1688,6 +1764,31 @@ export default{
                 transform: { x: 0, y: 0, width: 70, height: 38 },
                 state: ref(1), content: '单选', opacity: 1
             }
+            this.now = Cnt
+            this.lastnow = Cnt
+            this.pages[this.nowpage].push(newItem)
+        },
+        addCheckbox(){
+            let Cnt = this.pages[this.nowpage].length
+            let newItem = { "id": 'el' + Cnt, 
+                type: "checkbox", active: true,
+                transform: { x: 0, y: 0, width: 70, height: 38 },
+                content: '复选', opacity: 1
+            }
+            this.now = Cnt
+            this.lastnow = Cnt
+            this.pages[this.nowpage].push(newItem)
+        },
+        addIcon(index){
+            let Cnt = this.pages[this.nowpage].length
+            let newItem = { "id": 'el' + Cnt, 
+                type: "icon", active: true,
+                transform: { x: 0, y: 0, width: 30, height: 30 },
+                style: {"width": "100%", "height": "100%", "color": "grey"},
+                icon_index: 0, opacity: 1
+            }
+            newItem.icon_index = index
+
             this.now = Cnt
             this.lastnow = Cnt
             this.pages[this.nowpage].push(newItem)
@@ -1902,6 +2003,9 @@ export default{
         that.URLpage = this.$route.query.URLpage
         that.URLpageName = this.$route.query.URLpageName
         that.axure_id = this.$route.query.axure_id
+
+        //that.my_table['width'] = this.$route.query.width
+        //that.my_table['height'] = this.$route.query.height
 
         if(that.URLpage == null || that.URLpage.length < 1
             || that.URLpage == '') {

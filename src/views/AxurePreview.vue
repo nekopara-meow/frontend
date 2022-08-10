@@ -1,5 +1,5 @@
 <template>
-    <div class="Body">
+    <div v-if="CanPreview" class="Body">
         <div class="pageMenu">
             <el-menu :default-active="mytoString(nowpage)">
                 <el-menu-item v-for="(item, Index) in pagesname"
@@ -110,10 +110,23 @@
             </div>
         </div>
     </div>
+
+    <div v-else class="root">
+        <h1>有没有一种可能你404了</h1>
+        <h1> 原型设计未开放</h1>
+        <h2>喵呜！</h2>
+    </div>
     
 </template>
 
 <style lang="scss" scoped>
+.root {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
 .Body{
     width: 100%;
     height: 100%;
@@ -162,6 +175,11 @@
     }
 }
 
+.el-button{
+    width: 100%;
+    height: 100%;
+}
+
 </style>
 
 <script>
@@ -170,12 +188,18 @@ import Axios from "axios"
 import Vue3DraggableResizable from 'vue3-draggable-resizable'
 import { DraggableContainer } from 'vue3-draggable-resizable'
 
-import { load_axure } from "@/utils/api"
+import { load_axure, viewAxure } from "@/utils/api"
+
+import { ElDropdown, ElMenu, ElCollapse, 
+    ElButton, ElRadio, ElMessage, ElScrollbar} from 'element-plus'
 
 export default{
     components: { 
         Vue3DraggableResizable,
-        DraggableContainer
+        DraggableContainer,
+
+        ElDropdown, ElMenu, ElCollapse, 
+        ElButton, ElRadio, ElMessage, ElScrollbar
     },
     data() {
         return {
@@ -183,6 +207,8 @@ export default{
             pagesname: [],
             nowpage: 0,
             axure_id: 12,
+            username: '',
+            CanPreview: false,
         }
     },
     methods: {
@@ -299,6 +325,25 @@ export default{
     },
     created(){
         this.axure_id = this.$route.query.axure_id
+        this.username = this.$store.state.username
+
+        viewAxure({
+            axure_id: this.axure_id,
+            username: this.username
+        }).then((response) => {
+            let ret = response.data.status_code
+            if(ret == -1){
+                ElMessage.error("请求方式错误")
+                return 
+            }
+            else if(ret == 2){
+                this.CanPreview = false
+                ElMessage.error("原型设计未开放")
+                return 
+            }
+            else if(ret == 1)
+                this.CanPreview = true
+        })
     },
 }
 </script>
