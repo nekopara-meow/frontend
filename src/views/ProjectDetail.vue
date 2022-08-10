@@ -142,6 +142,7 @@ export default {
   props: {},
   data() {
     return {
+      gota: 0,
       avatars: [],
       projectinfo: {
         brief_intro: "",
@@ -174,17 +175,19 @@ export default {
           this.projectinfo.project_name = response.data.project_name;
           this.projectinfo.team_name = response.data.team_name;
           this.avatars = [];
-          getavatarchain({ team_id: response.data.team_id }).then(
-            (response) => {
-              if (response.data.status_code == 1) {
-                let lenn = response.data.ans_list.length;
-                for (let j = 0; j < lenn; j++) {
-                  this.avatars.push(response.data.ans_list[j].avatar);
-                }
-                console.log(this.avatars);
-              } else ElMessage.error(response.data.message);
-            }
-          );
+          if (this.gota == 0)
+            getavatarchain({ team_id: response.data.team_id }).then(
+              (response) => {
+                if (response.data.status_code == 1) {
+                  let lenn = response.data.ans_list.length;
+                  for (let j = 0; j < lenn; j++) {
+                    this.avatars.push(response.data.ans_list[j].avatar);
+                  }
+                  console.log(this.avatars);
+                  this.gota++;
+                } else ElMessage.error(response.data.message);
+              }
+            );
         } else ElMessage.error(response.data.message);
       });
     },
@@ -222,7 +225,7 @@ export default {
       this.project_id = this.$route.query.project_id;
       this.username = this.$store.state.username;
       this.form.project_id = this.project_id;
-      this.getprojectinfos();
+      // this.getprojectinfos();
     }
 
     console.log(this.project_id);

@@ -1,7 +1,7 @@
 <template>
   <div id="fr-aside" :class="{ indent: collapse }">
     <header class="fr-back-color" :class="$store.getters.themeClass">
-      <figure @click="$router.push({name:'home'})">
+      <figure @click="$router.push({ name: 'home' })">
         <img src="@/assets/img/logo-w.png" class="h-100" alt="" />
       </figure>
       <span style="margin: 0; padding: 0">NEKOPARA</span>
@@ -80,7 +80,7 @@ export default {
 
   background-color: #26476d;
   backdrop-filter: blur(1rem);
-  border-bottom-right-radius: 3em;
+  // border-bottom-right-radius: 3em;
   box-shadow: 0 15px 10px 3px rgba(221, 221, 221, 0.308);
   transition: 0.3s;
   &.indent {

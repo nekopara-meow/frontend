@@ -11,10 +11,18 @@
               ></el-button>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item @click="sortByTime(1)">按修改时间升序</el-dropdown-item>
-                  <el-dropdown-item @click="sortByTime(-1)">按修改时间降序</el-dropdown-item>
-                  <el-dropdown-item @click="sortByFileName(1)">按文件名升序</el-dropdown-item>
-                  <el-dropdown-item @click="sortByFileName(-1)">按文件名降序</el-dropdown-item>
+                  <el-dropdown-item @click="sortByTime(1)"
+                    >按修改时间升序</el-dropdown-item
+                  >
+                  <el-dropdown-item @click="sortByTime(-1)"
+                    >按修改时间降序</el-dropdown-item
+                  >
+                  <el-dropdown-item @click="sortByFileName(1)"
+                    >按文件名升序</el-dropdown-item
+                  >
+                  <el-dropdown-item @click="sortByFileName(-1)"
+                    >按文件名降序</el-dropdown-item
+                  >
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -26,27 +34,27 @@
         <div id="leftdown">
           <el-skeleton :rows="5" animated v-if="got != 1" />
           <el-empty
-              description="空空如也"
-              v-if="got == 1 && all_file.length == 0"
-              style="margin: 0 auto"
+            description="空空如也"
+            v-if="got == 1 && all_file.length == 0"
+            style="margin: 0 auto"
           />
           <div class="fileDisplayer">
             <file-preview
-                @updateData="reloadData"
-                v-if="got == 1 && all_file.length != 0"
-                v-for="(tmp, index) in all_file"
-                :file_id="tmp.file_id"
-                :update_time="tmp.update_time"
-                :file_type="tmp.file_type"
-                :creator="tmp.creator"
-                :file_name="tmp.file_name"
-                :file_content="tmp.file_content"
-                :project_id="tmp.project_id"
-                :width="tmp.width"
-                :height="tmp.height"
-                :key="index"
+              @updateData="reloadData"
+              v-if="got == 1 && all_file.length != 0"
+              v-for="(tmp, index) in all_file"
+              :file_id="tmp.file_id"
+              :update_time="tmp.update_time"
+              :file_type="tmp.file_type"
+              :creator="tmp.creator"
+              :file_name="tmp.file_name"
+              :file_content="tmp.file_content"
+              :project_id="tmp.project_id"
+              :width="tmp.width"
+              :height="tmp.height"
+              :key="index"
             ></file-preview>
-            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -57,42 +65,43 @@
 import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
 import { Filter, Sort, CaretBottom } from "@element-plus/icons-vue";
 import FilePreview from "@/components/file_componets/filePreview";
-import {getRecentFile} from "@/utils/api";
+import { getRecentFile } from "@/utils/api";
 export default {
   name: "Recent",
-  components: {FilePreview, Filter, Sort, CaretBottom },
-  data(){
-    return{
-      all_file:[],
-      username:'',
-      got:0,
-    }
+  components: { FilePreview, Filter, Sort, CaretBottom },
+  data() {
+    return {
+      all_file: [],
+      username: "",
+      got: 0,
+    };
   },
 
-  methods:{sortByTime(asc){
-      this.all_file.sort(function(a, b) {
-        return b.update_time < a.update_time ? asc : (asc*-1)
-      })
+  methods: {
+    sortByTime(asc) {
+      this.all_file.sort(function (a, b) {
+        return b.update_time < a.update_time ? asc : asc * -1;
+      });
     },
-    sortByFileName(asc){
-      this.all_file.sort(function(a, b) {
-        return b.file_name < a.file_name ? asc : (asc*-1)
-      })
+    sortByFileName(asc) {
+      this.all_file.sort(function (a, b) {
+        return b.file_name < a.file_name ? asc : asc * -1;
+      });
     },
-    reloadData(){
-      this.got=0
+    reloadData() {
+      this.got = 0;
       getRecentFile({
-        username:this.username,
-      }).then(res=>{
-        console.log(res.data)
-        this.all_file=res.data.ans_list
-        this.got++
-      })
-    }
+        username: this.username,
+      }).then((res) => {
+        console.log(res.data);
+        this.all_file = res.data.ans_list;
+        this.got++;
+      });
+    },
   },
   mounted() {
-    this.username=this.$store.state.username
-    this.reloadData()
+    this.username = this.$store.state.username;
+    this.reloadData();
   },
 };
 </script>
@@ -127,7 +136,7 @@ export default {
   flex: 1 1 60%;
   flex-direction: row;
   padding: 1rem;
-  overflow-y: scroll;
+  overflow-y: hidden;
 }
 #right {
   height: 100%;
@@ -202,7 +211,7 @@ export default {
 }
 #leftdown {
   overflow-y: scroll;
-  height: 63vh;
+  height: 60vh;
   padding: 0 5px;
   display: flex;
   flex-direction: row;
@@ -274,7 +283,7 @@ export default {
 .warn {
   border-left: 10px solid rgba(233, 233, 133, 0.377);
 }
-.fileDisplayer{
+.fileDisplayer {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
