@@ -37,30 +37,16 @@
             <h2 class="title">{{projectinfo.project_name}}</h2>
 
             <nav class="nav-link">
-              <router-link
-                :to="{
-                  name: 'projectInfo',
-                  params: {
-                    project_id: this.project_id,
-                  },
-                }"
-                @click="tab = 'tab-0'"
-                >概览</router-link
-              >
-              <router-link
-                :to="{
-                  name: 'projectFileInfo',
-                  params: {
-                    project_id: this.project_id,
-                  },
-                }"
-                @click="tab = 'tab-1'"
-                >文件</router-link
-              >
+              <router-link :to="{name:'projectInfo',query:{
+                project_id:this.project_id
+              }}" @click="tab='tab-0'">概览</router-link>
+              <router-link :to="{name:'projectFileInfo',query:{
+                project_id:this.project_id
+              }}" @click="tab='tab-1'">文件</router-link>
               <router-link
                 :to="{
                   name: 'projectFileBin',
-                  params: {
+                  query: {
                     project_id: this.project_id,
                   },
                 }"
@@ -164,6 +150,7 @@ export default {
     getprojectinfos(){
         getprojectinfo({project_id:this.project_id}).then((response) => {
           if (response.data.status_code == 1) {
+            console.log('projectinfo',response.data)
             this.projectinfo.brief_intro=response.data.brief_intro;
             this.projectinfo.create_time=response.data.create_time;
             this.projectinfo.creator=response.data.creator;
@@ -205,6 +192,9 @@ export default {
     console.log(this.project_id);
   },
   computed: {},
+  mounted() {
+    this.getprojectinfos()
+  }
 };
 </script>
 
