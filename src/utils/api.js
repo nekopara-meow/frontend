@@ -40,6 +40,13 @@ export function load_axure(data){
     })
 }
 
+export function get_file_number(data){
+    return request({
+        url: 'api/projects/count/files',
+        method: 'post',
+        data,
+    })
+}
 //
 // export function del_axure(data){
 //     return request({

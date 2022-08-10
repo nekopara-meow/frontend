@@ -60,6 +60,9 @@
   <!--新建axure对话框-->
   <el-dialog v-model="dialogFormVisible2" :title="renameFileTitle">
     <el-form :model="newAxure">
+      <el-form-item label="创建的文件名" label-width="140px">
+        <el-input v-model="newAxure.name" autocomplete="off" />
+      </el-form-item>
       <el-form-item label="新建画布高度" label-width="140px">
         <el-input-number v-model="newAxure.height"
                          controls-position="right"
@@ -123,6 +126,7 @@ export default {
       newAxure:{
         height:null,
         weight: null,
+        name:null,
       },
       visible:false,
       left:0,
@@ -256,7 +260,7 @@ export default {
       create_axure({
         username:this.username,
         project_id:this.project_id,
-        axure_name:this.fileInitial.name,
+        axure_name:this.newAxure.name,
         height:this.newAxure.height,
         weight:this.newAxure.weight
       }).then(res=>{
@@ -441,7 +445,11 @@ export default {
       }
       //创建文件
       console.log('创建新文件')
-      this.dialogFormVisible=true
+      if(this.file_type!=2){
+        this.dialogFormVisible=true
+      }else {
+        this.dialogFormVisible2=true
+      }
       if(this.fileInitial.name===null)
         return
       switch (this.file_type){
