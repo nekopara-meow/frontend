@@ -46,23 +46,10 @@
         <span>团队管理</span>
       </router-link>
     </div>
-    <div class="openBtn-open" :class="{ 'Btn-fold': collapse }">
-      <!--<el-button type="" :icon="EditPen"></el-button>-->
-      <div class="ww" @click="gotoTeam">
-        <el-icon :size="30">
-          <Calendar />
-        </el-icon>
-        <span class="Sp">日历</span>
-      </div>
-      <router-link to="/calendar" v-show="!collapse">
-        <span>我的日历</span>
-      </router-link>
-    </div>
   </div>
 </template>
 
 <script setup>
-// import { ElButton } from "element-plus";
 import { Menu, Notebook, UserFilled, Calendar } from "@element-plus/icons-vue";
 </script>
 

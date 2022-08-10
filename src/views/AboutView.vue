@@ -4,8 +4,7 @@
             <a-upload list-type="picture" draggable accept="image/*" :onSuccess="coverUpload"
                 @before-upload="beforeUpload" :action="filesUploadUrl" :default-file-list="fileList" image-preview />
         </a-form-item>
-        <a-form-item label="主题色">
-            <color-picker v-model:pureColor="pureColor" format="hex6" shape="circle" useType="both"
+        <a-form-item label="主题色">            <color-picker v-model:pureColor="pureColor" format="hex6" shape="circle" useType="both"
                 v-model:gradientColor="gradientColor" />
             <br><br>
             <a-input v-model="pureColor" allow-clear placeholder="主题色HEX"></a-input>
