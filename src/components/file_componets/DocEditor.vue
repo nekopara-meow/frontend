@@ -319,7 +319,7 @@ export default {
       json: "",
       table_row: "",
       table_col: "",
-      model_id: -1, //-1表示没有使用模板，模板id从0开始
+      model_id: '-1', //-1表示没有使用模板，模板id从0开始
       docModel: docModel,
       fromPath: "",
       fromQuery: "",
@@ -332,8 +332,10 @@ export default {
     this.doc_id = this.$route.query.doc_id;
     this.file_name = this.$route.query.file_name;
     this.creator = this.$route.query.creator;
-    if (this.$route.query.model_id != null) {
+    if (this.$route.query.model_id != "") {
+      console.log('this.$route.query.model_id != null',this.$route.query)
       this.model_id = this.$route.query.model_id;
+      console.log('read model_id',this.model_id)
     }
     this.project_id = this.$route.query.project_id;
     this.username = this.$store.state.username;
@@ -398,11 +400,13 @@ export default {
 
     //使用模板
 
-    console.log(this.model_id);
-    if (this.model_id !== -1) {
-      this.html = this.docModel[this.model_id].html;
+    console.log('model',this.model_id);
+    if(this.model_id!=-1){
+      if (this.model_id !== -1) {
+        this.html = this.docModel[this.model_id].html;
 
-      this.editor.commands.setContent(this.html);
+        this.editor.commands.setContent(this.html);
+      }
     }
   },
   /**

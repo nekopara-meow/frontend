@@ -52,7 +52,7 @@
               :file_content="tmp.file_content"
               :project_id="tmp.project_id"
               :name_url="tmp.name_url"
-              :weight="tmp.weight"
+              :width="tmp.width"
               :height="tmp.height"
               :key="index"
               :is-del="true"

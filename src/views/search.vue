@@ -140,7 +140,7 @@
             :file_content="v.file_content"
             :project_id="v.project_id"
             :height="v.height"
-            :weight="v.weight"
+            :width="v.width"
             :key="i"
           ></file-preview>
         </div>
