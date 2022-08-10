@@ -187,7 +187,6 @@ export default {
   },
   watch: {
     "$store.state.token"() {
-      // console.log("changed!");
       this.updateinfo();
     },
   },
@@ -272,14 +271,7 @@ export default {
           "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/Transparent_Akkarin.jpg";*/
         this.name = "请登录";
       } else {
-        getpersonalmsg({ username: this.$store.state.username }).then(
-          (response) => {
-            if (response.data.status_code == 1) {
-              console.log("xiaoxi", response.data);
-              this.personnalmsg = response.data.ans_list;
-            }
-          }
-        );
+        this.updatepersonalmsg();
         getuserinfo({ username: this.$store.state.username }).then(
           (response) => {
             if (response.data.status_code == 1) {
@@ -291,7 +283,6 @@ export default {
         //this.head = this.userinfo.head;
         this.name = this.$store.state.username;
       }
-      console.log("touxiang",this.$store.state.head,this.head)
     },
     indentSignal() {
       this.$emit("indent");
@@ -300,7 +291,6 @@ export default {
       getpersonalmsg({ username: this.$store.state.username }).then(
         (response) => {
           if (response.data.status_code == 1) {
-            console.log("xiaoxi", response.data);
             this.personnalmsg = response.data.ans_list;
             if(this.personnalmsg.length>0)this.flag=true;
             else this.flag=false;
@@ -325,6 +315,7 @@ export default {
     },
     logout() {
       this.$store.commit("removeInfo");
+      this.$router.push("/login");
     },
     checkInfo() {
       this.$router.push({
@@ -346,9 +337,7 @@ export default {
     accept(message_id) {
       //同意请求
       agreeinvitation({ message_id: message_id }).then((response) => {
-        console.log("tongyi", response.data);
         if (response.data.status_code == 1) {
-          console.log("tongyi");
           this.updatepersonalmsg();
         } else ElMessage.error(response.data.msg);
       });
