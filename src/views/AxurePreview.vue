@@ -321,12 +321,13 @@ export default{
     created(){
         this.axure_id = this.$route.query.axure_id
         this.username = this.$store.state.username
-
+        console.log('created')
         viewAxure({
             axure_id: this.axure_id,
             username: this.username
         }).then((response) => {
             let ret = response.data.status_code
+            console.log('ret', response.data)
             if(ret == -1){
                 ElMessage.error("请求方式错误")
                 return 
@@ -338,8 +339,9 @@ export default{
             }
             else if(ret == 1){
                 this.CanPreview = true
-                this.my_table['width'] = response.data.width = "px"
-                this.my_table['height'] = response.data.height = "px"
+                this.my_table['width'] = response.data.width + "px"
+                this.my_table['height'] = response.data.height + "px"
+                console.log('my_table', this.my_table)
             }
         })
     },
