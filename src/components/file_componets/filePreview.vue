@@ -20,7 +20,10 @@
   <el-dialog v-model="dialogFormVisible" :title="createFileTitle">
     <el-form :model="fileInitial">
       <el-form-item label="创建的文件名" label-width="140px">
-        <el-input v-model="fileInitial.name" autocomplete="off" />
+        <el-input v-model="fileInitial.name" autocomplete="off"
+                  type="text"
+                  placeholder="请输入文件名"
+        />
       </el-form-item>
       <el-form-item label="选择文件模板" v-if="this.file_type===1" label-width="140px">
         <el-select  v-model="doc_model_id" class="m-1" placeholder="不选择模板" size="large">
@@ -42,7 +45,7 @@
     </template>
   </el-dialog>
   <!--修改文件名对话框-->
-  <el-dialog v-model="dialogFormVisible1" :title="renameFileTitle">
+  <el-dialog v-model="dialogFormVisible1" title="文件重命名">
     <el-form :model="fileRename">
       <el-form-item label="重命名文件" label-width="140px">
         <el-input v-model="fileRename.rename" autocomplete="off" :placeholder="this.file_name" />
@@ -58,7 +61,7 @@
     </template>
   </el-dialog>
   <!--新建axure对话框-->
-  <el-dialog v-model="dialogFormVisible2" :title="renameFileTitle">
+  <el-dialog v-model="dialogFormVisible2" :title=createFileTitle>
     <el-form :model="newAxure">
       <el-form-item label="创建的文件名" label-width="140px">
         <el-input v-model="newAxure.name" autocomplete="off" />
@@ -105,6 +108,7 @@ import {
   renameFileById
 } from "@/utils/api";
 import docModel from "@/assets/fileModels/docModel";
+import {ElMessage, ElMessageBox} from "element-plus";
 export default {
   name: "filePreview",
   data(){
@@ -121,7 +125,7 @@ export default {
         model:null,
       },
       fileRename:{
-        rename:null,
+        rename:'新文件',
       },
       newAxure:{
         height:null,
@@ -182,7 +186,7 @@ export default {
         case 2:typestr+='设计原型'
           break
       }
-      return '文件名：'+this.file_name+'<br/>'+typestr+'<br/>上次修改时间：'+timestr
+      return '文件名：'+this.file_name+'<br/>'+typestr+'<br/>'+timestr
       +'<br/>'+'创建人:'+this.creator
     },
     fileName(){
@@ -249,14 +253,31 @@ export default {
   },
   methods:{
     completeDelFile(){
-      completelyDelFileByIn({
+      ElMessageBox.confirm(
+          '确认彻底删除文件：'+this.file_name,
+          '彻底删除',
+          {
+            confirmButtonText: '确认',
+            cancelButtonText: '取消',
+            type: 'warning',
+          }
+      ).then(()=>{
+        completelyDelFileByIn({
         username:this.username,
         file_id:this.file_id
-      }).then(res=>{
-        console.log(res.data)
-        //删除后父组件要更新数据
-        this.$emit('updateData')
+        }).then(res=>{
+          console.log(res.data)
+          //删除后父组件要更新数据
+          this.$emit('updateData')
+          if(res.data.status_code==1){
+            ElMessage.success('彻底删除文件：'+this.file_name)
+          }else {
+            ElMessage.warning('彻底删除文件错误：'+this.file_name)
+          }
+        })
       })
+
+
     },
     createUML(){
       console.log({
@@ -328,6 +349,8 @@ export default {
               project_id:this.project_id,
               URLpage:null,
               URLpageName:null,
+              height:this.newAxure.height,
+              width:this.newAxure.width
             }
           })
         }
@@ -490,6 +513,8 @@ export default {
                 file_name:this.file_name,
                 URLpage:this.file_content,
                 URLpageName:this.name_url,
+                height:this.height,
+                width:this.width
               }
             })
             break
@@ -515,7 +540,7 @@ export default {
       }else if(this.file_type==1){
         this.createDoc()
       }
-    }
+    },
 
   },
   watch:{

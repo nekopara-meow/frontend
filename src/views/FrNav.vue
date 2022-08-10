@@ -28,7 +28,7 @@
         v-if="$store.state.token"
       >
         <div class="el-dropdown-link d-flex align-items-center">
-          <el-badge is-dot class="item" type="danger">
+          <el-badge :is-dot='flag' class="item" type="danger">
             <i class="bi-bell"></i>
           </el-badge>
         </div>
@@ -49,7 +49,7 @@
                 <div class="dongtairight bluelight">
                   <div>{{ message.sender }}</div>
                   <div style="font-size: 15px">{{ message.msg }}</div>
-                  <div style="font-size: 13px">{{ message.send_time }}</div>
+                  <div style="font-size: 13px">{{this.timestampFormat(new Date(message.send_time).valueOf() / 1000)  }}</div>
                 </div>
                 <div class="dongtairightright">
                   <el-button
@@ -84,7 +84,7 @@
           <i class="bi-caret-down-fill" />
           <el-avatar :size="40">
             <!-- <img src="@/assets/img/head.jpg"> -->
-            <img :src="head ? head : ''" />
+            <img :src="$store.state.head" />
             <!-- YL -->
           </el-avatar>
         </div>
@@ -157,6 +157,7 @@ import {
 import { ElMessage } from "element-plus";
 import { Check, Close } from "@element-plus/icons-vue";
 import Base64 from "@/utils/Base64";
+import store from "@/store";
 export default {
   name: "FrNav",
   components: {
@@ -171,12 +172,13 @@ export default {
   },
   data() {
     return {
+      flag:false,
       personnalmsg: [],
       //{message_id:1,msg:"邀请您",sender:"luanbu",message_type:2,avatar:"",team_id:13,send_time:""}
       query: "",
       token: "",
       name: "",
-      head: "",
+      //head: this.$store.state.head,
       textarea1: "",
     };
   },
@@ -185,11 +187,73 @@ export default {
   },
   watch: {
     "$store.state.token"() {
-      // console.log("changed!");
       this.updateinfo();
     },
   },
   methods: {
+    timestampFormat(timestamp) {
+      function zeroize(num) {
+        return (String(num).length == 1 ? "0" : "") + num;
+      }
+
+      var curTimestamp = parseInt(new Date().getTime() / 1000); //当前时间戳
+      var timestampDiff = curTimestamp - timestamp; // 参数时间戳与当前时间戳相差秒数
+
+      var curDate = new Date(curTimestamp * 1000); // 当前时间日期对象
+      var tmDate = new Date(timestamp * 1000); // 参数时间戳转换成的日期对象
+
+      var Y = tmDate.getFullYear(),
+          m = tmDate.getMonth() + 1,
+          d = tmDate.getDate();
+      var H = tmDate.getHours(),
+          i = tmDate.getMinutes(),
+          s = tmDate.getSeconds();
+
+      if (timestampDiff < 60) {
+        // 一分钟以内
+        return "刚刚";
+      } else if (timestampDiff < 3600) {
+        // 一小时前之内
+        return Math.floor(timestampDiff / 60) + "分钟前";
+      } else if (
+          curDate.getFullYear() == Y &&
+          curDate.getMonth() + 1 == m &&
+          curDate.getDate() == d
+      ) {
+        return "今天" + zeroize(H) + ":" + zeroize(i);
+      } else {
+        var newDate = new Date((curTimestamp - 86400) * 1000); // 参数中的时间戳加一天转换成的日期对象
+        if (
+            newDate.getFullYear() == Y &&
+            newDate.getMonth() + 1 == m &&
+            newDate.getDate() == d
+        ) {
+          return "昨天" + zeroize(H) + ":" + zeroize(i);
+        } else if (curDate.getFullYear() == Y) {
+          return (
+              zeroize(m) +
+              "月" +
+              zeroize(d) +
+              "日 " +
+              zeroize(H) +
+              ":" +
+              zeroize(i)
+          );
+        } else {
+          return (
+              Y +
+              "年" +
+              zeroize(m) +
+              "月" +
+              zeroize(d) +
+              "日 " +
+              zeroize(H) +
+              ":" +
+              zeroize(i)
+          );
+        }
+      }
+    },
     browse() {
       this.$router.push({
         path: "search",
@@ -202,22 +266,17 @@ export default {
     updateinfo() {
       this.token = this.$store.state.token;
       if (!this.token) {
-        this.head =
-          "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/Transparent_Akkarin.jpg";
+        store.commit("setHead", "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/Transparent_Akkarin.jpg");
+        /*this.head =
+          "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/Transparent_Akkarin.jpg";*/
         this.name = "请登录";
       } else {
-        getpersonalmsg({ username: this.$store.state.username }).then(
-          (response) => {
-            if (response.data.status_code == 1) {
-              console.log("xiaoxi", response.data);
-              this.personnalmsg = response.data.ans_list;
-            }
-          }
-        );
+        this.updatepersonalmsg();
         getuserinfo({ username: this.$store.state.username }).then(
           (response) => {
             if (response.data.status_code == 1) {
-              this.head = response.data.avatar;
+              store.commit("setHead", response.data.avatar);
+              /*this.head = response.data.avatar;*/
             } else ElMessage.error(response.data.message);
           }
         );
@@ -232,8 +291,9 @@ export default {
       getpersonalmsg({ username: this.$store.state.username }).then(
         (response) => {
           if (response.data.status_code == 1) {
-            console.log("xiaoxi", response.data);
             this.personnalmsg = response.data.ans_list;
+            if(this.personnalmsg.length>0)this.flag=true;
+            else this.flag=false;
           }
         }
       );
@@ -255,7 +315,7 @@ export default {
     },
     logout() {
       this.$store.commit("removeInfo");
-      localStorage.clear();
+      this.$router.push("/login");
     },
     checkInfo() {
       this.$router.push({
@@ -277,9 +337,7 @@ export default {
     accept(message_id) {
       //同意请求
       agreeinvitation({ message_id: message_id }).then((response) => {
-        console.log("tongyi", response.data);
         if (response.data.status_code == 1) {
-          console.log("tongyi");
           this.updatepersonalmsg();
         } else ElMessage.error(response.data.msg);
       });

@@ -22,9 +22,11 @@
                 </el-menu-item>
             </el-menu>
         </div>
+
         <div class="display">
-            <div class="my-table">
-                <DraggableContainer referenceLineColor="#acbbdc">
+            <div :style="my_table">
+                <DraggableContainer 
+                    referenceLineColor="#acbbdc">
                     <Vue3DraggableResizable v-for="(item, index) in pages[nowpage]"
                         :initW = item.transform.width
                         :initH = item.transform.height
@@ -33,58 +35,41 @@
                         v-model:w = item.transform.width
                         v-model:h = item.transform.height
                         :parent = true
-                        :draggable = false
-                        :resizable = false
-                        
-                        @activated = "setActive(index)"
-                        @deactivated = "setDeActive(index)"
-                        @resizing = "resizingHandle">
-                        <div v-if = "isLable(item.type)" :style="item.style" :id="item.id">
-                            <div v-if="changingLable">
-                                <input :value="item.content"
-                                    @change="changeLable($event, index)"
-                                    type="text" :style="item.style">
-                            </div>
-                            <div v-else @dblclick="editLable">
-                                {{ item.content }}
-                            </div>
+                        v-model:active = item.active
+                        :draggable="false"
+                        :resizable="false"    
+                    >
+
+                        <div v-if = "isLable(item.type)" 
+                            :style="item.style" :id="item.id"
+                            @click = "myEvent(item.Event, item.jumpPage, 
+                                item.boxTitle, item.boxMessage)"
+                        >
+                            <div> {{ item.content }} </div>
                         </div>
-                        <div v-else-if="isBtn(item.type)" :style="item.style" :id="item.id">
+
+                        <div v-else-if="isBtn(item.type)" 
+                            :style="item.style" :id="item.id"
+                            @click = "myEvent(item.Event, item.jumpPage, 
+                                item.boxTitle, item.boxMessage)"
+                        >
                             <el-button v-if="haveColor(item.btnColor)" :type="item.btnType"
                                 :round = "isBtnRound(item.shape)"
                                 :circle = "isBtnCircle(item.shape)"
                                 :plain = "item.plain"
                                 :text = "item.text"
-                                :color = "item.btnColor"
-                                @dblclick="editLable" padding = 0>
-                                <input v-if="changingLable" :value="item.content"
-                                    @change="changeLable($event, index)"
-                                    style="border: none; 
-                                        background-color: transparent;
-                                        font-size: 15px;
-                                        width: 100%">
-                                <span v-else>
-                                    {{ item.content }}
-                                </span>
+                                :color = "item.btnColor" padding = 0>
+                                <span> {{ item.content }} </span>
                             </el-button>
-
                             <el-button v-else :type="item.btnType"
                                 :round = "isBtnRound(item.shape)"
                                 :circle = "isBtnCircle(item.shape)"
                                 :plain = "item.plain"
-                                :text = "item.text"
-                                @dblclick="editLable" padding = 0>
-                                <input v-if="changingLable" :value="item.content"
-                                    @change="changeLable($event, index)"
-                                    style="border: none; 
-                                        background-color: transparent;
-                                        font-size: 15px;
-                                        width: 100%">
-                                <span v-else>
-                                    {{ item.content }}
-                                </span>
+                                :text = "item.text" padding = 0>
+                                <span> {{ item.content }} </span>
                             </el-button>
                         </div>
+
                         <div v-else-if="isInput(item.type)" :style="item.style" :id="item.id">
                             <el-input :placeholder="item.content">
                                 <template v-if="item.havePretend" #prepend>
@@ -95,15 +80,31 @@
                                 </template>
                             </el-input>
                         </div>
+
                         <div v-else-if="isRadio(item.type)" :id="item.id">
                             <el-radio-group v-model="item.state">
                                 <el-radio>
                                     {{ item.content }}
                                 </el-radio>
                             </el-radio-group>
-                            
                         </div>
-                        <div v-else :style="item.style" :id="item.id">
+
+                        <div v-else-if="isCheckbox(item.type)" :id="item.id">
+                            <el-checkbox>{{ item.content }}</el-checkbox>
+                        </div>
+
+                        <div v-else-if="isIcon(item.type)" :id="item.id"
+                            @click = "myEvent(item.Event, item.jumpPage, 
+                                item.boxTitle, item.boxMessage)">
+                            <component
+                                :is="icons[item.icon_index]"
+                                :style="item.style">
+                            </component>
+                        </div>
+
+                        <div v-else :style="item.style" :id="item.id"
+                            @click = "myEvent(item.Event, item.jumpPage, 
+                            item.boxTitle, item.boxMessage)">
                         </div>
                     </Vue3DraggableResizable>
                 </DraggableContainer>
@@ -144,11 +145,6 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        .my-table{
-            width: 700px;
-            height: 450px;
-            background-color: white;
-        }
     }
 
     .pageMenu{
@@ -191,7 +187,7 @@ import { DraggableContainer } from 'vue3-draggable-resizable'
 import { load_axure, viewAxure } from "@/utils/api"
 
 import { ElDropdown, ElMenu, ElCollapse, 
-    ElButton, ElRadio, ElMessage, ElScrollbar} from 'element-plus'
+    ElButton, ElRadio, ElMessage, ElScrollbar, ElMessageBox} from 'element-plus'
 
 export default{
     components: { 
@@ -199,10 +195,16 @@ export default{
         DraggableContainer,
 
         ElDropdown, ElMenu, ElCollapse, 
-        ElButton, ElRadio, ElMessage, ElScrollbar
+        ElButton, ElRadio, ElMessage, ElScrollbar, ElMessageBox
     },
     data() {
         return {
+            my_table: {
+                "width": "700px",
+                "height": "450px",
+                "background-color": "white"
+            },
+
             pages: [],
             pagesname: [],
             nowpage: 0,
@@ -212,6 +214,19 @@ export default{
         }
     },
     methods: {
+        myEvent(Event, jumpPage, boxTitle, boxMessage){
+            console.log('myEvent', Event, jumpPage, boxTitle, boxMessage)
+            
+            if(Event == 0)
+                return
+            else if(Event == 1)
+                this.setPage(jumpPage)
+            else if(Event == 2){
+                ElMessageBox.alert(boxMessage, boxTitle, {
+                    confirmButtonText: '确认',
+                })
+            }
+        },
         havePretend(index){
             let item = this.pages[this.nowpage][index]
             return item.pretend != undefined && item.pretend != null
@@ -234,6 +249,12 @@ export default{
         },
         isRadio(strtype){
             return strtype === "radio"
+        },
+        isCheckbox(strtype){
+            return strtype === "checkbox"
+        },
+        isIcon(strtype){
+            return strtype === "icon"
         },
         ChangingThisPage(index){
             return this.changingPageName && (index == this.nowpage)
@@ -326,12 +347,13 @@ export default{
     created(){
         this.axure_id = this.$route.query.axure_id
         this.username = this.$store.state.username
-
+        console.log('created')
         viewAxure({
             axure_id: this.axure_id,
             username: this.username
         }).then((response) => {
             let ret = response.data.status_code
+            console.log('ret', response.data)
             if(ret == -1){
                 ElMessage.error("请求方式错误")
                 return 
@@ -341,8 +363,12 @@ export default{
                 ElMessage.error("原型设计未开放")
                 return 
             }
-            else if(ret == 1)
+            else if(ret == 1){
                 this.CanPreview = true
+                this.my_table['width'] = response.data.width + "px"
+                this.my_table['height'] = response.data.height + "px"
+                console.log('my_table', this.my_table)
+            }
         })
     },
 }

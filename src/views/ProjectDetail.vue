@@ -175,19 +175,19 @@ export default {
           this.projectinfo.project_name = response.data.project_name;
           this.projectinfo.team_name = response.data.team_name;
           this.avatars = [];
-          if (this.gota == 0)
-            getavatarchain({ team_id: response.data.team_id }).then(
-              (response) => {
-                if (response.data.status_code == 1) {
-                  let lenn = response.data.ans_list.length;
-                  for (let j = 0; j < lenn; j++) {
-                    this.avatars.push(response.data.ans_list[j].avatar);
-                  }
-                  console.log(this.avatars);
-                  this.gota++;
-                } else ElMessage.error(response.data.message);
-              }
-            );
+          getavatarchain({ team_id: response.data.team_id }).then(
+            (response) => {
+              if (response.data.status_code == 1) {
+                let lenn = response.data.ans_list.length;
+                for (let j = 0; j < lenn; j++) {
+                  this.avatars.push(response.data.ans_list[j].avatar);
+                }
+                console.log(this.avatars);
+              } else ElMessage.error(response.data.message);
+            }
+          );
+          this.form.brief_intro = this.projectinfo.brief_intro;
+          this.form.project_name = this.projectinfo.project_name;
         } else ElMessage.error(response.data.message);
       });
     },

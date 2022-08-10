@@ -130,33 +130,59 @@
             v-for="(teamcreat, index) in teamusercreat"
             :key="index"
             @click="go(teamcreat.team_id)"
+            @contextmenu.prevent.native="openMenu($event)"
           >
+            <el-popover
+
+                placement="bottom"
+                :width="150"
+                trigger="hover"
+
+            >
+              <template #reference>
             <div
               class="teamimage"
               :style="{ backgroundImage: `url(` + teamcreat.team_avatar + ')' }"
             ></div>
+</template>
+<el-button @click="deleteTeam(teamcreat.team_id,teamcreat.team_name)" size="large">解散团队</el-button>
+</el-popover>
             <div class="oneteamdown">
               <div style="font-size: 18px">{{ teamcreat.team_name }}</div>
               <div>{{ teamcreat.brief_intro }}</div>
-              <div class="text-wrap">
-                <div class="example">
-                  <div class="avatar-list avatar-list-stacked">
+
+
+              <el-popover
+
+                  placement="bottom"
+                  :width="150"
+                  trigger="hover"
+
+              >
+                <template #reference>
+                  <div class="text-wrap">
+                    <div class="example">
+                      <div class="avatar-list avatar-list-stacked">
                     <span
-                      v-for="i in teamcreat.avatars.slice(0, 4)"
-                      class="avatar cover-image brround"
-                      :style="{ backgroundImage: `url(` + i + ')' }"
+                        v-for="i in teamcreat.avatars.slice(0, 4)"
+                        class="avatar cover-image brround"
+                        :style="{ backgroundImage: `url(` + i + ')' }"
                     >
                     </span>
-                    <span
-                      v-if="teamcreat.avatars.length > 4"
-                      class="avatar cover-image brround"
-                      >+{{ teamcreat.avatars.length - 4 }}</span
-                    >
+                        <span
+                            v-if="teamcreat.avatars.length > 4"
+                            class="avatar cover-image brround"
+                        >+{{ teamcreat.avatars.length - 4 }}</span
+                        >
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
+                </template>
+                <el-button @click="deleteTeam(teamcreat.team_id,teamcreat.team_name)" size="large">解散团队</el-button>
+              </el-popover>
             </div>
           </div>
+
         </div>
         <div id="leftdown" v-if="tab == 'tab-1'">
           <el-skeleton
@@ -320,7 +346,7 @@
 </template>
 
 <script>
-import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
+import {ElForm, ElFormItem, ElInput, ElButton, ElMessage, ElMessageBox} from "element-plus";
 import { Filter, Sort, Plus, CaretBottom } from "@element-plus/icons-vue";
 import {
   establishteam,
@@ -329,7 +355,7 @@ import {
   getteamusercreat,
   getteamuserin,
   getuserinfo,
-  getavatarchain,
+  getavatarchain, del_team,
 } from "@/utils/api";
 import Base64 from "@/utils/Base64";
 export default {
@@ -341,6 +367,7 @@ export default {
   },
   data() {
     return {
+      menu_visible:false,
       got: 0,
       tab: "tab-0",
       dialogFormVisible: false,
@@ -356,6 +383,31 @@ export default {
     };
   },
   methods: {
+    deleteTeam(team_id,team_name){
+      let username=this.$store.state.username
+      ElMessageBox.confirm(
+          '确认解散团队：'+team_name,
+          '解散团队警告',
+          {
+            confirmButtonText: '确认',
+            cancelButtonText: '取消',
+            type: 'warning',
+          }
+      ).then(() => {
+        del_team({
+          username:username,
+          team_id:team_id,
+        }).then((res=>{
+          console.log(res.data)
+          if(res.data.status_code==1){
+            ElMessage.success('成功解散团队：'+team_name)
+            this.$router.go(0)
+          }
+        }))
+      })
+
+    },
+
     go(tid) {
       this.$router.push({
         path: "/teamdetail",

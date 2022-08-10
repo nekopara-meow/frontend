@@ -3,7 +3,7 @@
     <div
       class="image"
       style="
-        background-image: url('https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/bizhi/bg2.png');
+        background-image: url('https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/bizhi/bg1.png');
       "
     ></div>
     <div class="heading" style="display: flex; flex-direction: column">
@@ -18,6 +18,21 @@
       </h1>
       <h2 style="font-size: 20px; transform: translateY(-29vh) translateZ(1px)">
         软工团队协作与管理平台
+      </h2>
+      <h2
+        style="
+          font-size: 15px;
+          transform: translateY(-30vh) translateZ(1px);
+          background-color: white;
+          color: #26476d;
+          padding: 10px 20px;
+          border-radius: 20px;
+          font-weight: bolder;
+          cursor: pointer;
+        "
+        @click="go"
+      >
+        开始使用
       </h2>
     </div>
     <div class="text">
@@ -41,7 +56,7 @@
     <div
       class="image"
       style="
-        background-image: url('https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/bizhi/22.png');
+        background-image: url('https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/bizhi/bg4.png');
       "
     ></div>
     <div class="heading" style="display: flex; flex-direction: column">
@@ -49,17 +64,17 @@
       <h1 style="font-size: 20px">协同编辑，触手可得</h1>
     </div>
     <div class="text">
-      <h1>It's time to start your season</h1>
+      <h1>只为你更好的使用体验</h1>
     </div>
 
     <div
       class="image"
       style="
-        background-image: url('https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/bizhi/23.png');
+        background-image: url('https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/bizhi/bg1.png');
       "
     ></div>
     <div class="heading">
-      <h1>Come on,stranger.</h1>
+      <h1>Come on,programmer.</h1>
     </div>
   </div>
 </template>
@@ -74,7 +89,11 @@ export default {
   mounted() {
     // this.svgFun();
   },
-  methods: {},
+  methods: {
+    go() {
+      this.$router.push("/documentCenter");
+    },
+  },
 };
 </script>
 <style scoped>

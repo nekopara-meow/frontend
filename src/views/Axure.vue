@@ -21,10 +21,9 @@
                             保存
                         </el-dropdown-item>
                         <el-dropdown-item @click="bePic">导出</el-dropdown-item>
-                        <el-dropdown-item>重命名</el-dropdown-item>
-                        <el-dropdown-item @click="download">加载</el-dropdown-item>
                         <el-dropdown-item @click="openPreview">开启预览</el-dropdown-item>
                         <el-dropdown-item @click="closePreview">关闭预览</el-dropdown-item>
+                        <el-dropdown-item @click="printList">输出</el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
             </el-dropdown>
@@ -91,8 +90,7 @@
             </div>
             <div class="right">
                 <div class="canvas">
-                    <div :style="my_table" ref="imgDom"
-                        width = "700px" height = "450px">
+                    <div :style="my_table" ref="imgDom">
                         <DraggableContainer 
                             referenceLineColor="#acbbdc">
                             <Vue3DraggableResizable v-for="(item, index) in pages[nowpage]"
@@ -104,18 +102,19 @@
                                 v-model:h = item.transform.height
                                 :parent = true
                                 v-model:active = item.active
-                                :lockAspectRatio = "true"
+                                :lockAspectRatio = "isIcon(item.type)"
                                 
                                 @activated = "setActive(index)"
                                 @deactivated = "setDeActive(index)"
                                 @resizing = "resizingHandle">
-                                <div v-if = "isLable(item.type)" :style="item.style" :id="item.id">
+                                <div v-if = "isLable(item.type)" 
+                                    :style="item.style" :id="item.id">
                                     <div v-if="changingLable">
                                         <input :value="item.content"
                                             @change="changeLable($event, index)"
                                             type="text" :style="item.style">
                                     </div>
-                                    <div v-else @dblclick="editLable">
+                                    <div v-else @dblclick="editLable" :style="item.style">
                                         {{ item.content }}
                                     </div>
                                 </div>
@@ -205,9 +204,11 @@
                             <el-menu-item index="3" @click="setTool(3)">
                                 <el-icon><Star /></el-icon>
                             </el-menu-item>
+                            <!--
                             <el-menu-item index="4" @click="setTool(4)">
                                 <el-icon><Setting /></el-icon>
                             </el-menu-item>
+                            -->
                         </el-menu>
                     </div>
                 </div>
@@ -276,7 +277,7 @@
                             
                         </div>
                         <div class="line"></div>
-                        <el-collapse v-model="SettingActiveName">
+                        <el-collapse v-model="SettingActiveName" accordion>
                             <el-collapse-item title="外观" name="1">
                                 <!--
                                 <div style="width: 100%; height: 10px"></div>
@@ -366,8 +367,7 @@
                                 
                                 <div style="width: 10px; height: 10px"></div>
                                 <div v-if="isLable(pages[nowpage][lastnow].type)"
-                                    class="right-setting-border"
-                                    style="align-items: flex-start !important">
+                                    class="right-setting-border">
 
                                     <span>文本</span>
                                     <span style="width: 15px;"></span>
@@ -583,8 +583,71 @@
 
                             </el-collapse-item>
 
-                            <el-collapse-item title="事件" name="2">
-                                <span>事件 气死我了</span>
+                            <el-collapse-item v-if="haveEvent(pages[nowpage][lastnow].type)" title="事件" name="2">
+                                <div class="right-setting-border">
+                                    <span>单击事件</span>
+                                    <span style="width: 20px"></span>
+                                    <div style="padding-right: 10px">
+                                        <el-radio-group v-model="pages[nowpage][lastnow].Event"
+                                            @change="changeText">
+                                            <el-radio-button :label = "0" size = "small">
+                                                无
+                                            </el-radio-button>
+                                            <el-radio-button :label = "1" size = "small">
+                                                跳转页面
+                                            </el-radio-button>
+                                            <el-radio-button :label = "2" size = "small">
+                                                弹窗
+                                            </el-radio-button>
+                                        </el-radio-group>
+                                    </div>
+                                </div>
+
+                                <div style="width: 20px; height: 15px"></div>
+
+                                <div v-if="pages[nowpage][lastnow].Event == 1" class="right-setting-border">
+                                    <span>选择页面</span>
+                                    <span style="width: 15px"></span>
+                                    <el-dropdown>
+                                        <span style="align-items: center;">
+                                            页面 {{ pages[nowpage][lastnow].jumpPage + 1 }}
+                                            : {{ pagesname[pages[nowpage][lastnow].jumpPage] }}
+                                            <span style="width: 5px"></span>
+                                            <el-icon>
+                                                <arrow-down />
+                                            </el-icon>
+                                        </span>
+                                        <template #dropdown>
+                                            <el-dropdown-menu>
+                                                <el-dropdown-item v-for="(item, index) in pagesname"
+                                                    @click="setjumpPage(lastnow, index)">
+                                                    页面 {{ (index+1) }} : {{ item }}
+                                                </el-dropdown-item>
+                                            </el-dropdown-menu>
+                                        </template>
+                                    </el-dropdown>
+                                </div>
+
+                                <div v-if="pages[nowpage][lastnow].Event == 2" class="right-setting-border">
+                                    <span>弹窗标题</span>
+                                    <span style="width: 20px"></span>
+                                    <el-input style="width: 60%; height: 27px"
+                                        v-model = pages[nowpage][lastnow].boxTitle>
+                                    </el-input>
+                                </div>
+
+                                <div style="width: 20px; height: 15px"></div>
+
+                                <div v-if="pages[nowpage][lastnow].Event == 2" class="right-setting-border"
+                                    style="align-items: flex-start;">
+                                    <span>弹窗内容</span>
+                                    <span style="width: 20px"></span>
+                                    <el-input type="textarea" :rows="2"
+                                        style="width: 60%; height: 50px"
+                                        v-model = pages[nowpage][lastnow].boxMessage>
+                                    </el-input>
+                                </div>
+
                             </el-collapse-item>
                         </el-collapse>
                         
@@ -600,6 +663,7 @@
             </div>
             <div class="line"></div>
             <el-collapse v-model="activeNames" >
+
                 <el-collapse-item title="图形" name="1">
                     <div class="figure-button">
                         <div class="rect-button" @click="addRedRect"></div>
@@ -609,6 +673,7 @@
                         <div class="mykangle" @click="addKangle"></div>
                     </div>
                 </el-collapse-item>
+
                 <el-collapse-item title="常用" name="2">
                     <div class="figure-button">
                         <div class="label-button" @click="addLable">T</div>
@@ -662,7 +727,75 @@
 
                 </el-collapse-item>
 
+                <!--
                 <el-collapse-item title="图标" name="3">
+                    <el-scrollbar height="150">
+                        <div v-for = "index0 in 47"
+                            style="display: flex; 
+                            flex-direction: row;"
+                        >
+                            <div v-for = "index in 6"
+                                style="width: 30px; height: 30px; padding: 5;">
+                                <component
+                                    :is="icons[(index0 - 1) * 6 + index - 1]"
+                                    style="width: 20px; height: 20px; color: grey;"
+                                    @click="addIcon((index0 - 1) * 6 + index - 1)"
+                                >
+                                </component>
+                            </div>
+                        </div>
+                        
+                    </el-scrollbar>
+                    
+                </el-collapse-item>
+                -->
+
+            </el-collapse>
+        </div>
+        
+        <div v-if="tool[1]" class="tool-1">
+            <div class="tool-title">
+                <span>图片</span>
+                <el-icon @click="cancelTool"><CircleClose /></el-icon>
+            </div>
+            <div class="line"></div>
+
+            <el-collapse>
+                <el-collapse-item title="示例图片">
+                    
+                </el-collapse-item>
+            </el-collapse>
+
+            <div
+                style =
+                    "width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    padding: 10px;"
+            >
+                <div style="width: 80%;">
+                    <el-upload
+                        class="upload-demo"
+                        drag
+                        action = "testURL">
+                        <el-icon><Upload /></el-icon>
+                        <div class="el-upload__text">将文件拖到此处</div>
+                        <div class="el-upload__text">或<em>点击上传</em></div>
+                    </el-upload>
+                </div>
+            </div>
+            
+        </div>
+
+        <div v-if="tool[2]" class="tool-1">
+            <div class="tool-title">
+                <span>图标</span>
+                <el-icon @click="cancelTool"><CircleClose /></el-icon>
+            </div>
+            <div class="line"></div>
+            <el-collapse>
+                <el-collapse-item title="图标" name="1">
                     <!--
                     <div v-for = "(name,index) in icons"
                         style="padding: 10px; 
@@ -694,50 +827,6 @@
                 </el-collapse-item>
             </el-collapse>
         </div>
-        
-        <div v-if="tool[1]" class="tool-1">
-            <div class="tool-title">
-                <span>图片</span>
-                <el-icon @click="cancelTool"><CircleClose /></el-icon>
-            </div>
-            <div class="line"></div>
-
-            <el-collapse>
-                <el-collapse-item title="示例图片">
-                    
-                </el-collapse-item>
-            </el-collapse>
-
-            <div
-                style =
-                    "width: 100%;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    padding: 10px;"
-            >
-                <div style="width: 80%;">
-                    <el-upload
-                        class="upload-demo"
-                        drag
-                        action="https://jsonplaceholder.typicode.com/posts/"
-                        disabled = true>
-                        <el-icon><Upload /></el-icon>
-                        <div class="el-upload__text">将文件拖到此处</div>
-                        <div class="el-upload__text">或<em>点击上传</em></div>
-                    </el-upload>
-                </div>
-            </div>
-            
-        </div>
-
-        <div v-if="tool[2]" class="tool-1">
-            <div class="tool-title">
-                <span>图表</span>
-                <el-icon @click="cancelTool"><CircleClose /></el-icon>
-            </div>
-            <div class="line"></div>
-        </div>
 
         <div v-if="tool[3]" class="tool-1">
             <div class="tool-title">
@@ -745,8 +834,23 @@
                 <el-icon @click="cancelTool"><CircleClose /></el-icon>
             </div>
             <div class="line"></div>
+            <div style="width: 20px; height: 15px"></div>
+            <div style="display:flex; flex-direction: row;">
+                <div style="width: 10px; height: 30px"></div>
+                <el-button style="height: 30px; width: 60px"
+                    @click="load(1)">
+                    注册
+                </el-button>
+                <div style="width: 10px; height: 30px"></div>
+                <el-button style="height: 30px; width: 60px"
+                    @click="load(2)">
+                    问卷
+                </el-button>
+            </div>
+            
         </div>
 
+        <!--
         <div v-if="tool[4]" class="tool-1">
             <div class="tool-title">
                 <span>其它</span>
@@ -754,6 +858,7 @@
             </div>
             <div class="line"></div>
         </div>
+        -->
         
         <el-dialog v-model="dialogVisible" title="导出预览">
             <img width="500" :src="imgUrl" />
@@ -1148,7 +1253,7 @@
         right: 330px;
         .toolbox{
             width: 60%;
-            height: 300px;
+            height: 220px;
             background-color: white;
             box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.1);
             border-radius: 10px;
@@ -1283,7 +1388,8 @@
 
 <script>
 import { ElDropdown, ElMenu, ElCollapse, 
-    ElButton, ElRadio, ElMessage, ElScrollbar} from 'element-plus'
+    ElButton, ElRadio, ElMessage, ElScrollbar,
+    ElMessageBox} from 'element-plus'
 import { Plus, MoreFilled, ArrowDown, Document } from '@element-plus/icons-vue'
 import { Picture, PieChart, Stopwatch, Star, Setting } from '@element-plus/icons-vue'
 import { CircleClose, Delete, ArrowUp, Search } from '@element-plus/icons-vue'
@@ -1313,6 +1419,7 @@ export default{
     components: { 
         ElDropdown, ElMenu, ElCollapse, 
         ElButton, ElRadio, ElMessage, ElScrollbar, 
+        ElMessageBox,
         
         ArrowDown, MoreFilled, Plus, Document,
         Picture, PieChart, Stopwatch, Star, Setting,
@@ -1330,6 +1437,9 @@ export default{
     },
     data() {
         return {
+            //url="https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName;
+            testURL: "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/AxurePic/1.png",
+
             my_table: {
                 "width": "700px",
                 "height": "450px",
@@ -1355,38 +1465,8 @@ export default{
             ],
             nowtool: null,
 
-            pages: [
-                [
-                    {   
-                        id: "el0", type: "figure-rect", active: false,
-                        transform: { x: 100, y: 100, width: 100, height: 100 }, 
-                        style: { "width": "100%", "height": "100%",
-                            "border-color": "black", "border-style": "solid",
-                            "border-width": "2px", "padding": "0",
-                            "opacity": "1", "background-color": "transparent"
-                        },
-                        border: 2, opacity: 1,
-                        border_color: "#000000", fill_color: 'rgba(0, 0, 0, 0)'
-                    },
+            pages: [ [ ] ],
 
-                    
-                    /*{   
-                        id: "el0", type: "btn", active: false,
-                        transform: { x: 100, y: 100, width: 62, height: 32 },
-                        style: { "width": "100%", "height": "100%"},
-                        btnType: "primary", content: "按钮"
-                    }*/
-
-                    /*{   
-                        id: "el0", type: "input", active: false,
-                        transform: { x: 100, y: 100, width: 230, height: 40 },
-                        style: { "width": "100%", "height": "100%"},
-                        content: "Please Input",
-                        pretend: "", append: "",
-                        prefix_icon: "Search", suffix_icon:"Calendar"
-                    }*/
-                ]
-            ],
             pagesname: [
                 "page-1"
             ],
@@ -1444,10 +1524,45 @@ export default{
                 "opacity": "1",
                 "background-color": "transparent",
                 "font-size": "18px",
+                "align-items": "flex-start"
             },
         }
     },
     methods: {
+        load(index){
+            let that = this
+            let url = "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/Axure/muban/" + index + ".json"
+            Axios({
+                method: 'get',
+                url, responseType: 'blob',
+                transformResponse: [function (data) {
+                    let reader = new FileReader()
+                    reader.readAsText(data, 'UTF-8')
+                    reader.onload = function () {
+                        //此处便是返回值
+                        let text = reader.result
+                        that.pages = JSON.parse(text)
+                        //console.log('load1', this.pages)
+                        that.pagesname = ['page-1']
+                        that.nowpage = 0
+                    }
+                    return data
+                }]
+            })
+            .then(res => {
+                console.log('res')
+            })
+        },
+        setjumpPage(id, index){
+            this.setActive(id)
+            this.pages[this.nowpage][id].jumpPage = index            
+        },
+        haveEvent(strtype){
+            if(strtype == "checkbox" 
+                || strtype == "radio" || strtype == "input")
+                return false
+            return true
+        },
         openPreview(){
             openAxure({
                 axure_id: this.axure_id,
@@ -1538,6 +1653,9 @@ export default{
             this.setActive(this.lastnow)
             let index = this.lastnow
             this.pages[this.nowpage][index].style['font-size'] = value + "px"
+
+            console.log(this.pages[0][2].style)
+            console.log(this.pages[0][3].style)
         },
         changeFontColor(value){
             this.setActive(this.lastnow)
@@ -1682,11 +1800,23 @@ export default{
             let newItem = {"id": 'el' + Cnt, 
                 type: "figure-rect", active: true,
                 transform: { x: 0, y: 0, width: 100, height: 100 },
-                style: {},
+                style: {"width": "100%",
+                        "height": "100%",
+
+                        "border-color": "black",
+                        "border-style": "solid",
+                        "border-width": "2px",
+                        "padding": "0",
+                        "opacity": "1",
+                        "background-color": "transparent"},
                 border: 2, opacity: 1,
-                border_color: "#000000", fill_color: 'rgba(0, 0, 0, 0)'
+                border_color: "#000000", fill_color: 'rgba(0, 0, 0, 0)',
+
+                Event: ref(0),
+                jumpPage: ref(0),
+                boxTitle: 'Title',
+                boxMessage: 'This is a message',
             }
-            newItem.style = this.redRect
             this.now = Cnt
             this.lastnow = Cnt
             this.pages[this.nowpage].push(newItem)
@@ -1696,11 +1826,26 @@ export default{
             let newItem = {"id": 'el' + Cnt, 
                 type: "figure-circle", active: true,
                 transform: { x: 0, y: 0, width: 100, height: 100 },
-                style: {},
+                style: {
+                    "width": "100%",
+                    "height": "100%",
+
+                    "border-color": "black",
+                    "border-style": "solid",
+                    "border-radius": "50%",
+                    "border-width": "2px",
+                    "padding": "0",
+                    "opacity": "1",
+                    "background-color": "transparent"
+                },
                 border: 2, opacity: 1,
-                border_color: "#000000", fill_color: 'rgba(0, 0, 0, 0)'
+                border_color: "#000000", fill_color: 'rgba(0, 0, 0, 0)',
+
+                Event: ref(0),
+                jumpPage: ref(0),
+                boxTitle: 'Title',
+                boxMessage: 'This is a message',
             }
-            newItem.style = this.circle
             this.now = Cnt
             this.lastnow = Cnt
             this.pages[this.nowpage].push(newItem)
@@ -1710,7 +1855,12 @@ export default{
             let newItem = {"id": 'el' + Cnt, 
                 type: "figure-kangle", active: true,
                 transform: { x: 0, y: 0, width: 100, height: 100 },
-                style: {}, opacity: 1
+                style: {}, opacity: 1,
+
+                Event: ref(0),
+                jumpPage: ref(0),
+                boxTitle: 'Title',
+                boxMessage: 'This is a message',
             }
             newItem.style = this.kangle
             this.now = Cnt
@@ -1722,11 +1872,25 @@ export default{
             let newItem = {"id": 'el' + Cnt, 
                 type: "lable", active: true,
                 transform: { x: 0, y: 0, width: 130, height: 40},
-                style: {}, content: "这是一段文字", opacity: 1,
+                style: {
+                    "width": "100%",
+                    "height": "100%",
+                    "color": "black",
+                    "border": "none",
+                    "opacity": "1",
+                    "background-color": "transparent",
+                    "font-size": "18px",
+                    "align-items": "flex-start"
+                }, 
+                content: "这是一段文字", opacity: 1,
                 border_color: "#000000", fill_color: 'rgba(0, 0, 0, 0)',
                 font_size: 18,
+
+                Event: ref(0),
+                jumpPage: ref(0),
+                boxTitle: 'Title',
+                boxMessage: 'This is a message',
             }
-            newItem.style = this.Lable
             this.now = Cnt
             this.lastnow = Cnt
             this.pages[this.nowpage].push(newItem)
@@ -1740,6 +1904,11 @@ export default{
                 btnType: "", content: "按钮", opacity: 1,
                 shape: ref(0), plain: false, text: ref(false),
                 btnColor: "",
+
+                Event: ref(0),
+                jumpPage: ref(0),
+                boxTitle: 'Title',
+                boxMessage: 'This is a message',
             }
             this.now = Cnt
             this.lastnow = Cnt
@@ -1754,6 +1923,11 @@ export default{
                 btnType: "primary", content: "按钮", opacity: 1,
                 shape: ref(0), plain: false, text: ref(false),
                 btnColor: "",
+
+                Event: ref(0),
+                jumpPage: ref(0),
+                boxTitle: 'Title',
+                boxMessage: 'This is a message',
             }
             this.now = Cnt
             this.lastnow = Cnt
@@ -1803,7 +1977,12 @@ export default{
                 style: {"width": "100%", "height": "100%", 
                     "color": "#000000"},
                 icon_index: 0, color: "#000000",
-                opacity: 1
+                opacity: 1,
+
+                Event: ref(0),
+                jumpPage: ref(0),
+                boxTitle: 'Title',
+                boxMessage: 'This is a message',
             }
             newItem.icon_index = index
 
@@ -1813,6 +1992,7 @@ export default{
         },
         printList(){
             console.log(JSON.stringify(this.pages))
+            console.log(JSON.stringify(this.pagesname))
         },
         setActive(id){
             if(this.now != null)
@@ -2012,7 +2192,7 @@ export default{
         document.onkeydown = function(e) {
             if(that.changingLable || that.changingName || that.changingPageName)
                 return
-            if(e.which == 8 || e.which == 46)
+            if( /*e.which == 8 ||*/ e.which == 46)
                 that.Delete()
         }
 
@@ -2022,8 +2202,9 @@ export default{
         that.URLpageName = this.$route.query.URLpageName
         that.axure_id = this.$route.query.axure_id
 
-        //that.my_table['width'] = this.$route.query.width
-        //that.my_table['height'] = this.$route.query.height
+        that.my_table['width'] = this.$route.query.width + "px"
+        that.my_table['height'] = this.$route.query.height + "px"
+        console.log(that.my_table)
 
         if(that.URLpage == null || that.URLpage.length < 1
             || that.URLpage == '') {
@@ -2032,6 +2213,7 @@ export default{
             let fileName2 = "Axure/" + this.getFileNameUUID() + ".json"
             that.URLpageName = "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName2
         }
+        else this.download()
 
         console.log(that.URLpage)
         console.log(that.URLpageName)
