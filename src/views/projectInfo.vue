@@ -1,25 +1,31 @@
 <template>
-  <div id="leftdown1">
+  <el-skeleton
+    :rows="5"
+    style="height: 63vh"
+    animated
+    v-if="got2 == 0 && got3 == 0"
+  />
+  <div id="leftdown1" v-else>
     <div id="leftdown1left">
       <div style="display: flex; justify-content: space-between">
         <h2 class="bluelight">项目信息</h2>
       </div>
 
       <hr style="margin: 5px; margin-bottom: 20px" />
-      <span class="bluelight">团队：{{ data.team_name}}</span>
+      <span class="bluelight">团队：{{ data.team_name }}</span>
       <span class="bluelight">创建人：{{ data.creator }}</span
       ><span style="font-size: 13px" class="bluelight"
         >创建于{{ data.createtime }}</span
       >
 
       <div class="intro bluelight" style="margin-top: 10px">
-        简介:{{ data.intro}}
+        简介:{{ data.intro }}
       </div>
 
       <div
         style="display: flex; justify-content: space-between; margin-top: 20px"
       >
-        <h2 class="bluelight">项目进度</h2>
+        <h2 class="bluelight">文件概况</h2>
       </div>
 
       <hr style="margin: 5px; margin-bottom: 20px" />
@@ -34,34 +40,59 @@
           flex-shrink: 0;
         "
       >
-        <div class="pg" style="height: 100%; flex: 0 1 35%">
-          <span class="bluelight" style="font-size: 13px">已完成</span>
-          <span class="bluelight" style="font-size: 30px">11</span>
+        <div class="pg" style="height: 90%; flex: 0 1 30%">
+          <span class="bluelight" style="font-size: 10px; margin-bottom: 0"
+            >Doc文档</span
+          >
+          <span class="bluelight" style="font-size: 30px; margin-bottom: 0"
+            >11</span
+          >
           <el-progress status="success" :percentage="50" :show-text="false">
           </el-progress>
         </div>
-        <div class="pg" style="height: 100%; flex: 0 1 35%">
-          <span class="bluelight" style="font-size: 13px">未完成</span>
-          <span class="bluelight" style="font-size: 30px">11</span>
+        <div class="pg" style="height: 90%; flex: 0 1 30%">
+          <span class="bluelight" style="font-size: 10px; margin-bottom: 0"
+            >UML文档</span
+          >
+          <span class="bluelight" style="font-size: 30px; margin-bottom: 0"
+            >11</span
+          >
           <el-progress status="warning" :percentage="50" :show-text="false">
           </el-progress>
         </div>
+        <div class="pg" style="height: 90%; flex: 0 1 30%">
+          <span class="bluelight" style="font-size: 10px; margin-bottom: 0"
+            >原型文档</span
+          >
+          <span class="bluelight" style="font-size: 30px; margin-bottom: 0"
+            >11</span
+          >
+          <el-progress :percentage="50" :show-text="false"> </el-progress>
+        </div>
       </div>
     </div>
+
     <div id="leftdown1right">
       <div style="display: flex; justify-content: space-between">
         <h2 class="bluelight">项目动态</h2>
       </div>
 
       <hr style="margin: 5px; margin-bottom: 20px" />
-      <div class="dongtaicontainer">
-        <div class="dongtai" v-for="(message, index) in projectdongtai" :key="index">
-          <img
-            src="message.avatar"
-          />
+      <el-empty
+        description="空空如也"
+        v-if="got3 != 0 && projectdongtai.length == 0"
+        style="margin: 0 auto"
+      />
+      <div class="dongtaicontainer" v-else>
+        <div
+          class="dongtai"
+          v-for="(message, index) in projectdongtai"
+          :key="index"
+        >
+          <img src="message.avatar" />
           <div class="dongtairight bluelight">
             <div>{{ message.sender }}</div>
-            <div style="font-size: 15px">{{message.msg}}</div>
+            <div style="font-size: 15px">{{ message.msg }}</div>
             <div style="font-size: 13px">{{ message.send_time }}</div>
           </div>
         </div>
@@ -72,15 +103,17 @@
 
 <script>
 import { Filter, Sort, Edit, Plus, CaretBottom } from "@element-plus/icons-vue";
-import {getprojectinfo, getprojectmessage} from "@/utils/api";
-import {ElMessage} from "element-plus";
+import { getprojectinfo, getprojectmessage } from "@/utils/api";
+import { ElMessage } from "element-plus";
 export default {
   name: "projectInfo",
   components: { Edit },
   data() {
     return {
-      projectdongtai:[],
-      project_id:this.$route.query.project_id,
+      got2: 0,
+      got3: 0,
+      projectdongtai: [],
+      project_id: this.$route.query.project_id,
       editing: 0,
       data: {
         creator: "刘华阳",
@@ -90,33 +123,35 @@ export default {
       },
     };
   },
-  created() {this.getprojectinfos();
+  created() {
+    this.getprojectinfos();
     console.log(this.$route);
     this.getprojectdongtai();
-    console.log("msg",this.projectinfo)
+    console.log("msg", this.projectinfo);
   },
-  methods:{
-   getprojectinfos(){
-      getprojectinfo({project_id:this.project_id}).then((response) => {
+  methods: {
+    getprojectinfos() {
+      getprojectinfo({ project_id: this.project_id }).then((response) => {
         if (response.data.status_code == 1) {
-          console.log("xinxi2",response.data);
-          this.data.intro=response.data.brief_intro;
-          this.data.create_time=response.data.create_time;
-          this.data.creator=response.data.creator;
-          this.data.team_name=response.data.team_name;
+          console.log("xinxi2", response.data);
+          this.data.intro = response.data.brief_intro;
+          this.data.create_time = response.data.create_time;
+          this.data.creator = response.data.creator;
+          this.data.team_name = response.data.team_name;
+          this.got2 = 1;
         } else ElMessage.error(response.data.message);
       });
     },
-    getprojectdongtai(){
-      getprojectmessage({ project_id:this.project_id }).then((response) => {
+    getprojectdongtai() {
+      getprojectmessage({ project_id: this.project_id }).then((response) => {
         if (response.data.status_code == 1) {
-          console.log(response.data)
-          this.projectdongtai=response.data.ans_list;
+          console.log(response.data);
+          this.projectdongtai = response.data.ans_list;
+          this.got3 = 1;
         }
       });
     },
-  }
-
+  },
 };
 </script>
 

@@ -60,7 +60,7 @@ div {
            rgba(255, 255, 255, 0.4),
            rgba(255, 255, 255, 0.2)
     );
-    // backdrop-filter: blur(1rem);
+    backdrop-filter: blur(1rem);
     padding: 25px;
     border-radius: 10px;
     box-shadow: 0px 15px 10px -15px lightgray;
@@ -110,6 +110,7 @@ div {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    height: 80px;
 }
 ::v-deep .el-collapse-item__header {
     background-color: transparent;

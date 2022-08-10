@@ -289,6 +289,13 @@ export function getProsByUser(data){
     })
 }
 
+export function searchall(data){
+    return request({
+        url: 'api/interact/searchall',
+        method: 'post',
+        data,
+    })
+}
 
 export function getavatarchain(data){
     return request({

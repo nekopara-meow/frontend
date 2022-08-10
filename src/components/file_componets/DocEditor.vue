@@ -1,28 +1,47 @@
 <template>
   <div class="editor" style="height: calc(100vh - 4rem - 100px)">
-    <div style="display: flex;align-items: baseline">
-      <span style="font-weight: lighter; font-size: 40px; color: #000000">{{creator}}的项目文档</span>
-        <span style="font-weight: lighter; font-size: 30px; color: #26476d"
-          >《{{file_name}}》</span>
-      <span style="position: absolute;right: 5rem;top: 40px">
+    <div style="display: flex; align-items: baseline">
+      <span style="font-weight: lighter; font-size: 40px; color: #000000"
+        >{{ creator }}的项目文档</span
+      >
+      <span style="font-weight: lighter; font-size: 30px; color: #26476d"
+        >《{{ file_name }}》</span
+      >
+      <span style="position: absolute; right: 5rem; top: 40px">
         <el-button type="primary" @click="this.getHTML">导出为Html</el-button>
-        <el-button type="primary" @click="this.getMarkdown">导出为Markdown</el-button>
+        <el-button type="primary" @click="this.getMarkdown"
+          >导出为Markdown</el-button
+        >
         <el-button type="primary" @click="this.getPDF">导出为PDF</el-button>
         <el-button type="primary" @click="this.getWord">导出为Word</el-button>
         <el-button type="primary" @click="this.exit">退出编辑</el-button>
       </span>
     </div>
     <hr style="margin: 5px; margin-bottom: 20px" />
-    <bubble-menu :editor="editor" :tippy-options="{ duration: 100 }" v-if="editor" class="bubble-menu">
-      <div @click="editor.chain().focus().toggleBold().run()" :class="{ 'is-active-bubble': editor.isActive('bold') }">
+    <bubble-menu
+      :editor="editor"
+      :tippy-options="{ duration: 100 }"
+      v-if="editor"
+      class="bubble-menu"
+    >
+      <div
+        @click="editor.chain().focus().toggleBold().run()"
+        :class="{ 'is-active-bubble': editor.isActive('bold') }"
+      >
         粗体
       </div>
       <el-divider direction="vertical"></el-divider>
-      <div @click="editor.chain().focus().toggleItalic().run()" :class="{ 'is-active-bubble': editor.isActive('italic') }">
+      <div
+        @click="editor.chain().focus().toggleItalic().run()"
+        :class="{ 'is-active-bubble': editor.isActive('italic') }"
+      >
         斜体
       </div>
       <el-divider direction="vertical"></el-divider>
-      <div @click="editor.chain().focus().toggleHighlight().run()" :class="{ 'is-active-bubble': editor.isActive('highlight') }">
+      <div
+        @click="editor.chain().focus().toggleHighlight().run()"
+        :class="{ 'is-active-bubble': editor.isActive('highlight') }"
+      >
         高亮
       </div>
     </bubble-menu>
@@ -144,54 +163,52 @@
           <icon name="hr" />
         </button>
         <button
-            v-if="actionName === 'highlight'"
-            class="menubar__button"
-            :class="{ 'is-active': editor.isActive('highlight') }"
-            @click="editor.commands.toggleHighlight()"
+          v-if="actionName === 'highlight'"
+          class="menubar__button"
+          :class="{ 'is-active': editor.isActive('highlight') }"
+          @click="editor.commands.toggleHighlight()"
         >
-                   <icon name="highlight" />
-                 </button>
-                <button
-                    v-if="actionName === 'link'"
-                    class="menubar__button"
-                    :class="{ 'is-active': editor.isActive('link') }"
-                    @click="setLink"
-                >
-                   <icon name="link" />
-                 </button>
-
-          <el-popover
-              placement="top"
-              title="输入表格规格"
-              :width="250"
-              trigger="hover"
-          >
-            <template #reference>
-              <button
-                  v-if="actionName === 'table'"
-                  class="menubar__button"
-                  @click="setTable"
-              >
-          <icon name="table" />
+          <icon name="highlight" />
+        </button>
+        <button
+          v-if="actionName === 'link'"
+          class="menubar__button"
+          :class="{ 'is-active': editor.isActive('link') }"
+          @click="setLink"
+        >
+          <icon name="link" />
         </button>
 
-    </template>
-            <div>
-              <span>行数：</span>
-              <el-input-number v-model="table_row" ></el-input-number>
-            </div>
-            <div>
-              <span>列数：</span>
-              <el-input-number v-model="table_col"></el-input-number>
-            </div>
-  </el-popover>
+        <el-popover
+          placement="top"
+          title="输入表格规格"
+          :width="250"
+          trigger="hover"
+        >
+          <template #reference>
+            <button
+              v-if="actionName === 'table'"
+              class="menubar__button"
+              @click="setTable"
+            >
+              <icon name="table" />
+            </button>
+          </template>
+          <div>
+            <span>行数：</span>
+            <el-input-number v-model="table_row"></el-input-number>
+          </div>
+          <div>
+            <span>列数：</span>
+            <el-input-number v-model="table_col"></el-input-number>
+          </div>
+        </el-popover>
 
-
-                <button
-                    v-if="actionName === 'delete_table'"
-                    class="menubar__button"
-                    @click="editor.chain().focus().deleteTable().run()"
-                >
+        <button
+          v-if="actionName === 'delete_table'"
+          class="menubar__button"
+          @click="editor.chain().focus().deleteTable().run()"
+        >
           <icon name="delete_table" />
         </button>
         <button
@@ -205,11 +222,10 @@
         <button
           v-if="actionName === 'redo'"
           class="menubar__button"
-          @click="editor.chain().focus().redo().run();"
+          @click="editor.chain().focus().redo().run()"
         >
           <icon name="redo" />
         </button>
-
 
         <button
           v-if="actionName === 'exit'"
@@ -219,8 +235,8 @@
           <icon name="exitEdit" />
         </button>
       </span>
-      <span style="position: fixed;left: 60rem">
-        字数统计:{{this.editor.getText().length}}
+      <span style="position: fixed; left: 60rem">
+        字数统计:{{ this.editor.getText().length }}
       </span>
     </div>
     <editor-content class="editor__content" :editor="editor" />
@@ -233,24 +249,26 @@ import Icon from "./Icon";
 import Underline from "@tiptap/extension-underline";
 import StarterKit from "@tiptap/starter-kit";
 import Collaboration from "@tiptap/extension-collaboration";
-import Gapcursor from '@tiptap/extension-gapcursor'
+import Gapcursor from "@tiptap/extension-gapcursor";
 import Placeholder from "@tiptap/extension-placeholder";
-import { Editor, EditorContent,BubbleMenu } from "@tiptap/vue-3";
-import Highlight from '@tiptap/extension-highlight';
-import Typography from '@tiptap/extension-typography';
-import Link from '@tiptap/extension-link';
+import { Editor, EditorContent, BubbleMenu } from "@tiptap/vue-3";
+import Highlight from "@tiptap/extension-highlight";
+import Typography from "@tiptap/extension-typography";
+import Link from "@tiptap/extension-link";
 import { upload, readURL } from "@/utils/ali_oss";
 import { load_doc, save_doc } from "@/utils/api";
 import docModel from "@/assets/fileModels/docModel";
-import Table from '@tiptap/extension-table'
-import TableCell from '@tiptap/extension-table-cell'
-import TableHeader from '@tiptap/extension-table-header'
-import TableRow from '@tiptap/extension-table-row'
-import TurndownService from 'turndown/lib/turndown.es.js'
-import htmlDocx from 'html-docx-js/dist/html-docx';
-import saveAs from 'file-saver';
-const turndownService = new TurndownService()
-const html2pdf=require('html2pdf.js')
+
+import Table from "@tiptap/extension-table";
+import TableCell from "@tiptap/extension-table-cell";
+import TableHeader from "@tiptap/extension-table-header";
+import TableRow from "@tiptap/extension-table-row";
+import TurndownService from "turndown/lib/turndown.es.js";
+import htmlDocx from "html-docx-js/dist/html-docx";
+import saveAs from "file-saver";
+const turndownService = new TurndownService();
+const html2pdf = require("html2pdf.js");
+
 export default {
   name: "DocEditor",
   components: {
@@ -265,8 +283,8 @@ export default {
    */
   data() {
     return {
-      file_name:'',
-      creator:'',
+      file_name: "",
+      creator: "",
       doc_id: "",
       room_id: "",
       username: "",
@@ -286,27 +304,25 @@ export default {
         "blockquote",
         "codeBlock",
         "horizontalRule",
-          "highlight",
-          "link",
+        "highlight",
+        "link",
         "table",
-        'delete_table',
+        "delete_table",
         "undo",
         "redo",
         "save",
         "exit",
-
       ],
       editor: null,
       provider: null,
       html: "",
       json: "",
-      table_row:'',
-      table_col:'',
-      model_id:-1,//-1表示没有使用模板，模板id从0开始
-      docModel:docModel,
-      fromPath:'',
-      fromQuery:'',
-
+      table_row: "",
+      table_col: "",
+      model_id: -1, //-1表示没有使用模板，模板id从0开始
+      docModel: docModel,
+      fromPath: "",
+      fromQuery: "",
     };
   },
   emits: ["update"],
@@ -316,8 +332,8 @@ export default {
     this.doc_id = this.$route.query.doc_id;
     this.file_name = this.$route.query.file_name;
     this.creator = this.$route.query.creator;
-    if(this.$route.query.model_id!=null){
-      this.model_id=this.$route.query.model_id
+    if (this.$route.query.model_id != null) {
+      this.model_id = this.$route.query.model_id;
     }
     this.project_id = this.$route.query.project_id;
     this.username = this.$store.state.username;
@@ -344,7 +360,7 @@ export default {
         StarterKit.configure({
           // The Collaboration extension comes with its own history handling
           history: false,
-          highlight:{ multicolor: true },
+          highlight: { multicolor: true },
         }),
         // Register the document with Tiptap
         Collaboration.configure({
@@ -377,9 +393,11 @@ export default {
     });
 
     //使用模板
-    console.log(this.model_id)
-    if(this.model_id!==-1){
-      this.html=this.docModel[this.model_id].html
+
+    console.log(this.model_id);
+    if (this.model_id !== -1) {
+      this.html = this.docModel[this.model_id].html;
+
       this.editor.commands.setContent(this.html);
     }
   },
@@ -389,72 +407,66 @@ export default {
    * @date: 2022/8/5
    */
   methods: {
-    getWord(){
+    getWord() {
       let htmlStr = this.html;
       let page = `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>${this.html}
-        </body></html>`
+        </body></html>`;
       // console.log(page);return
       saveAs(
-          htmlDocx.asBlob(page, {
-            orientation: "landscape"//跨域设置
-          }),
-          //文件名
-          this.file_name+".doc"
-      )
+        htmlDocx.asBlob(page, {
+          orientation: "landscape", //跨域设置
+        }),
+        //文件名
+        this.file_name + ".doc"
+      );
     },
-    getMarkdown(){
-      let markdown = turndownService.turndown(this.html)
-      console.log(markdown)
-      let blob = new Blob([markdown], {type: "text/plain;charset=utf-8"});
-      saveAs(
-          blob,
-          this.file_name+".md"
-      )
+    getMarkdown() {
+      let markdown = turndownService.turndown(this.html);
+      console.log(markdown);
+      let blob = new Blob([markdown], { type: "text/plain;charset=utf-8" });
+      saveAs(blob, this.file_name + ".md");
     },
-    getHTML(){
-      let blob = new Blob([this.html], {type: "text/plain;charset=utf-8"});
-      saveAs(
-          blob,
-          this.file_name+".html"
-      )
+    getHTML() {
+      let blob = new Blob([this.html], { type: "text/plain;charset=utf-8" });
+      saveAs(blob, this.file_name + ".html");
     },
-    getPDF(){
-      var worker = html2pdf().from(this.html).save(this.file_name+'.pdf');
-      console.log('worker',worker)
+    getPDF() {
+      var worker = html2pdf()
+        .from(this.html)
+        .save(this.file_name + ".pdf");
+      console.log("worker", worker);
     },
-    setTable(){
-      console.log(this.table_row,this.table_col)
-      this.editor.commands.insertTable({ rows: this.table_row, cols: this.table_col, withHeaderRow: true })
-
+    setTable() {
+      console.log(this.table_row, this.table_col);
+      this.editor.commands.insertTable({
+        rows: this.table_row,
+        cols: this.table_col,
+        withHeaderRow: true,
+      });
     },
     setLink() {
-      const previousUrl = this.editor.getAttributes('link').href
-      const url = window.prompt('URL', previousUrl)
+      const previousUrl = this.editor.getAttributes("link").href;
+      const url = window.prompt("URL", previousUrl);
 
       // cancelled
       if (url === null) {
-        return
+        return;
       }
 
       // empty
-      if (url === '') {
-        this.editor
-            .chain()
-            .focus()
-            .extendMarkRange('link')
-            .unsetLink()
-            .run()
+      if (url === "") {
+        this.editor.chain().focus().extendMarkRange("link").unsetLink().run();
 
-        return
+        return;
       }
 
       // update link
       this.editor
-          .chain()
-          .focus()
-          .extendMarkRange('link')
-          .setLink({ href: url })
-          .run()
+        .chain()
+        .focus()
+        .extendMarkRange("link")
+        .setLink({ href: url })
+        .run();
     },
     save() {
       let url = upload("docs", this.html);
@@ -473,26 +485,24 @@ export default {
       //退出前先保存
       this.save();
       this.$router.push({
-        path:this.fromPath,
-        query:this.fromQuery
-      })
+        path: this.fromPath,
+        query: this.fromQuery,
+      });
     },
   },
-  mounted() {
-
-  },
+  mounted() {},
   beforeUnmount() {
     this.editor.destroy();
   },
-  beforeRouteEnter (to, from, next) {
-    console.log('in uml from',from)
-    next(vm=>{
-      vm.fromPath=from.fullPath
-      vm.fromQuery=from.query
-    })
+  beforeRouteEnter(to, from, next) {
+    console.log("in uml from", from);
+    next((vm) => {
+      vm.fromPath = from.fullPath;
+      vm.fromQuery = from.query;
+    });
   },
   beforeRouteLeave(to, from) {
-    this.save()
+    this.save();
   },
 };
 </script>
@@ -533,7 +543,10 @@ export default {
       z-index: 2;
       position: absolute;
       content: "";
-      left: 0; right: 0; top: 0; bottom: 0;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
       background: rgba(200, 200, 255, 0.4);
       pointer-events: none;
     }
@@ -565,7 +578,7 @@ export default {
     //color: #e72212;
     //box-decoration-break: clone;
   }
-  pre{
+  pre {
     background: #282626;
   }
 }
@@ -621,28 +634,28 @@ export default {
   align-self: flex-end;
 }
 
-.bubble-menu{
+.bubble-menu {
   display: flex;
   flex-direction: row;
   border: solid;
-  border-radius: .2rem;
+  border-radius: 0.2rem;
   transition: 0.5s;
-  div{
+  div {
     font-size: 10px;
-    margin-left : .05rem;
-    margin-right :.05rem;
+    margin-left: 0.05rem;
+    margin-right: 0.05rem;
     //padding: 0.1rem;
     color: #282626;
     transition: 0.5s;
   }
 }
-.is-active-bubble{
+.is-active-bubble {
   background: #c2e9fb;
   color: #26476d;
 }
-.el-button{
-  span{
-    color:black;
+.el-button {
+  span {
+    color: black;
   }
 }
 </style>
