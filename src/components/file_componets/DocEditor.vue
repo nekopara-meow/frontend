@@ -332,7 +332,7 @@ export default {
     this.doc_id = this.$route.query.doc_id;
     this.file_name = this.$route.query.file_name;
     this.creator = this.$route.query.creator;
-    if (this.$route.query.model_id != "") {
+    if (this.$route.query.model_id&&this.$route.query.model_id != "") {
       console.log('this.$route.query.model_id != null',this.$route.query)
       this.model_id = this.$route.query.model_id;
       console.log('read model_id',this.model_id)
@@ -340,7 +340,7 @@ export default {
     this.project_id = this.$route.query.project_id;
     this.username = this.$store.state.username;
     this.$store.commit("addNewArticle", this.doc_id);
-    if (this.$route.query.doc_url) {
+    if (this.$route.query.doc_url&&this.$route.query.doc_url!='') {
       let url = this.$route.query.doc_url;
       console.log(url);
       readURL(url, (htmlData) => {
@@ -364,7 +364,7 @@ export default {
         }),
 
         StarterKit.configure({
-          // The Collaboration extension comes with its own history handling
+          // The Collaboration extension comes with its own history hndling
           history: false,
           highlight: { multicolor: true },
         }),
@@ -401,8 +401,8 @@ export default {
     //使用模板
 
     console.log('model',this.model_id);
-    if(this.model_id!=-1){
-      if (this.model_id !== -1) {
+    if(this.doc_url!=''){
+      if (this.model_id != -1) {
         this.html = this.docModel[this.model_id].html;
 
         this.editor.commands.setContent(this.html);
