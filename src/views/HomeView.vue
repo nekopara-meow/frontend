@@ -136,4 +136,20 @@ h1 {
   color: #fff;
   font-size: 30px;
 }
+::-webkit-scrollbar {
+  width: 0px;
+  height: 8px;
+  background-color: #f5f5f5;
+}
+
+/*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: #f5f5f5;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+
+  background-color: #26476d;
+}
 </style>

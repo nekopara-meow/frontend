@@ -54,8 +54,7 @@
               v-model="form.team_name"
               placeholder="团队名称"
               size="large"
-
-              style="display: inline; width: 300px; font-size: 26px;"
+              style="display: inline; width: 300px; font-size: 26px"
             />
             <nav>
               <a
@@ -189,7 +188,11 @@
             </el-upload>
             <span class="bluelight">{{ teammsg.creator }}</span
             ><span style="font-size: 13px" class="bluelight"
-              >创建于{{this.timestampFormat(new Date(teammsg.create_time).valueOf() / 1000) }}</span
+              >创建于{{
+                this.timestampFormat(
+                  new Date(teammsg.create_time).valueOf() / 1000
+                )
+              }}</span
             >
             <div class="text-wrap" style="margin: 10px 0">
               <div class="example">
@@ -208,7 +211,12 @@
                 </div>
               </div>
             </div>
-            <div class="intro bluelight" v-if="editing == 0" style="word-break: break-all">简介:{{ teammsg.brief_intro }}
+            <div
+              class="intro bluelight"
+              v-if="editing == 0"
+              style="word-break: break-all"
+            >
+              简介:{{ teammsg.brief_intro }}
             </div>
             <el-input
               v-else
@@ -249,7 +257,13 @@
                 <div class="dongtairight bluelight">
                   <div>{{ message.sender }}</div>
                   <div style="font-size: 15px">{{ message.msg }}</div>
-                  <div style="font-size: 13px">{{this.timestampFormat(new Date(message.send_time).valueOf() / 1000) }}</div>
+                  <div style="font-size: 13px">
+                    {{
+                      this.timestampFormat(
+                        new Date(message.send_time).valueOf() / 1000
+                      )
+                    }}
+                  </div>
                 </div>
               </div>
             </div>
@@ -411,9 +425,13 @@
                   {{ teamproject.project_brief_intro }}
                 </div>
                 <div style="margin-bottom: 0">
-                  创建时间：{{ this.timestampFormat(new Date(teamproject.project_create_time).valueOf() / 1000) }}
+                  创建时间：{{
+                    this.timestampFormat(
+                      new Date(teamproject.project_create_time).valueOf() / 1000
+                    )
+                  }}
                 </div>
-            <div></div>
+                <div></div>
               </div>
             </div>
             <template #dropdown>
@@ -453,7 +471,11 @@
                   {{ teamproject.project_brief_intro }}
                 </div>
                 <div style="margin-bottom: 0">
-                  创建日期：{{  this.timestampFormat(new Date(teamproject.project_create_time).valueOf() / 1000) }}
+                  创建日期：{{
+                    this.timestampFormat(
+                      new Date(teamproject.project_create_time).valueOf() / 1000
+                    )
+                  }}
                 </div>
                 <div></div>
               </div>
@@ -478,7 +500,14 @@
 </template>
 
 <script>
-import {ElForm, ElFormItem, ElInput, ElButton, ElMessage, ElMessageBox} from "element-plus";
+import {
+  ElForm,
+  ElFormItem,
+  ElInput,
+  ElButton,
+  ElMessage,
+  ElMessageBox,
+} from "element-plus";
 import {
   Filter,
   Sort,
@@ -592,11 +621,11 @@ export default {
       var tmDate = new Date(timestamp * 1000); // 参数时间戳转换成的日期对象
 
       var Y = tmDate.getFullYear(),
-          m = tmDate.getMonth() + 1,
-          d = tmDate.getDate();
+        m = tmDate.getMonth() + 1,
+        d = tmDate.getDate();
       var H = tmDate.getHours(),
-          i = tmDate.getMinutes(),
-          s = tmDate.getSeconds();
+        i = tmDate.getMinutes(),
+        s = tmDate.getSeconds();
 
       if (timestampDiff < 60) {
         // 一分钟以内
@@ -605,40 +634,40 @@ export default {
         // 一小时前之内
         return Math.floor(timestampDiff / 60) + "分钟前";
       } else if (
-          curDate.getFullYear() == Y &&
-          curDate.getMonth() + 1 == m &&
-          curDate.getDate() == d
+        curDate.getFullYear() == Y &&
+        curDate.getMonth() + 1 == m &&
+        curDate.getDate() == d
       ) {
         return "今天" + zeroize(H) + ":" + zeroize(i);
       } else {
         var newDate = new Date((curTimestamp - 86400) * 1000); // 参数中的时间戳加一天转换成的日期对象
         if (
-            newDate.getFullYear() == Y &&
-            newDate.getMonth() + 1 == m &&
-            newDate.getDate() == d
+          newDate.getFullYear() == Y &&
+          newDate.getMonth() + 1 == m &&
+          newDate.getDate() == d
         ) {
           return "昨天" + zeroize(H) + ":" + zeroize(i);
         } else if (curDate.getFullYear() == Y) {
           return (
-              zeroize(m) +
-              "月" +
-              zeroize(d) +
-              "日 " +
-              zeroize(H) +
-              ":" +
-              zeroize(i)
+            zeroize(m) +
+            "月" +
+            zeroize(d) +
+            "日 " +
+            zeroize(H) +
+            ":" +
+            zeroize(i)
           );
         } else {
           return (
-              Y +
-              "年" +
-              zeroize(m) +
-              "月" +
-              zeroize(d) +
-              "日 " +
-              zeroize(H) +
-              ":" +
-              zeroize(i)
+            Y +
+            "年" +
+            zeroize(m) +
+            "月" +
+            zeroize(d) +
+            "日 " +
+            zeroize(H) +
+            ":" +
+            zeroize(i)
           );
         }
       }
@@ -660,15 +689,11 @@ export default {
       });
     },
     completelyDelPro(project_id) {
-      ElMessageBox.confirm(
-          '确认删除项目',
-          '删除项目警告',
-          {
-            confirmButtonText: '确认',
-            cancelButtonText: '取消',
-            type: 'warning',
-          }
-      ).then(()=>{
+      ElMessageBox.confirm("确认删除项目", "删除项目警告", {
+        confirmButtonText: "确认",
+        cancelButtonText: "取消",
+        type: "warning",
+      }).then(() => {
         let username = this.$store.state.username;
         completelyDelProById({
           username: username,
@@ -683,8 +708,7 @@ export default {
             this.initializationdata();
           }
         });
-      })
-
+      });
     },
     gotoproject(a) {
       console.log("pp", a),
@@ -787,15 +811,15 @@ export default {
     },
     initializationdata() {
       this.got = 0;
-      // this.gott=0
-      getavatarchain({ team_id: this.team_id }).then((response) => {
-        if (response.data.status_code == 1) {
-          let lenn = response.data.ans_list.length;
-          for (let j = 0; j < lenn; j++) {
-            this.avatars.push(response.data.ans_list[j].avatar);
-          }
-        } else ElMessage.error(response.data.message);
-      });
+      (this.avatars = []),
+        getavatarchain({ team_id: this.team_id }).then((response) => {
+          if (response.data.status_code == 1) {
+            let lenn = response.data.ans_list.length;
+            for (let j = 0; j < lenn; j++) {
+              this.avatars.push(response.data.ans_list[j].avatar);
+            }
+          } else ElMessage.error(response.data.message);
+        });
       getteammsgbyid({ team_id: this.team_id }).then((response) => {
         this.got += 1;
         if (response.data.status_code == 1) {
