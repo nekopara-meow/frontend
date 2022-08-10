@@ -95,9 +95,10 @@ export default {
   backdrop-filter: blur(1rem);
   border-bottom-right-radius: 3em;
   box-shadow: 0 15px 10px 3px rgba(221, 221, 221, 0.308);
-
+  transition: 0.3s;
   &.indent {
     width: 75px;
+    transition: 0.3s;
   }
 
   * {

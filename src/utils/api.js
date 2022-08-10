@@ -32,13 +32,14 @@ export function create_axure(data){
     })
 }
 
-// export function load_axure(data){
-//     return request({
-//         url: 'api/projects/load/axure',
-//         method: 'post',
-//         data,
-//     })
-// }
+export function load_axure(data){
+    return request({
+        url: 'api/projects/load/axure',
+        method: 'post',
+        data,
+    })
+}
+
 //
 // export function del_axure(data){
 //     return request({
@@ -289,6 +290,13 @@ export function getProsByUser(data){
 }
 
 
+export function getavatarchain(data){
+    return request({
+        url: 'api/team/getAllAvatarsOfTeam',
+        method: 'post',
+        data,
+    })
+}
 
 /*export const loginApi=data=>{
     return post({

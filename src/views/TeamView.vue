@@ -81,8 +81,52 @@
 
         <hr style="margin: 5px; margin-bottom: 20px" />
         <div id="leftdown" v-if="tab == 'tab-0'">
+          <el-skeleton
+            v-for="i in [1, 2, 3, 4]"
+            animated
+            style="
+              width: 170px;
+              height: 280px;
+              background: linear-gradient(
+                to right bottom,
+                rgba(255, 255, 255, 0.4),
+                rgba(255, 255, 255, 0.2)
+              );
+              backdrop-filter: blur(1rem);
+              margin: 0 50px 50px 0;
+              box-shadow: 0px 15px 10px -15px rgba(211, 211, 211, 0.664);
+            "
+            v-if="got != 3"
+          >
+            <template #template>
+              <el-skeleton-item
+                variant="image"
+                style="width: 170px; height: 170px"
+              />
+              <div style="padding: 14px">
+                <el-skeleton-item variant="p" style="width: 50%" />
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    justify-items: space-between;
+                  "
+                >
+                  <el-skeleton-item variant="text" style="margin-right: 16px" />
+                  <el-skeleton-item variant="text" style="width: 30%" />
+                  <!-- <el-skeleton-item variant="text" style="width: 90%" /> -->
+                </div>
+              </div>
+            </template>
+          </el-skeleton>
+          <el-empty
+            description="空空如也"
+            v-if="got == 3 && teamusercreat.length == 0"
+            style="margin: 0 auto"
+          />
           <div
             class="oneteam"
+            v-if="got == 3 && teamusercreat.length != 0"
             v-for="(teamcreat, index) in teamusercreat"
             :key="index"
             @click="go(teamcreat.team_id)"
@@ -129,7 +173,51 @@
           </div>
         </div>
         <div id="leftdown" v-if="tab == 'tab-1'">
+          <el-skeleton
+            v-for="i in [1, 2, 3, 4]"
+            animated
+            style="
+              width: 170px;
+              height: 280px;
+              background: linear-gradient(
+                to right bottom,
+                rgba(255, 255, 255, 0.4),
+                rgba(255, 255, 255, 0.2)
+              );
+              backdrop-filter: blur(1rem);
+              margin: 0 50px 50px 0;
+              box-shadow: 0px 15px 10px -15px rgba(211, 211, 211, 0.664);
+            "
+            v-if="got != 3"
+          >
+            <template #template>
+              <el-skeleton-item
+                variant="image"
+                style="width: 170px; height: 170px"
+              />
+              <div style="padding: 14px">
+                <el-skeleton-item variant="p" style="width: 50%" />
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    justify-items: space-between;
+                  "
+                >
+                  <el-skeleton-item variant="text" style="margin-right: 16px" />
+                  <el-skeleton-item variant="text" style="width: 30%" />
+                  <!-- <el-skeleton-item variant="text" style="width: 90%" /> -->
+                </div>
+              </div>
+            </template>
+          </el-skeleton>
+          <el-empty
+            description="空空如也"
+            style="margin: 0 auto"
+            v-if="got == 3 && teamuseradmin.length == 0"
+          />
           <div
+            v-if="got == 3 && teamusercreat.length != 0"
             class="oneteam"
             v-for="(teamadmin, index) in teamuseradmin"
             :key="index"
@@ -177,7 +265,51 @@
           </div>
         </div>
         <div id="leftdown" v-if="tab == 'tab-2'">
+          <el-skeleton
+            v-for="i in [1, 2, 3, 4]"
+            animated
+            style="
+              width: 170px;
+              height: 280px;
+              background: linear-gradient(
+                to right bottom,
+                rgba(255, 255, 255, 0.4),
+                rgba(255, 255, 255, 0.2)
+              );
+              backdrop-filter: blur(1rem);
+              margin: 0 50px 50px 0;
+              box-shadow: 0px 15px 10px -15px rgba(211, 211, 211, 0.664);
+            "
+            v-if="got != 3"
+          >
+            <template #template>
+              <el-skeleton-item
+                variant="image"
+                style="width: 170px; height: 170px"
+              />
+              <div style="padding: 14px">
+                <el-skeleton-item variant="p" style="width: 50%" />
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    justify-items: space-between;
+                  "
+                >
+                  <el-skeleton-item variant="text" style="margin-right: 16px" />
+                  <el-skeleton-item variant="text" style="width: 30%" />
+                  <!-- <el-skeleton-item variant="text" style="width: 90%" /> -->
+                </div>
+              </div>
+            </template>
+          </el-skeleton>
+          <el-empty
+            description="空空如也"
+            style="margin: 0 auto"
+            v-if="got == 3 && teamuserin.length == 0"
+          />
           <div
+            v-if="got == 3 && teamusercreat.length != 0"
             class="oneteam"
             v-for="(teamin, index) in teamuserin"
             :key="index"
@@ -188,7 +320,7 @@
               :style="{ backgroundImage: `url(` + teamin.team_avatar + ')' }"
             ></div>
             <div class="oneteamdown">
-              <div style="font-size: 18px">{{ teamin.team_name }}}</div>
+              <div style="font-size: 18px">{{ teamin.team_name }}</div>
               <div>{{ teamin.brief_intro }}</div>
               <div class="text-wrap">
                 <div class="example">
@@ -233,6 +365,7 @@ import {
   getteamusercreat,
   getteamuserin,
   getuserinfo,
+  getavatarchain,
 } from "@/utils/api";
 import Base64 from "@/utils/Base64";
 export default {
@@ -244,6 +377,7 @@ export default {
   },
   data() {
     return {
+      got: 0,
       tab: "tab-0",
       dialogFormVisible: false,
       teamuserin: [],
@@ -281,13 +415,27 @@ export default {
     initializationdata() {
       getteamuserin({ username: this.$store.state.username }).then(
         (response) => {
+          this.got += 1;
           if (response.data.status_code == 1) {
             this.teamuserin = response.data.Dict.team_info;
+            console.log(this.teamuserin);
+            let len = this.teamuserin.length;
+            let i = 0;
+            for (i = 0; i < len; i++) {
+              getavatarchain({ team_id: this.teamuserin[i].team_id }).then(
+                (response) => {
+                  if (response.data.status_code == 1) {
+                    console.log(response.data);
+                  } else ElMessage.error(response.data.message);
+                }
+              );
+            }
           } else ElMessage.error(response.data.message);
         }
       );
       getteamuseradmin({ username: this.$store.state.username }).then(
         (response) => {
+          this.got += 1;
           if (response.data.status_code == 1) {
             this.teamuseradmin = response.data.Dict.team_info;
           } else ElMessage.error(response.data.message);
@@ -295,6 +443,7 @@ export default {
       );
       getteamusercreat({ username: this.$store.state.username }).then(
         (response) => {
+          this.got += 1;
           if (response.data.status_code == 1) {
             this.teamusercreat = response.data.Dict.team_info;
           } else ElMessage.error(response.data.message);
@@ -371,6 +520,7 @@ export default {
   box-shadow: 0px 15px 10px -15px lightgray;
   height: 90%;
   width: 85%;
+  overflow-x: auto;
 }
 #left {
   height: 100%;
@@ -457,8 +607,8 @@ export default {
   }
 }
 #leftdown {
-  overflow-y: scroll;
-  height: 63vh;
+  overflow-y: auto;
+  height: 60vh;
   padding: 0 5px;
 }
 

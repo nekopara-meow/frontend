@@ -23,6 +23,7 @@
                         <el-dropdown-item @click="bePic">导出</el-dropdown-item>
                         <el-dropdown-item>重命名</el-dropdown-item>
                         <el-dropdown-item @click="download">加载</el-dropdown-item>
+                        <el-dropdown-item @click="preview">预览</el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
             </el-dropdown>
@@ -166,29 +167,129 @@
                     </div>
                 </div>
                 <div class="right-setting">
-                    <div class="right-setting-head">
-                        <span>input el0</span>
-                        <div class="right-setting-head-icon">
-                            <el-icon><View /></el-icon>
-                            <el-icon><Unlock /></el-icon>
+                    <div v-if="lastnow != null">
+                        <div class="right-setting-head">
+                            <span>
+                                {{pages[nowpage][lastnow].type}}
+                                {{pages[nowpage][lastnow].id}}
+                            </span>
+                            <div class="right-setting-head-icon">
+                                <el-icon><View /></el-icon>
+                                <el-icon><Unlock /></el-icon>
+                            </div>
                         </div>
-                    </div>
-                    <div class="line"></div>
-
-                    <div class="right-setting-position">
+                        <div class="line"></div>
                         
-                        <span>X</span>
-                        <el-input-number 
-                            v-model = textNumx
-                            :min="1" :max="100"
-                            controls-position="right">
-                        </el-input-number> 
-                        <span>Y</span>
-                        <el-input-number
-                            v-model = textNumx
-                            :min="1" :max="100"
-                            controls-position="right">
-                        </el-input-number>               
+                        <div style="width: 100%; height: 10px"></div>
+                        <span class="right-setting-title">基础</span>
+                        <div class="right-setting-position">
+                            <span style="font-size: 12px">X</span>
+                            <div style="width: 5%; height: 20px;"></div>
+                            <el-input-number
+                                v-model = pages[nowpage][lastnow].transform.x
+                                size = "small"
+                                step = "10"
+                                style = "width: 100px"
+                                controls-position = "right"
+                                @change = "changeX">
+                            </el-input-number> 
+                            <div style="width: 10%; height: 20px"></div>
+                            <span style="font-size: 12px">Y</span>
+                            <div style="width: 5%; height: 20px"></div>
+                            <el-input-number
+                                v-model = pages[nowpage][lastnow].transform.y
+                                size="small"
+                                step = "10"
+                                style="width: 100px"
+                                controls-position="right"
+                                @change = "changeX">
+                            </el-input-number>               
+                            
+                        </div>
+                        <div class="right-setting-position">
+                            <span style="font-size: 12px">w</span>
+                            <div style="width: 5%; height: 20px"></div>
+                            <el-input-number 
+                                v-model = pages[nowpage][lastnow].transform.width
+                                size="small"
+                                step = "10"
+                                style="width: 100px"
+                                controls-position="right"
+                                @change = "changeX">
+                            </el-input-number> 
+                            <div style="width: 10%; height: 20px"></div>
+                            <span style="font-size: 12px">H</span>
+                            <div style="width: 5%; height: 20px"></div>
+                            <el-input-number
+                                v-model = pages[nowpage][lastnow].transform.height
+                                size="small"
+                                step = "10"
+                                style="width: 100px"
+                                controls-position="right"
+                                @change = "changeX">
+                            </el-input-number>               
+                            
+                        </div>
+                        <div class="line"></div>
+                        <el-collapse v-model="SettingActiveName" accordion>
+                            <el-collapse-item title="外观" name="1">
+                                <!--
+                                <div style="width: 100%; height: 10px"></div>
+                                <span class="right-setting-title">外观</span>
+                                -->
+                                <div v-if="isRectCircle(lastnow)" class="right-setting-border">
+                                    <span>边框</span>
+                                    <span style="width: 35px"></span>
+                                    <el-slider
+                                        v-model = "pages[nowpage][lastnow].border"
+                                        :min = 0 :max = 10
+                                        @change = "changeBorder"
+                                        style = "width: 70%; height: 10px" size = "small"
+                                    />
+                                </div>
+
+                                <div class="right-setting-border">
+                                    <span>透明度</span>
+                                    <span style="width: 20px"></span>
+                                    <el-slider
+                                        @change="changeOpacity"
+                                        :step = 0.01
+                                        v-model = "pages[nowpage][lastnow].opacity"
+                                        :min = 0 :max = 1
+                                        style = "width: 70%; height: 10px" size = "small"
+                                    />
+                                </div>
+
+                                <div v-if="isRectCircle(lastnow)" class="right-setting-border">
+                                    <!--
+                                    <color-picker
+                                        v-model:pureColor = "pureColor"
+                                        v-model:gradientColor = "gradientColor"
+                                        shape="circle"
+                                        useType = "both"
+                                        :zIndex = 20
+                                    />-->
+                                    <span>边框颜色</span>
+                                    <span style="width: 20px"></span>
+                                    <el-color-picker
+                                        @change="changeBorderColor"
+                                        v-model="pages[nowpage][lastnow].border_color">
+                                    </el-color-picker>
+                                    
+                                    <span style="width: 20px"></span>
+                                    
+                                    <span>填充颜色</span>
+                                    <span style="width: 20px"></span>
+                                    <el-color-picker show-alpha
+                                        @change="changeFillColor"
+                                        v-model="pages[nowpage][lastnow].fill_color">
+                                    </el-color-picker>
+                                </div>
+                            </el-collapse-item>
+                            <el-collapse-item title="事件" name="2">
+                                <span>事件 气死我了</span>
+                            </el-collapse-item>
+                        </el-collapse>
                         
                     </div>
                 </div>
@@ -282,6 +383,12 @@
 
 <style lang="scss" scoped>
 
+
+.el-input-number .el-input__wrapper {
+    width: 50px;
+    height: 20px;
+}
+
 .el-button{
     width: 100%;
     height: 100%;
@@ -346,7 +453,7 @@
     width: 200px;
     height: 400px;
     position: absolute;
-    right: 340px;
+    right: 420px;
     top: 160px;
     box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.1);
     border-radius: 10px;
@@ -637,7 +744,7 @@
         justify-content: center;
 
         position: absolute;
-        right: 250px;
+        right: 330px;
         .toolbox{
             width: 60%;
             height: 300px;
@@ -672,12 +779,39 @@
     .right-setting{
         position: absolute;
         right: 0;
-        width: 15%;
+        width: 300px;
         height: 100%;
         background: white;
         
         display: flex;
         flex-direction: column;
+
+        :deep(.el-collapse-item__header){
+            font-size: 15px;
+            font-weight: 200;
+            color: grey;
+        }
+
+        .right-setting-title {
+            font-size: 15px;
+            font-weight: 200;
+            color: grey;
+            padding-left: 10px;
+            padding-top: 20px;
+        }
+
+        .right-setting-border{
+            width: 100%;
+            padding-top: 7px;
+            padding-left: 10px;
+            font-size: 13px;
+            font-weight: 200;
+            
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
         .right-setting-head {
             width: 100%;
             padding-left: 10px;
@@ -700,20 +834,19 @@
                 flex-direction: row;
                 justify-content: space-between;
                 align-items: center;
-                font-size: 10px;
+                font-size: 15px;
                 .el-input-number{
                     width: 20px;
                 }
             }
-
-            .right-setting-position{
-                width: 100%;
-                padding: 10px;
-                display: flex;
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
+        }
+        .right-setting-position{
+            width: 100%;
+            padding: 10px;
+            display: flex;
+            flex-direction: row;
+            
+            align-items: center;
         }
     }
 }
@@ -765,6 +898,12 @@ import OSS from "ali-oss"
 
 import { save_axure } from "@/utils/api"
 
+import { ColorPicker } from "vue3-colorpicker"
+import "vue3-colorpicker/style.css"
+
+import { ref } from "vue"
+import { ColorInputWithoutInstance } from "tinycolor2"
+
 export default{
     components: { 
         ElDropdown, ElMenu, ElCollapse, ElButton, ElRadio, ElMessage, 
@@ -777,6 +916,8 @@ export default{
         DraggableContainer,
 
         html2canvas, ImagePreview,
+
+        ColorPicker,
     },
     data() {
         return {
@@ -784,7 +925,10 @@ export default{
             URLpageName: "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/exampledir/exampleobject_name.json",
             axure_id: "",
 
-            textNumx: 1,
+            textNumx: 0,
+            pureColor: "#d0e0f7",
+
+            SettingActiveName: "1",
 
             AxureName: "Meow Meow",
             changingName: false,
@@ -796,13 +940,18 @@ export default{
 
             pages: [
                 [
-                    /*{ id: "el0", type: "figure-kangle", active: false,
+                    {   
+                        id: "el0", type: "figure-rect", active: false,
                         transform: { x: 100, y: 100, width: 100, height: 100 }, 
-                        style: { "width": "0", "height": "0",
-	                        "border-bottom": "solid 100px red",
-                            "border-left": "solid 50px transparent",
-                            "border-right": "solid 50px transparent",
-                            "position": "relative",} },*/
+                        style: { "width": "100%", "height": "100%",
+                            "border-color": "black", "border-style": "solid",
+                            "border-width": "2px", "padding": "0",
+                            "opacity": "1", "background-color": "transparent"
+                        },
+                        border: 2, opacity: 1,
+                        border_color: "#000000", fill_color: 'rgba(0, 0, 0, 0)'
+                    },
+
                     
                     /*{   
                         id: "el0", type: "btn", active: false,
@@ -811,20 +960,21 @@ export default{
                         btnType: "primary", content: "按钮"
                     }*/
 
-                    {   
+                    /*{   
                         id: "el0", type: "input", active: false,
                         transform: { x: 100, y: 100, width: 230, height: 40 },
                         style: { "width": "100%", "height": "100%"},
                         content: "Please Input",
                         pretend: "", append: "",
                         prefix_icon: "Search", suffix_icon:"Calendar"
-                    }
+                    }*/
                 ]
             ],
             pagesname: [
                 "page-1"
             ],
             now: null,
+            lastnow: null,
             nowpage: 0,
             
             dialogVisible: false,
@@ -840,6 +990,7 @@ export default{
                 "border-left": "solid 50px transparent",
                 "border-right": "solid 50px transparent",
                 "position": "relative",
+                "opacity": "1",
             },
 
             redRect: {
@@ -850,7 +1001,9 @@ export default{
                 "border-color": "black",
                 "border-style": "solid",
                 "border-width": "2px",
-                "padding": "0"
+                "padding": "0",
+                "opacity": "1",
+                "background-color": "transparent"
             },
 
             circle: {
@@ -861,20 +1014,59 @@ export default{
                 "border-style": "solid",
                 "border-radius": "50%",
                 "border-width": "2px",
-                "padding": "0"
+                "padding": "0",
+                "opacity": "1",
+                "background-color": "transparent"
             },
 
             Lable: {
                 "width": "100%",
                 "color": "black",
                 "border": "none",
+                "opacity": "1",
             },
             
         }
         
     },
     methods: {
+        changeBorderColor(value){
+            this.setActive(this.lastnow)
+            console.log('changeBorderColor', value)
+
+            let index = this.lastnow
+            this.pages[this.nowpage][index].style['border-color'] = value
+        },
+        changeFillColor(value){
+            this.setActive(this.lastnow)
+            console.log('changeFillColor', value)
+
+            let index = this.lastnow
+            this.pages[this.nowpage][index].style['background-color'] = value
+        },
+        isRectCircle(index){
+            //console.log('isRectCircle', this.lastnow, index)
+            let strtype = this.pages[this.nowpage][index].type
+            //console.log(this.pages[this.nowpage][index].style['border-width'])
+            return strtype === "figure-rect" || strtype === "figure-circle"
+        },
+        changeBorder(value){
+            this.setActive(this.lastnow)
+            this.pages[this.nowpage][this.now].style["border-width"] = value + "px"
+        },
+        //"opacity": "1"
+        changeOpacity(value){
+            this.setActive(this.lastnow)
+            this.pages[this.nowpage][this.now].style["opacity"] = value + ''
+        },
+        changeX(value){
+            console.log('changeX', value, this.lastnow)
+            this.setActive(this.lastnow)
+        },
         // pretend: "", append: ""
+        preview(){
+
+        },
         havePretend(index){
             let item = this.pages[this.nowpage][index]
             return item.pretend != undefined && item.pretend != null
@@ -958,9 +1150,12 @@ export default{
             let newItem = {"id": 'el' + Cnt, 
                 type: "figure-rect", active: true,
                 transform: { x: 0, y: 0, width: 100, height: 100 },
-                style: this.redRect
+                style: this.redRect,
+                border: 2, opacity: 1,
+                border_color: "#000000", fill_color: 'rgba(0, 0, 0, 0)'
             }
             this.now = Cnt
+            this.lastnow = Cnt
             this.pages[this.nowpage].push(newItem)
         },
         addCircle(){
@@ -968,8 +1163,12 @@ export default{
             let newItem = {"id": 'el' + Cnt, 
                 type: "figure-circle", active: true,
                 transform: { x: 0, y: 0, width: 100, height: 100 },
-                style: this.circle }
+                style: this.circle,
+                border: 2, opacity: 1,
+                border_color: "#000000", fill_color: 'rgba(0, 0, 0, 0)'
+            }
             this.now = Cnt
+            this.lastnow = Cnt
             this.pages[this.nowpage].push(newItem)
         },
         addKangle(){
@@ -977,8 +1176,10 @@ export default{
             let newItem = {"id": 'el' + Cnt, 
                 type: "figure-kangle", active: true,
                 transform: { x: 0, y: 0, width: 100, height: 100 },
-                style: this.kangle }
+                style: this.kangle, opacity: 1
+            }
             this.now = Cnt
+            this.lastnow = Cnt
             this.pages[this.nowpage].push(newItem)
         },
         addLable(){
@@ -986,8 +1187,10 @@ export default{
             let newItem = {"id": 'el' + Cnt, 
                 type: "lable", active: true,
                 transform: { x: 0, y: 0, width: 130, height: 40},
-                style: this.Lable, content: "这是一段文字"}
+                style: this.Lable, content: "这是一段文字", opacity: 1
+            }
             this.now = Cnt
+            this.lastnow = Cnt
             this.pages[this.nowpage].push(newItem)
         },
         addBtnWhite(){
@@ -996,9 +1199,10 @@ export default{
                 type: "btn", active: true,
                 transform: { x: 0, y: 0, width: 62, height: 32 },
                 style: { "width": "100%", "height": "100%"},
-                btnType: "", content: "按钮"
+                btnType: "", content: "按钮", opacity: 1
             }
             this.now = Cnt
+            this.lastnow = Cnt
             this.pages[this.nowpage].push(newItem)
         },
         addBtnGrey(){
@@ -1007,9 +1211,10 @@ export default{
                 type: "btn", active: true,
                 transform: { x: 0, y: 0, width: 62, height: 32 },
                 style: { "width": "100%", "height": "100%"},
-                btnType: "primary", content: "按钮"
+                btnType: "primary", content: "按钮", opacity: 1
             }
             this.now = Cnt
+            this.lastnow = Cnt
             this.pages[this.nowpage].push(newItem)
         },
         addInput(){
@@ -1019,9 +1224,10 @@ export default{
                 transform: { x: 0, y: 0, width: 230, height: 40 },
                 style: { "width": "100%", "height": "100%"},
                 content: "Please Input",
-                pretend: "", append: ""
+                pretend: "", append: "", opacity: 1
             }
             this.now = Cnt
+            this.lastnow = Cnt
             this.pages[this.nowpage].push(newItem)
         },
         printList(){
@@ -1031,6 +1237,7 @@ export default{
             if(this.now != null)
                 this.pages[this.nowpage][this.now].active = false
             this.now = id
+            this.lastnow = id
             this.pages[this.nowpage][this.now].active = true
         },
         setDeActive(id){
@@ -1051,16 +1258,19 @@ export default{
             }
             this.pages[this.nowpage].splice(this.now, 1)
             this.now = null
+            this.lastnow = null
         },
         AddPage(){
             this.pages.push([])
             this.pagesname.push("new-page")
             this.now = null
+            this.lastnow = null
             this.nowpage = this.pages.length - 1
             //this.changingPageName = false
         },
         setPage(index){
             this.now = null
+            this.lastnow = null
             this.nowpage = index
             //this.changingPageName = false
         },
@@ -1071,6 +1281,7 @@ export default{
             this.pages.splice(this.nowpage, 1)
             this.pagesname.splice(this.nowpage, 1)
             this.now = null
+            this.lastnow = null
             this.nowpage = 0
         },
         getdom(){
@@ -1147,11 +1358,11 @@ export default{
             console.log(fileName2)
 
             console.log(this.axure_id)
-            console.log('save_axure',{
+            /*console.log('save_axure',{
                 axure_id: this.axure_id,
                 axure_url: "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName,
                 name_url: "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName2
-            })
+            })*/
 
             save_axure({
                 axure_id: this.axure_id,

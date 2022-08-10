@@ -3,9 +3,6 @@
     <div id="leftdown1left">
       <div style="display: flex; justify-content: space-between">
         <h2 class="bluelight">项目信息</h2>
-        <el-button type="primary" style="margin-right: 30px"
-          ><el-icon><Edit /></el-icon
-        ></el-button>
       </div>
 
       <hr style="margin: 5px; margin-bottom: 20px" />
@@ -15,21 +12,10 @@
         >创建于{{ data.createtime }}</span
       >
 
-      <div
-        class="intro bluelight"
-        v-if="editing === 0"
-        style="margin-top: 10px"
-      >
+      <div class="intro bluelight" style="margin-top: 10px">
         {{ data.intro }}
       </div>
-      <el-input
-        v-else
-        v-model="data.brief_intro"
-        placeholder="简介"
-        type="textarea"
-        :rows="4"
-        style="display: inline; width: 200px; font-size: 10px"
-      />
+
       <div
         style="display: flex; justify-content: space-between; margin-top: 20px"
       >

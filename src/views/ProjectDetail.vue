@@ -1,4 +1,34 @@
 <template>
+  <el-dialog
+    v-model="dialogFormVisible"
+    title="修改项目信息"
+    width="30%"
+    center
+  >
+    <el-form :model="form">
+      <el-form-item label="项目名称">
+        <el-input v-model="form.name" autocomplete="off" />
+      </el-form-item>
+      <el-form-item label="项目介绍">
+        <el-input
+          type="textarea"
+          :rows="3"
+          v-model="form.intro"
+          autocomplete="off"
+        />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button
+          @click="dialogFormVisible = false"
+          style="background-color: white"
+          >Cancel</el-button
+        >
+        <el-button type="primary" @click="submit">Confirm</el-button>
+      </span>
+    </template>
+  </el-dialog>
   <div class="big">
     <div id="content">
       <div id="left">
@@ -12,7 +42,14 @@
               <router-link :to="{name:'projectFileInfo',query:{
                 project_id:this.project_id
               }}" @click="tab='tab-1'">文件</router-link>
-              <router-link to="" @click="tab='tab-2'">回收站</router-link>
+              <router-link
+                  :to="{
+                  name: 'projectFileBin',
+                  params: {
+                    project_id: this.project_id,
+                  },
+                }"
+                  @click="tab='tab-2'">回收站</router-link>
               <div class="animation" :class="tab"></div>
             </nav>
           </div>
@@ -41,6 +78,25 @@
               </div>
             </div>
           </div>
+          <el-button
+            type="primary"
+            style="margin-right: 30px"
+            v-if="tab == 'tab-0'"
+            @click="dialogFormVisible = true"
+            ><el-icon><Edit /></el-icon
+          ></el-button>
+          <el-button
+            type="primary"
+            style="margin-right: 30px"
+            v-if="tab == 'tab-1'"
+            ><el-icon><Sort /></el-icon
+          ></el-button>
+          <el-button
+            type="primary"
+            style="margin-right: 30px; visibility: hidden"
+            v-if="tab == 'tab-2'"
+            ><el-icon><Sort /></el-icon
+          ></el-button>
         </div>
         <hr style="margin: 5px; margin-bottom: 20px" />
         <router-view></router-view>
@@ -59,19 +115,21 @@ import AxureEditor from "@/components/rubbish/axureEditor";
 
 export default {
   name: "projectDetail",
-  components: { Edit },
+  components: { Edit, Sort },
   props: {},
   data() {
     return {
+      dialogFormVisible: false,
       project_id: "",
       tab: "tab-0",
       dialogFormVisible1: false,
       editing: 0,
       username: "",
+      form: {
+        name: "",
+        intro: "",
+      },
     };
-  },
-  methods:{
-
   },
   watch:{
     $route(val){
@@ -103,5 +161,28 @@ export default {
   a {
     color: black;
   }
+}
+::v-deep .el-dialog {
+  background: linear-gradient(
+    to right bottom,
+    rgba(255, 255, 255, 0.905),
+    rgba(255, 255, 255, 0.622)
+  );
+  backdrop-filter: blur(1rem);
+  border-radius: 10px;
+  box-shadow: 0px 15px 10px -15px lightgray;
+  font-weight: lighter;
+  font-size: 23px;
+  color: #26476d;
+  overflow: hidden;
+  .el-button {
+    background-color: #26476d;
+    border: none;
+  }
+}
+::v-deep .el-dialog__header {
+  margin-right: 0;
+  color: white;
+  background: linear-gradient(to right bottom, #26476def, #26476dc5);
 }
 </style>
