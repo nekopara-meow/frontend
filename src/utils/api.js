@@ -95,6 +95,14 @@ export function del_uml(data){
     })
 }
 
+export function del_team(data){
+    return request({
+        url: 'api/team/deleteteam',
+        method: 'post',
+        data,
+    })
+}
+
 export async function getuserinfo(data) {
     return request({
         url: 'api/users/get_info',
