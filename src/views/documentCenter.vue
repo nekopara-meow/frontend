@@ -27,14 +27,14 @@
           <el-tabs tab-position="top" v-model="active_tab">
             <el-tab-pane label="UML" name='0'>
               <div class="fileDisplayer">
-                <el-skeleton :rows="5" animated v-if="got != 2" />
+                <el-skeleton :rows="5" animated v-if="got != 3" />
                 <el-empty
                   description="空空如也"
-                  v-if="got == 2 && uml_file.length == 0"
+                  v-if="got == 3 && uml_file.length == 0"
                   style="margin: 0 auto"
                 />
                 <file-preview
-                  v-if="got == 2 && uml_file.length != 0"
+                  v-if="got == 3 && uml_file.length != 0"
                   v-for="(tmp, index) in uml_file"
                   :file_id="tmp.file_id"
                   :update_time="tmp.update_time"
@@ -49,14 +49,14 @@
             </el-tab-pane>
             <el-tab-pane label="文档" name='1'>
               <div class="fileDisplayer">
-                <el-skeleton :rows="5" animated v-if="got != 2" />
+                <el-skeleton :rows="5" animated v-if="got != 3" />
                 <el-empty
                   description="空空如也"
-                  v-if="got == 2 && doc_file.length == 0"
+                  v-if="got == 3 && doc_file.length == 0"
                   style="margin: 0 auto"
                 />
                 <file-preview
-                  v-if="got == 2 && doc_file.length != 0"
+                  v-if="got == 3 && doc_file.length != 0"
                   v-for="(tmp, index) in doc_file"
                   :file_id="tmp.file_id"
                   :file_type="tmp.file_type"
@@ -71,13 +71,14 @@
             </el-tab-pane>
             <el-tab-pane label="设计原型" name='2'>
               <div class="fileDisplayer">
+                <el-skeleton :rows="5" animated v-if="got != 3" />
                 <el-empty
                   description="空空如也"
-                  v-if="got == 2 && axure_file.length == 0"
+                  v-if="got == 3 && axure_file.length == 0"
                   style="margin: 0 auto"
                 />
                 <file-preview
-                  v-if="got == 2 && axure_file.length != 0"
+                  v-if="got == 3 && axure_file.length != 0"
                   v-for="(tmp, index) in axure_file"
                   :file_id="tmp.file_id"
                   :file_type="tmp.file_type"
@@ -104,14 +105,14 @@
               ></el-button>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item @click="userProjects.sort(function(a,b){return a.project_name.localeCompare(b.project_name)})"
-                  >按项目名升序</el-dropdown-item>
-                  <el-dropdown-item @click="userProjects.sort(function(a,b){return -1*a.project_name.localeCompare(b.project_name)})"
-                  >按项目名降序
-                  </el-dropdown-item>
-                  <el-dropdown-item @click="userProjects.sort(function(a,b){return a.team_name.localeCompare(b.team_name)})"
+<!--                  <el-dropdown-item @click="userProjects.sort(function(a,b){return a.project_name.localeCompare(b.project_name)})"-->
+<!--                  >按项目名升序</el-dropdown-item>-->
+<!--                  <el-dropdown-item @click="userProjects.sort(function(a,b){return -1*a.project_name.localeCompare(b.project_name)})"-->
+<!--                  >按项目名降序-->
+<!--                  </el-dropdown-item>-->
+                  <el-dropdown-item @click="teamusercreat.sort(function(a,b){return a.team_name.localeCompare(b.team_name)})"
                   >按团队名升序</el-dropdown-item>
-                  <el-dropdown-item @click="userProjects.sort(function(a,b){return -1*a.team_name.localeCompare(b.team_name)})"
+                  <el-dropdown-item @click="teamusercreat.sort(function(a,b){return -1*a.team_name.localeCompare(b.team_name)})"
                   >按团队名降序</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
@@ -123,7 +124,7 @@
 <!--          <pro-preview v-for="(tmp,index) in userProjects" :key="index" :focus_project_id="this.focus_project_id"-->
 <!--                       :team_name="tmp.team_name" :project_name="tmp.project_name" :project_id="tmp.project_id"-->
 <!--                       :brief_intro="tmp.brief_intro" @click="loadFiles(tmp.project_id)"></pro-preview>-->
-          <el-skeleton :rows="5" animated v-if="got1 != 3" />
+          <el-skeleton :rows="5" animated v-if="got1 !== 3" />
           <el-menu class="el-menu-vertical-demo" v-else>
             <el-sub-menu
               v-for="value in teamusercreat"
@@ -406,9 +407,9 @@ export default {
       }).then(res=>{
         if(res.data.ans_list){
           this.uml_file.splice(0)
-          let tmp
-          for(tmp in res.data.ans_list){
-            this.uml_file.push(tmp)
+          let l=res.data.ans_list.length
+          for(let i=0;i<l;i++){
+            this.uml_file.push(res.data.ans_list[i])
           }
           this.got += 1;
           console.log('uml_files',this.uml_file)
@@ -422,9 +423,9 @@ export default {
         if(res.data.ans_list){
           console.log('res',res.data)
           this.doc_file.splice(0)
-          let tmp
-          for(tmp in res.data.ans_list){
-            this.doc_file.push(tmp)
+          let l=res.data.ans_list.length
+          for(let i=0 ;i<l;i++){
+            this.doc_file.push(res.data.ans_list[i])
           }
           this.got += 1;
           console.log('doc_files',this.doc_file)
@@ -438,9 +439,9 @@ export default {
       }).then(res=>{
         if(res.data.ans_list){
           this.axure_file.splice(0)
-          let tmp
-          for(tmp in res.data.ans_list){
-            this.axure_file.push(tmp)
+          let l=res.data.ans_list.length
+          for(let i=0;i<l;i++){
+            this.axure_file.push(res.data.ans_list[i])
           }
           this.got += 1;
           console.log('axure_files',this.axure_file)

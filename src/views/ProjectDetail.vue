@@ -140,6 +140,9 @@ export default {
       if(val,name==='projectFileInfo'){
         this.tab='tab-1'
       }
+      if(val,name==='projectFileBin'){
+        this.tab='tab-2'
+      }
     }
   },
   created() {
