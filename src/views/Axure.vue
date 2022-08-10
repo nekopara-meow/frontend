@@ -91,8 +91,7 @@
             </div>
             <div class="right">
                 <div class="canvas">
-                    <div :style="my_table" ref="imgDom"
-                        width = "700px" height = "450px">
+                    <div :style="my_table" ref="imgDom">
                         <DraggableContainer 
                             referenceLineColor="#acbbdc">
                             <Vue3DraggableResizable v-for="(item, index) in pages[nowpage]"
@@ -2022,8 +2021,9 @@ export default{
         that.URLpageName = this.$route.query.URLpageName
         that.axure_id = this.$route.query.axure_id
 
-        that.my_table['width'] = this.$route.query.width
-        that.my_table['height'] = this.$route.query.height
+        that.my_table['width'] = this.$route.query.width + "px"
+        that.my_table['height'] = this.$route.query.height + "px"
+        console.log(that.my_table)
 
         if(that.URLpage == null || that.URLpage.length < 1
             || that.URLpage == '') {
