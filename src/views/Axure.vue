@@ -575,7 +575,9 @@
                                     class="right-setting-border">
                                     <span>图标颜色</span>
                                     <span style="width: 20px"></span>
-                                    <el-color-picker>
+                                    <el-color-picker
+                                        @change = "changeIconColor"
+                                        v-model = "pages[nowpage][lastnow].color">
                                     </el-color-picker>
                                 </div>
 
@@ -699,6 +701,13 @@
                 <el-icon @click="cancelTool"><CircleClose /></el-icon>
             </div>
             <div class="line"></div>
+
+            <el-collapse>
+                <el-collapse-item title="示例图片">
+                    
+                </el-collapse-item>
+            </el-collapse>
+
             <div
                 style =
                     "width: 100%;
@@ -1491,6 +1500,13 @@ export default{
                 return false
             return true
         },
+        changeIconColor(value){
+            this.setActive(this.lastnow)
+            let index = this.lastnow
+            this.pages[this.nowpage][index].color = value
+            this.pages[this.nowpage][index].style["color"] = value
+            console.log(value, this.pages[this.nowpage][index].style)
+        },
         changeBtnColor(value){
             console.log(value)
             this.setActive(this.lastnow)
@@ -1784,8 +1800,10 @@ export default{
             let newItem = { "id": 'el' + Cnt, 
                 type: "icon", active: true,
                 transform: { x: 0, y: 0, width: 30, height: 30 },
-                style: {"width": "100%", "height": "100%", "color": "grey"},
-                icon_index: 0, opacity: 1
+                style: {"width": "100%", "height": "100%", 
+                    "color": "#000000"},
+                icon_index: 0, color: "#000000",
+                opacity: 1
             }
             newItem.icon_index = index
 
