@@ -185,6 +185,8 @@ export default {
               } else ElMessage.error(response.data.message);
             }
           );
+          this.form.brief_intro=this.projectinfo.brief_intro;
+          this.form.project_name=this.projectinfo.project_name;
         } else ElMessage.error(response.data.message);
       });
     },
