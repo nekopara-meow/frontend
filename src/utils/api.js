@@ -433,7 +433,29 @@ export function getRecentFile(data){
     })
 }
 
+export function viewAxure(data){
+    return request({
+        url: 'api/projects/viewAxure',
+        method: 'post',
+        data,
+    })
+}
 
+export function openAxure(data){
+    return request({
+        url: 'api/projects/openAxure',
+        method: 'post',
+        data,
+    })
+}
+
+export function closeAxure(data){
+    return request({
+        url: 'api/projects/closeAxure',
+        method: 'post',
+        data,
+    })
+}
 
 
 /*export const loginApi=data=>{
