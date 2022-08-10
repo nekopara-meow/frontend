@@ -603,7 +603,7 @@ export default {
         this.editing = 1;
       } else {
         this.editing = 0;
-        console.log(this.form);
+        this.form.team_avatar=this.teammsg.avatar;
         editteaminfo(this.form).then((response) => {
           if (response.data.status_code == 1) {
             this.initializationdata();
