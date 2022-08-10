@@ -40,23 +40,19 @@
               infinite-scroll-distance="1"
               style="overflow: auto; overflow-x: hidden"
             >
-              <div class="dongtai" v-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]">
-                <img
-                  src="https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg"
-                />
+              <div class="dongtai" v-for="(message, index) in personnalmsg" :key="index">
+                <img :src="message.avatar"/>
                 <div class="dongtairight bluelight">
-                  <div>小七</div>
-                  <div style="font-size: 15px">邀请了成员：吕双羽</div>
-                  <div style="font-size: 13px">2022/8/5</div>
+                  <div>{{message.sender}}</div>
+                  <div style="font-size: 15px">{{message.msg}}</div>
+                  <div style="font-size: 13px">{{ message.send_time }}</div>
                 </div>
                 <div class="dongtairightright">
-                  <el-button type="success" :icon="Check" size="small" circle />
-                  <el-button type="info" :icon="Close" size="small" circle />
+                  <el-button v-if="message.message_type==1" type="success" :icon="Check" size="small" circle @click="accept(message.message_id)"/>
+                  <el-button type="info" :icon="Close" size="small" circle @click="deletemsg(message.message_id)" />
                 </div>
               </div>
             </div>
-            <!-- <el-dropdown-item divided class="badgecontainer">
-            </el-dropdown-item> -->
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -71,12 +67,12 @@
           <i class="bi-caret-down-fill" />
           <el-avatar :size="40">
             <!-- <img src="@/assets/img/head.jpg"> -->
-            <img :src="head ? head : ''" />
+            <img :src="head?head:''"/>
             <!-- YL -->
           </el-avatar>
         </div>
         <template #dropdown>
-          <el-dropdown-menu style="width: 160px">
+          <el-dropdown-menu  style="width: 160px">
             <el-dropdown-item
               :icon="User"
               v-if="$store.state.token"
@@ -133,11 +129,17 @@ import {
 </script>
 
 <script>
-import { changepassword, getuserinfo } from "@/utils/api";
+import {
+  agreeinvitation,
+  changepassword,
+  deletepersonalmsg,
+  edituserinfo,
+  getpersonalmsg,
+  getuserinfo
+} from "@/utils/api";
 import { ElMessage } from "element-plus";
-import { Check } from "@element-plus/icons-vue";
-import qs from "qs";
-import store from "@/store";
+import {Check, Close} from "@element-plus/icons-vue";
+import Base64 from "@/utils/Base64";
 export default {
   name: "FrNav",
   components: {
@@ -152,6 +154,8 @@ export default {
   },
   data() {
     return {
+      personnalmsg:[],
+      //{message_id:1,msg:"邀请您",sender:"luanbu",message_type:2,avatar:"",team_id:13,send_time:""}
       query: "",
       token: "",
       name: "",
@@ -179,7 +183,6 @@ export default {
       });*/
       // ???
     },
-
     updateinfo() {
       this.token = this.$store.state.token;
       if (!this.token) {
@@ -187,6 +190,12 @@ export default {
           "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/Transparent_Akkarin.jpg";
         this.name = "请登录";
       } else {
+        getpersonalmsg({username:this.$store.state.username}).then((response) => {
+          if (response.data.status_code == 1) {
+            console.log("xiaoxi",response.data)
+              this.personnalmsg=response.data.ans_list;
+          }
+        });
         getuserinfo({ username: this.$store.state.username }).then(
           (response) => {
             if (response.data.status_code == 1) {
@@ -201,7 +210,15 @@ export default {
     indentSignal() {
       this.$emit("indent");
     },
-    /* gotoListFollow() {
+    updatepersonalmsg(){
+      getpersonalmsg({username:this.$store.state.username}).then((response) => {
+        if (response.data.status_code == 1) {
+          console.log("xiaoxi",response.data)
+          this.personnalmsg=response.data.ans_list;
+        }
+      });
+    },
+   /* gotoListFollow() {
       this.$router.push({ name: "List" });
     },
     gotoListLike() {
@@ -221,10 +238,44 @@ export default {
       localStorage.clear();
     },
     checkInfo() {
-      this.$router.push("/personalspace");
+      this.$router.push({
+        path: "/personalspace",
+        query: {
+          info: Base64.encode(
+              JSON.stringify({
+                username:this.$store.state.username,
+                author:1,
+              })
+          ),
+        },
+      });
+      //this.$router.push("/personalspace");
     },
     changePassword() {
       this.$router.push("/changepassword");
+    },
+    accept(message_id){
+      //同意请求
+      agreeinvitation({ message_id:message_id }).then(
+          (response) => {
+            console.log("tongyi",response.data);
+            if (response.data.status_code == 1) {
+              console.log("tongyi")
+              this.updatepersonalmsg()
+            } else ElMessage.error(response.data.msg);
+          }
+      );
+
+    },
+    deletemsg(message_id){
+      //删除信息
+      deletepersonalmsg({message_id:message_id }).then(
+          (response) => {
+            if (response.data.status_code == 1) {
+              this.updatepersonalmsg()
+            }
+          }
+      );
     },
   },
 };

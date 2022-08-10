@@ -7,13 +7,13 @@
   >
     <el-form :model="form">
       <el-form-item label="项目名称">
-        <el-input v-model="form.name" autocomplete="off" />
+        <el-input v-model="form.project_name" autocomplete="off" />
       </el-form-item>
       <el-form-item label="项目介绍">
         <el-input
           type="textarea"
           :rows="3"
-          v-model="form.intro"
+          v-model="form.brief_intro"
           autocomplete="off"
         />
       </el-form-item>
@@ -34,22 +34,42 @@
       <div id="left">
         <div id="leftup">
           <div style="display: flex">
-            <h2 class="title gradient">NEKOPARA</h2>
+            <h2 class="title">{{projectinfo.project_name}}</h2>
+
             <nav class="nav-link">
-              <router-link :to="{name:'projectInfo',query:{
-                project_id:this.project_id
-              }}" @click="tab='tab-0'">概览</router-link>
-              <router-link :to="{name:'projectFileInfo',query:{
-                project_id:this.project_id
-              }}" @click="tab='tab-1'">文件</router-link>
               <router-link
-                  :to="{
+                :to="{
+                  name: 'projectInfo',
+                  params: {
+                    project_id: this.project_id,
+                  },
+                }"
+                @click="tab = 'tab-0'"
+                >概览</router-link
+              >
+              <router-link
+                :to="{
+                  name: 'projectFileInfo',
+                  params: {
+                    project_id: this.project_id,
+                  },
+                }"
+                @click="tab = 'tab-1'"
+                >文件</router-link
+              >
+              <router-link
+                :to="{
                   name: 'projectFileBin',
                   params: {
                     project_id: this.project_id,
                   },
                 }"
-                  @click="tab='tab-2'">回收站</router-link>
+                @click="tab = 'tab-2'"
+                >回收站</router-link
+              >
+              <!-- <router-link to="" @click="tab = 'tab-3'">迭代</router-link>
+              <router-link to="" @click="tab = 'tab-4'">统计</router-link> -->
+
               <div class="animation" :class="tab"></div>
             </nav>
           </div>
@@ -98,6 +118,7 @@
             ><el-icon><Sort /></el-icon
           ></el-button>
         </div>
+
         <hr style="margin: 5px; margin-bottom: 20px" />
         <router-view></router-view>
       </div>
@@ -110,7 +131,7 @@ import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
 import { Filter, Sort, Edit, Plus, CaretBottom } from "@element-plus/icons-vue";
 import UMLEditor from "@/components/rubbish/UMLEditor";
 import CoEditor from "@/components/rubbish/CoEditor";
-import { get_docfile, get_umlfile, del_uml, del_doc } from "@/utils/api";
+import {get_docfile, get_umlfile, del_uml, del_doc, updateprojectinfo, editteaminfo, getprojectinfo} from "@/utils/api";
 import AxureEditor from "@/components/rubbish/axureEditor";
 
 export default {
@@ -119,6 +140,13 @@ export default {
   props: {},
   data() {
     return {
+      projectinfo:{
+        brief_intro: "",
+        create_time: "",
+        creator: "",
+        project_name:"",
+        team_name: "",
+      },
       dialogFormVisible: false,
       project_id: "",
       tab: "tab-0",
@@ -126,24 +154,46 @@ export default {
       editing: 0,
       username: "",
       form: {
-        name: "",
-        intro: "",
+        project_name: "",
+        brief_intro: "",
+        project_id:this.project_id,
       },
     };
   },
-  watch:{
-    $route(val){
-      console.log('route is watched',val)
-      if(val.name==='projectInfo'){
-        this.tab='tab-0'
-      }
-      if(val,name==='projectFileInfo'){
-        this.tab='tab-1'
-      }
-      if(val,name==='projectFileBin'){
-        this.tab='tab-2'
-      }
+  methods: {
+    getprojectinfos(){
+        getprojectinfo({project_id:this.project_id}).then((response) => {
+          if (response.data.status_code == 1) {
+            this.projectinfo.brief_intro=response.data.brief_intro;
+            this.projectinfo.create_time=response.data.create_time;
+            this.projectinfo.creator=response.data.creator;
+            this.projectinfo.project_name=response.data.project_name;
+            this.projectinfo.team_name=response.data.team_name;
+          } else ElMessage.error(response.data.message);
+        });
+    },
+    submit(){
+      updateprojectinfo(this.form).then((response) => {
+        if (response.data.status_code == 1) {
+          ElMessage({
+            message: "修改成功",
+            type: "success",
+          });
+          this.dialogFormVisible=false;
+        } else ElMessage.error(response.data.message);
+      });
     }
+  },
+  watch: {
+    $route(val) {
+      console.log("route is watched", val);
+      if (val.name === "projectInfo") {
+        this.tab = "tab-0";
+      }
+      if ((val, name === "projectFileInfo")) {
+        this.tab = "tab-1";
+      }
+    },
   },
   created() {
     console.log('route in projectDetail')
@@ -152,7 +202,7 @@ export default {
       this.project_id=this.$route.query.project_id
       this.username=this.$store.state.username
     }
-    console.log(this.project_id)
+    console.log(this.project_id);
   },
   computed: {},
 };

@@ -30,13 +30,13 @@
       </div>
       <div id="down">
         <el-button
-          v-if="editing == 0"
+          v-if="editing === 0&&author===1"
           type="primary"
           id="editbutton"
           @click="edit"
           ><el-icon><Edit /></el-icon
         ></el-button>
-        <el-button v-else type="primary" id="editbutton" @click="edit"
+        <el-button v-else-if="editing===1" type="primary" id="editbutton" @click="edit"
           ><el-icon><Upload /></el-icon
         ></el-button>
         <div>
@@ -139,17 +139,17 @@ import { client, getFileNameUUID } from "../assets/alioss.js";
 import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
 import { Edit, Upload, Plus } from "@element-plus/icons-vue";
 import { edituserinfo, getuserinfo } from "@/utils/api";
+import Base64 from "@/utils/Base64";
 export default {
   name: "Register",
   components: { Edit, Upload, Plus },
   created() {},
   mounted() {
-    getuserinfo({ username: this.$store.state.username }).then((response) => {
-      console.log(response.data);
+    getuserinfo({ username: JSON.parse(Base64.decode(this.$route.query.info)).username }).then((response) => {
       if (response.data.status_code == 1) {
         this.data.nickname = response.data.nickname;
         this.data.tel = response.data.tel;
-        this.data.username = this.$store.state.username;
+        this.data.username = JSON.parse(Base64.decode(this.$route.query.info)).username,
         this.data.avatar = response.data.avatar;
         this.data.gender = response.data.gender;
         if (response.data.gender == 0)
@@ -163,9 +163,19 @@ export default {
     });
   },
 
-  watch: {},
+  watch: {
+    '$route': {
+      handler(newVal, oldVal) {
+        if(newVal.path==oldVal.path)
+          this.$router.go(0)
+      }
+      },
+      deep: true,
+      immediate: true,
+    },
   data() {
     return {
+      author:JSON.parse(Base64.decode(this.$route.query.info)).author,
       email: "",
       genderimg: require("../assets/img/猫.png"),
       editing: 0,
