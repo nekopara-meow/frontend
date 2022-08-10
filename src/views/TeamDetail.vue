@@ -194,36 +194,16 @@
               <div class="example">
                 <div class="avatar-list avatar-list-stacked">
                   <span
+                    v-for="i in avatars.slice(0, 5)"
                     class="avatar cover-image brround"
-                    style="
-                      background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                    "
-                  ></span
-                  ><span
+                    :style="{ backgroundImage: `url(` + i + ')' }"
+                  >
+                  </span>
+                  <span
+                    v-if="avatars.length > 5"
                     class="avatar cover-image brround"
-                    style="
-                      background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                    "
-                  ></span
-                  ><span
-                    class="avatar cover-image brround"
-                    style="
-                      background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                    "
-                  ></span
-                  ><span
-                    class="avatar cover-image brround"
-                    style="
-                      background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                    "
-                  ></span
-                  ><span
-                    class="avatar cover-image brround"
-                    style="
-                      background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                    "
-                  ></span
-                  ><span class="avatar cover-image brround">+8</span>
+                    >+{{ avatars.length - 5 }}</span
+                  >
                 </div>
               </div>
             </div>
@@ -525,6 +505,7 @@ import {
   deleteamadmin,
   recoverProById,
   completelyDelProById,
+  getavatarchain,
 } from "@/utils/api";
 import Base64 from "@/utils/Base64";
 import { client, getFileNameUUID } from "@/assets/alioss";
@@ -549,6 +530,7 @@ export default {
   },
   data() {
     return {
+      avatars: [],
       got: 0,
       gott: 0,
       form: {
@@ -730,8 +712,16 @@ export default {
       });
     },
     initializationdata() {
-      this.got=0
+      this.got = 0;
       // this.gott=0
+      getavatarchain({ team_id: this.team_id }).then((response) => {
+        if (response.data.status_code == 1) {
+          let lenn = response.data.ans_list.length;
+          for (let j = 0; j < lenn; j++) {
+            this.avatars.push(response.data.ans_list[j].avatar);
+          }
+        } else ElMessage.error(response.data.message);
+      });
       getteammsgbyid({ team_id: this.team_id }).then((response) => {
         this.got += 1;
         if (response.data.status_code == 1) {
@@ -797,7 +787,7 @@ export default {
         settee: membername,
         team_id: this.team_id,
       }).then((response) => {
-        console.log('setadmin',response.data)
+        console.log("setadmin", response.data);
         if (response.data.status_code == 1) {
           this.initializationmember();
           console.log(response.data);

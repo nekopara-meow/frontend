@@ -1,150 +1,62 @@
 <template>
   <div id="home">
-    <div id="container">
-      <div id="intro">
-        NEKOPARA创作平台<br /><span id="smallintro">智能互联 协同创作</span
-        ><br />
-        <div id="button" @click="go">
-          <div id="createbutton">Get Started →</div>
+    <full-page :options="options" id="fullpage" ref="fullpage">
+      <div class="section">
+        <h3>Section 1</h3>
+      </div>
+      <div class="section">
+        <div class="slide">
+          <h3>Slide 2.1</h3>
+        </div>
+        <div class="slide">
+          <h3>Slide 2.2</h3>
+        </div>
+        <div class="slide">
+          <h3>Slide 2.3</h3>
         </div>
       </div>
-      <img src="../assets/img/neko.png" />
-      <!-- <div id="lottie" style="position: absolute"></div> -->
-    </div>
-    <!-- <div class="circle1 circle"></div>
-    <div class="circle2 circle"></div>
-    <div class="circle3 circle"></div>
-    <div class="circle4 circle"></div> -->
+      <div class="section">
+        <h3>Section 3</h3>
+      </div>
+    </full-page>
   </div>
 </template>
 
 <script>
 export default {
   name: "HomeView",
-  components: {
-  },
+  components: {},
   data() {
     return {
+      options: {
+        licenseKey: "YOUR_KEY_HERE",
+        parallax: true,
+        scrollOverflow: true,
+        scrollBar: false,
+
+        navigation: true,
+
+        sectionsColor: ["#41b883", "#ff5f45", "#0798ec"],
+      },
     };
   },
   mounted() {
     // this.svgFun();
   },
-  methods: {
-    go() {
-      this.$router.push("/documentCenter");
-    },
-  },
+  methods: {},
 };
 </script>
 <style scoped>
-img {
-  position: absolute;
-  bottom: -30px;
-  right: 20px;
-  width: 250px;
-  z-index: -1;
-}
-.circle {
-  background: transparent;
-  background-image: linear-gradient(60deg, #e9fcf69d 0%, #f9f3ce58 100%);
-
-  position: absolute;
-  border-radius: 50%;
-  z-index: 0;
-}
-.circle1 {
-  height: 10rem;
-  width: 10rem;
-  top: 20%;
-  right: 15%;
-}
-.circle2 {
-  height: 10rem;
-  width: 10rem;
-  bottom: 5%;
-  left: 10%;
-}
-.circle3 {
-  height: 40rem;
-  width: 40rem;
-  bottom: -30%;
-  right: -20%;
-}
-.circle4 {
-  height: 20rem;
-  width: 20rem;
-  top: 20%;
-  left: 15%;
-}
-#container {
-  position: relative;
-  width: 80%;
-  height: 80%;
-  max-width: 50vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(
-    to right bottom,
-    rgba(255, 255, 255, 0.7),
-    rgba(255, 255, 255, 0.3)
-  );
-  backdrop-filter: blur(1rem);
-  position: relative;
-  border-radius: 1em;
-}
 #home {
-  display: flex;
+  /* display: flex;
   align-items: center;
   justify-content: center;
+  background-color: aqua; */
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
-#lottie {
-  width: 300px;
-  height: 300px;
-  position: absolute;
-  bottom: 1rem;
-  right: 1rem;
-  z-index: -1;
-}
-#intro {
-  position: relative;
-  font-weight: 700;
-  font-size: 70px;
-  font-family: "思源黑体 CN";
-  background-image: linear-gradient(90deg, #4facfe, #7bd4fe, #6acaf7, #4facfe);
-  background-size: 200%;
-  animation: streamer 5s linear infinite;
-  -webkit-background-clip: text;
-  color: transparent;
-}
-#smallintro {
-  font-size: 40px;
-}
-#button {
-  display: inline-block;
-  background-image: linear-gradient(90deg, #4facfe, #7bd4fe, #6acaf7, #4facfe);
-  background-size: 200%;
-  animation: streamer 5s linear infinite;
-  backdrop-filter: blur(2rem);
-  cursor: pointer;
-  height: 60px;
-  padding-left: 20px;
-  padding-right: 20px;
-  border-radius: 30px;
-  box-shadow: 0px 15px 10px -15px lightgray;
-}
-@keyframes streamer {
-  0% {
-    background-position: 0;
-  }
-  100% {
-    background-position: 200%;
-  }
-}
-#createbutton {
-  line-height: 60px;
-  font-size: 30px;
-  color: white;
+a {
+  color: #42b983;
 }
 </style>
