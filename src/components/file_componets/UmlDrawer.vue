@@ -32,9 +32,17 @@ export default {
       team_id: "",
       uml_id: "",
       uml_name:null,
-      fromParams:'',
-      fromRoute:'',
+      fromPath:'',
+      fromQuery:'',
+      saved:false,
     };
+  },
+  beforeRouteEnter (to, from, next) {
+    console.log('in uml from',from)
+    next(vm=>{
+      vm.fromPath=from.fullPath,
+          vm.fromQuery=from.query
+    })
   },
   methods: {
     /**
@@ -78,9 +86,9 @@ export default {
      * @date: 2022/8/4
      */
     start() {
-      console.log('检查router',this.$route.params)
-      this.uml_id=this.$route.params.uml_id
-      let url = this.$route.params.uml_url;
+      console.log('检查router',this.$route.query)
+      this.uml_id=this.$route.query.uml_id
+      let url = this.$route.query.uml_url;
       if(url){
         readURL(url, (xmlData) => {
           this.initial = xmlData;
@@ -136,7 +144,7 @@ export default {
           );
           localStorage.removeItem(".draft-" + name);
           this.draft = null;
-          this.close();
+          this.saveUML();
         } else if (msg.event === "autosave") {
           //自动保存,试验发现在每次修改uml之后被调用
           localStorage.setItem(
@@ -175,22 +183,17 @@ export default {
       console.log('close')
       window.removeEventListener("message", this.receive);
       this.iframe_class = "iframe_close";
-      let url = upload("testUML", this.imgData);
-      let pojo = {
-        username:this.username,
-        uml_id:this.uml_id,
-        uml_url: url,
-      };
-      console.log(pojo)
-      save_uml(pojo).then((res) => {
-        console.log("uml已上传");
-        console.log(res.data);
-      })
-      document.getElementById("app").removeChild(this.iframe);
-      console.log('proid',this.project_id)
+      // let url = upload("testUML", this.imgData);
+      // let pojo = {
+      //   username:this.username,
+      //   uml_id:this.uml_id,
+      //   uml_url: url,
+      // };
+      // save_uml(pojo)
+
       this.$router.push({
-        name:this.fromRoute,
-        params:this.fromParams
+        path:this.fromPath,
+        query:this.fromQuery
       })
     },
     /**
@@ -199,65 +202,37 @@ export default {
      * @date: 2022/8/4
      */
     saveUML() {
+      console.log('close')
+      window.removeEventListener("message", this.receive);
+      this.iframe_class = "iframe_close";
       let url = upload("testUML", this.imgData);
       let pojo = {
         username:this.username,
         uml_id:this.uml_id,
         uml_url: url,
       };
-      console.log(pojo)
-      save_uml(pojo).then((res) => {
-        console.log("uml已上传");
-        console.log(res.data);
-      });
+      save_uml(pojo)
+      this.saved=true
+      this.$router.push({
+        path:this.fromPath,
+        query:this.fromQuery
+      })
     },
   },
   mounted() {
     this.start();
-    console.log('检查router',this.$route.params)
-    this.project_id=this.$route.params.project_id
+    this.project_id=this.$route.query.project_id
     this.username=this.$store.state.username
     window.addEventListener("hashchange", this.start);
     this.edit()
   },
-  /**
-   * @description: 路由进入监听
-   * @author: 罗亚硕
-   * @date: 2022/8/9
-   */
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-      // 通过 `vm` 访问组件实例
-      console.log('to',to)
-      console.log('from',from)
-      vm.fromParams=from.params
-      vm.fromRoute=from.name
-    })
-  },
-  /**
-   * @description: 监听路由信息
-   * @author: 罗亚硕
-   * @date: 2022/8/9
-   */
   beforeRouteLeave(to, from) {
-    //离开前 删除iframe
-    function isParent (obj, parentObj){
-      while (obj != undefined && obj != null && obj.tagName.toUpperCase() != 'BODY'){
-        if (obj == parentObj){
-          return true;
-        }
-        obj = obj.parentNode;
-      }
-      return false;
-    }
     let app=document.getElementById("app")
-    if(isParent(this.iframe,app)){
-      console.log('find parant')
-      document.getElementById("app").removeChild(this.iframe);
+    if(this.iframe.parentElement===app)
+    {
+      app.removeChild(this.iframe)
     }
-    // if(this.iframe){
-    //   document.getElementById("app").removeChild(this.iframe);
-    // }
+    return true
   },
 };
 </script>

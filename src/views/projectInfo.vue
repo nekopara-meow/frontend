@@ -6,14 +6,14 @@
       </div>
 
       <hr style="margin: 5px; margin-bottom: 20px" />
-      <span class="bluelight">团队：猫娘乐园</span>
+      <span class="bluelight">团队：{{ data.team_name}}</span>
       <span class="bluelight">创建人：{{ data.creator }}</span
       ><span style="font-size: 13px" class="bluelight"
         >创建于{{ data.createtime }}</span
       >
 
       <div class="intro bluelight" style="margin-top: 10px">
-        {{ data.intro }}
+        简介:{{ data.intro}}
       </div>
 
       <div
@@ -55,34 +55,14 @@
 
       <hr style="margin: 5px; margin-bottom: 20px" />
       <div class="dongtaicontainer">
-        <div class="dongtai" v-for="i in [1, 2]">
+        <div class="dongtai" v-for="(message, index) in projectdongtai" :key="index">
           <img
-            src="https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg"
+            src="message.avatar"
           />
           <div class="dongtairight bluelight">
-            <div>刘华阳</div>
-            <div style="font-size: 15px">创建了项目：NEKOPARA</div>
-            <div style="font-size: 13px">2022/8/5</div>
-          </div>
-        </div>
-        <div class="dongtai" v-for="i in [1, 2]">
-          <img
-            src="https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg"
-          />
-          <div class="dongtairight bluelight">
-            <div>小七</div>
-            <div style="font-size: 15px">邀请了成员：吕双羽</div>
-            <div style="font-size: 13px">2022/8/5</div>
-          </div>
-        </div>
-        <div class="dongtai" v-for="i in [1, 2]">
-          <img
-            src="https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg"
-          />
-          <div class="dongtairight bluelight">
-            <div>徐凡</div>
-            <div style="font-size: 15px">成为了管理员</div>
-            <div style="font-size: 13px">2022/8/5</div>
+            <div>{{ message.sender }}</div>
+            <div style="font-size: 15px">{{message.msg}}</div>
+            <div style="font-size: 13px">{{ message.send_time }}</div>
           </div>
         </div>
       </div>
@@ -92,22 +72,51 @@
 
 <script>
 import { Filter, Sort, Edit, Plus, CaretBottom } from "@element-plus/icons-vue";
+import {getprojectinfo, getprojectmessage} from "@/utils/api";
+import {ElMessage} from "element-plus";
 export default {
   name: "projectInfo",
   components: { Edit },
   data() {
     return {
+      projectdongtai:[],
+      project_id:this.$route.query.project_id,
       editing: 0,
       data: {
         creator: "刘华阳",
         createtime: "2022/8/5",
-        avatar:
-          "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg",
-        intro:
-          "你若去往「绝云间」，便替我采来一束[清心」吧。一束就好。此行的旅费.啊，差些忘了，「契约」生效期间，旅费由你代为垫付。那就有劳了你说，归离原的少年仙人.啊.直至今日，他仍在履行他的职责.哦，这副「连理镇心散」，请替我带给他。对了，可千万不能让小派蒙偷吃了去，这里的药力.绝非常人所能承受。",
+        intro: "",
+        team_name: "",
       },
     };
   },
+  created() {this.getprojectinfos();
+    console.log(this.$route);
+    this.getprojectdongtai();
+    console.log("msg",this.projectinfo)
+  },
+  methods:{
+   getprojectinfos(){
+      getprojectinfo({project_id:this.project_id}).then((response) => {
+        if (response.data.status_code == 1) {
+          console.log("xinxi2",response.data);
+          this.data.intro=response.data.brief_intro;
+          this.data.create_time=response.data.create_time;
+          this.data.creator=response.data.creator;
+          this.data.team_name=response.data.team_name;
+        } else ElMessage.error(response.data.message);
+      });
+    },
+    getprojectdongtai(){
+      getprojectmessage({ project_id:this.project_id }).then((response) => {
+        if (response.data.status_code == 1) {
+          console.log(response.data)
+          this.projectdongtai=response.data.ans_list;
+        }
+      });
+    },
+  }
+
 };
 </script>
 

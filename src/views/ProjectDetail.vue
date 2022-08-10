@@ -7,13 +7,13 @@
   >
     <el-form :model="form">
       <el-form-item label="项目名称">
-        <el-input v-model="form.name" autocomplete="off" />
+        <el-input v-model="form.project_name" autocomplete="off" />
       </el-form-item>
       <el-form-item label="项目介绍">
         <el-input
           type="textarea"
           :rows="3"
-          v-model="form.intro"
+          v-model="form.brief_intro"
           autocomplete="off"
         />
       </el-form-item>
@@ -34,13 +34,13 @@
       <div id="left">
         <div id="leftup">
           <div style="display: flex">
-            <h2 class="title">NEKOPARA</h2>
+            <h2 class="title">{{projectinfo.project_name}}</h2>
 
             <nav class="nav-link">
               <router-link
                 :to="{
                   name: 'projectInfo',
-                  params: {
+                 query: {
                     project_id: this.project_id,
                   },
                 }"
@@ -131,8 +131,9 @@ import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
 import { Filter, Sort, Edit, Plus, CaretBottom } from "@element-plus/icons-vue";
 import UMLEditor from "@/components/rubbish/UMLEditor";
 import CoEditor from "@/components/rubbish/CoEditor";
-import { get_docfile, get_umlfile, del_uml, del_doc } from "@/utils/api";
+import {get_docfile, get_umlfile, del_uml, del_doc, updateprojectinfo, editteaminfo, getprojectinfo} from "@/utils/api";
 import AxureEditor from "@/components/rubbish/axureEditor";
+import Base64 from "@/utils/Base64";
 
 export default {
   name: "projectDetail",
@@ -140,6 +141,13 @@ export default {
   props: {},
   data() {
     return {
+      projectinfo:{
+        brief_intro: "",
+        create_time: "",
+        creator: "",
+        project_name:"",
+        team_name: "",
+      },
       dialogFormVisible: false,
       project_id: "",
       tab: "tab-0",
@@ -147,12 +155,40 @@ export default {
       editing: 0,
       username: "",
       form: {
-        name: "",
-        intro: "",
+        project_name: "",
+        brief_intro: "",
+        project_id:"",
       },
     };
   },
-  methods: {},
+  methods: {
+    getprojectinfos(){
+      console.log("getmsg",this.project_id)
+        getprojectinfo({project_id:this.project_id}).then((response) => {
+          if (response.data.status_code == 1) {
+            console.log("xinxi1",response.data);
+            this.projectinfo.brief_intro=response.data.brief_intro;
+            this.projectinfo.create_time=response.data.create_time;
+            this.projectinfo.creator=response.data.creator;
+            this.projectinfo.project_name=response.data.project_name;
+            this.projectinfo.team_name=response.data.team_name;
+          } else ElMessage.error(response.data.message);
+        });
+    },
+    submit(){
+      this.form.project_id=this.project_id;
+      updateprojectinfo(this.form).then((response) => {
+        if (response.data.status_code == 1) {
+
+          ElMessage({
+            message: "修改成功",
+            type: "success",
+          });
+          this.dialogFormVisible=false;
+        } else ElMessage.error(response.data.message);
+      });
+    }
+  },
   watch: {
     $route(val) {
       console.log("route is watched", val);
@@ -165,11 +201,12 @@ export default {
     },
   },
   created() {
-    console.log("route in projectDetail");
-    console.log(this.$route);
-    if (this.$route.params.project_id) {
-      this.project_id = this.$route.params.project_id;
-      this.username = this.$store.state.username;
+    console.log('route in projectDetail')
+    //JSON.parse(Base64.decode(this.$route.query.project_id))
+    if(this.$route.query.project_id){
+      this.project_id=this.$route.query.project_id
+      this.username=this.$store.state.username
+      this.getprojectinfos();
     }
     console.log(this.project_id);
   },
