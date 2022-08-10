@@ -127,6 +127,7 @@
           <el-dropdown
             trigger="contextmenu"
             v-for="(teamcreat, index) in teamusercreat"
+            v-if="got == 3 && teamusercreat.length != 0"
           >
             <div class="oneteam">
               <div

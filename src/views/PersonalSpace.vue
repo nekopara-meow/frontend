@@ -30,13 +30,17 @@
       </div>
       <div id="down">
         <el-button
-          v-if="editing === 0&&author===1"
+          v-if="editing === 0 && author === 1"
           type="primary"
           class="editbutton"
           @click="edit"
           ><el-icon><Edit /></el-icon
         ></el-button>
-        <el-button v-else-if="editing===1" type="primary" class="editbutton" @click="edit"
+        <el-button
+          v-else-if="editing === 1"
+          type="primary"
+          class="editbutton"
+          @click="edit"
           ><el-icon><Upload /></el-icon
         ></el-button>
         <div>
@@ -47,11 +51,12 @@
             v-else
             placeholder="性别"
             v-model="data.gender"
+            size="small"
             style="
-              display: inline;
+              display: inline-block;
               width: 70px;
               margin-right: 10px;
-              font-size: 15px;
+              font-size: 10px;
             "
           >
             <el-option label="男" :value="1" />
@@ -73,11 +78,13 @@
             v-else
             v-model="data.nickname"
             placeholder="真实姓名"
+            size="small"
             style="
-              display: inline;
+              display: inline-block;
               width: 70px;
+
               margin-right: 10px;
-              font-size: 15px;
+              font-size: 10px;
             "
           />
         </div>
@@ -106,7 +113,7 @@
               v-else
               v-model="data.tel"
               placeholder="电话"
-              style="display: inline; width: 200px; font-size: 15px"
+              style="display: inline-block; width: 200px; font-size: 15px"
             />
           </div>
           <div class="tel">
@@ -125,7 +132,7 @@
               placeholder="简介"
               type="textarea"
               :rows="4"
-              style="display: inline; width: 100%; font-size: 10px"
+              style="display: inline-block; width: 100%; font-size: 10px"
             />
           </div>
         </div>
@@ -150,22 +157,21 @@ export default {
   },
 
   watch: {
-    '$route': {
+    $route: {
       handler(newVal, oldVal) {
-        if(newVal.path==oldVal.path)
-          this.$router.go(0)
-      }
+        if (newVal.path == oldVal.path) this.$router.go(0);
       },
+    },
     "data.gender"() {
       // console.log("changed!");
       this.updategender();
     },
-      deep: true,
-      immediate: true,
-    },
+    deep: true,
+    immediate: true,
+  },
   data() {
     return {
-      author:JSON.parse(Base64.decode(this.$route.query.info)).author,
+      author: JSON.parse(Base64.decode(this.$route.query.info)).author,
       email: "",
       genderimg: require("../assets/img/猫.png"),
       editing: 0,
@@ -181,12 +187,16 @@ export default {
     };
   },
   methods: {
-    getuserinfos(){
-      getuserinfo({ username: JSON.parse(Base64.decode(this.$route.query.info)).username }).then((response) => {
+    getuserinfos() {
+      getuserinfo({
+        username: JSON.parse(Base64.decode(this.$route.query.info)).username,
+      }).then((response) => {
         if (response.data.status_code == 1) {
           this.data.nickname = response.data.nickname;
           this.data.tel = response.data.tel;
-          this.data.username = JSON.parse(Base64.decode(this.$route.query.info)).username;
+          this.data.username = JSON.parse(
+            Base64.decode(this.$route.query.info)
+          ).username;
           this.data.avatar = response.data.avatar;
           store.commit("setHead", response.data.avatar);
           this.data.gender = response.data.gender;
