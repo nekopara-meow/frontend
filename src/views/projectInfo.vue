@@ -42,22 +42,22 @@
       >
         <div class="pg" style="height: 90%; flex: 0 1 30%">
           <span class="bluelight" style="font-size: 10px; margin-bottom: 0"
-            >Doc文档</span
+            >UML文档</span
           >
           <span class="bluelight" style="font-size: 30px; margin-bottom: 0"
-            >11</span
+            >{{uml_num}}</span
           >
-          <el-progress status="success" :percentage="50" :show-text="false">
+          <el-progress status="success" :percentage="100*uml_num/(uml_num+doc_num+axure_num)" :show-text="false">
           </el-progress>
         </div>
         <div class="pg" style="height: 90%; flex: 0 1 30%">
           <span class="bluelight" style="font-size: 10px; margin-bottom: 0"
-            >UML文档</span
+            >Doc文档</span
           >
           <span class="bluelight" style="font-size: 30px; margin-bottom: 0"
-            >11</span
+            >{{doc_num}}</span
           >
-          <el-progress status="warning" :percentage="50" :show-text="false">
+          <el-progress status="warning" :percentage="100*doc_num/(uml_num+doc_num+axure_num)" :show-text="false">
           </el-progress>
         </div>
         <div class="pg" style="height: 90%; flex: 0 1 30%">
@@ -65,9 +65,9 @@
             >原型文档</span
           >
           <span class="bluelight" style="font-size: 30px; margin-bottom: 0"
-            >11</span
+            >{{axure_num}}</span
           >
-          <el-progress :percentage="50" :show-text="false"> </el-progress>
+          <el-progress :percentage="100*axure_num/(uml_num+doc_num+axure_num)" :show-text="false"> </el-progress>
         </div>
       </div>
     </div>
@@ -103,7 +103,7 @@
 
 <script>
 import { Filter, Sort, Edit, Plus, CaretBottom } from "@element-plus/icons-vue";
-import { getprojectinfo, getprojectmessage } from "@/utils/api";
+import {get_file_number, getprojectinfo, getprojectmessage} from "@/utils/api";
 import { ElMessage } from "element-plus";
 export default {
   name: "projectInfo",
@@ -121,6 +121,9 @@ export default {
         intro: "",
         team_name: "",
       },
+      uml_num:'',
+      doc_num:'',
+      axure_num:'',
     };
   },
   created() {
@@ -140,6 +143,16 @@ export default {
           this.data.team_name = response.data.team_name;
           this.got2 = 1;
         } else ElMessage.error(response.data.message);
+        get_file_number({
+          project_id:this.project_id
+        }).then(res=>{
+          console.log(res.data)
+          if(res.data.status_code==1){
+            this.uml_num=res.data.uml_num
+            this.doc_num=res.data.doc_num
+            this.axure_num=res.data.axure_num
+          }
+        })
       });
     },
     getprojectdongtai() {
@@ -152,6 +165,7 @@ export default {
       });
     },
   },
+
 };
 </script>
 
