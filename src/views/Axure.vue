@@ -103,7 +103,7 @@
                                 v-model:h = item.transform.height
                                 :parent = true
                                 v-model:active = item.active
-                                :lockAspectRatio = "true"
+                                :lockAspectRatio = "isIcon(item.type)"
                                 
                                 @activated = "setActive(index)"
                                 @deactivated = "setDeActive(index)"
@@ -275,7 +275,7 @@
                             
                         </div>
                         <div class="line"></div>
-                        <el-collapse v-model="SettingActiveName">
+                        <el-collapse v-model="SettingActiveName" accordion>
                             <el-collapse-item title="外观" name="1">
                                 <!--
                                 <div style="width: 100%; height: 10px"></div>
@@ -582,8 +582,71 @@
 
                             </el-collapse-item>
 
-                            <el-collapse-item title="事件" name="2">
-                                <span>事件 气死我了</span>
+                            <el-collapse-item v-if="haveEvent(pages[nowpage][lastnow].type)" title="事件" name="2">
+                                <div class="right-setting-border">
+                                    <span>单击事件</span>
+                                    <span style="width: 20px"></span>
+                                    <div style="padding-right: 10px">
+                                        <el-radio-group v-model="pages[nowpage][lastnow].Event"
+                                            @change="changeText">
+                                            <el-radio-button :label = "0" size = "small">
+                                                无
+                                            </el-radio-button>
+                                            <el-radio-button :label = "1" size = "small">
+                                                跳转页面
+                                            </el-radio-button>
+                                            <el-radio-button :label = "2" size = "small">
+                                                弹窗
+                                            </el-radio-button>
+                                        </el-radio-group>
+                                    </div>
+                                </div>
+
+                                <div style="width: 20px; height: 15px"></div>
+
+                                <div v-if="pages[nowpage][lastnow].Event == 1" class="right-setting-border">
+                                    <span>选择页面</span>
+                                    <span style="width: 15px"></span>
+                                    <el-dropdown>
+                                        <span style="align-items: center;">
+                                            页面 {{ pages[nowpage][lastnow].jumpPage + 1 }}
+                                            : {{ pagesname[pages[nowpage][lastnow].jumpPage] }}
+                                            <span style="width: 5px"></span>
+                                            <el-icon>
+                                                <arrow-down />
+                                            </el-icon>
+                                        </span>
+                                        <template #dropdown>
+                                            <el-dropdown-menu>
+                                                <el-dropdown-item v-for="(item, index) in pagesname"
+                                                    @click="setjumpPage(lastnow, index)">
+                                                    页面 {{ (index+1) }} : {{ item }}
+                                                </el-dropdown-item>
+                                            </el-dropdown-menu>
+                                        </template>
+                                    </el-dropdown>
+                                </div>
+
+                                <div v-if="pages[nowpage][lastnow].Event == 2" class="right-setting-border">
+                                    <span>弹窗标题</span>
+                                    <span style="width: 20px"></span>
+                                    <el-input style="width: 60%; height: 27px"
+                                        v-model = pages[nowpage][lastnow].boxTitle>
+                                    </el-input>
+                                </div>
+
+                                <div style="width: 20px; height: 15px"></div>
+
+                                <div v-if="pages[nowpage][lastnow].Event == 2" class="right-setting-border"
+                                    style="align-items: flex-start;">
+                                    <span>弹窗内容</span>
+                                    <span style="width: 20px"></span>
+                                    <el-input type="textarea" :rows="2"
+                                        style="width: 60%; height: 50px"
+                                        v-model = pages[nowpage][lastnow].boxMessage>
+                                    </el-input>
+                                </div>
+
                             </el-collapse-item>
                         </el-collapse>
                         
@@ -1282,7 +1345,8 @@
 
 <script>
 import { ElDropdown, ElMenu, ElCollapse, 
-    ElButton, ElRadio, ElMessage, ElScrollbar} from 'element-plus'
+    ElButton, ElRadio, ElMessage, ElScrollbar,
+    ElMessageBox} from 'element-plus'
 import { Plus, MoreFilled, ArrowDown, Document } from '@element-plus/icons-vue'
 import { Picture, PieChart, Stopwatch, Star, Setting } from '@element-plus/icons-vue'
 import { CircleClose, Delete, ArrowUp, Search } from '@element-plus/icons-vue'
@@ -1312,6 +1376,7 @@ export default{
     components: { 
         ElDropdown, ElMenu, ElCollapse, 
         ElButton, ElRadio, ElMessage, ElScrollbar, 
+        ElMessageBox,
         
         ArrowDown, MoreFilled, Plus, Document,
         Picture, PieChart, Stopwatch, Star, Setting,
@@ -1329,6 +1394,10 @@ export default{
     },
     data() {
         return {
+            testclick: ref(0),
+            testJumpPage: ref(0),
+            testmessagebox: ref(0),
+
             my_table: {
                 "width": "700px",
                 "height": "450px",
@@ -1354,38 +1423,8 @@ export default{
             ],
             nowtool: null,
 
-            pages: [
-                [
-                    {   
-                        id: "el0", type: "figure-rect", active: false,
-                        transform: { x: 100, y: 100, width: 100, height: 100 }, 
-                        style: { "width": "100%", "height": "100%",
-                            "border-color": "black", "border-style": "solid",
-                            "border-width": "2px", "padding": "0",
-                            "opacity": "1", "background-color": "transparent"
-                        },
-                        border: 2, opacity: 1,
-                        border_color: "#000000", fill_color: 'rgba(0, 0, 0, 0)'
-                    },
+            pages: [ [ ] ],
 
-                    
-                    /*{   
-                        id: "el0", type: "btn", active: false,
-                        transform: { x: 100, y: 100, width: 62, height: 32 },
-                        style: { "width": "100%", "height": "100%"},
-                        btnType: "primary", content: "按钮"
-                    }*/
-
-                    /*{   
-                        id: "el0", type: "input", active: false,
-                        transform: { x: 100, y: 100, width: 230, height: 40 },
-                        style: { "width": "100%", "height": "100%"},
-                        content: "Please Input",
-                        pretend: "", append: "",
-                        prefix_icon: "Search", suffix_icon:"Calendar"
-                    }*/
-                ]
-            ],
             pagesname: [
                 "page-1"
             ],
@@ -1447,6 +1486,16 @@ export default{
         }
     },
     methods: {
+        setjumpPage(id, index){
+            this.setActive(id)
+            this.pages[this.nowpage][id].jumpPage = index            
+        },
+        haveEvent(strtype){
+            if(strtype == "checkbox" 
+                || strtype == "radio" || strtype == "input")
+                return false
+            return true
+        },
         openPreview(){
             openAxure({
                 axure_id: this.axure_id,
@@ -1683,7 +1732,12 @@ export default{
                 transform: { x: 0, y: 0, width: 100, height: 100 },
                 style: {},
                 border: 2, opacity: 1,
-                border_color: "#000000", fill_color: 'rgba(0, 0, 0, 0)'
+                border_color: "#000000", fill_color: 'rgba(0, 0, 0, 0)',
+
+                Event: ref(0),
+                jumpPage: ref(0),
+                boxTitle: 'Title',
+                boxMessage: 'This is a message',
             }
             newItem.style = this.redRect
             this.now = Cnt
@@ -1697,7 +1751,12 @@ export default{
                 transform: { x: 0, y: 0, width: 100, height: 100 },
                 style: {},
                 border: 2, opacity: 1,
-                border_color: "#000000", fill_color: 'rgba(0, 0, 0, 0)'
+                border_color: "#000000", fill_color: 'rgba(0, 0, 0, 0)',
+
+                Event: ref(0),
+                jumpPage: ref(0),
+                boxTitle: 'Title',
+                boxMessage: 'This is a message',
             }
             newItem.style = this.circle
             this.now = Cnt
@@ -1709,7 +1768,12 @@ export default{
             let newItem = {"id": 'el' + Cnt, 
                 type: "figure-kangle", active: true,
                 transform: { x: 0, y: 0, width: 100, height: 100 },
-                style: {}, opacity: 1
+                style: {}, opacity: 1,
+
+                Event: ref(0),
+                jumpPage: ref(0),
+                boxTitle: 'Title',
+                boxMessage: 'This is a message',
             }
             newItem.style = this.kangle
             this.now = Cnt
@@ -1724,6 +1788,11 @@ export default{
                 style: {}, content: "这是一段文字", opacity: 1,
                 border_color: "#000000", fill_color: 'rgba(0, 0, 0, 0)',
                 font_size: 18,
+
+                Event: ref(0),
+                jumpPage: ref(0),
+                boxTitle: 'Title',
+                boxMessage: 'This is a message',
             }
             newItem.style = this.Lable
             this.now = Cnt
@@ -1739,6 +1808,11 @@ export default{
                 btnType: "", content: "按钮", opacity: 1,
                 shape: ref(0), plain: false, text: ref(false),
                 btnColor: "",
+
+                Event: ref(0),
+                jumpPage: ref(0),
+                boxTitle: 'Title',
+                boxMessage: 'This is a message',
             }
             this.now = Cnt
             this.lastnow = Cnt
@@ -1753,6 +1827,11 @@ export default{
                 btnType: "primary", content: "按钮", opacity: 1,
                 shape: ref(0), plain: false, text: ref(false),
                 btnColor: "",
+
+                Event: ref(0),
+                jumpPage: ref(0),
+                boxTitle: 'Title',
+                boxMessage: 'This is a message',
             }
             this.now = Cnt
             this.lastnow = Cnt
@@ -1802,7 +1881,12 @@ export default{
                 style: {"width": "100%", "height": "100%", 
                     "color": "#000000"},
                 icon_index: 0, color: "#000000",
-                opacity: 1
+                opacity: 1,
+
+                Event: ref(0),
+                jumpPage: ref(0),
+                boxTitle: 'Title',
+                boxMessage: 'This is a message',
             }
             newItem.icon_index = index
 
@@ -2011,7 +2095,7 @@ export default{
         document.onkeydown = function(e) {
             if(that.changingLable || that.changingName || that.changingPageName)
                 return
-            if(e.which == 8 || e.which == 46)
+            if( /*e.which == 8 ||*/ e.which == 46)
                 that.Delete()
         }
 
@@ -2032,6 +2116,7 @@ export default{
             let fileName2 = "Axure/" + this.getFileNameUUID() + ".json"
             that.URLpageName = "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName2
         }
+        else this.download()
 
         console.log(that.URLpage)
         console.log(that.URLpageName)

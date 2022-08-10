@@ -22,6 +22,7 @@
                 </el-menu-item>
             </el-menu>
         </div>
+
         <div class="display">
             <div :style="my_table">
                 <DraggableContainer 
@@ -35,15 +36,23 @@
                         v-model:h = item.transform.height
                         :parent = true
                         v-model:active = item.active
-                        :lockAspectRatio = "true"
-                        
-                        @activated = "setActive(index)"
-                        @deactivated = "setDeActive(index)"
-                        @resizing = "resizingHandle">
-                        <div v-if = "isLable(item.type)" :style="item.style" :id="item.id">
+                        :draggable="false"
+                        :resizable="false"    
+                    >
+
+                        <div v-if = "isLable(item.type)" 
+                            :style="item.style" :id="item.id"
+                            @click = "myEvent(item.Event, item.jumpPage, 
+                                item.boxTitle, item.boxMessage)"
+                        >
                             <div> {{ item.content }} </div>
                         </div>
-                        <div v-else-if="isBtn(item.type)" :style="item.style" :id="item.id">
+
+                        <div v-else-if="isBtn(item.type)" 
+                            :style="item.style" :id="item.id"
+                            @click = "myEvent(item.Event, item.jumpPage, 
+                                item.boxTitle, item.boxMessage)"
+                        >
                             <el-button v-if="haveColor(item.btnColor)" :type="item.btnType"
                                 :round = "isBtnRound(item.shape)"
                                 :circle = "isBtnCircle(item.shape)"
@@ -84,14 +93,18 @@
                             <el-checkbox>{{ item.content }}</el-checkbox>
                         </div>
 
-                        <div v-else-if="isIcon(item.type)" :id="item.id">
+                        <div v-else-if="isIcon(item.type)" :id="item.id"
+                            @click = "myEvent(item.Event, item.jumpPage, 
+                                item.boxTitle, item.boxMessage)">
                             <component
                                 :is="icons[item.icon_index]"
                                 :style="item.style">
                             </component>
                         </div>
 
-                        <div v-else :style="item.style" :id="item.id">
+                        <div v-else :style="item.style" :id="item.id"
+                            @click = "myEvent(item.Event, item.jumpPage, 
+                            item.boxTitle, item.boxMessage)">
                         </div>
                     </Vue3DraggableResizable>
                 </DraggableContainer>
@@ -174,7 +187,7 @@ import { DraggableContainer } from 'vue3-draggable-resizable'
 import { load_axure, viewAxure } from "@/utils/api"
 
 import { ElDropdown, ElMenu, ElCollapse, 
-    ElButton, ElRadio, ElMessage, ElScrollbar} from 'element-plus'
+    ElButton, ElRadio, ElMessage, ElScrollbar, ElMessageBox} from 'element-plus'
 
 export default{
     components: { 
@@ -182,7 +195,7 @@ export default{
         DraggableContainer,
 
         ElDropdown, ElMenu, ElCollapse, 
-        ElButton, ElRadio, ElMessage, ElScrollbar
+        ElButton, ElRadio, ElMessage, ElScrollbar, ElMessageBox
     },
     data() {
         return {
@@ -201,6 +214,19 @@ export default{
         }
     },
     methods: {
+        myEvent(Event, jumpPage, boxTitle, boxMessage){
+            console.log('myEvent', Event, jumpPage, boxTitle, boxMessage)
+            
+            if(Event == 0)
+                return
+            else if(Event == 1)
+                this.setPage(jumpPage)
+            else if(Event == 2){
+                ElMessageBox.alert(boxMessage, boxTitle, {
+                    confirmButtonText: '确认',
+                })
+            }
+        },
         havePretend(index){
             let item = this.pages[this.nowpage][index]
             return item.pretend != undefined && item.pretend != null
