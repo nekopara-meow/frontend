@@ -108,13 +108,14 @@
                                 @activated = "setActive(index)"
                                 @deactivated = "setDeActive(index)"
                                 @resizing = "resizingHandle">
-                                <div v-if = "isLable(item.type)" :style="item.style" :id="item.id">
+                                <div v-if = "isLable(item.type)" 
+                                    :style="item.style" :id="item.id">
                                     <div v-if="changingLable">
                                         <input :value="item.content"
                                             @change="changeLable($event, index)"
                                             type="text" :style="item.style">
                                     </div>
-                                    <div v-else @dblclick="editLable">
+                                    <div v-else @dblclick="editLable" :style="item.style">
                                         {{ item.content }}
                                     </div>
                                 </div>
@@ -204,9 +205,11 @@
                             <el-menu-item index="3" @click="setTool(3)">
                                 <el-icon><Star /></el-icon>
                             </el-menu-item>
+                            <!--
                             <el-menu-item index="4" @click="setTool(4)">
                                 <el-icon><Setting /></el-icon>
                             </el-menu-item>
+                            -->
                         </el-menu>
                     </div>
                 </div>
@@ -365,8 +368,7 @@
                                 
                                 <div style="width: 10px; height: 10px"></div>
                                 <div v-if="isLable(pages[nowpage][lastnow].type)"
-                                    class="right-setting-border"
-                                    style="align-items: flex-start !important">
+                                    class="right-setting-border">
 
                                     <span>文本</span>
                                     <span style="width: 15px;"></span>
@@ -662,6 +664,7 @@
             </div>
             <div class="line"></div>
             <el-collapse v-model="activeNames" >
+
                 <el-collapse-item title="图形" name="1">
                     <div class="figure-button">
                         <div class="rect-button" @click="addRedRect"></div>
@@ -671,6 +674,7 @@
                         <div class="mykangle" @click="addKangle"></div>
                     </div>
                 </el-collapse-item>
+
                 <el-collapse-item title="常用" name="2">
                     <div class="figure-button">
                         <div class="label-button" @click="addLable">T</div>
@@ -724,7 +728,75 @@
 
                 </el-collapse-item>
 
+                <!--
                 <el-collapse-item title="图标" name="3">
+                    <el-scrollbar height="150">
+                        <div v-for = "index0 in 47"
+                            style="display: flex; 
+                            flex-direction: row;"
+                        >
+                            <div v-for = "index in 6"
+                                style="width: 30px; height: 30px; padding: 5;">
+                                <component
+                                    :is="icons[(index0 - 1) * 6 + index - 1]"
+                                    style="width: 20px; height: 20px; color: grey;"
+                                    @click="addIcon((index0 - 1) * 6 + index - 1)"
+                                >
+                                </component>
+                            </div>
+                        </div>
+                        
+                    </el-scrollbar>
+                    
+                </el-collapse-item>
+                -->
+
+            </el-collapse>
+        </div>
+        
+        <div v-if="tool[1]" class="tool-1">
+            <div class="tool-title">
+                <span>图片</span>
+                <el-icon @click="cancelTool"><CircleClose /></el-icon>
+            </div>
+            <div class="line"></div>
+
+            <el-collapse>
+                <el-collapse-item title="示例图片">
+                    
+                </el-collapse-item>
+            </el-collapse>
+
+            <div
+                style =
+                    "width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    padding: 10px;"
+            >
+                <div style="width: 80%;">
+                    <el-upload
+                        class="upload-demo"
+                        drag
+                        action = "testURL">
+                        <el-icon><Upload /></el-icon>
+                        <div class="el-upload__text">将文件拖到此处</div>
+                        <div class="el-upload__text">或<em>点击上传</em></div>
+                    </el-upload>
+                </div>
+            </div>
+            
+        </div>
+
+        <div v-if="tool[2]" class="tool-1">
+            <div class="tool-title">
+                <span>图标</span>
+                <el-icon @click="cancelTool"><CircleClose /></el-icon>
+            </div>
+            <div class="line"></div>
+            <el-collapse>
+                <el-collapse-item title="图标" name="1">
                     <!--
                     <div v-for = "(name,index) in icons"
                         style="padding: 10px; 
@@ -756,50 +828,6 @@
                 </el-collapse-item>
             </el-collapse>
         </div>
-        
-        <div v-if="tool[1]" class="tool-1">
-            <div class="tool-title">
-                <span>图片</span>
-                <el-icon @click="cancelTool"><CircleClose /></el-icon>
-            </div>
-            <div class="line"></div>
-
-            <el-collapse>
-                <el-collapse-item title="示例图片">
-                    
-                </el-collapse-item>
-            </el-collapse>
-
-            <div
-                style =
-                    "width: 100%;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    padding: 10px;"
-            >
-                <div style="width: 80%;">
-                    <el-upload
-                        class="upload-demo"
-                        drag
-                        action="https://jsonplaceholder.typicode.com/posts/"
-                        disabled = true>
-                        <el-icon><Upload /></el-icon>
-                        <div class="el-upload__text">将文件拖到此处</div>
-                        <div class="el-upload__text">或<em>点击上传</em></div>
-                    </el-upload>
-                </div>
-            </div>
-            
-        </div>
-
-        <div v-if="tool[2]" class="tool-1">
-            <div class="tool-title">
-                <span>图表</span>
-                <el-icon @click="cancelTool"><CircleClose /></el-icon>
-            </div>
-            <div class="line"></div>
-        </div>
 
         <div v-if="tool[3]" class="tool-1">
             <div class="tool-title">
@@ -809,6 +837,7 @@
             <div class="line"></div>
         </div>
 
+        <!--
         <div v-if="tool[4]" class="tool-1">
             <div class="tool-title">
                 <span>其它</span>
@@ -816,6 +845,7 @@
             </div>
             <div class="line"></div>
         </div>
+        -->
         
         <el-dialog v-model="dialogVisible" title="导出预览">
             <img width="500" :src="imgUrl" />
@@ -1210,7 +1240,7 @@
         right: 330px;
         .toolbox{
             width: 60%;
-            height: 300px;
+            height: 220px;
             background-color: white;
             box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.1);
             border-radius: 10px;
@@ -1394,9 +1424,8 @@ export default{
     },
     data() {
         return {
-            testclick: ref(0),
-            testJumpPage: ref(0),
-            testmessagebox: ref(0),
+            //url="https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName;
+            testURL: "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/AxurePic/1.png",
 
             my_table: {
                 "width": "700px",
@@ -1482,6 +1511,7 @@ export default{
                 "opacity": "1",
                 "background-color": "transparent",
                 "font-size": "18px",
+                "align-items": "flex-start"
             },
         }
     },
@@ -1586,6 +1616,9 @@ export default{
             this.setActive(this.lastnow)
             let index = this.lastnow
             this.pages[this.nowpage][index].style['font-size'] = value + "px"
+
+            console.log(this.pages[0][2].style)
+            console.log(this.pages[0][3].style)
         },
         changeFontColor(value){
             this.setActive(this.lastnow)
@@ -1730,7 +1763,15 @@ export default{
             let newItem = {"id": 'el' + Cnt, 
                 type: "figure-rect", active: true,
                 transform: { x: 0, y: 0, width: 100, height: 100 },
-                style: {},
+                style: {"width": "100%",
+                        "height": "100%",
+
+                        "border-color": "black",
+                        "border-style": "solid",
+                        "border-width": "2px",
+                        "padding": "0",
+                        "opacity": "1",
+                        "background-color": "transparent"},
                 border: 2, opacity: 1,
                 border_color: "#000000", fill_color: 'rgba(0, 0, 0, 0)',
 
@@ -1739,7 +1780,6 @@ export default{
                 boxTitle: 'Title',
                 boxMessage: 'This is a message',
             }
-            newItem.style = this.redRect
             this.now = Cnt
             this.lastnow = Cnt
             this.pages[this.nowpage].push(newItem)
@@ -1749,7 +1789,18 @@ export default{
             let newItem = {"id": 'el' + Cnt, 
                 type: "figure-circle", active: true,
                 transform: { x: 0, y: 0, width: 100, height: 100 },
-                style: {},
+                style: {
+                    "width": "100%",
+                    "height": "100%",
+
+                    "border-color": "black",
+                    "border-style": "solid",
+                    "border-radius": "50%",
+                    "border-width": "2px",
+                    "padding": "0",
+                    "opacity": "1",
+                    "background-color": "transparent"
+                },
                 border: 2, opacity: 1,
                 border_color: "#000000", fill_color: 'rgba(0, 0, 0, 0)',
 
@@ -1758,7 +1809,6 @@ export default{
                 boxTitle: 'Title',
                 boxMessage: 'This is a message',
             }
-            newItem.style = this.circle
             this.now = Cnt
             this.lastnow = Cnt
             this.pages[this.nowpage].push(newItem)
@@ -1785,7 +1835,17 @@ export default{
             let newItem = {"id": 'el' + Cnt, 
                 type: "lable", active: true,
                 transform: { x: 0, y: 0, width: 130, height: 40},
-                style: {}, content: "这是一段文字", opacity: 1,
+                style: {
+                    "width": "100%",
+                    "height": "100%",
+                    "color": "black",
+                    "border": "none",
+                    "opacity": "1",
+                    "background-color": "transparent",
+                    "font-size": "18px",
+                    "align-items": "flex-start"
+                }, 
+                content: "这是一段文字", opacity: 1,
                 border_color: "#000000", fill_color: 'rgba(0, 0, 0, 0)',
                 font_size: 18,
 
@@ -1794,7 +1854,6 @@ export default{
                 boxTitle: 'Title',
                 boxMessage: 'This is a message',
             }
-            newItem.style = this.Lable
             this.now = Cnt
             this.lastnow = Cnt
             this.pages[this.nowpage].push(newItem)
@@ -1896,6 +1955,7 @@ export default{
         },
         printList(){
             console.log(JSON.stringify(this.pages))
+            console.log(JSON.stringify(this.pagesname))
         },
         setActive(id){
             if(this.now != null)
