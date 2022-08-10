@@ -400,6 +400,8 @@ export function completelyDelProById(data){
     })
 }
 
+
+
 export function recoverProById(data){
     return request({
         url: 'api/projects/recover/project',
@@ -407,6 +409,18 @@ export function recoverProById(data){
         data,
     })
 }
+
+
+export function getRecentFile(data){
+    return request({
+        url: 'api/projects/viewFilesInProject',
+        method: 'post',
+        data,
+    })
+}
+
+
+
 
 /*export const loginApi=data=>{
     return post({

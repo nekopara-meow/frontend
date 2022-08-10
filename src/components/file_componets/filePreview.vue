@@ -122,6 +122,7 @@ export default {
 
     tip(){
       if(this.isNew) return '点击图标，新建文件'
+      console.log('updateTime',this.update_time,this.fileName)
       let timestr=new Date(this.update_time).toLocaleDateString()+' '+new Date(this.update_time).toLocaleTimeString()
       console.log('timestr',timestr)
       if (this.update_time != undefined) {

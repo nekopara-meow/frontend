@@ -5,29 +5,16 @@
         <div id="leftup">
           <h2 class="title gradient">最近打开</h2>
           <div class="buttons">
-            <el-dropdown style="margin-right: 30px">
-              <el-button type="primary"
-                ><el-icon><Sort /></el-icon
-              ></el-button>
-              <template #dropdown>
-                <el-dropdown-menu>
-                  <el-dropdown-item>按项目分组</el-dropdown-item>
-                  <el-dropdown-item>按格式分组</el-dropdown-item>
-                  <el-dropdown-item>按时间分组</el-dropdown-item>
-                </el-dropdown-menu>
-              </template>
-            </el-dropdown>
             <el-dropdown>
               <el-button type="primary"
                 ><el-icon><Filter /></el-icon
               ></el-button>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item>Action 1</el-dropdown-item>
-                  <el-dropdown-item>Action 2</el-dropdown-item>
-                  <el-dropdown-item>Action 3</el-dropdown-item>
-                  <el-dropdown-item>Action 4</el-dropdown-item>
-                  <el-dropdown-item>Action 5</el-dropdown-item>
+                  <el-dropdown-item @click="sortByTime(1)">按修改时间升序</el-dropdown-item>
+                  <el-dropdown-item @click="sortByTime(-1)">按修改时间降序</el-dropdown-item>
+                  <el-dropdown-item @click="sortByFileName(1)">按文件名升序</el-dropdown-item>
+                  <el-dropdown-item @click="sortByFileName(-1)">按文件名降序</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -37,69 +24,25 @@
         <hr style="margin: 5px" />
 
         <div id="leftdown">
-          <el-collapse
-            v-model="activeNames"
-            @change="handleChange"
-            style="border: none"
-            class="onegroup"
-          >
-            <el-collapse-item
-              title="小学期项目"
-              name="1"
-              style="font-size: 20px; font-weight: lighter"
-            >
-              <el-dropdown
-                trigger="contextmenu"
-                v-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9]"
-              >
-                <div class="oneitem">
-                  <img src="..\assets\img\fileicons\Word.png" />
-                  <div>少年阿宾.txt</div>
-                  <div style="font-size: smaller; margin-top: 2px">
-                    2022/8/3
-                  </div>
-                </div>
-
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <el-dropdown-item>打开</el-dropdown-item>
-                    <el-dropdown-item>在新标签页中打开</el-dropdown-item>
-                    <el-dropdown-item>移出工作台</el-dropdown-item>
-                    <el-dropdown-item>历史版本</el-dropdown-item>
-                    <el-dropdown-item>属性</el-dropdown-item>
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
-            </el-collapse-item>
-
-            <hr style="margin: 5px" />
-            <el-collapse-item
-              title="软工项目"
-              name="2"
-              style="font-size: 20px; font-weight: lighter"
-            >
-              <el-dropdown
-                trigger="contextmenu"
-                v-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9]"
-              >
-                <div class="oneitem">
-                  <img src="..\assets\img\fileicons\txt.png" />
-                  <div>少年阿宾.txt</div>
-                </div>
-
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <el-dropdown-item>打开</el-dropdown-item>
-                    <el-dropdown-item>在新标签页中打开</el-dropdown-item>
-                    <el-dropdown-item>移出工作台</el-dropdown-item>
-                    <el-dropdown-item>历史版本</el-dropdown-item>
-                    <el-dropdown-item>属性</el-dropdown-item>
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
-            </el-collapse-item>
-            <hr style="margin: 5px" />
-          </el-collapse>
+          <el-skeleton :rows="5" animated v-if="got != 1" />
+          <el-empty
+              description="空空如也"
+              v-if="got == 1 && all_file.length == 0"
+              style="margin: 0 auto"
+          />
+          <file-preview
+              @updateData="reloadData"
+              v-if="got == 1 && all_file.length != 0"
+              v-for="(tmp, index) in all_file"
+              :file_id="tmp.file_id"
+              :update_time="tmp.update_time"
+              :file_type="tmp.file_type"
+              :creator="tmp.creator"
+              :file_name="tmp.file_name"
+              :file_content="tmp.file_content"
+              :project_id="tmp.project_id"
+              :key="index"
+          ></file-preview>
         </div>
       </div>
     </div>
@@ -109,9 +52,44 @@
 <script>
 import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
 import { Filter, Sort, CaretBottom } from "@element-plus/icons-vue";
+import FilePreview from "@/components/file_componets/filePreview";
+import {getRecentFile} from "@/utils/api";
 export default {
-  name: "workspace",
-  components: { Filter, Sort, CaretBottom },
+  name: "Recent",
+  components: {FilePreview, Filter, Sort, CaretBottom },
+  data(){
+    return{
+      all_file:[],
+      username:'',
+      got:0,
+    }
+  },
+
+  methods:{sortByTime(asc){
+      this.all_file.sort(function(a, b) {
+        return b.update_time < a.update_time ? asc : (asc*-1)
+      })
+    },
+    sortByFileName(asc){
+      this.all_file.sort(function(a, b) {
+        return b.file_name < a.file_name ? asc : (asc*-1)
+      })
+    },
+    reloadData(){
+      this.got=0
+      getRecentFile({
+        username:this.username,
+      }).then(res=>{
+        console.log(res.data)
+        this.all_file=res.data.ans_list
+        this.got++
+      })
+    }
+  },
+  mounted() {
+    this.username=this.$store.state.username
+    this.reloadData()
+  },
 };
 </script>
 
@@ -141,8 +119,8 @@ export default {
 }
 #left {
   height: 100%;
-  flex: 1 1 70%;
-  padding: 10px;
+  flex: 1 1 60%;
+  padding: 1rem;
 }
 #right {
   height: 100%;
@@ -176,6 +154,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-left: 2rem;
 }
 .buttons {
   margin-right: 50px;
@@ -218,6 +197,9 @@ export default {
   overflow-y: scroll;
   height: 63vh;
   padding: 0 5px;
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
 }
 #rightdown {
   overflow-y: scroll;
