@@ -142,30 +142,16 @@
                 <div class="example">
                   <div class="avatar-list avatar-list-stacked">
                     <span
+                      v-for="i in teamcreat.avatars.slice(0, 4)"
                       class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
+                      :style="{ backgroundImage: `url(` + i + ')' }"
+                    >
+                    </span>
+                    <span
+                      v-if="teamcreat.avatars.length > 4"
                       class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span class="avatar cover-image brround">+8</span>
+                      >+{{ teamcreat.avatars.length - 4 }}</span
+                    >
                   </div>
                 </div>
               </div>
@@ -234,30 +220,16 @@
                 <div class="example">
                   <div class="avatar-list avatar-list-stacked">
                     <span
+                      v-for="i in teamadmin.avatars.slice(0, 4)"
                       class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
+                      :style="{ backgroundImage: `url(` + i + ')' }"
+                    >
+                    </span>
+                    <span
+                      v-if="teamadmin.avatars.length > 4"
                       class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span class="avatar cover-image brround">+8</span>
+                      >+{{ teamadmin.avatars.length - 4 }}</span
+                    >
                   </div>
                 </div>
               </div>
@@ -326,24 +298,16 @@
                 <div class="example">
                   <div class="avatar-list avatar-list-stacked">
                     <span
+                      v-for="i in teamin.avatars.slice(0, 4)"
                       class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
+                      :style="{ backgroundImage: `url(` + i + ')' }"
+                    >
+                    </span>
+                    <span
+                      v-if="teamin.avatars.length > 4"
                       class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span
-                      class="avatar cover-image brround"
-                      style="
-                        background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                      "
-                    ></span
-                    ><span class="avatar cover-image brround">+8</span>
+                      >+{{ teamin.avatars.length - 4 }}</span
+                    >
                   </div>
                 </div>
               </div>
@@ -420,12 +384,20 @@ export default {
             this.teamuserin = response.data.Dict.team_info;
             console.log(this.teamuserin);
             let len = this.teamuserin.length;
-            let i = 0;
-            for (i = 0; i < len; i++) {
+            let lenn = 0;
+            for (let i = 0; i < len; i++) {
+              this.teamuserin[i].avatars = [];
               getavatarchain({ team_id: this.teamuserin[i].team_id }).then(
                 (response) => {
                   if (response.data.status_code == 1) {
-                    console.log(response.data);
+                    console.log("chain");
+                    console.log(response.data.ans_list);
+                    lenn = response.data.ans_list.length;
+                    for (let j = 0; j < lenn; j++) {
+                      this.teamuserin[i].avatars.push(
+                        response.data.ans_list[j].avatar
+                      );
+                    }
                   } else ElMessage.error(response.data.message);
                 }
               );
@@ -438,6 +410,26 @@ export default {
           this.got += 1;
           if (response.data.status_code == 1) {
             this.teamuseradmin = response.data.Dict.team_info;
+            console.log(this.teamuseradmin);
+            let len = this.teamuseradmin.length;
+            let lenn = 0;
+            for (let i = 0; i < len; i++) {
+              this.teamuseradmin[i].avatars = [];
+              getavatarchain({ team_id: this.teamuseradmin[i].team_id }).then(
+                (response) => {
+                  if (response.data.status_code == 1) {
+                    console.log("chain");
+                    console.log(response.data.ans_list);
+                    lenn = response.data.ans_list.length;
+                    for (let j = 0; j < lenn; j++) {
+                      this.teamuseradmin[i].avatars.push(
+                        response.data.ans_list[j].avatar
+                      );
+                    }
+                  } else ElMessage.error(response.data.message);
+                }
+              );
+            }
           }
         }
       );
@@ -446,6 +438,26 @@ export default {
           this.got += 1;
           if (response.data.status_code == 1) {
             this.teamusercreat = response.data.Dict.team_info;
+            console.log(this.teamusercreat);
+            let len = this.teamusercreat.length;
+            let lenn = 0;
+            for (let i = 0; i < len; i++) {
+              this.teamusercreat[i].avatars = [];
+              getavatarchain({ team_id: this.teamusercreat[i].team_id }).then(
+                (response) => {
+                  if (response.data.status_code == 1) {
+                    console.log("chain");
+                    console.log(response.data.ans_list);
+                    lenn = response.data.ans_list.length;
+                    for (let j = 0; j < lenn; j++) {
+                      this.teamusercreat[i].avatars.push(
+                        response.data.ans_list[j].avatar
+                      );
+                    }
+                  } else ElMessage.error(response.data.message);
+                }
+              );
+            }
           }
         }
       );

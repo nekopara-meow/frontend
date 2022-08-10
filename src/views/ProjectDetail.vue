@@ -78,24 +78,16 @@
             <div class="example">
               <div class="avatar-list avatar-list-stacked">
                 <span
+                  v-for="i in avatars.slice(0, 5)"
                   class="avatar cover-image brround"
-                  style="
-                    background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                  "
-                ></span
-                ><span
+                  :style="{ backgroundImage: `url(` + i + ')' }"
+                >
+                </span>
+                <span
+                  v-if="avatars.length > 5"
                   class="avatar cover-image brround"
-                  style="
-                    background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                  "
-                ></span
-                ><span
-                  class="avatar cover-image brround"
-                  style="
-                    background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-                  "
-                ></span
-                ><span class="avatar cover-image brround">+8</span>
+                  >+{{ avatars.length - 5 }}</span
+                >
               </div>
             </div>
           </div>
@@ -140,6 +132,7 @@ import {
   updateprojectinfo,
   editteaminfo,
   getprojectinfo,
+  getavatarchain,
 } from "@/utils/api";
 import AxureEditor from "@/components/rubbish/axureEditor";
 
@@ -149,6 +142,7 @@ export default {
   props: {},
   data() {
     return {
+      avatars: [],
       projectinfo: {
         brief_intro: "",
         create_time: "",
@@ -179,6 +173,18 @@ export default {
           this.projectinfo.creator = response.data.creator;
           this.projectinfo.project_name = response.data.project_name;
           this.projectinfo.team_name = response.data.team_name;
+          this.avatars = [];
+          getavatarchain({ team_id: response.data.team_id }).then(
+            (response) => {
+              if (response.data.status_code == 1) {
+                let lenn = response.data.ans_list.length;
+                for (let j = 0; j < lenn; j++) {
+                  this.avatars.push(response.data.ans_list[j].avatar);
+                }
+                console.log(this.avatars);
+              } else ElMessage.error(response.data.message);
+            }
+          );
         } else ElMessage.error(response.data.message);
       });
     },
@@ -218,6 +224,7 @@ export default {
       this.form.project_id = this.project_id;
       this.getprojectinfos();
     }
+
     console.log(this.project_id);
   },
   computed: {},
