@@ -187,7 +187,7 @@
             </el-upload>
             <span class="bluelight">{{ teammsg.creator }}</span
             ><span style="font-size: 13px" class="bluelight"
-              >创建于{{teammsg.create_time|formatDate}}</span
+              >创建于{{teammsg.create_time}}</span
             >
             <div class="text-wrap" style="margin: 10px 0">
               <div class="example">
@@ -493,7 +493,7 @@ import {
   getteamprojectbyid,
   invitemember, renameproject,
   setteamadmin,
-  editteaminfo, getteammessage,
+  editteaminfo, getteammessage, deleteamadmin,
 } from "@/utils/api";
 import Base64 from "@/utils/Base64";
 import {client, getFileNameUUID} from "@/assets/alioss";
@@ -723,6 +723,7 @@ export default {
         if (response.data.status_code == 1) {
           this.initializationmember();
           console.log(response.data);
+          this.getteammsg();
           ElMessage({
             message: "设置成功",
             type: "success",
@@ -731,17 +732,13 @@ export default {
       });
     },
     deletemember(membername) {
-      console.log({
-        deleter_username: this.$store.state.username,
-        deletee_username: membername,
-        team_id: this.team_id,
-      });
       deleteteammem({
         deleter_username: this.$store.state.username,
         deletee_username: membername,
         team_id: this.team_id,
       }).then((response) => {
         if (response.data.status_code == 1) {
+          this.getteammsg();
           this.initializationmember(),
             ElMessage({
               message: "移出成功",
@@ -750,11 +747,27 @@ export default {
         } else ElMessage.error(response.data.msg);
       });
     },
-    deleteadmin(){},
+    deleteadmin(membername){
+      deleteamadmin({
+        canceler: this.$store.state.username,
+        cancelee: membername,
+        team_id: this.team_id,
+      }).then((response) => {
+        if (response.data.status_code == 1) {
+          this.getteammsg();
+          this.initializationmember(),
+              ElMessage({
+                message: "移出成功",
+                type: "success",
+              });
+        } else ElMessage.error(response.data.msg);
+      });
+    },
     //项目操作
     deleteteamproject(project_id){
       deleteproject({username:this.$store.state.username,project_id:project_id}).then((response)=>{
         if (response.data.status_code == 1) {
+          this.getteammsg();
           this.initializationdata();
           ElMessage({
             message: "删除成功",

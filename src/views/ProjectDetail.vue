@@ -34,7 +34,7 @@
       <div id="left">
         <div id="leftup">
           <div style="display: flex">
-            <h2 class="title">NEKOPARA</h2>
+            <h2 class="title">{{projectinfo.project_name}}</h2>
 
             <nav class="nav-link">
               <router-link
@@ -131,7 +131,7 @@ import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
 import { Filter, Sort, Edit, Plus, CaretBottom } from "@element-plus/icons-vue";
 import UMLEditor from "@/components/rubbish/UMLEditor";
 import CoEditor from "@/components/rubbish/CoEditor";
-import {get_docfile, get_umlfile, del_uml, del_doc, updateprojectinfo, editteaminfo} from "@/utils/api";
+import {get_docfile, get_umlfile, del_uml, del_doc, updateprojectinfo, editteaminfo, getprojectinfo} from "@/utils/api";
 import AxureEditor from "@/components/rubbish/axureEditor";
 
 export default {
@@ -161,6 +161,17 @@ export default {
     };
   },
   methods: {
+    getprojectinfos(){
+        getprojectinfo({project_id:this.project_id}).then((response) => {
+          if (response.data.status_code == 1) {
+            this.projectinfo.brief_intro=response.data.brief_intro;
+            this.projectinfo.create_time=response.data.create_time;
+            this.projectinfo.creator=response.data.creator;
+            this.projectinfo.project_name=response.data.project_name;
+            this.projectinfo.team_name=response.data.team_name;
+          } else ElMessage.error(response.data.message);
+        });
+    },
     submit(){
       updateprojectinfo(this.form).then((response) => {
         if (response.data.status_code == 1) {
@@ -190,6 +201,7 @@ export default {
     if (this.$route.params.project_id) {
       this.project_id = this.$route.params.project_id;
       this.username = this.$store.state.username;
+      this.getprojectinfos();
     }
     console.log(this.project_id);
   },

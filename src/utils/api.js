@@ -361,6 +361,22 @@ export async function updateprojectinfo(data) {
         data,
     })
 }
+export async function deleteamadmin(data) {
+    return request({
+        url: 'api/team/deleteAdmins',
+        method: 'post',
+        data,
+    })
+}
+export async function getprojectinfo(data) {
+    return request({
+        url: 'api/projects/viewProject',
+        method: 'post',
+        data,
+    })
+}
+
+
 /*export const loginApi=data=>{
     return post({
         url: "api/users/login",
