@@ -166,6 +166,7 @@ export default {
             type: "success",
           });
           this.dialogFormVisible=false;
+          this.$router.go(0);
         } else ElMessage.error(response.data.message);
       });
     }
@@ -187,6 +188,7 @@ export default {
     if(this.$route.query.project_id){
       this.project_id=this.$route.query.project_id
       this.username=this.$store.state.username
+      this.form.project_id=this.project_id
     }
     console.log(this.project_id);
   },
