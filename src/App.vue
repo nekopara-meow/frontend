@@ -95,7 +95,7 @@ main {
   font-family: "Times New Roman", "simsun";
 }
 article {
-  border: 1px solid transparent;
+  // border: 1px solid transparent;
   height: calc(100vh - 4rem);
   width: calc(100vw - 200px);
   transition: 0.3s;

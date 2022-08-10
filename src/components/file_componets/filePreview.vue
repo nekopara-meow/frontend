@@ -36,7 +36,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogFormVisible = false;this.fileInitial.name=null">Cancel</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false;this.openFile()"
+        <el-button type="primary" @click="dialogFormVisible = false;this.handle()"
         >Confirm</el-button>
       </span>
     </template>
@@ -73,7 +73,7 @@
       </el-form-item>
 
       <el-form-item label="新建画布宽度" label-width="140px">
-        <el-input-number v-model="newAxure.weight"
+        <el-input-number v-model="newAxure.width"
                          controls-position="right"
                          class="mx-4"
                          :min="1" :step="50"
@@ -125,7 +125,7 @@ export default {
       },
       newAxure:{
         height:null,
-        weight: null,
+        width: null,
         name:null,
       },
       visible:false,
@@ -135,6 +135,7 @@ export default {
       dialogFormVisible2:false,
       doc_model_id:'',
       docModel:docModel,
+      creating_file_name:'',
     }
   },
   props:{
@@ -156,7 +157,8 @@ export default {
     update_time:Date,
     name_url:'',
     height:'',
-    weight:'',
+    width:'',
+
   },
   computed:{
 
@@ -256,13 +258,65 @@ export default {
         this.$emit('updateData')
       })
     },
+    createUML(){
+      console.log({
+        username:this.username,
+        project_id:this.project_id,
+        uml_name:this.fileInitial.name,
+      })
+      create_uml({
+        username:this.username,
+        project_id:this.project_id,
+        uml_name:this.fileInitial.name,
+      }).then((res)=>{
+        console.log('return')
+        console.log(res.data)
+        if(res.data.uml_id){
+          this.$router.push({
+            name:'UmlDrawer',
+            query: {
+              uml_url: null,
+              uml_id: res.data.uml_id,
+              project_id:this.project_id,
+            }
+          })
+        }
+        else console.log('创建uml失败')
+      })
+    },
+    createDoc(){
+      this.creating_file_name=this.fileInitial.name
+      create_doc({
+        username:this.username,
+        project_id:this.project_id,
+        doc_name:this.fileInitial.name,
+      }).then((res)=>{
+        console.log('return')
+        console.log(res.data)
+        if(res.data.doc_id){
+          this.$router.push({
+            name:'DocEditor',
+            query: {
+              doc_url: null,
+              doc_id: res.data.doc_id,
+              username:this.username,
+              project_id:this.project_id,
+              model_id:this.doc_model_id,
+              file_name:this.creating_file_name,
+              creator:this.creator,
+            }
+          })
+        }
+        else console.log('创建doc失败')
+      })
+    },
     createAxure(){
       create_axure({
         username:this.username,
         project_id:this.project_id,
         axure_name:this.newAxure.name,
         height:this.newAxure.height,
-        weight:this.newAxure.weight
+        width:this.newAxure.width
       }).then(res=>{
         console.log(res.data)
         if(res.data.axure_id){
@@ -415,7 +469,7 @@ export default {
                 doc_url: this.file_content,
                 doc_id: this.file_id,
                 project_id:this.project_id,
-                file_name:this.file_name,
+                file_name:this.fileInitial.file_name,
                 creator:this.creator
               }
             })
@@ -450,72 +504,18 @@ export default {
       }else {
         this.dialogFormVisible2=true
       }
-      if(this.fileInitial.name===null)
-        return
-      switch (this.file_type){
-        case 0:
-          console.log({
-            username:this.username,
-            project_id:this.project_id,
-            uml_name:this.fileInitial.name,
-          })
-          create_uml({
-            username:this.username,
-            project_id:this.project_id,
-            uml_name:this.fileInitial.name,
-          }).then((res)=>{
-            console.log('return')
-            console.log(res.data)
-            if(res.data.uml_id){
-              this.$router.push({
-                name:'UmlDrawer',
-                query: {
-                  uml_url: null,
-                  uml_id: res.data.uml_id,
-                  project_id:this.project_id,
-                }
-              })
-            }
-            else console.log('创建uml失败')
-          })
-          break
-        case 1:
-          console.log({
-            username:this.username,
-            project_id:this.project_id,
-            doc_name:this.fileInitial.name,
-          })
-          create_doc({
-            username:this.username,
-            project_id:this.project_id,
-            doc_name:this.fileInitial.name,
-          }).then((res)=>{
-            console.log('return')
-            console.log(res.data)
-            if(res.data.doc_id){
-              this.$router.push({
-                name:'DocEditor',
-                query: {
-                  doc_url: null,
-                  doc_id: res.data.doc_id,
-                  username:this.username,
-                  project_id:this.project_id,
-                  model_id:this.doc_model_id,
-                  file_name:this.file_name,
-                  creator:this.creator
-                }
-              })
-            }
-            else console.log('创建doc失败')
-          })
-          break
-        case 2:
-            this.dialogFormVisible2=true
-          break
-        default:
-          console.log('文件类型错误')
-      }
     },
+    handle(){
+      if(this.fileInitial.name==null){
+        return
+      }
+      this.creating_file_name=this.fileInitial.name
+      if(this.file_type==0){
+        this.createUML()
+      }else if(this.file_type==1){
+        this.createDoc()
+      }
+    }
 
   },
   watch:{

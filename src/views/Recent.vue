@@ -42,7 +42,7 @@
                 :file_name="tmp.file_name"
                 :file_content="tmp.file_content"
                 :project_id="tmp.project_id"
-                :weight="tmp.weight"
+                :width="tmp.width"
                 :height="tmp.height"
                 :key="index"
             ></file-preview>
