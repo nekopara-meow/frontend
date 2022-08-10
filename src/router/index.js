@@ -40,6 +40,7 @@ const routes = [
         path:'projectInfo',
         name:'projectInfo',
         component:()=>import('../views/projectInfo')
+
       },
       {
         path:'projectFileInfo',
