@@ -15,7 +15,7 @@
       <span class="bluelight">团队：{{ data.team_name }}</span>
       <span class="bluelight">创建人：{{ data.creator }}</span
       ><span style="font-size: 13px" class="bluelight"
-        >创建于{{ data.createtime }}</span
+        >创建于{{  this.timestampFormat(new Date(data.create_time).valueOf() / 1000) }}</span
       >
 
       <div class="intro bluelight" style="margin-top: 10px;word-break: break-all">
@@ -117,7 +117,7 @@ export default {
       editing: 0,
       data: {
         creator: "刘华阳",
-        createtime: "2022/8/5",
+        create_time: "",
         intro: "",
         team_name: "",
       },

@@ -84,7 +84,7 @@
           <i class="bi-caret-down-fill" />
           <el-avatar :size="40">
             <!-- <img src="@/assets/img/head.jpg"> -->
-            <img :src="head ? head : ''" />
+            <img :src="$store.state.head" />
             <!-- YL -->
           </el-avatar>
         </div>
@@ -157,6 +157,7 @@ import {
 import { ElMessage } from "element-plus";
 import { Check, Close } from "@element-plus/icons-vue";
 import Base64 from "@/utils/Base64";
+import store from "@/store";
 export default {
   name: "FrNav",
   components: {
@@ -177,7 +178,7 @@ export default {
       query: "",
       token: "",
       name: "",
-      head: "",
+      //head: this.$store.state.head,
       textarea1: "",
     };
   },
@@ -266,8 +267,9 @@ export default {
     updateinfo() {
       this.token = this.$store.state.token;
       if (!this.token) {
-        this.head =
-          "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/Transparent_Akkarin.jpg";
+        store.commit("setHead", "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/Transparent_Akkarin.jpg");
+        /*this.head =
+          "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/Transparent_Akkarin.jpg";*/
         this.name = "请登录";
       } else {
         getpersonalmsg({ username: this.$store.state.username }).then(
@@ -281,13 +283,15 @@ export default {
         getuserinfo({ username: this.$store.state.username }).then(
           (response) => {
             if (response.data.status_code == 1) {
-              this.head = response.data.avatar;
+              store.commit("setHead", response.data.avatar);
+              /*this.head = response.data.avatar;*/
             } else ElMessage.error(response.data.message);
           }
         );
         //this.head = this.userinfo.head;
         this.name = this.$store.state.username;
       }
+      console.log("touxiang",this.$store.state.head,this.head)
     },
     indentSignal() {
       this.$emit("indent");
@@ -321,7 +325,6 @@ export default {
     },
     logout() {
       this.$store.commit("removeInfo");
-      localStorage.clear();
     },
     checkInfo() {
       this.$router.push({
