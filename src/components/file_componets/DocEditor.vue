@@ -1,37 +1,34 @@
 <template>
   <div class="editor" style="height: calc(100vh - 4rem - 100px)">
-    <div class="titlebar">
-      <h2>小七的Doc文档</h2>
-      <div class="text-wrap">
-        <span style="font-weight: lighter; font-size: 13px; color: #26476d"
-          >编辑中：</span
-        >
-        <div class="example">
-          <div class="avatar-list avatar-list-stacked">
-            <span
-              class="avatar cover-image brround"
-              style="
-                background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-              "
-            ></span
-            ><span
-              class="avatar cover-image brround"
-              style="
-                background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-              "
-            ></span
-            ><span
-              class="avatar cover-image brround"
-              style="
-                background-image: url(https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/1654578546964_4f747bb0.jpg);
-              "
-            ></span
-            ><span class="avatar cover-image brround">+8</span>
-          </div>
-        </div>
-      </div>
+    <div style="display: flex;align-items: baseline">
+      <span style="font-weight: lighter; font-size: 40px; color: #000000">{{creator}}的项目文档</span>
+        <span style="font-weight: lighter; font-size: 30px; color: #26476d"
+          >《{{file_name}}》</span>
+      <span style="position: absolute;right: 5rem;top: 40px">
+        <el-button type="primary">导出为Html</el-button>
+        <el-button type="primary" @click="this.getMarkdown">导出为Markdown</el-button>
+        <el-button type="primary" @click="">导出为JSON</el-button>
+        <el-button type="primary" @click="this.getWord">导出为Word</el-button>
+        <el-button type="primary" @click="this.exit">退出编辑</el-button>
+        <a href="https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/docs//1660091784560_ad370682.txt">
+          asdasdasd
+        </a>
+      </span>
     </div>
     <hr style="margin: 5px; margin-bottom: 20px" />
+    <bubble-menu :editor="editor" :tippy-options="{ duration: 100 }" v-if="editor" class="bubble-menu">
+      <div @click="editor.chain().focus().toggleBold().run()" :class="{ 'is-active-bubble': editor.isActive('bold') }">
+        粗体
+      </div>
+      <el-divider direction="vertical"></el-divider>
+      <div @click="editor.chain().focus().toggleItalic().run()" :class="{ 'is-active-bubble': editor.isActive('italic') }">
+        斜体
+      </div>
+      <el-divider direction="vertical"></el-divider>
+      <div @click="editor.chain().focus().toggleHighlight().run()" :class="{ 'is-active-bubble': editor.isActive('highlight') }">
+        高亮
+      </div>
+    </bubble-menu>
     <div class="menubar">
       <span v-for="actionName in activeButtons" :key="actionName">
         <button
@@ -144,11 +141,62 @@
         <button
           v-if="actionName === 'horizontalRule'"
           class="menubar__button"
+          :class="{ 'is-active': editor.isActive('horizontalRule') }"
           @click="editor.chain().focus().setHorizontalRule().run()"
         >
           <icon name="hr" />
         </button>
+        <button
+            v-if="actionName === 'highlight'"
+            class="menubar__button"
+            :class="{ 'is-active': editor.isActive('highlight') }"
+            @click="editor.commands.toggleHighlight()"
+        >
+                   <icon name="highlight" />
+                 </button>
+                <button
+                    v-if="actionName === 'link'"
+                    class="menubar__button"
+                    :class="{ 'is-active': editor.isActive('link') }"
+                    @click="setLink"
+                >
+                   <icon name="link" />
+                 </button>
 
+          <el-popover
+              placement="top"
+              title="输入表格规格"
+              :width="250"
+              trigger="hover"
+          >
+            <template #reference>
+              <button
+                  v-if="actionName === 'table'"
+                  class="menubar__button"
+                  @click="setTable"
+              >
+          <icon name="table" />
+        </button>
+
+    </template>
+            <div>
+              <span>行数：</span>
+              <el-input-number v-model="table_row" ></el-input-number>
+            </div>
+            <div>
+              <span>列数：</span>
+              <el-input-number v-model="table_col"></el-input-number>
+            </div>
+  </el-popover>
+
+
+                <button
+                    v-if="actionName === 'delete_table'"
+                    class="menubar__button"
+                    @click="editor.chain().focus().deleteTable().run()"
+                >
+          <icon name="delete_table" />
+        </button>
         <button
           v-if="actionName === 'undo'"
           class="menubar__button"
@@ -160,18 +208,11 @@
         <button
           v-if="actionName === 'redo'"
           class="menubar__button"
-          @click="editor.chain().focus().redo().run()"
+          @click="editor.chain().focus().redo().run();"
         >
           <icon name="redo" />
         </button>
 
-        <!--        <button-->
-        <!--            v-if="actionName === 'save'"-->
-        <!--            class="menubar__button"-->
-        <!--            @click="save"-->
-        <!--        >-->
-        <!--           <icon name="save" />-->
-        <!--         </button>-->
 
         <button
           v-if="actionName === 'exit'"
@@ -180,6 +221,9 @@
         >
           <icon name="exitEdit" />
         </button>
+      </span>
+      <span style="position: fixed;left: 60rem">
+        字数统计:{{this.editor.getText().length}}
       </span>
     </div>
     <editor-content class="editor__content" :editor="editor" />
@@ -192,22 +236,28 @@ import Icon from "./Icon";
 import Underline from "@tiptap/extension-underline";
 import StarterKit from "@tiptap/starter-kit";
 import Collaboration from "@tiptap/extension-collaboration";
-import Document from "@tiptap/extension-document";
-import Paragraph from "@tiptap/extension-paragraph";
+import Gapcursor from '@tiptap/extension-gapcursor'
 import Placeholder from "@tiptap/extension-placeholder";
-import Text from "@tiptap/extension-text";
-import { Editor, EditorContent } from "@tiptap/vue-3";
-import Highlight from '@tiptap/extension-highlight'
-import Typography from '@tiptap/extension-typography'
+import { Editor, EditorContent,BubbleMenu } from "@tiptap/vue-3";
+import Highlight from '@tiptap/extension-highlight';
+import Typography from '@tiptap/extension-typography';
+import Link from '@tiptap/extension-link';
 import { upload, readURL } from "@/utils/ali_oss";
 import { load_doc, save_doc } from "@/utils/api";
 import docModel from "@/assets/fileModels/docModel";
-import Code from '@tiptap/extension-code'
+import Table from '@tiptap/extension-table'
+import TableCell from '@tiptap/extension-table-cell'
+import TableHeader from '@tiptap/extension-table-header'
+import TableRow from '@tiptap/extension-table-row'
+import TurndownService from 'turndown/lib/turndown.es.js'
+import {exportSignOffPaperWord} from '@/utils/html2word'
+const turndownService = new TurndownService()
 export default {
   name: "DocEditor",
   components: {
     EditorContent,
     Icon,
+    BubbleMenu,
   },
   /**
    * @description: 需要给编辑传入文档doc_id来确定当前文档有多少人在编辑
@@ -216,6 +266,8 @@ export default {
    */
   data() {
     return {
+      file_name:'',
+      creator:'',
       doc_id: "",
       room_id: "",
       username: "",
@@ -235,15 +287,22 @@ export default {
         "blockquote",
         "codeBlock",
         "horizontalRule",
+          "highlight",
+          "link",
+        "table",
+        'delete_table',
         "undo",
         "redo",
         "save",
         "exit",
+
       ],
       editor: null,
       provider: null,
       html: "",
       json: "",
+      table_row:'',
+      table_col:'',
       model_id:-1,//-1表示没有使用模板，模板id从0开始
       docModel:docModel,
       fromPath:'',
@@ -252,9 +311,12 @@ export default {
     };
   },
   emits: ["update"],
+
   created() {
     //接受参数
     this.doc_id = this.$route.query.doc_id;
+    this.file_name = this.$route.query.file_name;
+    this.creator = this.$route.query.creator;
     if(this.$route.query.model_id!=null){
       this.model_id=this.$route.query.model_id
     }
@@ -283,6 +345,7 @@ export default {
         StarterKit.configure({
           // The Collaboration extension comes with its own history handling
           history: false,
+          highlight:{ multicolor: true },
         }),
         // Register the document with Tiptap
         Collaboration.configure({
@@ -292,19 +355,28 @@ export default {
         Placeholder.configure({
           placeholder: "请输入",
         }),
-        Document,
-        Text,
         Underline,
-        Paragraph,
         Typography,
-        Highlight,
-        Code,
+        Highlight.configure({
+          multicolor: true,
+        }),
+        Link.configure({
+          openOnClick: true,
+        }),
+        Gapcursor,
+        Table.configure({
+          resizable: true,
+        }),
+        TableRow,
+        TableHeader,
+        TableCell,
       ],
     });
     this.editor.on("update", () => {
       this.html = this.editor.getHTML();
       this.json = this.editor.getJSON();
     });
+
     //使用模板
     if(this.model_id!==-1){
       this.html=this.docModel[this.model_id].html
@@ -317,6 +389,47 @@ export default {
    * @date: 2022/8/5
    */
   methods: {
+    getWord(){
+    },
+    getMarkdown(){
+      let markdown = turndownService.turndown(this.html)
+      window.location.href=this.$route.query.doc_url
+      console.log(markdown)
+    },
+    setTable(){
+      console.log(this.table_row,this.table_col)
+      this.editor.commands.insertTable({ rows: this.table_row, cols: this.table_col, withHeaderRow: true })
+
+    },
+    setLink() {
+      const previousUrl = this.editor.getAttributes('link').href
+      const url = window.prompt('URL', previousUrl)
+
+      // cancelled
+      if (url === null) {
+        return
+      }
+
+      // empty
+      if (url === '') {
+        this.editor
+            .chain()
+            .focus()
+            .extendMarkRange('link')
+            .unsetLink()
+            .run()
+
+        return
+      }
+
+      // update link
+      this.editor
+          .chain()
+          .focus()
+          .extendMarkRange('link')
+          .setLink({ href: url })
+          .run()
+    },
     save() {
       let url = upload("docs", this.html);
       console.log(url);
@@ -339,6 +452,9 @@ export default {
       })
     },
   },
+  mounted() {
+
+  },
   beforeUnmount() {
     this.editor.destroy();
   },
@@ -360,20 +476,73 @@ export default {
 @import "src/assets/scss/titap";
 /* Basic editor styles */
 .ProseMirror {
+  table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+
+    td,
+    th {
+      min-width: 1em;
+      border: 2px solid #ced4da;
+      padding: 3px 5px;
+      vertical-align: top;
+      box-sizing: border-box;
+      position: relative;
+
+      > * {
+        margin-bottom: 0;
+      }
+    }
+
+    th {
+      font-weight: bold;
+      text-align: left;
+      background-color: #f1f3f5;
+    }
+
+    .selectedCell:after {
+      z-index: 2;
+      position: absolute;
+      content: "";
+      left: 0; right: 0; top: 0; bottom: 0;
+      background: rgba(200, 200, 255, 0.4);
+      pointer-events: none;
+    }
+
+    .column-resize-handle {
+      position: absolute;
+      right: -2px;
+      top: 0;
+      bottom: -2px;
+      width: 4px;
+      background-color: #adf;
+      pointer-events: none;
+    }
+
+    p {
+      margin: 0;
+    }
+  }
   > * + * {
     margin-top: 0.75em;
-    z-index: 999;
   }
   code {
-    font-size: 0.9rem;
-    padding: 0.25em;
-    border-radius: 0.25em;
-    background-color: rgba(#616161, 0.1);
-    color: #616161;
-    box-decoration-break: clone;
+    font-size: 0.8rem;
+    color: yellowgreen;
+    background: #282626;
+    //padding: 0.25em;
+    //border-radius: 0.25em;
+    ////background-color: rgba(#616161, 0.1);
+    //color: #e72212;
+    //box-decoration-break: clone;
+  }
+  pre{
+    background: #282626;
   }
 }
-
 /* Placeholder (at the top) */
 .ProseMirror p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);
@@ -381,7 +550,6 @@ export default {
   color: #adb5bd;
   pointer-events: none;
   height: 0;
-  z-index: 999;
 }
 
 /* Give a remote user a caret */
@@ -426,10 +594,29 @@ export default {
 .tool-span {
   align-self: flex-end;
 }
-.titlebar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
 
+.bubble-menu{
+  display: flex;
+  flex-direction: row;
+  border: solid;
+  border-radius: .2rem;
+  transition: 0.5s;
+  div{
+    font-size: 10px;
+    margin-left : .05rem;
+    margin-right :.05rem;
+    //padding: 0.1rem;
+    color: #282626;
+    transition: 0.5s;
+  }
+}
+.is-active-bubble{
+  background: #c2e9fb;
+  color: #26476d;
+}
+.el-button{
+  span{
+    color:black;
+  }
+}
 </style>

@@ -232,7 +232,9 @@ export default {
               query: {
                 doc_url: this.file_content,
                 doc_id: this.file_id,
-                project_id:this.project_id
+                project_id:this.project_id,
+                file_name:this.file_name,
+                creator:this.creator
               }
             })
             break
@@ -311,6 +313,8 @@ export default {
                   username:this.username,
                   project_id:this.project_id,
                   model_id:this.doc_model_id,
+                  file_name:this.file_name,
+                  creator:this.creator
                 }
               })
             }
