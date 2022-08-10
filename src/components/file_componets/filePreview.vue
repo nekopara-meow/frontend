@@ -131,7 +131,7 @@ export default {
             this.timestampFormat(new Date(this.update_time).valueOf() / 1000)
         );
       }
-      return '文件名：'+this.file_name+'<br/>'+'上次修改时间：'+timestr
+      return '文件名：'+this.file_name+'<br/>'+timestr
       +'<br/>'+'创建人:'+this.creator
     },
     fileName(){

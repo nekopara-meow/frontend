@@ -179,6 +179,8 @@ export default {
           this.projectinfo.creator = response.data.creator;
           this.projectinfo.project_name = response.data.project_name;
           this.projectinfo.team_name = response.data.team_name;
+          this.form.brief_intro=this.projectinfo.brief_intro;
+          this.form.project_name=this.projectinfo.project_name;
         } else ElMessage.error(response.data.message);
       });
     },
