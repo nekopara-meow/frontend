@@ -42,16 +42,46 @@
     </template>
   </el-dialog>
   <!--修改文件名对话框-->
-  <el-dialog v-model="dialogFormVisible1" :title="createFileTitle">
+  <el-dialog v-model="dialogFormVisible1" :title="renameFileTitle">
     <el-form :model="fileRename">
-      <el-form-item label="新文件名" label-width="140px">
-        <el-input v-model="fileRename.rename" autocomplete="off" />
+      <el-form-item label="重命名文件" label-width="140px">
+        <el-input v-model="fileRename.rename" autocomplete="off" :placeholder="this.file_name" />
       </el-form-item>
     </el-form>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogFormVisible1 = false;">Cancel</el-button>
         <el-button type="primary" @click="dialogFormVisible1 = false;file_name=fileRename.rename;doFileRename()"
+        >Confirm</el-button
+        >
+      </span>
+    </template>
+  </el-dialog>
+  <!--新建axure对话框-->
+  <el-dialog v-model="dialogFormVisible2" :title="renameFileTitle">
+    <el-form :model="newAxure">
+      <el-form-item label="新建画布高度" label-width="140px">
+        <el-input-number v-model="newAxure.height"
+                         controls-position="right"
+                         class="mx-4"
+                         :min="1" :step="50"
+                         :max="1000"
+        />
+      </el-form-item>
+
+      <el-form-item label="新建画布宽度" label-width="140px">
+        <el-input-number v-model="newAxure.weight"
+                         controls-position="right"
+                         class="mx-4"
+                         :min="1" :step="50"
+                         :max="1000"
+        />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogFormVisible2 = false;">Cancel</el-button>
+        <el-button type="primary" @click="dialogFormVisible2 = false;this.createAxure()"
         >Confirm</el-button
         >
       </span>
@@ -90,11 +120,15 @@ export default {
       fileRename:{
         rename:null,
       },
-
+      newAxure:{
+        height:null,
+        weight: null,
+      },
       visible:false,
       left:0,
       top:-50,
       dialogFormVisible1:false,
+      dialogFormVisible2:false,
       doc_model_id:'',
       docModel:docModel,
     }
@@ -117,6 +151,8 @@ export default {
     file_name:'',
     update_time:Date,
     name_url:'',
+    height:'',
+    weight:'',
   },
   computed:{
 
@@ -131,12 +167,27 @@ export default {
             this.timestampFormat(new Date(this.update_time).valueOf() / 1000)
         );
       }
-      return '文件名：'+this.file_name+'<br/>'+'上次修改时间：'+timestr
+      let typestr='文件类型：'
+      switch (this.file_type){
+        case 0:typestr+='UML'
+              break
+        case 1:typestr+='文档文件'
+          break
+        case 2:typestr+='设计原型'
+          break
+      }
+      return '文件名：'+this.file_name+'<br/>'+typestr+'<br/>上次修改时间：'+timestr
       +'<br/>'+'创建人:'+this.creator
     },
     fileName(){
       if(this.isNew) return '新建文件'
-      return this.file_name
+      let ex='.uml'
+      switch (this.file_type){
+        case 0:ex='.uml';break
+        case 1:ex='.doc';break
+        case 2:ex='.axu';break
+      }
+      return this.file_name+ex
     },
     /**
      * @description: 出现错误就返回新建图片的标签
@@ -188,7 +239,7 @@ export default {
         default:
           return '类型错误！'
       }
-    }
+    },
   },
   methods:{
     completeDelFile(){
@@ -199,6 +250,29 @@ export default {
         console.log(res.data)
         //删除后父组件要更新数据
         this.$emit('updateData')
+      })
+    },
+    createAxure(){
+      create_axure({
+        username:this.username,
+        project_id:this.project_id,
+        axure_name:this.fileInitial.name,
+        height:this.newAxure.height,
+        weight:this.newAxure.weight
+      }).then(res=>{
+        console.log(res.data)
+        if(res.data.axure_id){
+          console.log('create_axure',res.data)
+          this.$router.push({
+            name:'axure',
+            query:{
+              axure_id:res.data.axure_id,
+              project_id:this.project_id,
+              URLpage:null,
+              URLpageName:null,
+            }
+          })
+        }
       })
     },
     recoverFile(){
@@ -346,6 +420,7 @@ export default {
             console.log("打开已有的axure",{
               project_id:this.project_id,
               axure_id:this.file_id,
+              file_name:this.file_name,
               URLpage:this.file_content,
               URLpageName:this.name_url,
             })
@@ -354,6 +429,7 @@ export default {
               query: {
                 project_id:this.project_id,
                 axure_id:this.file_id,
+                file_name:this.file_name,
                 URLpage:this.file_content,
                 URLpageName:this.name_url,
               }
@@ -426,31 +502,7 @@ export default {
           })
           break
         case 2:
-          console.log('create_axure',{
-            username:this.username,
-            project_id:this.project_id,
-            axure_name:this.fileInitial.name,
-          })
-            create_axure({
-              username:this.username,
-              project_id:this.project_id,
-              axure_name:this.fileInitial.name,
-            }).then(res=>{
-              console.log(res.data)
-              if(res.data.axure_id){
-                console.log('create_axure',res.data)
-                this.$router.push({
-                  name:'axure',
-                  query:{
-                    axure_id:res.data.axure_id,
-                    project_id:this.project_id,
-                    URLpage:null,
-                    URLpageName:null,
-                  }
-                })
-              }
-            })
-
+            this.dialogFormVisible2=true
           break
         default:
           console.log('文件类型错误')

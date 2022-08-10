@@ -347,13 +347,17 @@ export default {
         this.editor.commands.setContent(this.html);
       });
     }
+    let r=Math.floor(Math.random()*256);
+    let g=Math.floor(Math.random()*256);
+    let b=Math.floor(Math.random()*256);
+    let color="rgba("+r+','+g+','+b+',0.7'+")"
     this.editor = new Editor({
       extensions: [
         CollaborationCursor.configure({
           provider: this.$store.state.provider,
           user: {
             name: this.username,
-            color: "#f783ac",
+            color: color,
           },
         }),
 
