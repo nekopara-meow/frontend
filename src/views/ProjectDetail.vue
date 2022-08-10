@@ -37,30 +37,16 @@
             <h2 class="title">{{projectinfo.project_name}}</h2>
 
             <nav class="nav-link">
-              <router-link
-                :to="{
-                  name: 'projectInfo',
-                 query: {
-                    project_id: this.project_id,
-                  },
-                }"
-                @click="tab = 'tab-0'"
-                >概览</router-link
-              >
-              <router-link
-                :to="{
-                  name: 'projectFileInfo',
-                  params: {
-                    project_id: this.project_id,
-                  },
-                }"
-                @click="tab = 'tab-1'"
-                >文件</router-link
-              >
+              <router-link :to="{name:'projectInfo',query:{
+                project_id:this.project_id
+              }}" @click="tab='tab-0'">概览</router-link>
+              <router-link :to="{name:'projectFileInfo',query:{
+                project_id:this.project_id
+              }}" @click="tab='tab-1'">文件</router-link>
               <router-link
                 :to="{
                   name: 'projectFileBin',
-                  params: {
+                  query: {
                     project_id: this.project_id,
                   },
                 }"
@@ -133,7 +119,6 @@ import UMLEditor from "@/components/rubbish/UMLEditor";
 import CoEditor from "@/components/rubbish/CoEditor";
 import {get_docfile, get_umlfile, del_uml, del_doc, updateprojectinfo, editteaminfo, getprojectinfo} from "@/utils/api";
 import AxureEditor from "@/components/rubbish/axureEditor";
-import Base64 from "@/utils/Base64";
 
 export default {
   name: "projectDetail",
@@ -157,16 +142,14 @@ export default {
       form: {
         project_name: "",
         brief_intro: "",
-        project_id:"",
+        project_id:this.project_id,
       },
     };
   },
   methods: {
     getprojectinfos(){
-      console.log("getmsg",this.project_id)
         getprojectinfo({project_id:this.project_id}).then((response) => {
           if (response.data.status_code == 1) {
-            console.log("xinxi1",response.data);
             this.projectinfo.brief_intro=response.data.brief_intro;
             this.projectinfo.create_time=response.data.create_time;
             this.projectinfo.creator=response.data.creator;
@@ -176,15 +159,14 @@ export default {
         });
     },
     submit(){
-      this.form.project_id=this.project_id;
       updateprojectinfo(this.form).then((response) => {
         if (response.data.status_code == 1) {
-
           ElMessage({
             message: "修改成功",
             type: "success",
           });
           this.dialogFormVisible=false;
+          this.$router.go(0);
         } else ElMessage.error(response.data.message);
       });
     }
@@ -202,15 +184,18 @@ export default {
   },
   created() {
     console.log('route in projectDetail')
-    //JSON.parse(Base64.decode(this.$route.query.project_id))
+    console.log(this.$route)
     if(this.$route.query.project_id){
       this.project_id=this.$route.query.project_id
       this.username=this.$store.state.username
-      this.getprojectinfos();
+      this.form.project_id=this.project_id
     }
     console.log(this.project_id);
   },
   computed: {},
+  mounted() {
+    this.getprojectinfos()
+  }
 };
 </script>
 

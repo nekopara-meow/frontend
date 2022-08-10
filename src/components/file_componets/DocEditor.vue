@@ -5,14 +5,11 @@
         <span style="font-weight: lighter; font-size: 30px; color: #26476d"
           >《{{file_name}}》</span>
       <span style="position: absolute;right: 5rem;top: 40px">
-        <el-button type="primary">导出为Html</el-button>
+        <el-button type="primary" @click="this.getHTML">导出为Html</el-button>
         <el-button type="primary" @click="this.getMarkdown">导出为Markdown</el-button>
-        <el-button type="primary" @click="">导出为JSON</el-button>
+        <el-button type="primary" @click="this.getPDF">导出为PDF</el-button>
         <el-button type="primary" @click="this.getWord">导出为Word</el-button>
         <el-button type="primary" @click="this.exit">退出编辑</el-button>
-        <a href="https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/docs//1660091784560_ad370682.txt">
-          asdasdasd
-        </a>
       </span>
     </div>
     <hr style="margin: 5px; margin-bottom: 20px" />
@@ -250,8 +247,10 @@ import TableCell from '@tiptap/extension-table-cell'
 import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
 import TurndownService from 'turndown/lib/turndown.es.js'
-import {exportSignOffPaperWord} from '@/utils/html2word'
+import htmlDocx from 'html-docx-js/dist/html-docx';
+import saveAs from 'file-saver';
 const turndownService = new TurndownService()
+const html2pdf=require('html2pdf.js')
 export default {
   name: "DocEditor",
   components: {
@@ -378,6 +377,7 @@ export default {
     });
 
     //使用模板
+    console.log(this.model_id)
     if(this.model_id!==-1){
       this.html=this.docModel[this.model_id].html
       this.editor.commands.setContent(this.html);
@@ -390,11 +390,37 @@ export default {
    */
   methods: {
     getWord(){
+      let htmlStr = this.html;
+      let page = `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>${this.html}
+        </body></html>`
+      // console.log(page);return
+      saveAs(
+          htmlDocx.asBlob(page, {
+            orientation: "landscape"//跨域设置
+          }),
+          //文件名
+          this.file_name+".doc"
+      )
     },
     getMarkdown(){
       let markdown = turndownService.turndown(this.html)
-      window.location.href=this.$route.query.doc_url
       console.log(markdown)
+      let blob = new Blob([markdown], {type: "text/plain;charset=utf-8"});
+      saveAs(
+          blob,
+          this.file_name+".md"
+      )
+    },
+    getHTML(){
+      let blob = new Blob([this.html], {type: "text/plain;charset=utf-8"});
+      saveAs(
+          blob,
+          this.file_name+".html"
+      )
+    },
+    getPDF(){
+      var worker = html2pdf().from(this.html).save(this.file_name+'.pdf');
+      console.log('worker',worker)
     },
     setTable(){
       console.log(this.table_row,this.table_col)
