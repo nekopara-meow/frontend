@@ -1,5 +1,5 @@
 <template>
-  <div>uml</div>
+  <div></div>
 </template>
 
 <script>

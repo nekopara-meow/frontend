@@ -3,10 +3,10 @@
     <div id="content">
       <h1 class="intro">登录</h1>
       <el-form :model="form" :rules="rules" class="login-box">
-        <el-form-item label="用户名" class="intro" prop="username">
+        <el-form-item label="账号" class="intro" prop="username">
           <el-input
             type="text"
-            placeholder="请输入用户名"
+            placeholder="请输入账号"
             v-model="form.username"
           ></el-input>
         </el-form-item>
@@ -60,7 +60,7 @@ export default {
         username: [
           {
             required: true,
-            message: "请输入用户名",
+            message: "请输入账号",
             trigger: "blur",
           },
         ],
@@ -116,7 +116,7 @@ export default {
   background-image: linear-gradient(90deg, #4facfe, #7bd4fe, #6acaf7, #4facfe);
   background-size: 200%;
   animation: streamer 5s linear infinite;
-  background-clip: text;
+  -webkit-background-clip: text;
   color: transparent;
   margin-bottom: 20px;
 }
@@ -132,7 +132,7 @@ export default {
   background-image: linear-gradient(90deg, #4facfe, #7bd4fe, #6acaf7, #4facfe);
   background-size: 200%;
   animation: streamer 5s linear infinite;
-  background-clip: text;
+  -webkit-background-clip: text;
   color: transparent;
   border-radius: 20px;
 }

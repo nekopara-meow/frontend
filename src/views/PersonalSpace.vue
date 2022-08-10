@@ -32,11 +32,11 @@
         <el-button
           v-if="editing === 0&&author===1"
           type="primary"
-          id="editbutton"
+          class="editbutton"
           @click="edit"
           ><el-icon><Edit /></el-icon
         ></el-button>
-        <el-button v-else-if="editing===1" type="primary" id="editbutton" @click="edit"
+        <el-button v-else-if="editing===1" type="primary" class="editbutton" @click="edit"
           ><el-icon><Upload /></el-icon
         ></el-button>
         <div>
@@ -48,7 +48,7 @@
             placeholder="性别"
             v-model="data.gender"
             style="
-              display: line;
+              display: inline;
               width: 70px;
               margin-right: 10px;
               font-size: 15px;
@@ -74,7 +74,7 @@
             v-model="data.nickname"
             placeholder="真实姓名"
             style="
-              display: line;
+              display: inline;
               width: 70px;
               margin-right: 10px;
               font-size: 15px;
@@ -106,7 +106,7 @@
               v-else
               v-model="data.tel"
               placeholder="电话"
-              style="display: line; width: 200px; font-size: 15px"
+              style="display: inline; width: 200px; font-size: 15px"
             />
           </div>
           <div class="tel">
@@ -125,7 +125,7 @@
               placeholder="简介"
               type="textarea"
               :rows="4"
-              style="display: line; width: 100%; font-size: 10px"
+              style="display: inline; width: 100%; font-size: 10px"
             />
           </div>
         </div>
@@ -348,7 +348,7 @@ export default {
   background-color: #26476d;
   border: none;
 }
-#editbutton {
+.editbutton {
   position: absolute;
   top: 20px;
   right: 20px;

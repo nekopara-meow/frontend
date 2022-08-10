@@ -53,7 +53,8 @@
               v-else
               v-model="form.team_name"
               placeholder="团队名称"
-              style="display: inline; width: 200px; font-size: 30px"
+              size="large"
+              style="display: inline; width: 200px; font-size: 26px"
             />
             <nav>
               <a
@@ -729,6 +730,8 @@ export default {
       });
     },
     initializationdata() {
+      this.got=0
+      // this.gott=0
       getteammsgbyid({ team_id: this.team_id }).then((response) => {
         this.got += 1;
         if (response.data.status_code == 1) {
@@ -767,6 +770,7 @@ export default {
     },
     //动态
     getteammsg() {
+      this.gott = 0;
       getteammessage({ team_id: this.team_id }).then((response) => {
         if (response.data.status_code == 1) {
           this.teamdongtai = response.data.ans_list;
@@ -793,6 +797,7 @@ export default {
         settee: membername,
         team_id: this.team_id,
       }).then((response) => {
+        console.log('setadmin',response.data)
         if (response.data.status_code == 1) {
           this.initializationmember();
           console.log(response.data);
@@ -992,6 +997,8 @@ export default {
   color: #26476d;
   text-overflow: ellipsis;
   white-space: nowrap;
+  width: 300px;
+  overflow: hidden;
 }
 #leftup {
   display: flex;

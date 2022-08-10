@@ -50,7 +50,7 @@
               <router-link
                 :to="{
                   name: 'projectFileInfo',
-                  params: {
+                  query: {
                     project_id: this.project_id,
                   },
                 }"
