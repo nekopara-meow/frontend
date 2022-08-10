@@ -2022,8 +2022,8 @@ export default{
         that.URLpageName = this.$route.query.URLpageName
         that.axure_id = this.$route.query.axure_id
 
-        //that.my_table['width'] = this.$route.query.width
-        //that.my_table['height'] = this.$route.query.height
+        that.my_table['width'] = this.$route.query.width
+        that.my_table['height'] = this.$route.query.height
 
         if(that.URLpage == null || that.URLpage.length < 1
             || that.URLpage == '') {
