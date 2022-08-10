@@ -20,7 +20,10 @@
   <el-dialog v-model="dialogFormVisible" :title="createFileTitle">
     <el-form :model="fileInitial">
       <el-form-item label="创建的文件名" label-width="140px">
-        <el-input v-model="fileInitial.name" autocomplete="off" />
+        <el-input v-model="fileInitial.name" autocomplete="off"
+                  type="text"
+                  placeholder="请输入文件名"
+        />
       </el-form-item>
       <el-form-item label="选择文件模板" v-if="this.file_type===1" label-width="140px">
         <el-select  v-model="doc_model_id" class="m-1" placeholder="不选择模板" size="large">
@@ -36,22 +39,55 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogFormVisible = false;this.fileInitial.name=null">Cancel</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false;this.openFile()"
+        <el-button type="primary" @click="dialogFormVisible = false;this.handle()"
         >Confirm</el-button>
       </span>
     </template>
   </el-dialog>
   <!--修改文件名对话框-->
-  <el-dialog v-model="dialogFormVisible1" :title="createFileTitle">
+  <el-dialog v-model="dialogFormVisible1" :title="renameFileTitle">
     <el-form :model="fileRename">
-      <el-form-item label="新文件名" label-width="140px">
-        <el-input v-model="fileRename.rename" autocomplete="off" />
+      <el-form-item label="重命名文件" label-width="140px">
+        <el-input v-model="fileRename.rename" autocomplete="off" :placeholder="this.file_name" />
       </el-form-item>
     </el-form>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogFormVisible1 = false;">Cancel</el-button>
         <el-button type="primary" @click="dialogFormVisible1 = false;file_name=fileRename.rename;doFileRename()"
+        >Confirm</el-button
+        >
+      </span>
+    </template>
+  </el-dialog>
+  <!--新建axure对话框-->
+  <el-dialog v-model="dialogFormVisible2" :title="renameFileTitle">
+    <el-form :model="newAxure">
+      <el-form-item label="创建的文件名" label-width="140px">
+        <el-input v-model="newAxure.name" autocomplete="off" />
+      </el-form-item>
+      <el-form-item label="新建画布高度" label-width="140px">
+        <el-input-number v-model="newAxure.height"
+                         controls-position="right"
+                         class="mx-4"
+                         :min="1" :step="50"
+                         :max="1000"
+        />
+      </el-form-item>
+
+      <el-form-item label="新建画布宽度" label-width="140px">
+        <el-input-number v-model="newAxure.width"
+                         controls-position="right"
+                         class="mx-4"
+                         :min="1" :step="50"
+                         :max="1000"
+        />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogFormVisible2 = false;">Cancel</el-button>
+        <el-button type="primary" @click="dialogFormVisible2 = false;this.createAxure()"
         >Confirm</el-button
         >
       </span>
@@ -90,13 +126,19 @@ export default {
       fileRename:{
         rename:null,
       },
-
+      newAxure:{
+        height:null,
+        width: null,
+        name:null,
+      },
       visible:false,
       left:0,
       top:-50,
       dialogFormVisible1:false,
+      dialogFormVisible2:false,
       doc_model_id:'',
       docModel:docModel,
+      creating_file_name:'',
     }
   },
   props:{
@@ -117,6 +159,9 @@ export default {
     file_name:'',
     update_time:Date,
     name_url:'',
+    height:'',
+    width:'',
+
   },
   computed:{
 
@@ -131,12 +176,27 @@ export default {
             this.timestampFormat(new Date(this.update_time).valueOf() / 1000)
         );
       }
-      return '文件名：'+this.file_name+'<br/>'+timestr
+      let typestr='文件类型：'
+      switch (this.file_type){
+        case 0:typestr+='UML'
+              break
+        case 1:typestr+='文档文件'
+          break
+        case 2:typestr+='设计原型'
+          break
+      }
+      return '文件名：'+this.file_name+'<br/>'+typestr+'<br/>'+timestr
       +'<br/>'+'创建人:'+this.creator
     },
     fileName(){
       if(this.isNew) return '新建文件'
-      return this.file_name
+      let ex='.uml'
+      switch (this.file_type){
+        case 0:ex='.uml';break
+        case 1:ex='.doc';break
+        case 2:ex='.axu';break
+      }
+      return this.file_name+ex
     },
     /**
      * @description: 出现错误就返回新建图片的标签
@@ -188,7 +248,7 @@ export default {
         default:
           return '类型错误！'
       }
-    }
+    },
   },
   methods:{
     completeDelFile(){
@@ -199,6 +259,83 @@ export default {
         console.log(res.data)
         //删除后父组件要更新数据
         this.$emit('updateData')
+      })
+    },
+    createUML(){
+      console.log({
+        username:this.username,
+        project_id:this.project_id,
+        uml_name:this.fileInitial.name,
+      })
+      create_uml({
+        username:this.username,
+        project_id:this.project_id,
+        uml_name:this.fileInitial.name,
+      }).then((res)=>{
+        console.log('return')
+        console.log(res.data)
+        if(res.data.uml_id){
+          this.$router.push({
+            name:'UmlDrawer',
+            query: {
+              uml_url: null,
+              uml_id: res.data.uml_id,
+              project_id:this.project_id,
+            }
+          })
+        }
+        else console.log('创建uml失败')
+      })
+    },
+    createDoc(){
+      this.creating_file_name=this.fileInitial.name
+      create_doc({
+        username:this.username,
+        project_id:this.project_id,
+        doc_name:this.fileInitial.name,
+      }).then((res)=>{
+        console.log('return')
+        console.log(res.data)
+        if(res.data.doc_id){
+          this.$router.push({
+            name:'DocEditor',
+            query: {
+              doc_url: null,
+              doc_id: res.data.doc_id,
+              username:this.username,
+              project_id:this.project_id,
+              model_id:this.doc_model_id,
+              file_name:this.creating_file_name,
+              creator:this.creator,
+            }
+          })
+        }
+        else console.log('创建doc失败')
+      })
+    },
+    createAxure(){
+      create_axure({
+        username:this.username,
+        project_id:this.project_id,
+        axure_name:this.newAxure.name,
+        height:this.newAxure.height,
+        width:this.newAxure.width
+      }).then(res=>{
+        console.log(res.data)
+        if(res.data.axure_id){
+          console.log('create_axure',res.data)
+          this.$router.push({
+            name:'axure',
+            query:{
+              axure_id:res.data.axure_id,
+              project_id:this.project_id,
+              URLpage:null,
+              URLpageName:null,
+              height:this.newAxure.height,
+              width:this.newAxure.width
+            }
+          })
+        }
       })
     },
     recoverFile(){
@@ -337,7 +474,7 @@ export default {
                 doc_url: this.file_content,
                 doc_id: this.file_id,
                 project_id:this.project_id,
-                file_name:this.file_name,
+                file_name:this.fileInitial.file_name,
                 creator:this.creator
               }
             })
@@ -346,6 +483,7 @@ export default {
             console.log("打开已有的axure",{
               project_id:this.project_id,
               axure_id:this.file_id,
+              file_name:this.file_name,
               URLpage:this.file_content,
               URLpageName:this.name_url,
             })
@@ -354,6 +492,7 @@ export default {
               query: {
                 project_id:this.project_id,
                 axure_id:this.file_id,
+                file_name:this.file_name,
                 URLpage:this.file_content,
                 URLpageName:this.name_url,
               }
@@ -365,97 +504,23 @@ export default {
       }
       //创建文件
       console.log('创建新文件')
-      this.dialogFormVisible=true
-      if(this.fileInitial.name===null)
-        return
-      switch (this.file_type){
-        case 0:
-          console.log({
-            username:this.username,
-            project_id:this.project_id,
-            uml_name:this.fileInitial.name,
-          })
-          create_uml({
-            username:this.username,
-            project_id:this.project_id,
-            uml_name:this.fileInitial.name,
-          }).then((res)=>{
-            console.log('return')
-            console.log(res.data)
-            if(res.data.uml_id){
-              this.$router.push({
-                name:'UmlDrawer',
-                query: {
-                  uml_url: null,
-                  uml_id: res.data.uml_id,
-                  project_id:this.project_id,
-                }
-              })
-            }
-            else console.log('创建uml失败')
-          })
-          break
-        case 1:
-          console.log({
-            username:this.username,
-            project_id:this.project_id,
-            doc_name:this.fileInitial.name,
-          })
-          create_doc({
-            username:this.username,
-            project_id:this.project_id,
-            doc_name:this.fileInitial.name,
-          }).then((res)=>{
-            console.log('return')
-            console.log(res.data)
-            if(res.data.doc_id){
-              this.$router.push({
-                name:'DocEditor',
-                query: {
-                  doc_url: null,
-                  doc_id: res.data.doc_id,
-                  username:this.username,
-                  project_id:this.project_id,
-                  model_id:this.doc_model_id,
-                  file_name:this.file_name,
-                  creator:this.creator
-                }
-              })
-            }
-            else console.log('创建doc失败')
-          })
-          break
-        case 2:
-          console.log('create_axure',{
-            username:this.username,
-            project_id:this.project_id,
-            axure_name:this.fileInitial.name,
-          })
-            create_axure({
-              username:this.username,
-              project_id:this.project_id,
-              axure_name:this.fileInitial.name,
-            }).then(res=>{
-              console.log(res.data)
-              if(res.data.axure_id){
-                console.log('create_axure',res.data)
-                this.$router.push({
-                  name:'axure',
-                  query:{
-                    axure_id:res.data.axure_id,
-                    project_id:this.project_id,
-                    URLpage:null,
-                    URLpageName:null,
-                  }
-                })
-              }
-            })
-
-          break
-        default:
-          console.log('文件类型错误')
+      if(this.file_type!=2){
+        this.dialogFormVisible=true
+      }else {
+        this.dialogFormVisible2=true
       }
     },
+    handle(){
+      if(this.fileInitial.name==null){
+        return
+      }
+      this.creating_file_name=this.fileInitial.name
+      if(this.file_type==0){
+        this.createUML()
+      }else if(this.file_type==1){
+        this.createDoc()
+      }
+    }
 
   },
   watch:{

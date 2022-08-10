@@ -98,7 +98,7 @@
 
         <hr style="margin: 5px; margin-bottom: 20px" />
 
-        <div id="leftdown" v-if="tab == 'tab-1'">
+        <div class="leftdown" v-if="tab == 'tab-1'">
           <el-skeleton :rows="5" animated v-if="got1 == 0" />
           <el-empty
             description="空空如也"
@@ -122,7 +122,7 @@
             </div>
           </div>
         </div>
-        <div id="leftdown" v-if="tab == 'tab-2'">
+        <div class="leftdown" v-if="tab == 'tab-2'">
           <el-skeleton :rows="5" animated v-if="got1 == 0" />
           <el-empty
             description="空空如也"
@@ -139,10 +139,12 @@
             :file_name="v.file_name"
             :file_content="v.file_content"
             :project_id="v.project_id"
-            :key="index"
+            :height="v.height"
+            :width="v.width"
+            :key="i"
           ></file-preview>
         </div>
-        <div id="leftdown" v-if="tab == 'tab-3'">
+        <div class="leftdown" v-if="tab == 'tab-3'">
           <el-skeleton :rows="5" animated v-if="got1 == 0" />
           <el-empty
             description="空空如也"
@@ -505,7 +507,7 @@ export default {
   background-image: linear-gradient(90deg, #4facfe, #7bd4fe, #6acaf7, #4facfe);
   background-size: 200%;
   animation: streamer 5s linear infinite;
-  background-clip: text;
+  -webkit-background-clip: text;
   color: transparent;
 }
 @keyframes streamer {
@@ -574,7 +576,7 @@ export default {
     border-radius: 20%;
   }
 }
-#leftdown {
+.leftdown {
   overflow-y: scroll;
   height: 63vh;
   padding: 0 5px;

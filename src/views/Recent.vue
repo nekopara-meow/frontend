@@ -30,19 +30,23 @@
               v-if="got == 1 && all_file.length == 0"
               style="margin: 0 auto"
           />
-          <file-preview
-              @updateData="reloadData"
-              v-if="got == 1 && all_file.length != 0"
-              v-for="(tmp, index) in all_file"
-              :file_id="tmp.file_id"
-              :update_time="tmp.update_time"
-              :file_type="tmp.file_type"
-              :creator="tmp.creator"
-              :file_name="tmp.file_name"
-              :file_content="tmp.file_content"
-              :project_id="tmp.project_id"
-              :key="index"
-          ></file-preview>
+          <div class="fileDisplayer">
+            <file-preview
+                @updateData="reloadData"
+                v-if="got == 1 && all_file.length != 0"
+                v-for="(tmp, index) in all_file"
+                :file_id="tmp.file_id"
+                :update_time="tmp.update_time"
+                :file_type="tmp.file_type"
+                :creator="tmp.creator"
+                :file_name="tmp.file_name"
+                :file_content="tmp.file_content"
+                :project_id="tmp.project_id"
+                :width="tmp.width"
+                :height="tmp.height"
+                :key="index"
+            ></file-preview>
+            </div>
         </div>
       </div>
     </div>
@@ -119,8 +123,11 @@ export default {
 }
 #left {
   height: 100%;
+  width: 100%;
   flex: 1 1 60%;
+  flex-direction: row;
   padding: 1rem;
+  overflow-y: scroll;
 }
 #right {
   height: 100%;
@@ -132,7 +139,7 @@ export default {
   background-image: linear-gradient(90deg, #4facfe, #7bd4fe, #6acaf7, #4facfe);
   background-size: 200%;
   animation: streamer 5s linear infinite;
-  background-clip: text;
+  -webkit-background-clip: text;
   color: transparent;
 }
 @keyframes streamer {
@@ -266,5 +273,10 @@ export default {
 }
 .warn {
   border-left: 10px solid rgba(233, 233, 133, 0.377);
+}
+.fileDisplayer{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 </style>

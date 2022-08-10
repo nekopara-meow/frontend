@@ -40,6 +40,13 @@ export function load_axure(data){
     })
 }
 
+export function get_file_number(data){
+    return request({
+        url: 'api/projects/count/files',
+        method: 'post',
+        data,
+    })
+}
 //
 // export function del_axure(data){
 //     return request({
@@ -426,7 +433,29 @@ export function getRecentFile(data){
     })
 }
 
+export function viewAxure(data){
+    return request({
+        url: 'api/projects/viewAxure',
+        method: 'post',
+        data,
+    })
+}
 
+export function openAxure(data){
+    return request({
+        url: 'api/projects/openAxure',
+        method: 'post',
+        data,
+    })
+}
+
+export function closeAxure(data){
+    return request({
+        url: 'api/projects/closeAxure',
+        method: 'post',
+        data,
+    })
+}
 
 
 /*export const loginApi=data=>{
