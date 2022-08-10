@@ -417,7 +417,7 @@ export default {
           this.got += 1;
           if (response.data.status_code == 1) {
             this.teamuserin = response.data.Dict.team_info;
-          } else ElMessage.error(response.data.message);
+          }
         }
       );
       getteamuseradmin({ username: this.$store.state.username }).then(
@@ -425,7 +425,7 @@ export default {
           this.got += 1;
           if (response.data.status_code == 1) {
             this.teamuseradmin = response.data.Dict.team_info;
-          } else ElMessage.error(response.data.message);
+          }
         }
       );
       getteamusercreat({ username: this.$store.state.username }).then(
@@ -433,7 +433,7 @@ export default {
           this.got += 1;
           if (response.data.status_code == 1) {
             this.teamusercreat = response.data.Dict.team_info;
-          } else ElMessage.error(response.data.message);
+          }
         }
       );
     },

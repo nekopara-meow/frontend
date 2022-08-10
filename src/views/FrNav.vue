@@ -193,7 +193,7 @@ export default {
         getpersonalmsg({username:this.$store.state.username}).then((response) => {
           if (response.data.status_code == 1) {
             console.log("xiaoxi",response.data)
-             // this.personnalmsg=response.data.ans_list;
+              this.personnalmsg=response.data.ans_list;
           }
         });
         getuserinfo({ username: this.$store.state.username }).then(
@@ -258,9 +258,11 @@ export default {
       //同意请求
       agreeinvitation({ message_id:message_id }).then(
           (response) => {
+            console.log("tongyi",response.data);
             if (response.data.status_code == 1) {
+              console.log("tongyi")
               this.updatepersonalmsg()
-            } else ElMessage.error(response.data.message);
+            } else ElMessage.error(response.data.msg);
           }
       );
 

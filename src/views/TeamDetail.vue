@@ -254,8 +254,8 @@
                 />
                 <div class="dongtairight bluelight">
                   <div>{{ message.sender }}</div>
-                  <div style="font-size: 15px">创建了项目：NEKOPARA</div>
-                  <div style="font-size: 13px">2022/8/5</div>
+                  <div style="font-size: 15px">{{message.msg}}</div>
+                  <div style="font-size: 13px">{{ message.send_time }}</div>
                 </div>
               </div>
             </div>
