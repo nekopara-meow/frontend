@@ -1,6 +1,27 @@
 <template>
     <div class="Body">
-        <div class="pageMenu"></div>
+        <div class="pageMenu">
+            <el-menu :default-active="mytoString(nowpage)">
+                <el-menu-item v-for="(item, Index) in pagesname"
+                    :index="Index.toString()" @click="setPage(Index)">
+                    <div class="menu-item">
+                        <div class="menu-item-left" @dblclick="startChangePageName">
+                            <el-icon><Document /></el-icon>
+                            <input v-if=ChangingThisPage(Index)
+                                :value = pagesname[Index]
+                                @change="changePageName($event, Index)"
+                                style="border:none; width: 100%;
+                                    background-color: transparent;
+                                    color: white;">
+                            <span v-else>
+                                {{ item }}
+                            </span>
+                        </div>
+                        <el-icon><MoreFilled /></el-icon>
+                    </div>
+                </el-menu-item>
+            </el-menu>
+        </div>
         <div class="display">
             <div class="my-table">
                 <DraggableContainer referenceLineColor="#acbbdc">
@@ -13,25 +34,74 @@
                         v-model:h = item.transform.height
                         :parent = true
                         :draggable = false
-                        :resizable = false>
+                        :resizable = false
+                        
+                        @activated = "setActive(index)"
+                        @deactivated = "setDeActive(index)"
+                        @resizing = "resizingHandle">
                         <div v-if = "isLable(item.type)" :style="item.style" :id="item.id">
-                            <span> {{ item.content }} </span>
+                            <div v-if="changingLable">
+                                <input :value="item.content"
+                                    @change="changeLable($event, index)"
+                                    type="text" :style="item.style">
+                            </div>
+                            <div v-else @dblclick="editLable">
+                                {{ item.content }}
+                            </div>
                         </div>
                         <div v-else-if="isBtn(item.type)" :style="item.style" :id="item.id">
-                            <el-button :type="item.btnType" @dblclick="editLable" padding = 0>
-                                <span> {{ item.content }} </span>
+                            <el-button v-if="haveColor(item.btnColor)" :type="item.btnType"
+                                :round = "isBtnRound(item.shape)"
+                                :circle = "isBtnCircle(item.shape)"
+                                :plain = "item.plain"
+                                :text = "item.text"
+                                :color = "item.btnColor"
+                                @dblclick="editLable" padding = 0>
+                                <input v-if="changingLable" :value="item.content"
+                                    @change="changeLable($event, index)"
+                                    style="border: none; 
+                                        background-color: transparent;
+                                        font-size: 15px;
+                                        width: 100%">
+                                <span v-else>
+                                    {{ item.content }}
+                                </span>
+                            </el-button>
+
+                            <el-button v-else :type="item.btnType"
+                                :round = "isBtnRound(item.shape)"
+                                :circle = "isBtnCircle(item.shape)"
+                                :plain = "item.plain"
+                                :text = "item.text"
+                                @dblclick="editLable" padding = 0>
+                                <input v-if="changingLable" :value="item.content"
+                                    @change="changeLable($event, index)"
+                                    style="border: none; 
+                                        background-color: transparent;
+                                        font-size: 15px;
+                                        width: 100%">
+                                <span v-else>
+                                    {{ item.content }}
+                                </span>
                             </el-button>
                         </div>
                         <div v-else-if="isInput(item.type)" :style="item.style" :id="item.id">
-                            <el-input :placeholder="item.content" 
-                                prefix-icon="Search">
-                                <template v-if=havePretend(index) #prepend>
+                            <el-input :placeholder="item.content">
+                                <template v-if="item.havePretend" #prepend>
                                     {{ item.pretend }}
                                 </template>
-                                <template v-if="haveAppend(index)" #append>
+                                <template v-if="item.haveAppend" #append>
                                     {{ item.append }}
                                 </template>
                             </el-input>
+                        </div>
+                        <div v-else-if="isRadio(item.type)" :id="item.id">
+                            <el-radio-group v-model="item.state">
+                                <el-radio>
+                                    {{ item.content }}
+                                </el-radio>
+                            </el-radio-group>
+                            
                         </div>
                         <div v-else :style="item.style" :id="item.id">
                         </div>
@@ -53,7 +123,7 @@
     .pageMenu{
         width: 20%;
         height: 100%;
-        background-color: red;
+        background-color: white;
     }
     .display{
         width: 80%;
@@ -65,6 +135,29 @@
             width: 700px;
             height: 450px;
             background-color: white;
+        }
+    }
+
+    .pageMenu{
+        position: relative;
+        overflow: hidden;
+    }
+    .menu-item{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0;
+        .menu-item-left{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            .input{
+                height: 50%;
+                background-color: transparent;
+                border: none;
+            }
         }
     }
 }
@@ -87,6 +180,7 @@ export default{
     data() {
         return {
             pages: [],
+            pagesname: [],
             nowpage: 0,
             axure_id: 12,
         }
@@ -112,6 +206,34 @@ export default{
         isInput(strtype){
             return strtype === "input"
         },
+        isRadio(strtype){
+            return strtype === "radio"
+        },
+        ChangingThisPage(index){
+            return this.changingPageName && (index == this.nowpage)
+        },
+        setPage(index){
+            this.now = null
+            this.lastnow = null
+            this.nowpage = index
+            //this.changingPageName = false
+        },
+        mytoString(num){
+            if(num == null)
+                return null
+            return num.toString()
+        },
+        haveColor(color){
+            if(color == "" || color.length < 0)
+                return false
+            return true
+        },
+        isBtnRound(shape){
+            return shape == 1
+        },
+        isBtnCircle(shape){
+            return shape == 2
+        },
     },
     mounted() {
         let url = ""
@@ -128,13 +250,12 @@ export default{
             //console.log(response.data)
 
             let ret = response.data.status_code
-            if(ret == -1)
+            if(ret == -1){
                 ElMessage.error("请求方式错误")
-            else{
-                //console.log('response')
-                //console.log(response.data.axure_url)
-                url = response.data.axure_url
+                return 
             }
+
+            url = response.data.axure_url
             Axios({
                 method: 'get',
                 url, responseType: 'blob',
@@ -146,6 +267,26 @@ export default{
                         let text = reader.result
                         //console.log(text)
                         that.pages = JSON.parse(text)
+                        //console.log(that.pages)
+                    }
+                    return data
+                }]
+            }).then(res => {
+                console.log('res')
+            })
+
+            url = response.data.name_url
+            Axios({
+                method: 'get',
+                url, responseType: 'blob',
+                transformResponse: [function (data) {
+                    let reader = new FileReader()
+                    reader.readAsText(data, 'UTF-8')
+                    reader.onload = function () {
+                        //此处便是返回值
+                        let text = reader.result
+                        //console.log(text)
+                        that.pagesname = JSON.parse(text)
                         //console.log(that.pages)
                     }
                     return data

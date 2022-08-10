@@ -1820,11 +1820,11 @@ export default{
             console.log(fileName2)
 
             console.log(this.axure_id)
-            /*console.log('save_axure',{
+            console.log('save_axure',{
                 axure_id: this.axure_id,
                 axure_url: "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName,
                 name_url: "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/" + fileName2
-            })*/
+            })
 
             save_axure({
                 axure_id: this.axure_id,
@@ -1897,11 +1897,11 @@ export default{
                 that.Delete()
         }
 
-        console.log('params')
-        console.log(this.$route.params)
-        that.URLpage = this.$route.params.URLpage
-        that.URLpageName = this.$route.params.URLpageName
-        that.axure_id = this.$route.params.axure_id
+        console.log('query')
+        console.log(this.$route.query)
+        that.URLpage = this.$route.query.URLpage
+        that.URLpageName = this.$route.query.URLpageName
+        that.axure_id = this.$route.query.axure_id
 
         if(that.URLpage == null || that.URLpage.length < 1
             || that.URLpage == '') {
