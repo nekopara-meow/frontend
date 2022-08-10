@@ -140,6 +140,7 @@ import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
 import { Edit, Upload, Plus } from "@element-plus/icons-vue";
 import { edituserinfo, getuserinfo } from "@/utils/api";
 import Base64 from "@/utils/Base64";
+import store from "@/store";
 export default {
   name: "Register",
   components: { Edit, Upload, Plus },
@@ -185,8 +186,9 @@ export default {
         if (response.data.status_code == 1) {
           this.data.nickname = response.data.nickname;
           this.data.tel = response.data.tel;
-          this.data.username = JSON.parse(Base64.decode(this.$route.query.info)).username,
-              this.data.avatar = response.data.avatar;
+          this.data.username = JSON.parse(Base64.decode(this.$route.query.info)).username;
+          this.data.avatar = response.data.avatar;
+          store.commit("setHead", response.data.avatar);
           this.data.gender = response.data.gender;
           if (response.data.gender == 0)
             this.genderimg = require("../assets/img/xingbienv.png");

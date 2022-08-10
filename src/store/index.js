@@ -5,7 +5,7 @@ export default createStore({
   state: {
     token: localStorage.getItem("token"),
     username: localStorage.getItem("username"),
-    head:'',
+    head:localStorage.getItem("head"),
     ydoc:'',
     provider:'',
     sharedDoc:Array,
@@ -31,6 +31,8 @@ export default createStore({
       state.username = ''
       state.head=''
       localStorage.setItem("token", '')
+      localStorage.setItem("username", '')
+      localStorage.setItem("head", '')
     },
     initYDoc(state){
       state.ydoc=new Y.Doc

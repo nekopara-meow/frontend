@@ -134,6 +134,8 @@ const routes = [
   },
 ]
 
+
+
 const router = createRouter({
   history: createWebHashHistory(),
   base: process.env.BASE_URL,
@@ -151,17 +153,17 @@ const router = createRouter({
 //   store.commit('setFromName',from.name)
 //   next()
 // })
-/*router.beforeEach((to, from, next) => {
-  if (to.path === '/login'||'/register') {
+router.beforeEach((to, from, next) => {
+  if (to.path === '/login'||to.path ==='/register') {
     next()
   } else {
     const token = localStorage.getItem('token')
     if (!token) {
-      next('/Login')
+      next('/login')
     } else {
       next()
     }
   }
-})*/
+})
 
 export default router
