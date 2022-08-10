@@ -30,7 +30,7 @@
         <router-link
           to="/register"
           class="intro"
-          style="float: right; font-size: medium"
+          style="text-align: right; font-size: medium"
           >注册账号</router-link
         >
       </span>
@@ -112,28 +112,15 @@ export default {
 .intro {
   font-weight: 700;
   font-size: 40px;
-  font-family: "思源黑体 CN";
-  background-image: linear-gradient(90deg, #4facfe, #7bd4fe, #6acaf7, #4facfe);
-  background-size: 200%;
-  animation: streamer 5s linear infinite;
-  -webkit-background-clip: text;
-  color: transparent;
+
   margin-bottom: 20px;
+  color: #26476d;
+  text-indent: 0;
+  width: 100%;
 }
-@keyframes streamer {
-  0% {
-    background-position: 0;
-  }
-  100% {
-    background-position: 200%;
-  }
-}
+
 .button {
-  background-image: linear-gradient(90deg, #4facfe, #7bd4fe, #6acaf7, #4facfe);
-  background-size: 200%;
-  animation: streamer 5s linear infinite;
-  -webkit-background-clip: text;
-  color: transparent;
+  color: #26476d;
   border-radius: 20px;
 }
 #content {
@@ -152,6 +139,7 @@ export default {
   box-shadow: 0px 15px 10px -15px lightgray;
   height: 70%;
   width: 400px;
+  align-items: center;
 }
 #submitcontain {
   display: flex;
@@ -160,8 +148,12 @@ export default {
   justify-content: center;
   height: 3em;
 }
+.el-form {
+  width: 100%;
+}
 .el-form-item {
   margin-top: 38px;
+  width: 100%;
 }
 .el-input {
   height: 100%;

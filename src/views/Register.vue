@@ -77,7 +77,7 @@ export default {
       btnText: "获取验证码",
       disabled: false,
       rules: {
-        username: [
+        name: [
           {
             required: true,
             message: "请输入用户名",
@@ -197,31 +197,23 @@ export default {
 </script>
 
 <style scoped>
+.big {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .intro {
   font-weight: 700;
   font-size: 40px;
-  font-family: "思源黑体 CN";
-  background-image: linear-gradient(90deg, #4facfe, #7bd4fe, #6acaf7, #4facfe);
-  background-size: 200%;
-  animation: streamer 5s linear infinite;
-  background-clip: text;
-  color: transparent;
-  margin-bottom: 30px;
+
+  margin-bottom: 10px;
+  color: #26476d;
+  text-indent: 0;
+  width: 100%;
 }
-@keyframes streamer {
-  0% {
-    background-position: 0;
-  }
-  100% {
-    background-position: 200%;
-  }
-}
+
 .button {
-  background-image: linear-gradient(90deg, #4facfe, #7bd4fe, #6acaf7, #4facfe);
-  background-size: 200%;
-  animation: streamer 5s linear infinite;
-  background-clip: text;
-  color: transparent;
+  color: #26476d;
   border-radius: 20px;
 }
 #content {
@@ -236,11 +228,11 @@ export default {
   );
   backdrop-filter: blur(2rem);
   padding: 50px;
-  padding-top: 20px;
   border-radius: 10px;
   box-shadow: 0px 15px 10px -15px lightgray;
   height: 70%;
   width: 400px;
+  align-items: center;
 }
 #submitcontain {
   display: flex;
@@ -249,36 +241,15 @@ export default {
   justify-content: center;
   height: 3em;
 }
-.codebtn {
-  border-radius: 0;
-  position: absolute;
-  top: 0;
-  right: 0px;
-  font-size: 11px;
-  font-weight: 500;
-
-  line-height: 15px;
-  cursor: pointer;
-  padding-left: 10px;
-  border: 0px;
-  border-left: 1px solid lightgray;
-  background-color: transparent;
+.el-form {
+  width: 100%;
 }
-.codebtn:hover {
-  border: 0px;
-  border-left: 1px solid lightgray;
-  background-color: transparent;
+.el-form-item {
+  margin-top: 20px;
+  width: 100%;
 }
-.bind_code {
-  width: 279.5px;
-  height: 35px;
-  position: relative;
-}
-
 .el-input {
   height: 100%;
-  overflow: hidden;
-  position: relative;
 }
 .el-button {
   height: 100%;
