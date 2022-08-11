@@ -455,6 +455,7 @@ export default {
       });
     },
     initializationdata() {
+      this.got=0
       getteamuserin({ username: this.$store.state.username }).then(
         (response) => {
           this.got += 1;
