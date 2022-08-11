@@ -1,7 +1,7 @@
 <template>
   <div class="big">
-    <div id="content">
-      <div id="up">
+    <div id="content" style="padding: 0">
+      <div id="up" style="width: 100%">
         <img v-if="editing == 0" :src="data.avatar" />
         <el-upload
           v-else
@@ -28,7 +28,7 @@
           <el-icon class="avatar-uploader-icon"><Plus /></el-icon>
         </el-upload>
       </div>
-      <div id="down">
+      <div id="down" style="width: 100%">
         <el-button
           v-if="editing === 0 && author === 1"
           type="primary"

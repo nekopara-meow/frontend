@@ -164,7 +164,15 @@
                   backgroundImage: `url(` + v.avatar + ')',
                 }"
               ></div>
-              <div class="oneteamdown">
+              <div
+                class="oneteamdown"
+                style="
+                  height: 110px;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: space-around;
+                "
+              >
                 <div style="font-size: 18px">{{ v.username }}</div>
                 <div>用户名：{{ v.nickname }}</div>
                 <div>{{ v.email }}</div>
@@ -530,7 +538,7 @@ export default {
   align-items: center;
   justify-content: space-between;
 }
-#leftdown {
+.leftdown {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
@@ -577,8 +585,8 @@ export default {
   }
 }
 .leftdown {
-  overflow-y: scroll;
-  height: 63vh;
+  overflow-y: auto;
+  height: 60vh;
   padding: 0 5px;
 }
 
@@ -601,7 +609,7 @@ export default {
 
 nav {
   position: relative;
-  width: 280px;
+  width: 400px;
   height: 50px;
 
   border-radius: 8px;
@@ -615,7 +623,7 @@ nav a {
   float: left;
   font-size: 15px;
   line-height: 50px;
-  width: 70px;
+  width: 100px;
   height: 50px;
   color: #fff;
   text-transform: uppercase;
@@ -639,18 +647,18 @@ nav .animation {
 
 .tab-1,
 nav a:hover ~ .animation {
-  width: 70px;
+  width: 100px;
   left: 0px;
 }
 .tab-2,
 nav a:nth-child(2):hover ~ .animation {
-  width: 70px;
-  left: 70px;
+  width: 100px;
+  left: 100px;
 }
 .tab-3,
 nav a:nth-child(3):hover ~ .animation {
-  width: 70px;
-  left: 140px;
+  width: 100px;
+  left: 200px;
 }
 
 .avatar {

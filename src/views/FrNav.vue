@@ -14,7 +14,7 @@
     <div class="text">
       <input
         type="text"
-        v-model="query"
+        v-model="$store.kw"
         @keydown.enter="browse"
         placeholder="搜索..."
         style="background-color: rgba(255, 255, 255, 0.437)"
@@ -28,7 +28,7 @@
         v-if="$store.state.token"
       >
         <div class="el-dropdown-link d-flex align-items-center">
-          <el-badge :is-dot='flag' class="item" type="danger">
+          <el-badge :is-dot="flag" class="item" type="danger">
             <i class="bi-bell"></i>
           </el-badge>
         </div>
@@ -49,7 +49,13 @@
                 <div class="dongtairight bluelight">
                   <div>{{ message.sender }}</div>
                   <div style="font-size: 15px">{{ message.msg }}</div>
-                  <div style="font-size: 13px">{{this.timestampFormat(new Date(message.send_time).valueOf() / 1000)  }}</div>
+                  <div style="font-size: 13px">
+                    {{
+                      this.timestampFormat(
+                        new Date(message.send_time).valueOf() / 1000
+                      )
+                    }}
+                  </div>
                 </div>
                 <div class="dongtairightright">
                   <el-button
@@ -172,10 +178,10 @@ export default {
   },
   data() {
     return {
-      flag:false,
+      flag: false,
       personnalmsg: [],
       //{message_id:1,msg:"邀请您",sender:"luanbu",message_type:2,avatar:"",team_id:13,send_time:""}
-      query: "",
+
       token: "",
       name: "",
       //head: this.$store.state.head,
@@ -203,11 +209,11 @@ export default {
       var tmDate = new Date(timestamp * 1000); // 参数时间戳转换成的日期对象
 
       var Y = tmDate.getFullYear(),
-          m = tmDate.getMonth() + 1,
-          d = tmDate.getDate();
+        m = tmDate.getMonth() + 1,
+        d = tmDate.getDate();
       var H = tmDate.getHours(),
-          i = tmDate.getMinutes(),
-          s = tmDate.getSeconds();
+        i = tmDate.getMinutes(),
+        s = tmDate.getSeconds();
 
       if (timestampDiff < 60) {
         // 一分钟以内
@@ -216,40 +222,40 @@ export default {
         // 一小时前之内
         return Math.floor(timestampDiff / 60) + "分钟前";
       } else if (
-          curDate.getFullYear() == Y &&
-          curDate.getMonth() + 1 == m &&
-          curDate.getDate() == d
+        curDate.getFullYear() == Y &&
+        curDate.getMonth() + 1 == m &&
+        curDate.getDate() == d
       ) {
         return "今天" + zeroize(H) + ":" + zeroize(i);
       } else {
         var newDate = new Date((curTimestamp - 86400) * 1000); // 参数中的时间戳加一天转换成的日期对象
         if (
-            newDate.getFullYear() == Y &&
-            newDate.getMonth() + 1 == m &&
-            newDate.getDate() == d
+          newDate.getFullYear() == Y &&
+          newDate.getMonth() + 1 == m &&
+          newDate.getDate() == d
         ) {
           return "昨天" + zeroize(H) + ":" + zeroize(i);
         } else if (curDate.getFullYear() == Y) {
           return (
-              zeroize(m) +
-              "月" +
-              zeroize(d) +
-              "日 " +
-              zeroize(H) +
-              ":" +
-              zeroize(i)
+            zeroize(m) +
+            "月" +
+            zeroize(d) +
+            "日 " +
+            zeroize(H) +
+            ":" +
+            zeroize(i)
           );
         } else {
           return (
-              Y +
-              "年" +
-              zeroize(m) +
-              "月" +
-              zeroize(d) +
-              "日 " +
-              zeroize(H) +
-              ":" +
-              zeroize(i)
+            Y +
+            "年" +
+            zeroize(m) +
+            "月" +
+            zeroize(d) +
+            "日 " +
+            zeroize(H) +
+            ":" +
+            zeroize(i)
           );
         }
       }
@@ -258,15 +264,18 @@ export default {
       this.$router.push({
         path: "search",
         query: {
-          keyword: this.query,
+          keyword: this.$store.kw,
+          username: this.$store.state.username,
         },
       });
-      this.query = "";
     },
     updateinfo() {
       this.token = this.$store.state.token;
       if (!this.token) {
-        store.commit("setHead", "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/Transparent_Akkarin.jpg");
+        store.commit(
+          "setHead",
+          "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/Transparent_Akkarin.jpg"
+        );
         /*this.head =
           "https://miaotu-headers.oss-cn-hangzhou.aliyuncs.com/yonghutouxiang/Transparent_Akkarin.jpg";*/
         this.name = "请登录";
@@ -292,8 +301,8 @@ export default {
         (response) => {
           if (response.data.status_code == 1) {
             this.personnalmsg = response.data.ans_list;
-            if(this.personnalmsg.length>0)this.flag=true;
-            else this.flag=false;
+            if (this.personnalmsg.length > 0) this.flag = true;
+            else this.flag = false;
           }
         }
       );

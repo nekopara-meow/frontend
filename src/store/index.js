@@ -11,6 +11,7 @@ export default createStore({
     sharedDoc:Array,
     fromParams:'',
     fromName:'',
+    kw:"",
   },
   mutations: {
     // set
