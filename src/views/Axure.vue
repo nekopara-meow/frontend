@@ -1586,7 +1586,7 @@ export default{
                 }
                 else if(ret == 1){
                     ElMessageBox.alert(
-                        "http://43.138.45.223/#/axurepreview?axure_id="
+                        "http://www.yaseal.space/#/axurepreview?axure_id="
                             + this.axure_id, 
                         "已成功开放", {
                             confirmButtonText: '确认',
