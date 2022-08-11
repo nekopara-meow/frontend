@@ -1578,9 +1578,11 @@ export default{
                     return 
                 }
                 else if(ret == 1){
-                    ElMessage({
-                        message: "原型设计已开放",
-                        type: "success",
+                    ElMessageBox.alert(
+                        "http://43.138.45.223/#/axurepreview?axure_id="
+                            + this.axure_id, 
+                        "已成功开放", {
+                            confirmButtonText: '确认',
                     })
                 }
             })
