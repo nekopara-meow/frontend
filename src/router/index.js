@@ -154,7 +154,8 @@ const router = createRouter({
 //   next()
 // })
 router.beforeEach((to, from, next) => {
-  if (to.path === '/login'||to.path ==='/register'||to.path==='/') {
+  console.log('to',to)
+  if (to.path === '/login'||to.path ==='/register'||to.path==='/'||to.path==='/confirm') {
     next()
   } else {
     const token = localStorage.getItem('token')
@@ -165,5 +166,5 @@ router.beforeEach((to, from, next) => {
     }
   }
 })
-console.log = function() {}
+// console.log = function() {}
 export default router
