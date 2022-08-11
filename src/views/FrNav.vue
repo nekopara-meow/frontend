@@ -50,11 +50,7 @@
                   <div>{{ message.sender }}</div>
                   <div style="font-size: 15px">{{ message.msg }}</div>
                   <div style="font-size: 13px">
-                    {{
-                      this.timestampFormat(
-                        new Date(message.send_time).valueOf() / 1000
-                      )
-                    }}
+                    {{msgTime(message.send_time)}}
                   </div>
                 </div>
                 <div class="dongtairightright">
@@ -197,6 +193,10 @@ export default {
     },
   },
   methods: {
+    msgTime(send_time){
+      return this.timestampFormat(new Date(send_time).valueOf() / 1000)
+
+    },
     timestampFormat(timestamp) {
       function zeroize(num) {
         return (String(num).length == 1 ? "0" : "") + num;
