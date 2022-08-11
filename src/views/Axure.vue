@@ -23,7 +23,10 @@
                         <el-dropdown-item @click="bePic">导出</el-dropdown-item>
                         <el-dropdown-item @click="openPreview">开启预览</el-dropdown-item>
                         <el-dropdown-item @click="closePreview">关闭预览</el-dropdown-item>
-                        <el-dropdown-item @click="printList">输出</el-dropdown-item>
+                        <!--
+                        <el-dropdown-item @click="printList">
+                            输出
+                        </el-dropdown-item>-->
                     </el-dropdown-menu>
                 </template>
             </el-dropdown>
@@ -195,9 +198,11 @@
                             <el-menu-item index="0" @click="setTool(0)">
                                 <el-icon><Stopwatch /></el-icon>
                             </el-menu-item>
+                            <!--
                             <el-menu-item index="1" @click="setTool(1)">
                                 <el-icon><Picture /></el-icon>
                             </el-menu-item>
+                            -->
                             <el-menu-item index="2" @click="setTool(2)">
                                 <el-icon><PieChart /></el-icon>
                             </el-menu-item>
@@ -753,6 +758,7 @@
             </el-collapse>
         </div>
         
+        <!--
         <div v-if="tool[1]" class="tool-1">
             <div class="tool-title">
                 <span>图片</span>
@@ -787,6 +793,7 @@
             </div>
             
         </div>
+        -->
 
         <div v-if="tool[2]" class="tool-1">
             <div class="tool-title">
