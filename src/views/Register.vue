@@ -3,7 +3,7 @@
     <div id="content">
       <h1 class="intro">注册</h1>
       <el-form :model="form" :rules="rules" class="login-box">
-        <el-form-item label="账号" class="intro" prop="name">
+        <el-form-item label="账号" class="intro" prop="username">
           <el-input
             type="text"
             placeholder="请输入用户名"
@@ -77,7 +77,7 @@ export default {
       btnText: "获取验证码",
       disabled: false,
       rules: {
-        name: [
+        username: [
           {
             required: true,
             message: "请输入用户名",
