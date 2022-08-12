@@ -14,7 +14,7 @@
 
 ## 📔Preview
 
-![image-20220811185453940](docs\img\image-20220811185453940.png)
+![image-20220811185453940](docs/img/image-20220811185453940.png)
 
 ## ✨Features
 
@@ -26,31 +26,31 @@
 
   实时同步基于[yjs](https://github.com/yjs/yjs) 和 [y-webrtc](https://github.com/yjs/y-webrtc)
 
-  ![image-20220811190346354](docs\img\image-20220811190346354.png)
+  ![image-20220811190346354](docs/img/image-20220811190346354.png)
 
 - 🔖原型设计：在线设计您自己的网页
 
-  ![image-20220811190814755](docs\img\image-20220811190814755.png)
+  ![image-20220811190814755](docs/img/image-20220811190814755.png)
 
 - 📘内嵌[drawio-embed](https://imaoda.github.io/drawio-embed/) 支持绘制uml模型并且保存
 
-  ![image-20220811191427787](docs\img\image-20220811191427787.png)
+  ![image-20220811191427787](docs/img/image-20220811191427787.png)
 
 - 🌐文件回收站/项目回收站
 
 - 🎈工作台支持快速浏览项目文件
 
-  ![image-20220811191528374](docs\img\image-20220811191528374.png)
+  ![image-20220811191528374](docs/img/image-20220811191528374.png)
 
 - 🍀搜索功能
 
-  ![image-20220811191604737](docs\img\image-20220811191604737.png)
+  ![image-20220811191604737](docs/img/image-20220811191604737.png)
 
 - 💻消息通知
 
-  ![image-20220811191634432](docs\img\image-20220811191634432.png)
+  ![image-20220811191634432](docs/img/image-20220811191634432.png)
 
-  ![image-20220811191705216](docs\img\image-20220811191705216.png)
+  ![image-20220811191705216](docs/img/image-20220811191705216.png)
 
 ## 📦 Installation
 
